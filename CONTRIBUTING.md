@@ -40,6 +40,7 @@ tracking issue lists what is planned and in what order.
 
 - Search open issues first. Comment on an issue to claim it before you start.
 - One issue per PR. If the work grows, split it into new issues.
+- Signed commits (SSH or GPG) are preferred, not required.
 - **AI agents take only agent-sized issues that aren't labeled `human-task`.**
   If an issue's "Verify first" item turns out false, stop and comment on the
   issue instead of guessing.
