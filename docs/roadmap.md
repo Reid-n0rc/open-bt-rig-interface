@@ -65,9 +65,10 @@ required status checks.
 
 - #4 Requirements spec (app-neutral)
 - #5 Research: per-radio power and interface table
-- #6 Research: five-OS host compatibility matrix (BLE throughput, host bridge, USB wired mode)
+- #6 Research: five-OS host compatibility matrix (wired USB-C classes, BLE throughput)
+- #42 Research: core device shortlist, host links and radio connectors (ADR-0008)
 - #8 Decision: audio codec and isolation transformers (ADR-0002)
-- #9 Research/design: CAT/PTT/RTS/DTR circuits and USB-host block (ADR-0003)
+- #9 Research/design: CAT/PTT circuits, RS-232-tolerant serial modes, USB routing (ADR-0003)
 - #10 Research/design: variant M automotive 12 V front end (ADR-0004)
 - #11 Research/design: variant R power (radio DC, USB-C, VBUS to the radio) (ADR-0005)
 
@@ -77,13 +78,13 @@ corrected or has a follow-up issue.
 
 ### Phase 2: Key decisions
 
-- #7 Decision: confirm the ESP32-S3-MINI-1 BLE module (ADR-0001), per ADR-0008
+- #7 Decision: confirm the ESP32-S3-MINI-1 module (sourcing, FCC integration) per ADR-0008
 - #12 Decision: variants, board strategy, folder layout, tag scheme (ADR-0006)
 - #13 Architecture and app-neutral versioned protocol spec with golden vectors (ADR-0007)
 
 **Exit criteria:**
 
-- ADR-0001, ADR-0006 and ADR-0007 are accepted.
+- ADR-0008 (and ADR-0001 if #7 needs one), ADR-0006 and ADR-0007 are accepted.
 - The module's FCC ID and integration-guide constraints (antenna, keep-out) are
   recorded.
 - `protocol/` has a versioned spec and golden vectors.
@@ -91,14 +92,17 @@ corrected or has a follow-up issue.
 ### Phase 3: Firmware (on the module vendor's dev kit before custom hardware)
 
 - #14 Firmware: portable core, HAL skeleton, host tests, firmware CI
-- #15 Firmware: transparent CAT bridge over BLE with PTT/RTS/DTR fail-safes
-- #16 Firmware: audio pipeline (analog codec and radio USB sound card to the BLE stream)
-- #17 Firmware (optional): BLE L2CAP audio and on-device scheduled tone-sequence TX
+- #15 Firmware: transparent CAT bridge over BLE and wired USB with PTT/RTS/DTR fail-safes
+- #16 Firmware: audio pipeline (codec and radio USB sound card to BLE stream and USB Audio device)
+- #43 Firmware: USB host in Bluetooth mode (radio USB-serial and sound card)
+- #44 Firmware: wired USB-C mode (USB CDC-ACM + USB Audio device, mode switching)
+- #17 Firmware (optional): on-device scheduled tone-sequence TX
+- #45 Host software (later): desktop Bluetooth bridge
 - 👤 #18 Bench test the audio paths against a wired interface on all five OSes
 
 **Exit criteria:**
 
-- On the dev kit, CAT and PTT work from all five host OSes.
+- On the dev kit, CAT and PTT work from all five host OSes, over Bluetooth and wired USB-C.
 - The PTT fail-safes are proven: off at boot, reset, brownout and disconnect;
   keepalive timeout; maximum TX timer.
 - The #18 bench results are recorded.
@@ -106,7 +110,7 @@ corrected or has a follow-up issue.
 ### Phase 4: Hardware
 
 - #21 KiCad 10 project setup per variant via Konnect (title block, `${REVISION}` silkscreen, libs, jobset)
-- Per-block schematic issues (radio module, audio, CAT/PTT/RTS/DTR, USB host, power R, power M, connectors). *Created after Phase 2.*
+- Per-block schematic issues (radio module, audio, CAT/PTT/RTS/DTR, USB routing (hub, switches, USB-C), power R, power M, connectors). *Created after Phase 2.*
 - Parts list with distributor stock and lifecycle checks (Digi-Key, Mouser, LCSC). *To be created.*
 - Design review (Konnect review workflow). *To be created.*
 - PCB layout per variant (antenna keep-out, EMC). *To be created.*
@@ -155,10 +159,12 @@ flowchart LR
   I1 --> I4["#4 Requirements"]
   I1 --> I5["#5 Radio power/IF table"]
   I1 --> I6["#6 Host OS matrix"]
-  I1 --> I7["#7 Module ADR-0001"]
+  I1 --> I42["#42 Shortlist + ADR-0008"]
+  I42 --> I7["#7 Module sourcing + FCC"]
   I1 --> I8["#8 Audio codec ADR-0002"]
   I1 --> I13["#13 Protocol ADR-0007"]
-  I5 --> I9["#9 CAT/PTT/USB-host ADR-0003"]
+  I5 --> I9["#9 CAT/PTT/USB routing ADR-0003"]
+  I42 --> I9
   I1 --> I9
   I4 --> I10["#10 Power M ADR-0004"]
   I5 --> I11["#11 Power R ADR-0005"]
@@ -183,11 +189,19 @@ flowchart LR
   I13 --> I15
   I14 --> I16["#16 FW audio pipeline"]
   I8 --> I16
-  I14 --> I17["#17 FW BLE audio + tone TX (optional)"]
+  I14 --> I43["#43 FW USB host (BT mode)"]
+  I16 --> I43
+  I14 --> I44["#44 FW wired USB-C mode"]
+  I16 --> I44
+  I9 -.-> I44
+  I6 -.-> I44
+  I14 --> I17["#17 FW tone TX (optional)"]
   I13 --> I17
   I16 --> I17
   I16 --> I18["👤 #18 Audio bench test"]
-  I17 -.-> I18
+  I44 -.-> I18
+  I13 --> I45["#45 Host BT bridge (later)"]
+  I16 --> I45
   I12 --> I21["#21 KiCad setup via Konnect"]
   I7 --> I21
   I3 --> I21
