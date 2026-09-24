@@ -18,5 +18,8 @@ alike. In short:
    [`KICAD_VERSION`](KICAD_VERSION) in step with the files.
 7. Add SPDX/REUSE licensing for every new file (`uvx reuse lint`).
 
+Who reviews, merges and releases, and how decisions are made, is described in
+[`GOVERNANCE.md`](GOVERNANCE.md).
+
 By contributing you agree your contribution is licensed under the license of the
 path it touches (see [`LICENSE`](LICENSE)).
