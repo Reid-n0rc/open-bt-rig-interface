@@ -12,3 +12,5 @@ and tagged independently (see `AGENTS.md`).
 
 - Repository bootstrap: agent docs, REUSE licensing (CERN-OHL-P-2.0 / MIT /
   CC-BY-4.0), design constraints, directory skeleton, templates.
+- Signed commits are now preferred but not required: the branch ruleset no
+  longer enforces signatures, and the docs and templates were updated to match (#35).
