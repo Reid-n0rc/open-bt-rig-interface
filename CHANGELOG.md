@@ -15,8 +15,25 @@ and tagged independently (see `AGENTS.md`).
   (jump start now 26 V), LM74800-Q1 load-dump cut-off with a 150 V FET and TVS
   stack, CMC + pi filter, two LMR43620-Q1 bucks synchronized at 2.304 MHz to keep
   harmonics out of the HF amateur bands, brownout forcing PTT off, and ≤ 7 µA
-  off-state drain. `constraints.md` §3.2/§3.4 and `pcb-fabrication.md` §6.3
-  updated (#10).
+  off-state drain. The device supplies no power to the radio (ADR-0003).
+  `constraints.md` §3.2/§3.4 and `pcb-fabrication.md` §6.3 updated (#10).
+- Radio module confirmation (`docs/research/module-selection.md`): the
+  ESP32-S3-MINI-1 FCC grant (2AC7Z-ESPS3MINI1: single modular, BLE certified at
+  10.3 dBm conducted, 20 cm mobile use), ISED ID, lifecycle and dated LCSC
+  sourcing; supports ADR-0008. New `docs/compliance/fcc.md`: antenna keep-out
+  and board integration rules, host label text, user manual statements and a
+  Part 15B SDoC checklist. Revision A uses the -N8 ordering code; ADR-0008
+  accepted by the maintainer (#7).
+- Requirements specification (`docs/requirements/requirements.md`): numbered,
+  testable `REQ-<area>-NNN` requirements for both host links (Bluetooth LE and
+  wired USB-C), CAT, PTT fail-safes, audio, radio interfaces, isolation, power,
+  regulatory, EMC, firmware, mechanical and manufacturing, with a traceability
+  table and a coverage checklist against `constraints.md` (#4).
+- CI checks (`.github/workflows/checks.yml`): `REUSE lint`, `KiCad version
+  consistency` (every KiCad file and the docs against `KICAD_VERSION`, which
+  now also records the symbol-library format) and `Silkscreen revision check`
+  (title-block revision, `${REVISION}`/`${ISSUE_DATE}`, required markings,
+  `hw-*` tags), with unit tests in `tools/kicad_ci/` (#3).
 - PCB fabrication and passive-component rules (`docs/requirements/pcb-fabrication.md`):
   JLCPCB standard process, 2 layers preferred, 0402 resistors, MLCC with a 2×
   voltage rule and DC-bias check (#49).

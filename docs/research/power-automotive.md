@@ -13,10 +13,16 @@ Scope: the power input of variant M, from the vehicle 12 V lead to the 5 V and
 3.3 V rails, including transient protection, EMI filtering, regulation,
 brownout handling and power-down. Variant R power is #11; schematic and layout
 come later. Requirements are cited by
-[`constraints.md`](../requirements/constraints.md) section, because the
-requirement IDs from #4 don't exist yet. The design follows
+[`constraints.md`](../requirements/constraints.md) section and by
+[`requirements.md`](../requirements/requirements.md) ID: REQ-PWR-003, -005,
+-010 to -017, REQ-EMC-004 to -007 and REQ-ENV-002. The design follows
 [ADR-0008](../decisions/ADR-0008-host-links-esp32-s3.md) (ESP32-S3-MINI-1,
-Bluetooth LE and wired USB-C, USB hub, current-limited VBUS to the radio).
+Bluetooth LE and wired USB-C, USB hub).
+
+**The device supplies no power to the radio.** The radio port's USB VBUS is
+blocked in hardware (maintainer decision 2026-09-24; circuit in ADR-0003,
+[#9](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/9)). The device
+only takes power in and never sources power out of any port; USB-C is a sink.
 
 Values marked **(verify)** are not confirmed by a primary source or need a
 bench test. Calculations are reproducible from the numbers given here.
@@ -40,14 +46,13 @@ bench test. Calculations are reproducible from the numbers given here.
   160 m to 10 m lands inside a US amateur band (worst margin 88 kHz; §6).
   The usual 2.1 MHz and 2.2 MHz defaults put a harmonic inside 10 m.
 - **Cold crank:** no buck-boost. Logic keeps running to about 3.8 V input; a
-  hardware brownout detector forces PTT off at 7.0 V; hold-up is ≥ 239 µs from
+  hardware brownout detector forces PTT off at 7.0 V; hold-up is ≥ 618 µs from
   7.0 V at worst-case load (§7, §8).
 - **Power-down:** ignition / radio-on sense, USB-C host and a firmware hold
   line drive the LM74800-Q1 enable. **Off-state drain ≤ 7 µA** at 25 °C
   (limit 1 mA; §9).
-- **Power budget:** about 2 W typical and **6.2 W worst case** input; the
-  constraint's 3 W peak target is exceeded because the radio's USB VBUS alone
-  can take 3.1 W (§2).
+- **Power budget:** about 1.2 W typical and **2.4 W worst case** input, inside
+  the 1.5 W typical / 3 W peak target of constraints §3.4 (REQ-PWR-003) (§2).
 
 ## 1. Test levels
 
@@ -125,7 +130,8 @@ worst corners are therefore 101 V / 4 Ω and 79 V / 0.5 Ω.
   the sources above; the 2023 edition adds a more detailed description of the
   load dump origin (Annex B).
 - **Verify-first result:** the levels in constraints §3.2 are confirmed except
-  the jump start (26 V, not 24 V). ESD (ISO 10605) was not checked.
+  the jump start (26 V, not 24 V; REQ-PWR-014 still says 24 V). ESD (ISO 10605)
+  was not checked.
 
 ## 2. Loads and power budget
 
@@ -138,29 +144,27 @@ Placeholders are marked with the issue that settles them.
 | 3.3 V | Audio codec incl. its 1.8 V core LDO | 0.05 A | 0.05 A | Placeholder (#8) |
 | 3.3 V | Oscillator, supervisor, USB switches, LEDs, PTT PhotoMOS LED, isolator side 1 | 0.02 A | 0.02 A | Allowance; SiT8924B ≤ 4.8 mA ([datasheet](../references/index.md#sitime-sit8924b-ds)) |
 | **3.3 V total** | | **0.17 A (0.56 W)** | **0.46 A (1.52 W)** | |
-| 5 V | VBUS to the radio (TPS2553-Q1 limit) | 0.10 A **(placeholder, #5)** | **0.62 A** (limit set ≥ 0.5 A minimum) | [TPS2553-Q1](../references/index.md#ti-tps2553-q1-ds): 475–565 mA with 49.9 kΩ, so a slightly lower R is needed |
 | 5 V | Isolated jack-side supply (RS-232, analog switches, isolator side 2) | 0.07 A | 0.07 A | Placeholder: 0.25 W out at 70 % (#9) |
 | 5 V | Buck B input (3.3 V rail at 88 %) | 0.13 A | 0.35 A | Efficiency **(verify)** |
-| **5 V total** | | **0.30 A (1.5 W)** | **1.04 A (5.2 W)** | |
-| 12 V in | Buck A at 88 %, protection and filter losses | **≈ 1.8 W** | **≈ 6.2 W** | Efficiency **(verify)** |
+| **5 V total** | | **0.20 A (1.0 W)** | **0.42 A (2.1 W)** | |
+| 12 V in | Buck A at 88 %, protection and filter losses | **≈ 1.2 W** | **≈ 2.4 W** | Efficiency **(verify)** |
 
-- Input current at 6.2 W: 0.46 A at 13.5 V, 0.69 A at 9 V.
-- **Option: isolated radio USB** (ADuM4160 fitting option, constraints §6).
-  VBUS to the radio then has to come from an isolated 5 V supply: about 3.1 W
-  out, about 4.2 W in at 75 %, replacing the 0.62 A VBUS row. The front end
-  handles it (Buck A has headroom to 2 A), but the isolated supply is a
-  separate design (#9).
-- **USB-C in variant M** is a data link (wired mode). The device doesn't draw
-  from the host's VBUS and never back-feeds it; VBUS is used only to detect a
-  host and as a wake source (§9). Bench powering from USB-C alone is left to
-  #11's source mux.
-- The constraint target "about 1.5 W typical, 3 W peak" (§3.4) holds for the
-  device itself; the radio's VBUS draw is on top. §3.4 is updated to say so.
+- **No radio load.** The radio port's VBUS is blocked (ADR-0003, #9), so no
+  VBUS switch or radio current appears here. The radio USB isolator
+  (ADuM4160 fitting option, constraints §6) needs only a small radio-side
+  supply, which belongs to the isolated supply (#9).
+- Input current at 2.4 W: 0.18 A at 13.5 V, 0.27 A at 9 V, 0.40 A at 6 V.
+- Inside constraints §3.4 / REQ-PWR-003 (about 1.5 W typical, 3 W peak).
+- **USB-C in variant M** is a sink-only data link (wired mode). The device
+  never sources power on it. In variant M its VBUS is used to detect a host and
+  as a wake source (§9). Whether variant M can also run from USB-C VBUS alone
+  (for bench use) belongs to #11's source-mux design. The 5 V budget (0.42 A
+  worst case) would fit a 500 mA USB-C default, but that isn't designed here.
 
 ## 3. Architecture
 
 ```text
-12 V lead ─ F1 ─┬─ D3+D4 TVS stack ─┬─ Q1 (150 V) ═╤═ Q2 (80 V) ─ CMC ─ C1 ─ L1 ─┬─ C2 + C_bulk ─┬─ Buck A 5 V ─┬─ TPS2553-Q1 ─ radio USB VBUS
+12 V lead ─ F1 ─┬─ D3+D4 TVS stack ─┬─ Q1 (150 V) ═╤═ Q2 (80 V) ─ CMC ─ C1 ─ L1 ─┬─ C2 + C_bulk ─┬─ Buck A 5 V ─┬─ codec LDO (LP5907-Q1)
   (2 A)         │  C_in 100 nF 250 V│  HGATE        │  DGATE (ideal diode)          │  (hold-up)    │  LMR43620-Q1 ├─ isolated supply (jack side, #9)
                 │                   └── LM74800-Q1 (common source, OV cut-off 38.5 V)│              │              └─ Buck B 3.3 V ─ ESP32-S3, hub, codec (LDO)
 IGN / radio-on ─┴─ sense network ────── EN/UVLO ◄── USB-C VBUS, firmware HOLD     │              │                 LMR43620-Q1
@@ -176,7 +180,7 @@ IGN / radio-on ─┴─ sense network ────── EN/UVLO ◄── USB-
   AEC-Q200; [datasheet](../references/index.md#littelfuse-437-ds)); interrupting
   rating 50 A at 63 V per the LCSC listing **(verify** the table grouping for 2 A).
   63 V covers the jump start (26 V) with more than 2× margin.
-- 2 A against a worst-case input of 0.69 A at 9 V: the datasheet recommends
+- 2 A against a worst-case input of 0.40 A at 6 V: the datasheet recommends
   continuous operation at ≤ 80 % of rating; temperature derating at 85 °C
   **(verify** against the 437A derating curve).
 - The harness also carries an in-line blade fuse at the battery or fuse-box
@@ -265,7 +269,7 @@ Test B (US* ≤ 35 V) gives **0 J** in the chosen stack as well.
 | Pulse 3a / 3b, −220 / +150 V, 50 Ω, 150 ns | C_in absorbs: +150 V into 100 nF raises the node by 4.4 V; D4 takes 3a (3.6 A, 6 µJ) | Negligible | A |
 | Jump start 26 V, 60 s; transient 18 V | Below OV cut-off; Buck A on-time still above its minimum at 26 V | — | A |
 | Test B, 35 V, ≤ 400 ms | Below OV cut-off; the stack doesn't conduct | 0 J; Buck A briefly below minimum on-time (frequency foldback, §6.3) | A |
-| Test A, ≤ 101 V, ≤ 400 ms, 10 × | Q1 opens at 37–40 V; hold-up carries ≈ 1 ms, then brownout forces PTT off and the device resets | 0 J in TVS and FETs; VS clamp 0.45 W total for ≤ 400 ms | C |
+| Test A, ≤ 101 V, ≤ 400 ms, 10 × | Q1 opens at 37–40 V; hold-up carries ≈ 2.6 ms, then brownout forces PTT off and the device resets | 0 J in TVS and FETs; VS clamp 0.45 W total for ≤ 400 ms | C |
 | Reverse −14 V, 60 s | Q1 body diode conducts, Q2 blocks 14 V | LM74800-Q1 reverse leakage 19 µA typ | A (off) |
 | ESD ±15 kV air (330 pF) | 4.95 µC into C_in raises it ≈ 50 V; the stack clamps | **(verify)** with ISO 10605 network | A |
 
@@ -282,27 +286,27 @@ Figure 1, from CISPR 25:2016).
 component, and the vehicle's 12 V wiring also feeds the radio. It is
 therefore filtered as if the MW limit applied.
 
-**Differential-mode estimate** (Buck A at 1.07 A, 14 V → 5 V, D = 0.357):
+**Differential-mode estimate** (Buck A at 0.42 A, 14 V → 5 V, D = 0.357):
 
 - Fundamental of the input current pulse train:
-  I1 = (2/π)·Iout·sin(πD) = **0.61 A peak**.
+  I1 = (2/π)·Iout·sin(πD) = **0.24 A peak**.
 - Buck-side input capacitance 2 × 2.2 µF 100 V (≈ 1.9 µF each at 14 V bias),
-  ESR ≈ 5 mΩ: |Z| = 18.9 mΩ → V1 = 11.6 mV peak = **78.3 dBµV rms**.
-- Target 28 dBµV (Class 5 MW average 34 dBµV − 6 dB margin): **≥ 50.3 dB**
+  ESR ≈ 5 mΩ: |Z| = 18.9 mΩ → V1 = 4.5 mV peak = **70.1 dBµV rms**.
+- Target 28 dBµV (Class 5 MW average 34 dBµV − 6 dB margin): **≥ 42.1 dB**
   of attenuation needed.
 - **L1 = 2.2 µH** (TDK TFM252012ALMA2R2MTAA, AEC-Q200, 2.6 A, 75 mΩ,
   −55 to +150 °C; [datasheet](../references/index.md#tdk-tfm252012alma-ds)):
   XL = 31.8 Ω at 2.304 MHz. **C1 = 2.2 µF 100 V X7R 1210** (TDK
   CGA6N3X7R2A225K, AEC-Q200; [catalog](../references/index.md#tdk-cga-ds)), XC = 36 mΩ:
-  **≈ 59 dB** ideal, about 9 dB over the need before parasitics.
+  **≈ 59 dB** ideal, about 17 dB over the need before parasitics.
 - **Corner frequency:** f0 = 1 / (2π√(L1·C1)) = **78 kHz** (L1 with C1), or
   55 kHz with the buck-side 3.8 µF; both are ≥ 30× below fsw.
 - **Damping and stability:** filter Z0 = √(L1 / C_buck) = 0.76 Ω. The
   **100 µF 50 V electrolytic** (Panasonic EEE-FK1H101P, AEC-Q200,
   −55 to +105 °C; [datasheet](../references/index.md#panasonic-fk-ds)) at the
   buck side damps the resonance with its ESR and doubles as hold-up (§8).
-  The buck's negative input resistance, Vin² / Pin, is 13.1 Ω at 9 V and
-  5.8 Ω at 6 V, well above Z0 (Middlebrook criterion met).
+  The buck's negative input resistance, Vin² / Pin, is 33.8 Ω at 9 V and
+  15.0 Ω at 6 V, well above Z0 (Middlebrook criterion met).
 - **Common mode:** **TDK ACM70V-701-2PL-TL00**, 700 Ω at 100 MHz, 4 A at
   125 °C, 80 V rated, AEC-Q200, −40 to +125 °C
   ([datasheet](../references/index.md#tdk-acm70v-ds)), placed after Q2 where
@@ -405,10 +409,13 @@ clock tolerance, against every band. Findings (1 kHz scan, 0.3–3.0 MHz):
 - **Buck B: 5 V → 3.3 V, LMR43620MSC3RPERQ1**, on the same clock. Its input
   never sees automotive transients, so no foldback (D = 0.66). It keeps
   3.3 V until the 5 V rail falls to about 3.5 V (input ≈ 3.7–3.8 V).
-- **VBUS to the radio: TPS2553-Q1** (AEC-Q100 grade 1, 2.5–6.5 V, 85 mΩ,
-  75–1300 mA adjustable limit, 2 µs response; [datasheet](../references/index.md#ti-tps2553-q1-ds)).
-  Set R_ILIM so the minimum limit is ≥ 500 mA (49.9 kΩ gives 475–565 mA,
-  slightly low).
+- **No VBUS switch to the radio.** The radio port's VBUS is blocked in
+  hardware; see ADR-0003 (#9).
+- **Buck A sizing:** 0.42 A worst case uses about a fifth of the
+  LMR43620-Q1's 2 A. The pin-compatible **LMR43610MSC5RPERQ1** (1 A;
+  TI.com 2.850 USD at 100–249, 3,843 in stock, 2026-09-24) would do. The 2 A
+  part is kept so that both bucks share one part family, and for headroom
+  if #9's isolated supply grows.
 - **Codec analog rail: LP5907-Q1** 3.3 V LDO from the 5 V rail (AEC-Q100
   grade 1, 2.2–5.5 V input, 250 mA, < 6.5 µV rms, 82 dB PSRR at 1 kHz, 120 mV
   typical dropout; [datasheet](../references/index.md#ti-lp5907-q1-ds)). #8
@@ -418,14 +425,12 @@ clock tolerance, against every band. Findings (1 kHz scan, 0.3–3.0 MHz):
 
 ### 6.4 Thermal
 
-- Buck A worst continuous load (VBUS 0.62 A, isolated 0.07 A, 3.3 V average
-  0.25 A): P_out ≈ 4.5 W, loss ≈ 0.62 W at 88 %. ΔT = 31 °C (50 °C/W EVM) to
-  52 °C (84.4 °C/W JEDEC), so **TJ ≈ 116–137 °C at 85 °C ambient**, under the
-  150 °C limit but tight on 2 layers. Needs a generous ground pour under the
-  package **(verify on the board)**.
-- Buck B: ≈ 0.21 W → ≤ 18 °C rise. TPS2553-Q1 at 0.62 A: ≈ 33 mW (85 mΩ typ).
-- Q1/Q2 conduction: (22 + 21) mΩ × 0.69 A² ≈ 20 mW. L1, CMC and F1 together
-  < 0.1 W.
+- Buck A at worst case (P_out 2.1 W): loss ≈ 0.28 W at 88 %. ΔT = 14 °C
+  (50 °C/W EVM) to 24 °C (84.4 °C/W JEDEC), so **TJ ≤ about 109 °C at 85 °C
+  ambient**. Comfortable on 2 layers with a normal ground pour.
+- Buck B: ≈ 0.21 W → ≤ 18 °C rise.
+- Q1/Q2 conduction: (22 + 21) mΩ × 0.27 A² ≈ 3 mW. L1, CMC and F1 together
+  < 20 mW.
 - The electrolytic's life at 105 °C is 2000–5000 h depending on size; at
   85 °C ambient expect roughly 4× that **(verify** against the series table;
   a hybrid polymer EEH-ZA gives 10,000 h at 105 °C).
@@ -435,14 +440,13 @@ clock tolerance, against every band. Findings (1 kHz scan, 0.3–3.0 MHz):
 **Decision: no buck-boost. Accept brownout with PTT forced off.**
 
 - Normal cold crank (4.5 V for 15 ms, then 6.5 V) keeps the 3.3 V logic
-  alive: Buck A drops out to Vin − 0.2 V and Buck B needs about 3.5 V. VBUS to
-  the radio sags to ≈ 4.3 V, so the radio's USB chips may reset. PTT is off
-  below 7.0 V anyway (§8). Severe crank (3 V) resets the device; PTT is off by
-  the hardware default.
-- A 5 V buck-boost (for example TPS55165-Q1-class) would keep VBUS up, but it
-  adds a second converter, a second frequency to place, and cost. The radio
-  itself generally isn't specified to operate that low; most mobile HF rigs
-  are specified around 13.8 V ± 15 % **(verify per radio, #5)**.
+  alive: Buck A drops out to Vin − 0.2 V and Buck B needs about 3.5 V. PTT is
+  off below 7.0 V anyway (§8). Severe crank (3 V) resets the device; PTT is off
+  by the hardware default.
+- A buck-boost would only add logic uptime between about 3.8 V and 3 V. It
+  would cost a second converter, a second frequency to place, and money. The
+  radio itself generally isn't specified to operate that low; most mobile HF
+  rigs are specified around 13.8 V ± 15 % **(verify per radio, #5)**.
 
 ## 8. Brownout detector, PTT fail-safe and hold-up
 
@@ -462,10 +466,10 @@ clock tolerance, against every band. Findings (1 kHz scan, 0.3–3.0 MHz):
   logic enters an undefined state.
 - **Hold-up** (100 µF − 20 % + 3 × 1.9 µF ≈ 85.7 µF; t = C·(V1² − V2²) / 2P):
 
-| From → to | 6.2 W (worst) | 2.0 W (typical) | Meaning |
+| From → to | 2.4 W (worst) | 1.2 W (typical) | Meaning |
 |---|---|---|---|
-| 7.0 V → 3.8 V | **239 µs** | 740 µs | Time from PTT-off to logic dropout; detector path ≈ 20 µs |
-| 14 V → 7.0 V | 1.0 ms | 3.1 ms | Supply interruptions shorter than this don't disturb PTT |
+| 7.0 V → 3.8 V | **618 µs** | 1.28 ms | Time from PTT-off to logic dropout; detector path ≈ 20 µs |
+| 14 V → 7.0 V | 2.6 ms | 5.4 ms | Supply interruptions shorter than this don't disturb PTT |
 
 - Q2 blocks reverse current within 0.5 µs, so a dipping or shorted input
   doesn't drain the hold-up capacitance.
@@ -522,13 +526,12 @@ parts is **(verify)**.
 | U2, U3 | TI LMR43620MSC5RPERQ1 / MSC3RPERQ1 | AEC-Q100 grade 1 | C6979910 / 4.457 / **2**; C3190193 / 4.8281 / **36** | 2.944 / 1,686; 2.944 / 3,000 | blank |
 | U2, U3 alt | TI LMR43620MC5RPERQ1 / MC3RPERQ1 (no spread spectrum) | AEC-Q100 grade 1 | C32594901 / 3.7734 / 5; C41658611 / — / 10 | 2.944 / 3,103; 2.494 / 3,500 | blank |
 | Y1 | SiTime SiT8924B at 2.304 MHz (programmed) | AEC-Q100 grade 1 option | Not stocked at 2.304 MHz (8 MHz version C401144: 2.9584 / 24) | — | blank (programmable at distributors) |
-| U4 | TI TPS2553QDBVRQ1 | AEC-Q100 grade 1 | C130055 / 1.6506 / **10** | 0.956 / **0** | blank |
 | U5 | TI TPS3710QDSERQ1 | AEC-Q100 grade 1 | C2863756 / 1.0411 / **0** | 1.563 / 73 | blank |
 | U6 | TI LP5907QMFX-3.3Q1 | AEC-Q100 | C130005 / 0.4393 / 7,268 | 0.460 / 16,881 | blank |
 | (U7) | TI SN6505BQDBVRQ1 (isolated supply, #9) | AEC-Q100 grade 1 | C1849490 / 0.7522 / 4,745 | 1.820 / 18,670 | blank |
 
-Sourcing risks: LCSC stock of the LMR43620-Q1, Q1, TPS2553-Q1 and TPS3710-Q1
-is thin or zero, and TI shows no TPS2553-Q1 stock. None of the parts above is
+Sourcing risks: LCSC stock of the LMR43620-Q1, Q1 and TPS3710-Q1 is thin or
+zero. None of the parts above is
 a JLCPCB Basic part, so each adds an extended-part fee
 ([JLCPCB FAQ](../references/index.md#jlcpcb-pcba-faqs)). Alternates to check
 in schematic work: Yageo AC1210KKX7R0BB225 (C1/C2), Murata PLT5BPH5013R1SNL
@@ -545,7 +548,7 @@ Per [pcb-fabrication.md §6.3](../requirements/pcb-fabrication.md#63-voltage-rat
 |---|---|---|
 | Connector to Q1 (before protection) | Test A 101 V; stack clamp up to ≈ 127 V on fast pulses | **250 V** (C_in); 2 × 101 V = 202 V |
 | After Q2 (filter, hold-up, Buck A input) | OV cut-off 37–40 V | **100 V** MLCC (2 × 40 V = 80 V → next standard 100 V); 50 V electrolytic (the 2× rule is for MLCC) |
-| 5 V rail, VBUS | USB hot-plug ringing | 16 V minimum, 25 V at the USB-A connector |
+| 5 V rail | Regulator overshoot | 16 V (2 × 5 V = 10 V → next standard rating 16 V) |
 | 3.3 V rail | Regulator overshoot | 10 V |
 
 The DC-bias loss of the 100 V 1210 X7R at 14 V is small; 1.9 µF effective was
@@ -589,8 +592,8 @@ assumed in §5 **(verify** against the TDK DC-bias curve).
 - **Same TVS and ideal diode:** SMBJ33CA-HE3 and LM74700-Q1 or LM74800-Q1
   (common drain, 60–80 V FETs, no 150 V FET needed without unsuppressed load
   dump) for the accessory input's reverse-polarity and TVS protection.
-- **Same TPS2553-Q1** VBUS switch, **TPS3710-Q1** brownout detector and
-  **LP5907-Q1** codec LDO.
+- **Same TPS3710-Q1** brownout detector and **LP5907-Q1** codec LDO. Neither
+  variant has a VBUS switch to the radio (ADR-0003, #9).
 - **Variant M only:** the 150 V Q1, TPSMB82A, OV cut-off, CMC and the
   ignition/auto power-down network.
 
@@ -615,7 +618,9 @@ values. Record it as a separate variant if there is demand.
   long-term and transient overvoltage values (from one secondary source);
   buck efficiencies and TJ on 2 layers; MLCC DC bias; TVS and FET leakage at
   85 °C; 56 V zener part; electrolytic life at 85 °C;
-  PhotoMOS turn-off time (#9); the radio's VBUS draw (#5).
+  PhotoMOS turn-off time (#9).
+- **REQ-PWR-014** says 24 V; ISO 16750-2:2023 says 26 V. #4's owner should
+  update it to 26 V.
 - **Decisions for other issues:** isolated jack-side supply frequency (#9);
   the hub and codec currents (#8, #9); whether variant R adopts the
   2.304 MHz clock (#11).

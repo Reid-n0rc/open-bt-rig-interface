@@ -9,6 +9,8 @@ The hard constraints every hardware, firmware and enclosure decision must meet.
 Values marked **(verify)** are not yet confirmed. Each one belongs to a research
 issue and must be confirmed (or corrected here) before a design depends on it.
 Decisions that settle an open point are recorded in [`../decisions/`](../decisions/).
+The numbered, testable form of these constraints is
+[`requirements.md`](requirements.md).
 
 ## 1. What the device is
 
@@ -121,8 +123,10 @@ Design guidance (confirmed in the power-front-end issue):
 | Radio module (ESP32-S3-MINI-1), BLE active | about 0.1 A typical, 0.34 A peak (BLE TX at +20 dBm, datasheet) @ 3.3 V |
 | USB hub (wired mode) | about 50 mA **(verify with the hub chosen)** |
 | Audio codec | about 50 mA |
-| USB host VBUS to the radio | up to about 0.5 A (current-limited switch) |
-| Target total | about 1.5 W typical, 3 W peak for the device itself; the radio's VBUS draw comes on top (variant M worst case about 6.2 W input, [`power-automotive.md`](../research/power-automotive.md#2-loads-and-power-budget)) |
+| Target total | about 1.5 W typical, 3 W peak |
+
+The device supplies no power to the radio: the radio port's VBUS is blocked in
+hardware (ADR-0003, [#9](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/9)).
 
 **USB-C budget:** a USB-C host without USB PD may supply only 500 mA at 5 V
 (USB 2.0 default). In wired mode that must cover the device, the hub and the

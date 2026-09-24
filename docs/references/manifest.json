@@ -11,6 +11,8 @@
       "used_in": [
         "docs/decisions/ADR-0008-host-links-esp32-s3.md",
         "docs/research/core-devices.md",
+        "docs/research/module-selection.md",
+        "docs/compliance/fcc.md",
         "docs/research/power-automotive.md"
       ],
       "sha256": "4d4b7f1c17b484c627aaa0f806566c48a6124a8e466c6d21d99210e6eacdef04",
@@ -37,7 +39,9 @@
       "url": "https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32s3/esp-hardware-design-guidelines-en-master-esp32s3.pdf",
       "file": "esp32s3-hw-design.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/module-selection.md",
+        "docs/compliance/fcc.md"
       ],
       "sha256": "2ee5e2e340c2b95c13bd37b611596e1c24023b179bd21930e6f6aa7e2a8a542b",
       "retrieved": "2026-09-24"
@@ -53,6 +57,7 @@
       "notes": "The site blocks scripted downloads; save the PDF from a browser to the cache path.",
       "used_in": [
         "docs/decisions/ADR-0008-host-links-esp32-s3.md",
+        "docs/requirements/requirements.md",
         "docs/research/core-devices.md"
       ]
     },
@@ -117,7 +122,8 @@
       "url": "https://www.raytac.com/download/index.php?index_id=43",
       "file": "raytac-mdbt50q-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/module-selection.md"
       ],
       "sha256": "61fec8c0c9f8c33175be2237a8ebba73c6cfc0a3572fe3835fd341079c103d03",
       "retrieved": "2026-09-24"
@@ -575,6 +581,284 @@
       "retrieved": "2026-09-24"
     },
     {
+      "id": "esp32s3-mini1-fcc-grant",
+      "title": "FCC grant of equipment authorization, FCC ID 2AC7Z-ESPS3MINI1 (ESP32-S3-MINI-1), 2022-02-28",
+      "publisher": "Espressif Systems (copy of the TCB grant)",
+      "kind": "fcc",
+      "url": "https://www.espressif.com/sites/default/files/ESP32-S3-MINI-1%20FCC%20Certification.pdf",
+      "file": "esp32s3-mini1-fcc-grant.pdf",
+      "used_in": [
+        "docs/research/module-selection.md",
+        "docs/compliance/fcc.md"
+      ],
+      "sha256": "0344102bc60709abc518d532b2cadafa5d3fef3f7f8981cf33a7c5ac10a5d768",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "esp32s3-mini1-ised-cert",
+      "title": "ISED technical acceptance certificate 21098-ESPS3MINI1 (ESP32-S3-MINI-1), C1PC 2024-08-16",
+      "publisher": "Espressif Systems (copy of the certificate)",
+      "kind": "web",
+      "url": "https://www.espressif.com/sites/default/files/ESP32-S3-MINI-1%20IC%20Certification.pdf",
+      "file": "esp32s3-mini1-ised-cert.pdf",
+      "used_in": [
+        "docs/research/module-selection.md",
+        "docs/compliance/fcc.md"
+      ],
+      "sha256": "77618c1572f7f4e2a819fb7d022bfd081d755140c37117c50a437ef3c11a437a",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "fcc-2ac7z-esps3mini1-filings",
+      "title": "FCC ID 2AC7Z-ESPS3MINI1 filing list (grant, user manual, test reports)",
+      "publisher": "FCC filing (Espressif Systems)",
+      "kind": "fcc",
+      "url": "https://fcc.report/FCC-ID/2AC7Z-ESPS3MINI1",
+      "file": "fcc-2ac7z-esps3mini1-filings.html",
+      "fetch": "manual",
+      "notes": "The site (and the FCC EAS at apps.fcc.gov/oetcf/eas) blocks scripted access; save the page, and the User Manual exhibit, from a browser.",
+      "used_in": [
+        "docs/research/module-selection.md",
+        "docs/compliance/fcc.md"
+      ]
+    },
+    {
+      "id": "esp32s3-mini1-fcc-manual",
+      "title": "ESP32-S3-MINI-1 user manual v0.6 (2022-02-24), the FCC user-manual exhibit for 2AC7Z-ESPS3MINI1 (mirror)",
+      "publisher": "Espressif Systems (mirrored by manuals.plus)",
+      "kind": "fcc",
+      "url": "https://manuals.plus/espressif/esp32-s3-mini-1-development-board-manual",
+      "file": "esp32s3-mini1-fcc-manual.html",
+      "fetch": "manual",
+      "notes": "Secondary copy of the FCC exhibit; the site blocks scripted downloads. Prefer the User Manual exhibit on the FCC filing list when it can be opened.",
+      "used_in": [
+        "docs/research/module-selection.md",
+        "docs/compliance/fcc.md"
+      ]
+    },
+    {
+      "id": "espressif-longevity",
+      "title": "Espressif longevity commitment (ESP32-S3 series: at least 12 years from 2021-01-01)",
+      "publisher": "Espressif Systems",
+      "kind": "web",
+      "url": "https://www.espressif.com/en/products/longevity-commitment",
+      "file": "espressif-longevity.html",
+      "used_in": [
+        "docs/research/module-selection.md"
+      ],
+      "sha256": "5a6175e2942421dfdf294a5b359181ddc77794564847799f021f1be41c1e654b",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "espressif-s3-modules",
+      "title": "ESP32-S3 modules page (variants, chips, listed distributors)",
+      "publisher": "Espressif Systems",
+      "kind": "web",
+      "url": "https://www.espressif.com/en/products/modules/esp32-s3",
+      "file": "espressif-s3-modules.html",
+      "used_in": [
+        "docs/research/module-selection.md"
+      ],
+      "sha256": "acb02bf0379ebe1de1e4949dfdd5550d31482cd2496cf55c38af1bc05c18b4cc",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "lcsc-esp32s3-mini1-n8",
+      "title": "LCSC C2913206: ESP32-S3-MINI-1-N8 (price, stock)",
+      "publisher": "LCSC Electronics",
+      "kind": "web",
+      "url": "https://www.lcsc.com/product-detail/C2913206.html",
+      "file": "lcsc-esp32s3-mini1-n8.html",
+      "used_in": [
+        "docs/research/module-selection.md"
+      ],
+      "sha256": "1eb7d558a7f945d8eacb5e8aa811c31c9e7f07a04ddac8c830c0aba8a65af46e",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "lcsc-esp32s3-mini1-n4r2",
+      "title": "LCSC C3013941: ESP32-S3-MINI-1-N4R2 (price, stock)",
+      "publisher": "LCSC Electronics",
+      "kind": "web",
+      "url": "https://www.lcsc.com/product-detail/C3013941.html",
+      "file": "lcsc-esp32s3-mini1-n4r2.html",
+      "used_in": [
+        "docs/research/module-selection.md"
+      ],
+      "sha256": "2b6c8debba37bd7c136c36f6152f7ee90bbfe4b5902551026290e0cd3dd567f1",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "lcsc-mdbt50q-p1mv2",
+      "title": "LCSC C5119772: Raytac MDBT50Q-P1MV2 (price, stock)",
+      "publisher": "LCSC Electronics",
+      "kind": "web",
+      "url": "https://lcsc.com/product-detail/bluetooth-modules_raytac-mdbt50q-p1mv2_C5119772.html",
+      "file": "lcsc-mdbt50q-p1mv2.html",
+      "used_in": [
+        "docs/research/module-selection.md"
+      ],
+      "sha256": "c79fd0a7e789106a8489f64969cd3b5df9c61fda595d90e88749b1b7f6a673ba",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ecfr-47-15-19",
+      "title": "47 CFR 15.19 Labeling requirements",
+      "publisher": "eCFR (U.S. Government Publishing Office)",
+      "kind": "standard",
+      "url": "https://www.ecfr.gov/current/title-47/section-15.19",
+      "file": "ecfr-47-15-19.html",
+      "used_in": [
+        "docs/compliance/fcc.md"
+      ],
+      "sha256": "dae15d07a32bef2c0b3c235572b721beb3844db350451627efa35036ca58b95d",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ecfr-47-15-21",
+      "title": "47 CFR 15.21 Information to user",
+      "publisher": "eCFR (U.S. Government Publishing Office)",
+      "kind": "standard",
+      "url": "https://www.ecfr.gov/current/title-47/section-15.21",
+      "file": "ecfr-47-15-21.html",
+      "used_in": [
+        "docs/compliance/fcc.md"
+      ],
+      "sha256": "4dc2fa72c763aa9d28288853b5ef0219e23f3cec8976f108c2b36ff76ac9ebe4",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ecfr-47-15-101",
+      "title": "47 CFR 15.101 Equipment authorization of unintentional radiators",
+      "publisher": "eCFR (U.S. Government Publishing Office)",
+      "kind": "standard",
+      "url": "https://www.ecfr.gov/current/title-47/section-15.101",
+      "file": "ecfr-47-15-101.html",
+      "used_in": [
+        "docs/compliance/fcc.md"
+      ],
+      "sha256": "374d101302a2ed595684617d5bc468c84c4a83553c1f2a22e21ea632bcb319ac",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ecfr-47-15-105",
+      "title": "47 CFR 15.105 Information to the user (Class A and B statements)",
+      "publisher": "eCFR (U.S. Government Publishing Office)",
+      "kind": "standard",
+      "url": "https://www.ecfr.gov/current/title-47/section-15.105",
+      "file": "ecfr-47-15-105.html",
+      "used_in": [
+        "docs/compliance/fcc.md"
+      ],
+      "sha256": "13f3830df801a99037fc6141da5f68233e05b907a94f58b06783988cc7cf3e32",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ecfr-47-15-212",
+      "title": "47 CFR 15.212 Modular transmitters",
+      "publisher": "eCFR (U.S. Government Publishing Office)",
+      "kind": "standard",
+      "url": "https://www.ecfr.gov/current/title-47/section-15.212",
+      "file": "ecfr-47-15-212.html",
+      "used_in": [
+        "docs/compliance/fcc.md"
+      ],
+      "sha256": "80a1878929065d22f66ce07908079ed732207fadb426f8e4e1df14656a99d668",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ecfr-47-2-938",
+      "title": "47 CFR 2.938 Retention of records",
+      "publisher": "eCFR (U.S. Government Publishing Office)",
+      "kind": "standard",
+      "url": "https://www.ecfr.gov/current/title-47/section-2.938",
+      "file": "ecfr-47-2-938.html",
+      "used_in": [
+        "docs/compliance/fcc.md"
+      ],
+      "sha256": "ade234c9def317e4331c0294cdad146ad0c61a9763871563ca6cb70e1dacb0b0",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ecfr-47-2-1074",
+      "title": "47 CFR 2.1074 Identification (Supplier's Declaration of Conformity)",
+      "publisher": "eCFR (U.S. Government Publishing Office)",
+      "kind": "standard",
+      "url": "https://www.ecfr.gov/current/title-47/section-2.1074",
+      "file": "ecfr-47-2-1074.html",
+      "used_in": [
+        "docs/compliance/fcc.md"
+      ],
+      "sha256": "01209e2cae33e4d0c8568ab5a9b924104c9dce0f4c9c212743b6b7f2433122ef",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ecfr-47-2-1077",
+      "title": "47 CFR 2.1077 Compliance information (Supplier's Declaration of Conformity)",
+      "publisher": "eCFR (U.S. Government Publishing Office)",
+      "kind": "standard",
+      "url": "https://www.ecfr.gov/current/title-47/section-2.1077",
+      "file": "ecfr-47-2-1077.html",
+      "used_in": [
+        "docs/compliance/fcc.md"
+      ],
+      "sha256": "2a97f5848c0eece629581fe31cae308defaf42ae32c0dfe3b76663c983303878",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "fcc-kdb-996369",
+      "title": "FCC KDB 996369: modules, module certification, 15.212 (D03 OEM manual, D04 module integration guide)",
+      "publisher": "FCC Office of Engineering and Technology",
+      "kind": "standard",
+      "url": "https://apps.fcc.gov/oetcf/kdb/forms/FTSSearchResultPage.cfm?id=44637&switch=P",
+      "file": "fcc-kdb-996369.html",
+      "fetch": "manual",
+      "notes": "apps.fcc.gov blocks scripted access; open it in a browser and save the page (and the D03 and D04 attachments as PDF).",
+      "used_in": [
+        "docs/research/module-selection.md",
+        "docs/compliance/fcc.md"
+      ]
+    },
+    {
+      "id": "fcc-kdb-784748",
+      "title": "FCC KDB 784748: labeling and user information (D01 general labeling and notification)",
+      "publisher": "FCC Office of Engineering and Technology",
+      "kind": "standard",
+      "url": "https://apps.fcc.gov/oetcf/kdb/forms/FTSSearchResultPage.cfm?id=27980&switch=P",
+      "file": "fcc-kdb-784748.html",
+      "fetch": "manual",
+      "notes": "apps.fcc.gov blocks scripted access; open it in a browser and save the page (and the D01 attachment as PDF).",
+      "used_in": [
+        "docs/compliance/fcc.md"
+      ]
+    },
+    {
+      "id": "ecfr-47-15-107",
+      "title": "47 CFR 15.107 Conducted limits (unintentional radiators)",
+      "publisher": "eCFR (U.S. Government Publishing Office)",
+      "kind": "standard",
+      "url": "https://www.ecfr.gov/current/title-47/section-15.107",
+      "file": "ecfr-47-15-107.html",
+      "used_in": [
+        "docs/compliance/fcc.md"
+      ],
+      "sha256": "64e9da389531c8d6e8ad331a7e43f3e34f412e93a1c8b21381326e7919aeea88",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ecfr-47-15-109",
+      "title": "47 CFR 15.109 Radiated emission limits (unintentional radiators)",
+      "publisher": "eCFR (U.S. Government Publishing Office)",
+      "kind": "standard",
+      "url": "https://www.ecfr.gov/current/title-47/section-15.109",
+      "file": "ecfr-47-15-109.html",
+      "used_in": [
+        "docs/compliance/fcc.md"
+      ],
+      "sha256": "d67001d0dc491931674b4dcefca686fc87fe31410d93af81045b2a73a24a395a",
+      "retrieved": "2026-09-24"
+    },
+    {
       "id": "iso-16750-2-2023-preview",
       "title": "ISO 16750-2:2023 (5th edition) Road vehicles, electrical loads: official preview (foreword, contents, clauses 1-4.2)",
       "publisher": "ISO (preview via iTeh Standards)",
@@ -814,20 +1098,6 @@
         "docs/research/power-automotive.md"
       ],
       "sha256": "6ae0d287dc6c9e980493a67a5bf0c9370937e52e5923f6ea5ac4221bb9c4118c",
-      "retrieved": "2026-09-24"
-    },
-    {
-      "id": "ti-tps2553-q1-ds",
-      "title": "TPS2553-Q1 automotive adjustable current-limited power-distribution switch datasheet",
-      "publisher": "Texas Instruments",
-      "kind": "datasheet",
-      "url": "https://www.ti.com/lit/ds/symlink/tps2553-q1.pdf",
-      "file": "ti-tps2553-q1-ds.pdf",
-      "used_in": [
-        "docs/research/power-automotive.md",
-        "docs/decisions/ADR-0004-power-automotive.md"
-      ],
-      "sha256": "ae020244567f34db96d4095a581b0e54d9c90284ebb7c5488c9b454c17b8c98d",
       "retrieved": "2026-09-24"
     },
     {

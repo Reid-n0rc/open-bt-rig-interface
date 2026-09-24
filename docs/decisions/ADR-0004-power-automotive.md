@@ -18,9 +18,14 @@ the vehicle is off. Constraints: [`constraints.md`](../requirements/constraints.
 §3.2 (automotive input), §3.4 (power budget), §5 (RF environment), §6
 (PTT fail-safe, isolation), §11 (−40 to +85 °C), §12 and
 [`pcb-fabrication.md`](../requirements/pcb-fabrication.md) (JLCPCB, 2 layers,
-MLCC 2× rule). Loads follow [ADR-0008](ADR-0008-host-links-esp32-s3.md):
-ESP32-S3-MINI-1 (0.34 A peak), USB hub, codec, isolated jack-side supply and
-current-limited 5 V VBUS to the radio (up to about 0.5 A).
+MLCC 2× rule). Requirements: REQ-PWR-003, -005, -010 to -017, REQ-EMC-004 to
+-007 and REQ-ENV-002 ([`requirements.md`](../requirements/requirements.md)).
+Loads follow [ADR-0008](ADR-0008-host-links-esp32-s3.md): ESP32-S3-MINI-1
+(0.34 A peak), USB hub, codec and the isolated jack-side supply. **The device
+supplies no power to the radio.** The radio port's VBUS is blocked in hardware
+(maintainer decision 2026-09-24; ADR-0003,
+[#9](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/9)), and the
+device never sources power out of any port (USB-C is a sink).
 
 The test levels were confirmed from app notes that reproduce ISO 16750-2:2023
 and ISO 7637-2:2011, plus the official ISO previews for editions and clauses
@@ -47,8 +52,8 @@ Full analysis, calculations, prices and stock:
 | **D. LM74800-Q1 common source (150 V blocking FET, OV cut-off) + TVS stack with breakdown above 101 V** | One IC does reverse polarity, reverse-current blocking and load-dump cut-off; **0 J** in the TVS and FETs during test A and B; 5 µA max shutdown | Resets during a test A pulse (functional status C); needs a 150 V FET and a VS clamp | [LM7480-Q1](../references/index.md#ti-lm7480-q1-ds) §10.3, [TPSMB](../references/index.md#littelfuse-tpsmb-ds) |
 | Buck at a default frequency (2.1 / 2.2 MHz, spread spectrum) | Standard, no clock part | 2.1 MHz × 14 and 2.2 MHz × 13 land inside 10 m; spread spectrum smears harmonics into the bands | [47 CFR 97.301](../references/index.md#ecfr-47-97-301), research §6.2 |
 | **Buck synchronized at 2.304 MHz** (LMR43620-Q1, sync 0.2–2.5 MHz, FPWM) | Every harmonic from 160 m to 10 m at least 88 kHz outside the US bands (≥ 53 kHz up to ±0.5 % clock error) | Needs an AEC-Q100 oscillator; the LM6x440 family can't sync that high (2.2 MHz max; its only clean point, 2.150 MHz, has 50 kHz margin) | [LMR436x0-Q1](../references/index.md#ti-lmr436x0-q1-ds), [SiT8924B](../references/index.md#sitime-sit8924b-ds) |
-| 5 V buck-boost for cold crank | VBUS to the radio survives a 4.5 V crank | Second converter and frequency, cost; the radio itself isn't specified that low **(verify, #5)** | research §7 |
-| **Brownout with PTT forced off** | Simple; logic survives the normal crank; PTT is off below 7 V by hardware | Radio USB may reset during a crank | [TPS3710-Q1](../references/index.md#ti-tps3710-q1-ds) |
+| 5 V buck-boost for cold crank | Logic survives the severe 3 V crank | Second converter and frequency, cost; the radio itself isn't specified that low **(verify, #5)** | research §7 |
+| **Brownout with PTT forced off** | Simple; logic survives the normal crank; PTT is off below 7 V by hardware | Device resets in a severe crank | [TPS3710-Q1](../references/index.md#ti-tps3710-q1-ds) |
 
 ## Decision
 
@@ -66,12 +71,13 @@ Full analysis, calculations, prices and stock:
 3. **Regulation:** **LMR43620-Q1** 12 V → 5 V (Buck A), then a second
    **LMR43620-Q1** 5 V → 3.3 V (Buck B). Both are **synchronized to a
    2.304 MHz AEC-Q100 oscillator** (SiT8924B), in FPWM, with no spread
-   spectrum while synchronized. [TPS2553-Q1](../references/index.md#ti-tps2553-q1-ds) current-limits VBUS to the radio
-   (≥ 0.5 A minimum). LP5907-Q1 supplies the codec's analog rail (#8 decides).
+   spectrum while synchronized. Worst-case load is 0.42 A at 5 V and 2.4 W at
+   the input. There is no VBUS switch to the radio (see ADR-0003, #9).
+   LP5907-Q1 supplies the codec's analog rail (#8 decides).
 4. **Cold crank:** no buck-boost; brown out safely. A **TPS3710-Q1** on the
    protected rail pulls **PTT enable** low below **7.0 V**. That gives
-   ≥ 239 µs before logic dropout at worst-case load, and interruptions up to
-   1 ms (at 6.2 W) are ridden through.
+   ≥ 618 µs before logic dropout at worst-case load, and interruptions up to
+   2.6 ms (at 2.4 W) are ridden through.
 5. **Power-down:** ignition or radio-on SENSE, USB-C host VBUS and a firmware
    HOLD line are diode-ORed into the LM74800-Q1 enable. Off-state drain is
    **≤ 7 µA** at 25 °C (limit 1 mA).
@@ -87,28 +93,27 @@ constraints §5 requires.
 ## Consequences
 
 - **constraints.md §3.2:** jump start is now 26 V for 60 s (ISO 16750-2:2023),
-  with the editions and research doc cited. **§3.4:** the variant M worst case
-  is about 6.2 W input, because the radio's VBUS (up to 0.62 A at 5 V) adds to
-  the device's 3 W. **pcb-fabrication.md §6.3:** capacitors before the
+  with the editions and research doc cited; REQ-PWR-014 should follow (26 V).
+  **§3.4:** the radio VBUS row is removed, since the device supplies no power
+  to the radio (ADR-0003, #9). Variant M's 2.4 W worst case meets the 3 W peak
+  target (REQ-PWR-003). **pcb-fabrication.md §6.3:** capacitors before the
   protection are rated 250 V, after it 100 V.
 - **Variant R (#11)** should reuse the LMR43620-Q1 pair on the same 2.304 MHz
   clock, the SMBJ33CA-HE3, the LM74700-Q1 or LM74800-Q1 (common drain, no
-  150 V FET), the TPS2553-Q1, the TPS3710-Q1 and the LP5907-Q1.
+  150 V FET), the TPS3710-Q1 and the LP5907-Q1.
 - **#9:** the isolated jack-side supply must also keep its harmonics out of the
   bands. An SN6505B-Q1 (external clock ≤ 1.6 MHz, divided by 2) can't share
   the 2.304 MHz comb, so it needs filtering and shielding, or another
   topology. The PTT enable from the brownout detector is ANDed with the
   watchdog gate.
-- **#5:** the radio's VBUS current and its low-voltage behavior set the
-  TPS2553-Q1 limit and confirm the cold-crank decision.
+- **#5:** the radios' low-voltage behavior confirms the cold-crank decision.
 - **Firmware:** a power-management task handles the SENSE input, the delayed
   HOLD release, the low-battery shutdown and the brownout interrupt. Each gets
   tests per the PTT fail-safe rule.
-- **Risks to verify:** thin stock of the LMR43620-Q1, Q1, TPS2553-Q1 and
-  TPS3710-Q1 (Digi-Key/Mouser lookups were blocked, so the second distributor
-  is still open); Buck A junction temperature on 2 layers (116–137 °C
-  estimated at 85 °C ambient); harmonics 22–23 in 6 m, which are unavoidable
-  below 4 MHz and need measurement; ISO 10605 ESD levels; buck efficiencies.
+- **Risks to verify:** thin stock of the LMR43620-Q1, Q1 and TPS3710-Q1
+  (Digi-Key/Mouser lookups were blocked, so the second distributor is still
+  open); harmonics 22–23 in 6 m, which are unavoidable below 4 MHz and need
+  measurement; ISO 10605 ESD levels; buck efficiencies.
 - **Bench tests (later human-task):** ISO 7637-2 level IV pulses, ISO 16750-2
   test A/B, jump start, cold crank, ESD, a CISPR 25 pre-scan, and a receiver
   noise-floor check from 160 m to 6 m.

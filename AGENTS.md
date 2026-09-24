@@ -114,10 +114,21 @@ name or protocol to a particular host application.
 
 ## Build and test
 
-The rest of CI and the full command list are added by the CI issue (#3). Until then:
+CI runs `.github/workflows/checks.yml` and `kicad-checks.yml` on every PR and on
+pushes to `dev`/`main`. Required checks: **`REUSE lint`**, **`KiCad version
+consistency`**, **`Silkscreen revision check`** and **`KiCad ERC/DRC gate`**.
+Run the same commands locally before pushing:
 
 - KiCad CLI (macOS): `/Applications/KiCad/KiCad.app/Contents/MacOS/kicad-cli`.
-- License check: `uvx reuse lint`.
+- License check: `uvx --from 'reuse[charset-normalizer]' reuse lint`.
+- KiCad version: `python3 tools/kicad_ci/check_kicad_version.py`. Every
+  `*.kicad_sch/pcb/sym/mod/pro` and every doc quoting the minimum version must
+  match [`KICAD_VERSION`](KICAD_VERSION).
+- Silkscreen: `python3 tools/kicad_ci/check_silkscreen.py [--tag hw-R-revA-v1.0]`.
+  Checks each `hardware/boards/<board>/rev<X>/` PCB against the silkscreen rules
+  above; on `hw-*` tags a board must match the tag.
+- CI script self-tests: `python3 -m unittest discover -s tools/kicad_ci -p 'test_*.py'`.
+  Their KiCad fixtures are strings inside the tests; never commit `.kicad_*` fixtures.
 - Reference library: `python3 tools/refs/refs.py check` (manifest valid, index current);
   `python3 tools/refs/refs.py fetch` downloads local copies into the gitignored
   `docs/references/cache/`. Cite third-party documents through
