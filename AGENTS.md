@@ -25,8 +25,11 @@ name or protocol to a particular host application.
 - **PR to `dev`** with `Closes #N`. `dev` is pre-release and the default branch.
 - **`main` is for releases only**, updated by a `dev` → `main` PR per release.
   Never commit directly to `main` or `dev` (a ruleset enforces PRs).
-- **Signed commits only.** Never use `--no-gpg-sign` or change signing config.
-  If signing fails, stop and report.
+- **Signed commits (SSH or GPG) are preferred but not required.** The branch
+  ruleset doesn't enforce signatures; PRs are still required for `main` and `dev`.
+  If your environment signs automatically, keep it on: don't pass `--no-gpg-sign`
+  or change signing config. If signing fails, report it rather than silently
+  committing unsigned.
 - Research and decision issues end in a written artifact: a findings doc
   or an ADR in [`docs/decisions/`](docs/decisions/) (copy `ADR-0000-template.md`).
 - If an issue's "Verify first" fact turns out false, stop and comment on the

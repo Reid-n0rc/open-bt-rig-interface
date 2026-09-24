@@ -11,7 +11,8 @@ alike. In short:
 1. **Start from an issue.** No change without one. Propose one first if it doesn't exist.
 2. **Plan** in the issue before working.
 3. **Branch** from `dev` as `<type>/<issue#>-<slug>`.
-4. **Signed commits only.**
+4. **Signed commits (SSH or GPG) are preferred but not required.** The branch
+   ruleset doesn't enforce signatures; PRs are still required for `main` and `dev`.
 5. **Open a PR to `dev`** with `Closes #N` and fill in the PR template. `main` is
    updated only by release PRs.
 6. KiCad work uses **KiCad ≥ 10.0.6** through the Konnect tools. Keep
