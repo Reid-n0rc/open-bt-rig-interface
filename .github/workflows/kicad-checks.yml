@@ -1,0 +1,127 @@
+# SPDX-FileCopyrightText: 2026 Reid Crowe, N0RC
+# SPDX-License-Identifier: MIT
+#
+# Merge gate for hardware: ERC must pass when a schematic changes and DRC must
+# pass when a PCB changes. `KiCad ERC/DRC gate` always reports, so it can be a
+# required status check: it passes when there is nothing to check (no KiCad
+# changes, or no boards yet). Rules live in tools/kicad_ci/select_projects.py.
+
+name: KiCad checks
+
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: kicad-checks-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # "error+warning" = KiCad's default: errors and warnings fail, excluded items
+  # never do. Set to "error" to let warnings through (maintainer decision).
+  KICAD_GATE_SEVERITY: error+warning
+
+jobs:
+  plan:
+    name: Plan KiCad checks
+    runs-on: ubuntu-latest
+    outputs:
+      any: ${{ steps.select.outputs.any }}
+      matrix: ${{ steps.select.outputs.matrix }}
+      image: ${{ steps.image.outputs.image }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Self-test the KiCad CI scripts
+        run: python -m unittest discover -s tools/kicad_ci -p 'test_*.py' -v
+
+      - name: Resolve the pinned KiCad image (from KICAD_VERSION)
+        id: image
+        run: python tools/kicad_ci/select_projects.py --github-output "$GITHUB_OUTPUT" image
+
+      - name: Select projects and checks
+        id: select
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            git diff --name-only "$BASE_SHA...$HEAD_SHA" > "$RUNNER_TEMP/changed.txt"
+            echo "Changed files:"; cat "$RUNNER_TEMP/changed.txt"
+            python tools/kicad_ci/select_projects.py --github-output "$GITHUB_OUTPUT" \
+              select --changed-files "$RUNNER_TEMP/changed.txt"
+          else
+            python tools/kicad_ci/select_projects.py --github-output "$GITHUB_OUTPUT" select --all
+          fi
+
+  erc-drc:
+    name: ERC/DRC ${{ matrix.project.name }}
+    needs: plan
+    if: needs.plan.outputs.any == 'true'
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ needs.plan.outputs.image }}
+      options: --user root
+    strategy:
+      fail-fast: false
+      matrix:
+        project: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Show KiCad version
+        run: kicad-cli version
+
+      - name: Ensure python3
+        run: command -v python3 >/dev/null || (apt-get update && apt-get install -y --no-install-recommends python3)
+
+      - name: Run ERC/DRC
+        env:
+          PROJECT_JSON: ${{ toJSON(matrix.project) }}
+        run: python3 tools/kicad_ci/run_checks.py --out kicad-reports
+
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kicad-reports-${{ matrix.project.slug }}
+          path: kicad-reports/
+          if-no-files-found: ignore
+
+  kicad-gate:
+    name: KiCad ERC/DRC gate
+    needs: [plan, erc-drc]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Evaluate
+        env:
+          PLAN_RESULT: ${{ needs.plan.result }}
+          CHECK_RESULT: ${{ needs.erc-drc.result }}
+          ANY: ${{ needs.plan.outputs.any }}
+        run: |
+          echo "plan=$PLAN_RESULT checks=$CHECK_RESULT any=$ANY"
+          if [ "$PLAN_RESULT" != "success" ]; then
+            echo "::error::Planning the KiCad checks failed"; exit 1
+          fi
+          if [ "$ANY" != "true" ]; then
+            echo "Nothing to check: no KiCad schematic/PCB changes (or no boards yet)." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          if [ "$CHECK_RESULT" != "success" ]; then
+            echo "::error::ERC/DRC did not pass ($CHECK_RESULT); see the job summaries and report artifacts"; exit 1
+          fi
+          echo "ERC/DRC passed." >> "$GITHUB_STEP_SUMMARY"

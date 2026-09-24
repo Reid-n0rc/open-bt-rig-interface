@@ -97,7 +97,34 @@ name or protocol to a particular host application.
 
 ## Build and test
 
-CI and the command list are added by the CI issue. Until then:
+The rest of CI and the full command list are added by the CI issue (#3). Until then:
 
 - KiCad CLI (macOS): `/Applications/KiCad/KiCad.app/Contents/MacOS/kicad-cli`.
 - License check: `uvx reuse lint`.
+
+### ERC/DRC merge gate (required)
+
+**ERC must pass when a schematic changes, and DRC must pass when a PCB
+changes**, before anything merges into `dev` or `main`.
+`.github/workflows/kicad-checks.yml` enforces this in the pinned
+`kicad/kicad:<KICAD_MIN_VERSION>` image. The required check is **`KiCad ERC/DRC gate`**.
+
+- **Triggers:** `*.kicad_sch` → ERC on the project's root schematic.
+  `*.kicad_pcb` → DRC with `--schematic-parity --refill-zones`.
+  `*.kicad_pro`, `*.kicad_dru` and the lib tables → both. `hardware/lib/**`,
+  `KICAD_VERSION` and the CI scripts → every project. Pushes to `dev`/`main`
+  → every project.
+- **Severity:** KiCad's default. **Errors and warnings fail; excluded items
+  don't.** To accept a specific warning, exclude that instance in KiCad with a
+  comment explaining why, where the PR review sees it. To change what blocks,
+  change the rule's severity in the project settings. Don't weaken the gate in CI.
+- **Run it locally before pushing** (the same scripts CI uses):
+
+  ```sh
+  python3 -m unittest discover -s tools/kicad_ci -p 'test_*.py'
+  python3 tools/kicad_ci/select_projects.py select --all      # prints the plan
+  KICAD_CLI=/Applications/KiCad/KiCad.app/Contents/MacOS/kicad-cli \
+    python3 tools/kicad_ci/run_checks.py --project-json '<one matrix entry>' --out /tmp/kicad-reports
+  ```
+
+  Or run ERC/DRC from Konnect (`verification` toolset) or the KiCad GUI.
