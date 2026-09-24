@@ -16,6 +16,11 @@ and tagged independently (see `AGENTS.md`).
   sourcing; supports ADR-0008. New `docs/compliance/fcc.md`: antenna keep-out
   and board integration rules, host label text, user manual statements and a
   Part 15B SDoC checklist (#7).
+- CI checks (`.github/workflows/checks.yml`): `REUSE lint`, `KiCad version
+  consistency` (every KiCad file and the docs against `KICAD_VERSION`, which
+  now also records the symbol-library format) and `Silkscreen revision check`
+  (title-block revision, `${REVISION}`/`${ISSUE_DATE}`, required markings,
+  `hw-*` tags), with unit tests in `tools/kicad_ci/` (#3).
 - PCB fabrication and passive-component rules (`docs/requirements/pcb-fabrication.md`):
   JLCPCB standard process, 2 layers preferred, 0402 resistors, MLCC with a 2×
   voltage rule and DC-bias check (#49).
