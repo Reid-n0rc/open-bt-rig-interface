@@ -19,8 +19,9 @@ Decisions are weighed against these principles, in order:
 
 1. **Safety first.** The device keys a transmitter. PTT fail-safes, behavior in a
    strong RF field, and power-input robustness outrank features and schedule.
-2. **Open.** Hardware is CERN-OHL-P-2.0, firmware/tools/protocol code MIT, and docs
-   CC-BY-4.0 (see [`LICENSE`](LICENSE)). Design decisions are recorded publicly.
+2. **Open.** Sources and design decisions are public. Licensing is defined only in
+   [`LICENSE`](LICENSE), [`LICENSES/`](LICENSES/) and
+   [`COMMERCIAL.md`](COMMERCIAL.md); this document doesn't restate it.
 3. **App-neutral.** No design, name or protocol is tied to a particular host
    application. Host apps are consumers of published protocol releases.
 4. **Standards over custom.** Standard Bluetooth profiles come first, so the device
@@ -30,7 +31,7 @@ Decisions are weighed against these principles, in order:
 
 | Role | Who | Can |
 |---|---|---|
-| **Maintainer** | Reid Crowe, N0RC ([@Reid-n0rc](https://github.com/Reid-n0rc)) | Everything below, plus: merge PRs, cut releases, appoint or remove reviewers, set priorities, make final decisions, change governance. |
+| **Maintainer** | Reid Crowe, N0RC ([@Reid-n0rc](https://github.com/Reid-n0rc)) | Everything below, plus: merge PRs, cut releases, appoint or remove reviewers, set priorities, make final decisions, grant commercial licenses, change governance. The maintainer is the project's final decision-maker. |
 | **Reviewer** | Appointed by the maintainer, listed in this file | Review and approve PRs; merge PRs the maintainer delegates to them. Can't cut releases or change governance. |
 | **Contributor** | Anyone | Open issues, propose plans, submit PRs, review and comment. |
 | **AI agent** | Automated assistants working on a contributor's behalf | Prepare plans, issues, branches, commits and PRs under `AGENTS.md`. **Can't merge, approve, release, or do `human-task` work** (anything needing a person, physical hardware, test equipment or accounts). A person is always accountable for an agent's output. |
@@ -55,16 +56,19 @@ Current reviewers: *none yet.*
 
 - All changes reach `dev` through a PR linked to an issue. `main` and `dev` are
   protected: PRs only, signed commits, no force-push or deletion.
-- A PR can be merged when its required checks pass, all commits are signed, and it
-  meets its issue's acceptance criteria. Hardware PRs must pass ERC for schematic
+- A PR can be merged when its required checks pass, all commits are signed, its
+  author has accepted the contributor terms, and it meets its issue's acceptance
+  criteria. Decisions are made through the linked issue and PR review. Hardware PRs must pass ERC for schematic
   changes and DRC for PCB changes.
 - Only the maintainer, or a reviewer the maintainer delegates to, merges PRs.
   Authors, human or agent, don't merge their own PRs unless they're the maintainer.
 
 ## Release policy
 
-- Releases are cut by the maintainer through a `dev` → `main` PR, then tagged using
-  the scheme in [`AGENTS.md`](AGENTS.md#releases-and-tags).
+- **Release authority belongs to the maintainer alone.** Only the maintainer opens
+  and merges the `dev` → `main` release PR and creates release tags (`hw-…`, `fw-…`,
+  `proto-…`, using the scheme in [`AGENTS.md`](AGENTS.md#releases-and-tags)).
+  Reviewers and agents may prepare release notes but can't release.
 - A **hardware release** (`hw-<variant>-rev<X>-v…`) needs all of the following:
   - clean ERC and DRC;
   - a completed design review;
@@ -87,11 +91,17 @@ Current reviewers: *none yet.*
 
 ## Contributions and licensing
 
-- **Inbound = outbound.** A contribution is licensed under the license of the path
-  it changes (see [`REUSE.toml`](REUSE.toml)). There's no CLA.
-- Third-party material must be license-compatible and keep its notices. Sources
-  under GPL, LGPL or AGPL, or with no license, may be used for facts only, never
-  copied.
+- The project is **dual-licensed**: public non-commercial terms, plus separate
+  commercial licenses granted by the maintainer (see [`COMMERCIAL.md`](COMMERCIAL.md)).
+  To keep that possible, **every contribution must be made under the contributor
+  terms in [`CONTRIBUTING.md`](CONTRIBUTING.md)** (a contributor license agreement
+  or copyright assignment). Those terms let the maintainer license contributions
+  under both the public and the commercial terms. The maintainer won't merge a PR
+  whose author hasn't accepted them. This document doesn't restate the license or
+  contributor terms themselves.
+- Third-party material must be license-compatible with **both** the public and the
+  commercial terms, and must keep its notices. Sources under GPL, LGPL or AGPL, or
+  with no license, may be used for facts only, never copied.
 
 ## Conduct and reporting
 
