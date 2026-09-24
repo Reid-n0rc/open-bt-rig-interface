@@ -6,7 +6,7 @@ SPDX-License-Identifier: CC-BY-4.0
 # Governance
 
 This document says **who decides what** in open-bt-rig-interface. *How* to do the
-work (issues, branches, signed commits, PRs) is in [`AGENTS.md`](AGENTS.md); this
+work (issues, branches, commits, PRs) is in [`AGENTS.md`](AGENTS.md); this
 document doesn't repeat those rules. Where the two appear to disagree, raise an
 issue. Until it's resolved, `AGENTS.md` governs day-to-day work and this document
 governs authority.
@@ -55,8 +55,9 @@ Current reviewers: *none yet.*
 ## Merge policy
 
 - All changes reach `dev` through a PR linked to an issue. `main` and `dev` are
-  protected: PRs only, signed commits, no force-push or deletion.
-- A PR can be merged when its required checks pass, all commits are signed, its
+  protected: PRs only, no force-push or deletion. Signed commits (SSH or GPG)
+  are preferred but not required; the ruleset doesn't enforce signatures.
+- A PR can be merged when its required checks pass, its
   author has accepted the contributor terms, and it meets its issue's acceptance
   criteria. Decisions are made through the linked issue and PR review. Hardware PRs must pass ERC for schematic
   changes and DRC for PCB changes.
