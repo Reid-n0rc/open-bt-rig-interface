@@ -10,7 +10,7 @@ Written 2026-09-24.
 
 This document turns [`constraints.md`](constraints.md) into numbered, testable
 requirements. It follows the host-link decision in
-[ADR-0008](../decisions/ADR-0008-host-links-esp32-s3.md) (proposed): **Bluetooth
+[ADR-0008](../decisions/ADR-0008-host-links-esp32-s3.md): **Bluetooth
 LE and wired USB-C** host links, no Bluetooth Classic, and one radio side for
 both. The radio-side connectors come from
 [`radio-connectors.md`](radio-connectors.md), and PCB and passive-component
