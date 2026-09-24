@@ -1,0 +1,72 @@
+# SPDX-FileCopyrightText: 2026 Reid Crowe, N0RC
+# SPDX-License-Identifier: MIT
+#
+# Repository checks for every PR and push (see AGENTS.md, Build and test):
+# REUSE licensing, KiCad version consistency and the silkscreen revision check.
+# The jobs have no path filters, so they always report and can be required
+# status checks. With no boards yet the KiCad checks pass. The ERC/DRC gate is
+# separate (kicad-checks.yml).
+
+name: Checks
+
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+    tags: ["hw-*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  reuse:
+    name: REUSE lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v6
+
+      - name: reuse lint
+        run: uvx --from 'reuse[charset-normalizer]' reuse lint
+
+  kicad-version:
+    name: KiCad version consistency
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Self-test the check
+        working-directory: tools/kicad_ci
+        run: python -m unittest -v test_kicad_files test_check_kicad_version
+
+      - name: Check KiCad files and docs against KICAD_VERSION
+        run: python tools/kicad_ci/check_kicad_version.py
+
+  silkscreen:
+    name: Silkscreen revision check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Self-test the check
+        working-directory: tools/kicad_ci
+        run: python -m unittest -v test_kicad_files test_check_silkscreen
+
+      # On hw-* tag builds the tag comes from GITHUB_REF and must match a board.
+      - name: Check board revisions and silkscreen
+        run: python tools/kicad_ci/check_silkscreen.py
