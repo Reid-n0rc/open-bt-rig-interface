@@ -6,7 +6,8 @@ SPDX-License-Identifier: CC-BY-4.0
 # Contributing
 
 The complete rules are in [`AGENTS.md`](AGENTS.md). They apply to humans and AI agents
-alike. In short:
+alike. For environment setup, local checks and recipes, see the
+[developer guide](docs/developer-guide.md). In short:
 
 1. **Start from an issue.** No change without one. Propose one first if it doesn't exist.
 2. **Plan** in the issue before working.

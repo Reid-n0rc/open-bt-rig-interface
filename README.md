@@ -53,6 +53,8 @@ PTT, CAT (TTL/RS-232/CI-V), and a USB host for radios that expose only USB. See
 Every change starts from an issue and lands through a PR to `dev`. Read
 [`AGENTS.md`](AGENTS.md) (the rules for humans and AI agents alike) and
 [`CONTRIBUTING.md`](CONTRIBUTING.md).
+For setup, local checks and step-by-step recipes, see the
+[developer guide](docs/developer-guide.md).
 
 ## Background
 
