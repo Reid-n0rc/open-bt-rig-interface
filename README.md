@@ -5,25 +5,28 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # open-bt-rig-interface
 
-A source-available **hardware + firmware** Bluetooth interface between an amateur-radio
-transceiver and a phone, tablet or computer. It carries **CAT serial**, **PTT**
-(including RTS/DTR-style control) and **audio** without a cable to the host.
+A source-available **hardware + firmware** interface between an amateur-radio
+transceiver and a phone, tablet or computer, over **Bluetooth LE** or **wired
+USB-C**. It carries **CAT serial**, **PTT** (including RTS/DTR-style control)
+and **audio**.
 
 > **Status:** planning and research. No hardware or firmware yet. See the open
 > issues.
 
 ## Host support (target)
 
-The device appears as a **standard Bluetooth audio device plus a serial
-connection**:
+See [ADR-0008](docs/decisions/ADR-0008-host-links-esp32-s3.md):
 
-| Host | Serial | Audio |
+| Host | Wired USB-C | Bluetooth LE |
 |---|---|---|
-| Windows | COM port (Bluetooth SPP) | Headset device (HFP, mSBC) |
-| macOS | `/dev/cu.*` (SPP) | Input/output device (HFP) |
-| Linux | `rfcomm` (SPP) | PipeWire (HFP) |
-| Android | SPP (app-level `BluetoothSocket`) | HFP |
-| iOS | **Bluetooth LE, app-level only.** Apps must implement the [protocol](protocol/); iOS offers no SPP to non-MFi accessories | HFP |
+| Windows, macOS, Linux | Native serial port and sound card, no drivers | Apps or host software that implement the [protocol](protocol/) |
+| Android | Sound card natively; serial through apps | Apps that implement the protocol |
+| iOS / iPadOS | Sound card natively | Apps that implement the protocol |
+
+On the radio side it supports, in both modes, radios with a built-in USB-serial
+chip and sound card, radios with USB serial and analog audio, and radios with
+RS-232, 3.3 V logic or Icom CI-V serial and analog audio. In wired mode, radios
+with their own USB port appear to the computer directly through an on-board hub.
 
 ## Planned variants
 
@@ -32,8 +35,9 @@ connection**:
 - **M: mobile/automotive.** A 12 V input built for a harsh automotive environment
   (ISO 16750-2 / ISO 7637-2 targets).
 
-Both share one core design: a dual-mode Bluetooth module, audio codec, isolated
-PTT, CAT (TTL/RS-232/CI-V), and a USB host for radios that expose only USB. See
+Both share one core design: an ESP32-S3-MINI-1 Bluetooth LE module, audio codec,
+isolated PTT, CAT (TTL/RS-232/CI-V), and a USB host for the radio's USB sound
+card and USB-serial chip. See
 [`docs/requirements/constraints.md`](docs/requirements/constraints.md).
 
 ## Repository layout

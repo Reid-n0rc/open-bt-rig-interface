@@ -10,6 +10,18 @@ and tagged independently (see `AGENTS.md`).
 
 ## Unreleased
 
+- Core device shortlist for revision A (`docs/research/core-devices.md`):
+  candidate key parts per block, with dated module price and stock (#42).
+- ADR-0008 (proposed): Bluetooth LE and wired USB-C host links on the
+  ESP32-S3-MINI-1, with one radio side for both: radios with USB serial + USB
+  audio, USB serial + analog audio, or RS-232 / 3.3 V logic / CI-V + analog
+  audio. In wired mode an on-board hub shows the radio's own USB chips to the
+  computer. `constraints.md` and `README.md` updated to match (#42).
+- Radio-side connector spec (`docs/requirements/radio-connectors.md`): AUDIO and
+  SERIAL 3.5 mm TRRS jacks compatible with existing cables, firmware-selected
+  RS-232-tolerant serial modes, a radio USB port and a USB-C port (#42).
+- Reference library: `docs/references/` manifest and index, and
+  `tools/refs/refs.py` to fetch local copies into a gitignored cache (#42).
 - `SECURITY.md`: report security and safety problems privately through
   GitHub private vulnerability reporting (now enabled), linked from
   `GOVERNANCE.md` and the issue chooser (#47).

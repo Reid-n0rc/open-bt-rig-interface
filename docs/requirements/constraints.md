@@ -12,8 +12,8 @@ Decisions that settle an open point are recorded in [`../decisions/`](../decisio
 
 ## 1. What the device is
 
-A Bluetooth interface between an amateur-radio transceiver and a host (phone,
-tablet or computer). It carries:
+An interface between an amateur-radio transceiver and a host (phone, tablet or
+computer), over Bluetooth LE or a wired USB-C connection (§2). It carries:
 
 - **CAT serial:** transparent byte passthrough. The device never interprets the
   radio's command set.
@@ -22,37 +22,45 @@ tablet or computer). It carries:
 
 ## 2. Host compatibility
 
-The device must appear as **both an audio device and a serial connection** on
-all five host platforms:
+The device has two host links ([ADR-0008](../decisions/ADR-0008-host-links-esp32-s3.md)):
+**Bluetooth LE**, using this project's versioned protocol
+([`../../protocol/`](../../protocol/)), and **wired USB-C**, using standard USB
+classes. The radio side works the same in both (§7).
 
-| Host | Serial | Audio (in + out) |
+| Host | Wired USB-C | Bluetooth LE |
 |---|---|---|
-| Windows | Classic Bluetooth SPP, shown as a COM port | HFP, shown as a headset device |
-| macOS | SPP, shown as `/dev/cu.*` | HFP input/output device |
-| Linux | SPP, shown as `rfcomm` (BlueZ) | HFP via PipeWire's native backend |
-| Android | SPP, opened by apps through `BluetoothSocket` | HFP (apps start the SCO link) |
-| iOS | **Bluetooth LE only, app-level only** (see below) | HFP (any headset; no MFi needed) |
+| Windows, macOS, Linux | Native serial port (USB CDC-ACM) and sound card (USB Audio Class); no drivers | Apps or host software that implement the protocol |
+| Android | Sound card natively; serial through apps (USB CDC-ACM) | Apps that implement the protocol |
+| iOS / iPadOS | Sound card natively (USB-C devices); no app access to USB serial | Apps that implement the protocol |
 
 Consequences:
 
-- **Dual-mode Bluetooth is mandatory:** Classic BR/EDR (SPP + HFP) and Bluetooth LE,
-  running at the same time. A Bluetooth-LE-only radio (for example ESP32-S3/C3/C6/C5
-  or Nordic nRF) cannot be the only radio.
-- **HFP must support wideband speech (mSBC, 16 kHz).** CVSD (8 kHz) is the
-  fallback. FT8-class audio (about 200–3000 Hz) fits in both.
-- **iOS has no SPP** for accessories outside Apple's MFi program. On iOS, serial
-  is available only to apps that implement this project's Bluetooth LE protocol
-  (see [`../../protocol/`](../../protocol/)). This platform limitation must be
-  stated in user documentation.
-- **RTS/DTR over SPP:** RFCOMM carries modem-status signals, which the device may
-  map to PTT. Whether each host OS passes an application's RTS/DTR changes through
-  is **(verify)**. PTT through the device's own control channel, or through the
+- **No Bluetooth Classic.** SPP, HFP and RFCOMM are not used. Revision A uses the
+  ESP32-S3-MINI-1 (§4, §10).
+- **Wired mode is selected automatically** when a USB host enumerates the device
+  on USB-C, Bluetooth mode otherwise, with a setting to force either. The
+  Bluetooth radio is off in wired mode.
+- **In wired mode, radios with their own USB port appear to the computer
+  directly** (through an on-board USB hub): their USB-serial chip, and their
+  sound card if they have one. The device adds its own USB sound card when the
+  radio's audio is analog, its own USB serial port bridged to the SERIAL jack
+  when the radio's serial isn't USB, and always a USB serial port for
+  configuration and AUDIO-jack PTT.
+- **No OS shows a Bluetooth LE device as a serial port or audio device
+  natively.** Over Bluetooth, hosts need apps or host software that implement
+  the protocol. User documentation must state this plainly.
+- **Audio over Bluetooth LE:** at least 12 kHz / 16-bit mono, one direction at a
+  time (192 kbit/s), over an L2CAP connection-oriented channel or GATT, using the
+  2M PHY where the host supports it. Throughput to each OS **(verify)**,
+  especially iOS. LC3 compression (permissively licensed implementation) is the
+  fallback if raw PCM doesn't fit.
+- **Audio over USB:** 48 kHz / 16-bit, USB Audio Class (UAC1 or UAC2, whichever
+  every target OS supports without drivers **(verify)**).
+- **RTS/DTR:** native in wired mode (USB CDC-ACM line state); protocol messages
+  over Bluetooth. PTT through the protocol's control channel, or through the
   radio's CAT command, must work regardless.
-- **HFP limits:** codec artifacts, packet-loss concealment and host OS voice
-  processing may degrade weak-signal decoding **(verify per OS)**. An optional
-  higher-quality Bluetooth LE audio channel (L2CAP) may be offered to apps that
-  support it. It supplements the standard HFP path and doesn't replace it.
-- Not required: Hamlib/FLrig-specific features, Wi-Fi, LE Audio (LC3).
+- Not required: Hamlib/FLrig-specific features, Wi-Fi, LE Audio (LC3 as a
+  Bluetooth profile).
 
 ## 3. Power
 
@@ -107,10 +115,16 @@ Design guidance (confirmed in the power-front-end issue):
 
 | Load | Estimate |
 |---|---|
-| Radio module, Classic + BLE active | about 0.1–0.25 A @ 3.3 V |
+| Radio module (ESP32-S3-MINI-1), BLE active | about 0.1 A typical, 0.34 A peak (BLE TX at +20 dBm, datasheet) @ 3.3 V |
+| USB hub (wired mode) | about 50 mA **(verify with the hub chosen)** |
 | Audio codec | about 50 mA |
 | USB host VBUS to the radio | up to about 0.5 A (current-limited switch) |
 | Target total | about 1.5 W typical, 3 W peak |
+
+**USB-C budget:** a USB-C host without USB PD may supply only 500 mA at 5 V
+(USB 2.0 default). In wired mode that must cover the device, the hub and the
+radio's USB VBUS draw. Use the higher USB-C current advertised on CC (1.5 A or
+3 A) when present, and report an overcurrent to the host rather than browning out.
 
 ## 4. Regulatory
 
@@ -139,25 +153,52 @@ The device operates next to HF transmitters of 100 W or more.
 - **Hardware default off:** a pull-down, or an opto/MOSFET that must be
   actively driven, so a hung MCU cannot key the radio.
 - The firmware enforces a maximum continuous TX time (configurable, cannot be disabled).
-- **Galvanic isolation** toward the radio: transformer-coupled audio,
-  opto-isolated PTT, and digital isolators on CAT when the device is powered
-  separately from the radio. Required for variant M, optional for variant R.
+- **Galvanic isolation** of the AUDIO and SERIAL jacks toward the radio:
+  transformer-coupled audio, isolated PTT, and digital isolators on the serial
+  lines. **Required for variant M, and on every variant whenever the USB-C data
+  link is used** (it brings the computer's ground to the device). Optional only
+  for variant R used over Bluetooth and powered from the radio.
+- The **radio USB port** is not isolated by default (like a direct USB cable).
+  A full-speed USB isolator (ADuM4160-class) is a fitting option, recommended for
+  variant M.
 
 ## 7. Radio interfaces
 
 - **CAT:** TTL 3.3/5 V, RS-232 levels, Icom CI-V (single-wire open-collector
-  bus); 4800–115200 baud.
-- **PTT:** isolated closure to ground; RTS/DTR outputs at RS-232 levels for
-  cables that expect them.
-- **USB host:** for radios whose only CAT/audio path is their own USB port
-  (CP210x, FTDI, CDC-ACM serial chips). Supplies current-limited VBUS (3.1).
-- **Connectors:** per-radio cables or harnesses (mini-DIN, 3.5 mm, DB9) rather than
-  per-radio boards, where practical.
+  bus); 4800–115200 baud. The mode is selected in firmware, and **every mode must
+  survive any cable**: RS-232 levels (±15 V) on any SERIAL-jack contact must not
+  damage the logic or CI-V paths, and vice versa. Use high-voltage analog
+  switches or signal relays and an RS-232 transceiver whose drivers go
+  high-impedance when disabled. Power-on default: 3.3 V logic.
+- **PTT:** isolated closure to ground on the AUDIO jack. Host RTS/DTR (native in
+  wired mode, protocol messages over Bluetooth) map to this closure, or to the
+  radio's USB-serial chip when the radio has one. The SERIAL jack has no RS-232
+  RTS/DTR contacts ([`radio-connectors.md`](radio-connectors.md)).
+- **USB host:** for radios with their own USB port. The device is the USB host to
+  the radio's USB-serial chip (CP210x including dual-port CP2105, FTDI, CH34x,
+  CDC-ACM) **and** its built-in USB sound card (USB Audio Class 1.0), including
+  through a USB hub inside the radio. Full speed (12 Mbit/s) is enough. Supplies
+  current-limited VBUS (3.1). In wired mode the same port is routed to the
+  on-board hub so the computer reaches the radio's chips directly (§2).
+- **Radio-type coverage, in both host modes:** radios with USB serial + USB
+  audio; USB serial + analog audio; RS-232, 3.3 V logic or CI-V serial + analog
+  audio.
+- **Connectors:** two 3.5 mm TRRS jacks (AUDIO and SERIAL) with a fixed pinout
+  that is compatible with existing cables made for that convention, plus a USB-A
+  host port. Per-radio cables or harnesses (mini-DIN, 3.5 mm, DB9, USB), not
+  per-radio boards. See [`radio-connectors.md`](radio-connectors.md).
 
 ## 8. Audio
 
-- The internal codec runs at 48 kHz. The host path is at least 12 kHz / 16-bit
-  where the transport allows (HFP is limited to 16 kHz mSBC or 8 kHz CVSD).
+- **Two radio audio paths, both on every board:** analog (the internal codec,
+  line level, isolated per §6) and USB (the radio's built-in USB sound card, §7).
+  The firmware uses USB audio when a radio sound card enumerates, with a manual
+  override. In wired mode with a radio USB sound card, the computer uses that
+  sound card directly and the device's audio path is idle.
+- The internal codec runs at 48 kHz. The host path is at least 12 kHz / 16-bit (§2).
+- **Rate matching:** a radio's USB sound card runs on its own clock. The firmware
+  matches rates between it and the Bluetooth LE stream without audible artifacts
+  or tone shift.
 - ADC SNR ≥ 90 dB (A-weighted) **(verify with codec choice)**.
 - Sample clock accuracy ±50 ppm or better (no tone shift).
 - No automatic gain control, noise suppression or voice processing in the

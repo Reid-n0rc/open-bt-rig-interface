@@ -1,0 +1,518 @@
+{
+  "_comment": "Source of truth for cited third-party documents. Edit this file, then run: python3 tools/refs/refs.py fetch && python3 tools/refs/refs.py index. Copies live in docs/references/cache/ (gitignored, never committed). See docs/references/README.md.",
+  "references": [
+    {
+      "id": "esp32s3-mini1-ds",
+      "title": "ESP32-S3-MINI-1 & ESP32-S3-MINI-1U datasheet",
+      "publisher": "Espressif Systems",
+      "kind": "datasheet",
+      "url": "https://www.espressif.com/sites/default/files/documentation/esp32-s3-mini-1_mini-1u_datasheet_en.pdf",
+      "file": "esp32s3-mini1-ds.pdf",
+      "used_in": [
+        "docs/decisions/ADR-0008-host-links-esp32-s3.md",
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "4d4b7f1c17b484c627aaa0f806566c48a6124a8e466c6d21d99210e6eacdef04",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "esp32s3-ds",
+      "title": "ESP32-S3 series datasheet (SoC)",
+      "publisher": "Espressif Systems",
+      "kind": "datasheet",
+      "url": "https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf",
+      "file": "esp32s3-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "2d5a7cb7fd559d8d972bd88db32669c0196d23f22d7afaafb0f63d099b589a3f",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "esp32s3-hw-design",
+      "title": "ESP32-S3 hardware design guidelines (schematic, PCB layout, antenna keep-out, USB, power)",
+      "publisher": "Espressif Systems",
+      "kind": "app-note",
+      "url": "https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32s3/esp-hardware-design-guidelines-en-master-esp32s3.pdf",
+      "file": "esp32s3-hw-design.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "2ee5e2e340c2b95c13bd37b611596e1c24023b179bd21930e6f6aa7e2a8a542b",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "fcc-2ac7z-esps3mini1",
+      "title": "FCC ID 2AC7Z-ESPS3MINI1 test report (ESP32-S3-MINI-1)",
+      "publisher": "FCC filing (Espressif Systems)",
+      "kind": "fcc",
+      "url": "https://fcc.report/FCC-ID/2AC7Z-ESPS3MINI1/5706883.pdf",
+      "file": "fcc-2ac7z-esps3mini1.pdf",
+      "fetch": "manual",
+      "notes": "The site blocks scripted downloads; save the PDF from a browser to the cache path.",
+      "used_in": [
+        "docs/decisions/ADR-0008-host-links-esp32-s3.md",
+        "docs/research/core-devices.md"
+      ]
+    },
+    {
+      "id": "fcc-2ac7z-espc3mini1",
+      "title": "FCC ID 2AC7Z-ESPC3MINI1 (ESP32-C3-MINI-1) filing list",
+      "publisher": "FCC filing (Espressif Systems)",
+      "kind": "fcc",
+      "url": "https://fcc.report/FCC-ID/2AC7Z-ESPC3MINI1",
+      "file": "fcc-2ac7z-espc3mini1.html",
+      "fetch": "manual",
+      "notes": "The site blocks scripted downloads; save the page from a browser.",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ]
+    },
+    {
+      "id": "fcc-2ahmr-bw16",
+      "title": "FCC ID 2AHMR-BW16 (Ai-Thinker BW16) filing list",
+      "publisher": "FCC filing (Ai-Thinker)",
+      "kind": "fcc",
+      "url": "https://fccid.io/2AHMR-BW16",
+      "file": "fcc-2ahmr-bw16.html",
+      "fetch": "manual",
+      "notes": "The site blocks scripted downloads; save the page from a browser.",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ]
+    },
+    {
+      "id": "fcc-qoq-gm220p",
+      "title": "FCC ID QOQ-GM220P (Silicon Labs BGM220P) filing list",
+      "publisher": "FCC filing (Silicon Labs)",
+      "kind": "fcc",
+      "url": "https://fcc.report/FCC-ID/QOQ-GM220P",
+      "file": "fcc-qoq-gm220p.html",
+      "fetch": "manual",
+      "notes": "The site blocks scripted downloads; save the page from a browser.",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ]
+    },
+    {
+      "id": "raytac-mdbt50q-fcc",
+      "title": "Raytac MDBT50Q FCC ID SH6MDBT50Q granted (announcement)",
+      "publisher": "Raytac",
+      "kind": "web",
+      "url": "https://www.raytac.com/news/ins.php?index_id=101",
+      "file": "raytac-mdbt50q-fcc.html",
+      "used_in": [
+        "docs/decisions/ADR-0008-host-links-esp32-s3.md",
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "70b71413a61c877768de5aaed19945ae21ddce7fa8957039ba7c6657f6f27a50",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "raytac-mdbt50q-ds",
+      "title": "Raytac MDBT50Q-1MV2 / MDBT50Q-P1MV2 approval sheet (datasheet)",
+      "publisher": "Raytac",
+      "kind": "datasheet",
+      "url": "https://www.raytac.com/download/index.php?index_id=43",
+      "file": "raytac-mdbt50q-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "61fec8c0c9f8c33175be2237a8ebba73c6cfc0a3572fe3835fd341079c103d03",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "esp-usb-uac-readme",
+      "title": "esp-usb: USB Host UAC driver README (usb_host_uac)",
+      "publisher": "Espressif Systems (Apache-2.0)",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-usb/bf0f0aa36227cc60ea9d241d14ef62944af5fb94/host/class/uac/usb_host_uac/README.md",
+      "file": "esp-usb-uac-readme.md",
+      "used_in": [
+        "docs/decisions/ADR-0008-host-links-esp32-s3.md",
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "d9cd03095210444e6162dc95d05e40fbd83292b16516a81d85b4e04d9ba7a08c",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "esp-usb-host-kconfig",
+      "title": "esp-usb: USB Host Library Kconfig (USB_HOST_HUBS_SUPPORTED)",
+      "publisher": "Espressif Systems (Apache-2.0)",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-usb/bf0f0aa36227cc60ea9d241d14ef62944af5fb94/host/usb/Kconfig",
+      "file": "esp-usb-host-kconfig.txt",
+      "used_in": [
+        "docs/decisions/ADR-0008-host-links-esp32-s3.md",
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "e3ab7801e8e267ce09b6d8a6f52f672a10df902fa6c30e2eb5d3cd1649366af9",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "esp-idf-hfp-hf-readme",
+      "title": "ESP-IDF hfp_hf example README (HFP data paths, mSBC)",
+      "publisher": "Espressif Systems (Apache-2.0)",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/048ec57f228afe2d720542431b849cc10c949a15/examples/bluetooth/bluedroid/classic_bt/hfp_hf/README.md",
+      "file": "esp-idf-hfp-hf-readme.md",
+      "used_in": [
+        "docs/decisions/ADR-0008-host-links-esp32-s3.md",
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "f33f812e42729ca8510a31a1acdab9c304165081830aa373e1025de6eeb15ca9",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "esp32-wroom-32e-ds",
+      "title": "ESP32-WROOM-32E & ESP32-WROOM-32UE datasheet",
+      "publisher": "Espressif Systems",
+      "kind": "datasheet",
+      "url": "https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32e_esp32-wroom-32ue_datasheet_en.pdf",
+      "file": "esp32-wroom-32e-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "4c7a345d1c1bfec34c38665639e39a7f43b79a35a12f6adcc2c7c0f83850f8b8",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "pico-sdk-1461",
+      "title": "pico-sdk issue #1461: SCO connection not established (Pico W)",
+      "publisher": "Raspberry Pi (GitHub issue)",
+      "kind": "issue",
+      "url": "https://github.com/raspberrypi/pico-sdk/issues/1461",
+      "file": "pico-sdk-1461.html",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "9fb76d6853cd5b720de8f47464030add29d706435e5030a50a1aa0a39cd05abd",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "pico-btstack-license",
+      "title": "pico-sdk BTstack licence for Raspberry Pi products (LICENSE.RP)",
+      "publisher": "Raspberry Pi / BlueKitchen",
+      "kind": "license",
+      "url": "https://raw.githubusercontent.com/raspberrypi/pico-sdk/079c6f39023649b154152db30f1d781e884879bc/src/rp2_common/pico_btstack/LICENSE.RP",
+      "file": "pico-btstack-license.txt",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "3b9280bbfedf57d9f7793d2f9af7beb5d5c45f16b587fa3c3568aaedd16fedf4",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "infineon-btsdk-license",
+      "title": "Infineon wiced_btsdk LICENSE.txt (Cypress End User License Agreement)",
+      "publisher": "Infineon / Cypress",
+      "kind": "license",
+      "url": "https://raw.githubusercontent.com/Infineon/wiced_btsdk/b2fe90bdcafb6e9cb65c6be73efdcd59a2bdbfaa/LICENSE.txt",
+      "file": "infineon-btsdk-license.txt",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "80b2cd0b70a20968b1fa603bab0458045d386b9e075a7746d194baa03b6eff37",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "microchip-bm83-spp-kb",
+      "title": "Microchip KB: BM83 BLE and SPP simultaneous connection",
+      "publisher": "Microchip",
+      "kind": "web",
+      "url": "https://support.microchip.com/s/article/BM83---BLE-and-SPP-Simultaneous-Connection",
+      "file": "microchip-bm83-spp-kb.html",
+      "fetch": "manual",
+      "notes": "Rendered by JavaScript; save the page from a browser (print to PDF also works: change the file name to .pdf).",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ]
+    },
+    {
+      "id": "ti-tlv320aic3104-ds",
+      "title": "TLV320AIC3104 low-power stereo audio codec datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tlv320aic3104.pdf",
+      "file": "ti-tlv320aic3104-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "17ce38b2b2b35e44fedaad6c44fcb9c2133722dccfd5ef80e9ec2e3b8f281e9a",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-tlv320aic3104-q1-ds",
+      "title": "TLV320AIC3104-Q1 automotive audio codec datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tlv320aic3104-q1.pdf",
+      "file": "ti-tlv320aic3104-q1-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "6a9633798673cdb85d441a708ef684f5ffc8c7f6661448fea4a68fcc889835c4",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-tlv320aic3204-ds",
+      "title": "TLV320AIC3204 audio codec datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tlv320aic3204.pdf",
+      "file": "ti-tlv320aic3204-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "31b8b4e12b86f4e5c44a125ef671bac9a9d1dd6f20e6c37986da4f2945887ccd",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "bourns-lm-np-ds",
+      "title": "Bourns LM-NP/LP 1000 series line matching transformers datasheet",
+      "publisher": "Bourns",
+      "kind": "datasheet",
+      "url": "https://www.bourns.com/pdfs/LMNPLP.pdf",
+      "file": "bourns-lm-np-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "3ad23168c4218a64b7c7741608681cb28d36c11a3f240273e166819f2f2b2f20",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-sn74lxc1t45-ds",
+      "title": "SN74LXC1T45 single-bit dual-supply level translator datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/sn74lxc1t45.pdf",
+      "file": "ti-sn74lxc1t45-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "4737f9c02d562bd3688b8753d6161a24ce870a3841505debfdbc110e02420179",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-sn74lvc1g07-ds",
+      "title": "SN74LVC1G07 single buffer with open-drain output datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1g07.pdf",
+      "file": "ti-sn74lvc1g07-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "5c68b82a5110b337457ca918b149432c6b9c605be7849e76116f108ddbd7abee",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-iso7721-ds",
+      "title": "ISO772x dual-channel digital isolator datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/iso7721.pdf",
+      "file": "ti-iso7721-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "fb039c00ceb601b93618004839b2108d3358777a019f2526bca427b7f6c0649c",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-tps2553-ds",
+      "title": "TPS2553 adjustable current-limited power-distribution switch datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tps2553.pdf",
+      "file": "ti-tps2553-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "88e453700cea2b263cdb5b44fce1e883e0f6d3b975457f879ac1423eeea42071",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-tps3430-ds",
+      "title": "TPS3430 window watchdog timer datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tps3430.pdf",
+      "file": "ti-tps3430-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "f9887a28788bac6ae6743e211ae50dddd809e3ff7bf0d6a3447c8d71f62c6b4d",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-tps2121-ds",
+      "title": "TPS2121 power multiplexer datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tps2121.pdf",
+      "file": "ti-tps2121-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "b2f5950f596dc2c4ca33e4ebac27fd35e4dcc68ea63e173466123e1118e91a06",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-tps62933-ds",
+      "title": "TPS62933 3.8–30 V synchronous buck converter datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tps62933.pdf",
+      "file": "ti-tps62933-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "16ec2eac43c7374eb9e7edd7df7bdb24de6862f695e1582c68716ced4820e5f6",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-lm74700-q1-ds",
+      "title": "LM74700-Q1 automotive ideal diode controller datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/lm74700-q1.pdf",
+      "file": "ti-lm74700-q1-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "e16b3a8c0023201fafa5825436f5f2dd6f885b92b84e65602b3f50d741c58b6f",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "adi-ltc4380-ds",
+      "title": "LTC4380 low quiescent current surge stopper datasheet",
+      "publisher": "Analog Devices",
+      "kind": "datasheet",
+      "url": "https://www.analog.com/media/en/technical-documentation/data-sheets/ltc4380.pdf",
+      "file": "adi-ltc4380-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "fetch": "manual",
+      "notes": "The site blocks scripted downloads; save the PDF from a browser."
+    },
+    {
+      "id": "ti-lmq62440-q1-ds",
+      "title": "LMQ62440-Q1 automotive 36 V synchronous buck converter datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/lmq62440-q1.pdf",
+      "file": "ti-lmq62440-q1-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "6c888eeb219d47fb0c13ea4b53e6412cae876991c01e4ec6256c7789db8e522a",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-tps7a20-ds",
+      "title": "TPS7A20 low-noise LDO datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tps7a20.pdf",
+      "file": "ti-tps7a20-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "663a9ff5bca608643e711652cba00e7b8bf955c0993a9b86fa108d24d58b8ddc",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-tpd4e05u06-ds",
+      "title": "TPD4E05U06 4-channel ESD protection datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tpd4e05u06.pdf",
+      "file": "ti-tpd4e05u06-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "c167cf1e72a5473a4d2c59b6a3c0251498701da05b7785919b9ceaae3b3e02c6",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-trs3221e-ds",
+      "title": "TRS3221E 1-driver/1-receiver RS-232 transceiver datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/trs3221e.pdf",
+      "file": "ti-trs3221e-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "3978592d390b01cc806e335d286836e42003fe8b55156cc01fc37c8c51fd1b6b",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-tmux6219-ds",
+      "title": "TMUX6219 36 V SPDT analog switch datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tmux6219.pdf",
+      "file": "ti-tmux6219-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "216e5fe55ce423e3d2e4702dd88ad203e7550e57d3b306ac7d1f31dae06394c0",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-ts3usb221a-ds",
+      "title": "TS3USB221A USB 2.0 1:2 multiplexer/demultiplexer datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/ts3usb221a.pdf",
+      "file": "ti-ts3usb221a-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "cccebf8c10df605133d24bd3ab3abeb97a19dbf539d3465b53562fc19f7a242e",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-tpd2e2u06-ds",
+      "title": "TPD2E2U06 2-channel ESD protection datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tpd2e2u06.pdf",
+      "file": "ti-tpd2e2u06-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "a133b86ea3d3c3d34667339b92d3b5e98d541d10e9775d63e7cdfa153794f4ed",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "microchip-usb2422-ds",
+      "title": "USB2422 2-port USB 2.0 hub controller datasheet",
+      "publisher": "Microchip",
+      "kind": "datasheet",
+      "url": "https://ww1.microchip.com/downloads/en/DeviceDoc/00001726B.pdf",
+      "file": "microchip-usb2422-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "4a9ad71cd6535368f9535d08924dbff9c21c0554d5fbf01cf06ae0d92a44fc0d",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "adi-adum4160-ds",
+      "title": "ADuM4160 full/low-speed USB digital isolator datasheet",
+      "publisher": "Analog Devices",
+      "kind": "datasheet",
+      "url": "https://www.analog.com/media/en/technical-documentation/data-sheets/ADuM4160.pdf",
+      "file": "adi-adum4160-ds.pdf",
+      "fetch": "manual",
+      "notes": "The site blocks scripted downloads; save the PDF from a browser.",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ]
+    }
+  ]
+}
