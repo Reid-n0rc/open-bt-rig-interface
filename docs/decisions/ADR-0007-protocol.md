@@ -75,6 +75,12 @@ version 0.1.0) is one framed byte stream:
   PTT source; a maximum TX time that can't be disabled, with lockout until
   every source is released; an arming rule so that a port open that raises
   RTS and DTR together never keys; PTT off at every session end.
+- **SPEC §8 (PTT rules) approved by the maintainer, 2026-09-24**, together
+  with three user-facing notes in §8.5: wired CDC-ACM RTS/DTR needs no
+  keepalive, so a hung desktop program can hold PTT until `MAX_TX_S`, the
+  hardware watchdog or a USB disconnect; CAT-command keying is invisible to
+  the device and guarded only by the radio's timers; RTS and DTR rising
+  together count as a port open and don't key (map only one line to PTT).
 - **Hardware PTT watchdog** (maintainer decision, 2026-09-24, designed in
   #9): a hardware timer (configurable, default 10 minutes) forces PTT off
   even if the firmware is hung. It backs up `MAX_TX_S`, which must not exceed

@@ -378,9 +378,11 @@ ATT_MTU − 3 bytes, or L2CAP SDUs (§13).
 
 PTT safety is the most important part of this protocol
 ([`GOVERNANCE.md`](../GOVERNANCE.md#scope-and-principles)). The rules here are
-the protocol's side of REQ-PTT-001 to REQ-PTT-010. The device-side state
+the protocol's side of REQ-PTT-001 to REQ-PTT-011. The device-side state
 machine is in [architecture §5](../docs/architecture.md#5-ptt-safety-state-machine).
-Changes to this section need the maintainer's explicit approval
+The maintainer approved this section on 2026-09-24
+([ADR-0007](../docs/decisions/ADR-0007-protocol.md)). Later changes need the
+maintainer's explicit approval again
 ([`GOVERNANCE.md`](../GOVERNANCE.md#safety-and-compliance)).
 
 ### 8.1 PTT sources and outputs
@@ -493,6 +495,19 @@ any      --session start, SERIAL_OPEN, USB reset/configure,
   `LINE_MAP` while keyed releases PTT first.
 - The hardware keeps PTT off unless actively driven (REQ-PTT-008); the
   protocol doesn't rely on the firmware alone.
+
+**Notes for users** (known behaviour, not extra rules):
+
+- **Wired RTS/DTR has no keepalive.** A desktop program that hangs while it
+  holds RTS or DTR on a wired CDC-ACM port keeps PTT keyed until `MAX_TX_S`
+  expires, the hardware PTT watchdog trips, or the USB link goes away.
+- **CAT keying is invisible to the device.** PTT keyed by a CAT command in the
+  byte stream isn't seen by the device (§8.1), so only the radio's own timers
+  guard it.
+- **Raising RTS and DTR together doesn't key.** The device treats both lines
+  rising in the same update as a port open (§8.4). Software that keys by
+  raising both at once won't key; map only one line to PTT (`LINE_MAP`) and
+  use that line.
 
 ### 8.6 PTT reason codes
 
