@@ -15,6 +15,13 @@ and tagged independently (see `AGENTS.md`).
   Bluetooth LE (2M PHY, DLE, MTU, intervals, L2CAP CoC vs GATT, throughput
   budget) on iOS/iPadOS, macOS, Android, Windows and Linux. Recommends UAC1 for
   #44 and NimBLE with L2CAP CoC plus a GATT fallback (#6).
+- Radio module confirmation (`docs/research/module-selection.md`): the
+  ESP32-S3-MINI-1 FCC grant (2AC7Z-ESPS3MINI1: single modular, BLE certified at
+  10.3 dBm conducted, 20 cm mobile use), ISED ID, lifecycle and dated LCSC
+  sourcing; supports ADR-0008. New `docs/compliance/fcc.md`: antenna keep-out
+  and board integration rules, host label text, user manual statements and a
+  Part 15B SDoC checklist. Revision A uses the -N8 ordering code; ADR-0008
+  accepted by the maintainer (#7).
 - Requirements specification (`docs/requirements/requirements.md`): numbered,
   testable `REQ-<area>-NNN` requirements for both host links (Bluetooth LE and
   wired USB-C), CAT, PTT fail-safes, audio, radio interfaces, isolation, power,
