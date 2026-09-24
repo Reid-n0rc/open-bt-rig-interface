@@ -25,8 +25,8 @@ Findings that constrain the design:
    the certified level (§3.2).
 2. **The grant is for mobile use only** (at least 20 cm from people). A portable
    or body-worn use needs a separate approval (§3.2).
-3. **Only the -N8 ordering code is named in the FCC exhibit.** Grant coverage of
-   -N4R2 is **(verify)** (§3.3). Revision A should use **-N8**.
+3. **Revision A uses ESP32-S3-MINI-1-N8** (maintainer decision, 2026-09-24).
+   It is the ordering code named in the FCC exhibit (§3.3).
 4. **The second-distributor check isn't done.** Digi-Key and Mouser block
    scripted lookups, so only LCSC figures are recorded. The two-distributor rule
    in [`AGENTS.md`](../../AGENTS.md#parts-and-sourcing) is still open (§2).
@@ -108,7 +108,7 @@ recorded as a manual-fetch reference
 | Rule parts | 15C; the module manual names 15.247 and 15.209 |
 | Frequency, output power (conducted) | 2402.0–2480.0 MHz: 0.0107 W (Bluetooth LE); 2412.0–2462.0 MHz: 0.3365 W (Wi-Fi) |
 | Modular type | **Single modular** |
-| Antenna | On-board PCB antenna, 3.96 dBi (module manual) **(verify against the FCC exhibit)** |
+| Antenna | On-board PCB antenna, 3.96 dBi (module manual) |
 
 Grant notes, in summary:
 
@@ -132,8 +132,10 @@ couldn't be opened. It says:
 - the host maker must test the final product for any other requirements
   (Part 15 Subpart B) with the module installed.
 
-The 2022 grant is the only FCC document read. Later permissive changes on
-the FCC side are **unknown**, since the EAS couldn't be queried.
+The 2022 grant is the only FCC document read; the EAS couldn't be queried.
+The maintainer accepts Espressif's published FCC ID and module documentation as
+sufficient for an Espressif module (2026-09-24), so no further grant check is
+planned.
 
 ### 3.2 What the grant means for the design
 
@@ -164,9 +166,8 @@ the FCC side are **unknown**, since the EAS couldn't be queried.
   "ESP32-S3-MINI-1".
 - The FCC user manual v0.6 lists **ESP32-S3-MINI-1-N8** and
   ESP32-S3-MINI-1U-N8 only.
-- -N4R2 uses a different SoC (ESP32-S3FH4R2, with PSRAM). Whether it is covered
-  by 2AC7Z-ESPS3MINI1 is **(verify)**: read the FCC ID on a -N4R2 module's
-  shield, or ask Espressif. Until then revision A uses **-N8**.
+- -N4R2 uses a different SoC (ESP32-S3FH4R2, with PSRAM). Revision A uses
+  **-N8** (maintainer decision, 2026-09-24); -N4R2 isn't used.
 
 ### 3.4 ISED (for the record)
 
@@ -202,19 +203,14 @@ Unlike the ESP32-S3-MINI-1, the MDBT50Q grant covers portable use.
 |---|---|---|
 | Single vendor (Espressif) | A supply problem stops the build | 12-year longevity commitment; MDBT50Q fallback, at the cost of a USB host controller and a USB-audio host driver (ADR-0008) |
 | Second distributor unchecked | AGENTS.md sourcing rule not yet met | Check Digi-Key and Mouser in a browser before the BOM is frozen |
-| -N4R2 grant coverage unconfirmed | PSRAM variant may not carry the FCC ID | Use -N8; confirm before any switch |
 | BLE TX power above the grant | Product outside its FCC authorization | Firmware cap at 10.3 dBm or lower, with a test (§3.2) |
 | 20 cm mobile-only grant | Handheld or body-worn use not covered | State it in the user manual; keep the device off-body |
 | Antenna detuned by board or enclosure | Short range, BLE audio dropouts | Board-edge placement and keep-out, 15 mm enclosure clearance, range test in the final enclosure ([`fcc.md`](../compliance/fcc.md) §1) |
-| 4-layer recommendation | Espressif recommends a 4-layer board ([hardware design guidelines](../references/index.md#esp32s3-hw-design) §1.4); the project prefers 2 ([`pcb-fabrication.md`](../requirements/pcb-fabrication.md) §2) | Decide in the layout issue; module integration is already a listed reason for 4 layers |
+| 4-layer recommendation | Espressif recommends a 4-layer board ([hardware design guidelines](../references/index.md#esp32s3-hw-design) §1.4); the project prefers 2 ([`pcb-fabrication.md`](../requirements/pcb-fabrication.md) §2) | The maintainer accepts 2 layers for the module (2026-09-24); follow the guidelines' 2-layer layout rules and the keep-out in [`fcc.md`](../compliance/fcc.md) §1 |
 | Shared USB PHY | USB download and logs are lost while the USB port is a host or standard device | UART0 header plus strapping-pin access ([`fcc.md`](../compliance/fcc.md) §1.5) |
-| FCC database inaccessible to tools | Later grant changes unseen | Open the filing list in a browser and save it to the reference cache |
 
 ## 5. Open items
 
 - **Digi-Key and Mouser** price, stock, lead time and lifecycle for all three
   parts (a person with a browser, or API access).
-- **-N4R2** coverage by 2AC7Z-ESPS3MINI1.
-- **Antenna gain** 3.96 dBi, and any later permissive change, checked against
-  the FCC exhibits.
 - **MDBT50Q** lifecycle status at Raytac.

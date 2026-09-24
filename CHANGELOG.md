@@ -15,7 +15,8 @@ and tagged independently (see `AGENTS.md`).
   10.3 dBm conducted, 20 cm mobile use), ISED ID, lifecycle and dated LCSC
   sourcing; supports ADR-0008. New `docs/compliance/fcc.md`: antenna keep-out
   and board integration rules, host label text, user manual statements and a
-  Part 15B SDoC checklist (#7).
+  Part 15B SDoC checklist. Revision A uses the -N8 ordering code; ADR-0008
+  accepted by the maintainer (#7).
 - CI checks (`.github/workflows/checks.yml`): `REUSE lint`, `KiCad version
   consistency` (every KiCad file and the docs against `KICAD_VERSION`, which
   now also records the symbol-library format) and `Silkscreen revision check`
