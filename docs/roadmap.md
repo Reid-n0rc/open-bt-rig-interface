@@ -30,8 +30,8 @@ serial connection is BLE and available to apps only.
 
 ## Merge gates
 
-Every PR targets `dev`, links its issue (`Closes #N`) and has only signed
-commits (see [`AGENTS.md`](../AGENTS.md)). In addition:
+Every PR targets `dev` and links its issue (`Closes #N`). Signed commits (SSH or
+GPG) are preferred but not required (see [`AGENTS.md`](../AGENTS.md)). In addition:
 
 | Change in the PR | Must pass before merge |
 |---|---|
