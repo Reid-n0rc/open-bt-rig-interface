@@ -10,6 +10,12 @@ and tagged independently (see `AGENTS.md`).
 
 ## Unreleased
 
+- Radio module confirmation (`docs/research/module-selection.md`): the
+  ESP32-S3-MINI-1 FCC grant (2AC7Z-ESPS3MINI1: single modular, BLE certified at
+  10.3 dBm conducted, 20 cm mobile use), ISED ID, lifecycle and dated LCSC
+  sourcing; supports ADR-0008. New `docs/compliance/fcc.md`: antenna keep-out
+  and board integration rules, host label text, user manual statements and a
+  Part 15B SDoC checklist (#7).
 - PCB fabrication and passive-component rules (`docs/requirements/pcb-fabrication.md`):
   JLCPCB standard process, 2 layers preferred, 0402 resistors, MLCC with a 2×
   voltage rule and DC-bias check (#49).
