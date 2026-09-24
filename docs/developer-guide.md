@@ -25,7 +25,7 @@ Before any design work, read
 
 | Tool | Why | Notes |
 |---|---|---|
-| git ≥ 2.34 | Version control, SSH commit signing | Signed commits are required (see below) |
+| git ≥ 2.34 | Version control, SSH commit signing | Signed commits are preferred, not required (see below) |
 | [GitHub CLI `gh`](https://cli.github.com/) | Issues, PRs, checks | `gh auth login` |
 | [KiCad](https://www.kicad.org/download/) **≥ 10.0.6** | Schematic/PCB | Must match [`KICAD_VERSION`](../KICAD_VERSION) |
 | `kicad-cli` | ERC/DRC and exports from the shell | Ships with KiCad (paths below) |
@@ -45,10 +45,11 @@ Check the version with `kicad-cli version`. It must be at least the
 `KICAD_MIN_VERSION` in [`KICAD_VERSION`](../KICAD_VERSION). CI runs the pinned
 `kicad/kicad:<KICAD_MIN_VERSION>` Docker image.
 
-### Signed commits (required)
+### Signed commits (preferred)
 
-The `main` and `dev` branches only accept signed commits, and we sign every
-commit on feature branches too. SSH signing is the simplest option:
+Signed commits (SSH or GPG) are preferred but not required. The branch ruleset
+doesn't enforce signatures; PRs are still required for `main` and `dev`. SSH
+signing is the simplest option:
 
 ```sh
 git config --global gpg.format ssh
@@ -62,8 +63,9 @@ git config --global gpg.ssh.allowedSignersFile ~/.ssh/allowed_signers
 Then add the same public key to GitHub as a **Signing key** (Settings → SSH and
 GPG keys → New SSH key → Key type: *Signing Key*). GPG signing works too.
 
-Never bypass signing (`--no-gpg-sign`, `-c commit.gpgsign=false`). If signing
-fails, fix the setup or stop and ask.
+If you have signing set up, keep it on; don't pass `--no-gpg-sign` or
+`-c commit.gpgsign=false`. If signing fails, fix the setup or mention it in the
+PR rather than silently committing unsigned.
 
 ### Private or local tooling
 
@@ -117,9 +119,9 @@ The full rules are in [AGENTS.md → Workflow](../AGENTS.md#workflow). Step by s
    Types: `hw`, `fw`, `proto`, `docs`, `ci`, `enc`, `research`. Git worktrees
    (`git worktree add ../<repo>-<slug> -b <branch> origin/dev`) keep parallel
    work separate.
-4. **Commit (signed) and verify** before pushing:
+4. **Commit** (signed if you can) and check before pushing:
    ```sh
-   git log --format='%h %G? %s' origin/dev..HEAD   # every line must show G
+   git log --format='%h %G? %s' origin/dev..HEAD   # G = good signature; N = unsigned (allowed)
    ```
 5. **Run the local checks** in [section 4](#4-local-checks).
 6. **Push and open the PR against `dev`:**
@@ -130,8 +132,8 @@ The full rules are in [AGENTS.md → Workflow](../AGENTS.md#workflow). Step by s
    …"
    ```
    Fill in the PR template checklist.
-7. **Merge.** Required checks must pass, and the ruleset requires a PR plus signed
-   commits. `dev` is the default branch, so `Closes #N` closes the issue when
+7. **Merge.** Required checks must pass, and the ruleset requires a PR (signatures
+   are preferred, not enforced). `dev` is the default branch, so `Closes #N` closes the issue when
    the PR merges. Merged branches are deleted automatically.
 8. **Releases** go from `dev` to `main` through a release PR ([section 6](#6-releases-and-tags)).
 
@@ -261,7 +263,7 @@ are produced by CI and attached to the GitHub release.
 
 | Symptom | Fix |
 |---|---|
-| Commit shows `N` or `E` in `git log --format='%G?'` | Signing isn't set up, or your key isn't in `allowed_signers` ([section 1](#signed-commits-required)). Don't push unsigned commits; the ruleset rejects them on `dev`/`main`. |
+| Commit shows `N` or `E` in `git log --format='%G?'` | `N`: unsigned, which is allowed, though signing is preferred. `E`: git can't verify it locally because your key isn't in `allowed_signers`. See [section 1](#signed-commits-preferred). |
 | Push to `dev` or `main` rejected | Expected. Push a feature branch and open a PR. |
 | `uvx reuse lint` fails with an encoding / `charset_normalizer` error | Use `uvx --from 'reuse[charset-normalizer]' reuse lint`. |
 | `reuse lint` reports an unused license | A license text in `LICENSES/` must be used by at least one file. Keep `REUSE.toml` and `LICENSES/` in step. |
