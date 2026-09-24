@@ -37,18 +37,24 @@ From [constraints §6 and §8](../requirements/constraints.md#8-audio) and
 - I2S to the ESP32-S3. −40 to +85 °C for variant M (−20 to +60 °C for variant R).
 - JLCPCB standard assembly, top side, 2 sources per key part
   ([`pcb-fabrication.md`](../requirements/pcb-fabrication.md#4-assembly)).
+- EU market (maintainer, 2026-09-24, #59): every chosen part RoHS-compliant;
+  REACH status recorded where the manufacturer shows it. ESD and immunity
+  levels at the jacks come from EN 301 489-1 via #59.
+- Design priority (maintainer, 2026-09-24): minimize spurious emissions and cost.
 - Galvanic isolation of the AUDIO jack: **mandatory on variant M and whenever
   the USB-C data link is used**; optional only for variant R used over
   Bluetooth and powered from the radio.
 
-## 2. ESP32-S3 I2S clocking and the ±50 ppm requirement
+## 2. Sample clock and the ±50 ppm requirement
+
+### 2.1 ESP32-S3 I2S clocking
 
 From the [ESP32-S3 TRM v1.8](../references/index.md#esp32s3-trm), §28.6, and the
 [hardware design guidelines](../references/index.md#esp32s3-hw-design), §1.3.5:
 
 - Two I2S controllers. Each can be clock master or slave, and can output
   `I2Sn_MCLK_out` as a master clock for an external device, routed through the
-  GPIO matrix.
+  GPIO matrix. In slave mode the I2S clock must be at least 8 × BCLK.
 - **No audio PLL.** The I2S clock is divided from 40 MHz `XTAL_CLK`, 160 MHz
   `PLL_F160M_CLK`, 240 MHz `PLL_D2_CLK`, or an external `I2Sn_MCLK_in`. The
   divider is N + b/a (N = 2–256) with a fractional part. The TRM warns that
@@ -59,24 +65,86 @@ From the [ESP32-S3 TRM v1.8](../references/index.md#esp32s3-trm), §28.6, and th
   40 MHz ±10 ppm part. Its tolerance over temperature and ageing isn't stated
   **(verify)**.
 
-Options for a 48 kHz sample clock:
+### 2.2 Can the codec PLL run from the 2.304 MHz buck-sync clock?
 
-| Option | How | Accuracy | Jitter |
+The power design ([PR #57](https://github.com/Reid-n0rc/open-bt-rig-interface/pull/57),
+ADR-0004, proposed) synchronizes the 3.3 V buck to a **2.304 MHz** oscillator
+(2.304 MHz = 48 × 48 kHz; SiTime SiT8924B, ±20 ppm option, no spread
+spectrum). Checked against the TLV320AIC3104 datasheet
+([SLAS510G](../references/index.md#ti-tlv320aic3104-ds) §10.3.3.1, pages 26–28):
+
+- With the PLL off, fs = CLKDIV_IN / (128 × Q) with Q ≥ 2, so MCLK must be at
+  least 256 × 48 kHz = 12.288 MHz. **2.304 MHz needs the PLL.**
+- With the PLL on, fs = MCLK × K × R / (2048 × P), with P = 1–8, R = 1–16,
+  K = J.D (J = 1–63, D = 0–9999). For 48 kHz: K × R / P = 48,000 × 2048 /
+  2,304,000 = 128/3.
+- **D ≠ 0 is not possible:** it requires 10 MHz ≤ MCLK / P ≤ 20 MHz
+  (page 27), and 2.304 MHz is below 10 MHz for every P.
+- **D = 0 works:** the limits are 512 kHz ≤ MCLK / P ≤ 20 MHz,
+  80 MHz ≤ MCLK × K × R / P ≤ 110 MHz and 4 ≤ J ≤ 55 (page 27). Only P = 3
+  keeps MCLK / P ≥ 512 kHz (P = 3 gives 768 kHz; P = 6 gives 384 kHz). Then
+  J × R = 128: **P = 3, R = 8, J = 16, D = 0** (J = 8 with R = 16, or J = 32
+  with R = 4, also fit).
+- Result: PLL output 2.304 MHz × 16 × 8 / 3 = **98.304 MHz** (inside
+  80–110 MHz), ÷ 8 = 12.288 MHz = 256 × 48 kHz, so fs = **48,000 Hz exactly**,
+  with integer settings only.
+
+The datasheet's example table (Table 10-1, page 28) starts at 2.048 MHz and
+doesn't list 2.304 MHz, so this setting is derived from the equations and
+limits above and must be confirmed on the bench **(needs bench test)**.
+
+### 2.3 Options
+
+| Option | How | Accuracy | Spurious and cost |
 |---|---|---|---|
-| A. ESP32-S3 outputs 12.288 MHz (256 × 48 kHz) | 160 MHz ÷ 13.0208 (N = 13, b/a = 1/48) | Crystal, ±10 ppm | Fractional divider: cycle-to-cycle jitter at the converter clock |
-| **B. ESP32-S3 outputs an integer-divided MCLK; codec PLL makes 48 kHz** | 160 MHz ÷ 10 = 16 MHz. TLV320AIC3104 PLL: P = 1, R = 1, J = 6, D = 1440 gives exactly 48,000 Hz ([datasheet](../references/index.md#ti-tlv320aic3104-ds) Table 10-1) | Crystal, ±10 ppm | Integer divider; codec PLL generates the converter clocks |
-| C. Separate 12.288 MHz crystal or oscillator at the codec | Codec is I2S master | That crystal's tolerance | Low; but a second clock domain the firmware must rate-match against the ESP32-S3 |
+| A. ESP32-S3 outputs 12.288 MHz | 160 MHz ÷ 13.0208 (fractional) | Crystal, ±10 ppm | Fractional-divider jitter at the converters; a 12.288 MHz clock net |
+| B. ESP32-S3 outputs 16 MHz; codec PLL | 160 MHz ÷ 10; P = 1, R = 1, J = 6, D = 1440 (Table 10-1) | Crystal, ±10 ppm | Adds a **16 MHz** clock net and its harmonics; no parts; uses one GPIO |
+| **D. Codec MCLK from the 2.304 MHz buck-sync oscillator; codec PLL** | P = 3, R = 8, J = 16, D = 0 (§2.2); codec is I2S master, ESP32-S3 is I2S slave | Oscillator, ±20 ppm option | **No new clock frequency on the board**; no parts beyond a series resistor on the clock trace; frees one GPIO |
+| C. Separate 12.288 MHz crystal at the codec | Codec is I2S master | That crystal | Adds a part and a third clock domain |
 
-**Option B is recommended.** It stays in the ESP32-S3's crystal domain
-(±10 ppm initial, well inside ±50 ppm), avoids fractional-divider jitter at
-the converters, and needs no extra crystal. The 16 MHz MCLK meets the
-AIC3104's PLL limits for a fractional K (10–20 MHz input, 80–110 MHz VCO,
-J = 4–11). Option C buys nothing: the host side is another clock domain in
-both modes (USB SOF in wired mode, the phone or computer over Bluetooth), and
-firmware already rate-matches there ([ADR-0008](../decisions/ADR-0008-host-links-esp32-s3.md#consequences)).
+Spurious comparison between B and D (US amateur bands per 47 CFR 97.301, as
+used in PR #57):
 
-Confirm on the bench that `I2Sn_MCLK_out` carries the divided `I2Sn_TX_CLK`
-and measure the 48 kHz frame rate against a reference **(needs bench test)**.
+- **16 MHz (option B):** no harmonic lands in an HF band (16 and 32 MHz are
+  outside 1.8–29.7 MHz; the 6 m band 50–54 MHz falls between 48 and 64 MHz),
+  but the 9th harmonic, **144.000 MHz**, is at the bottom edge of the 2 m band.
+  It is also a second, unrelated comb: its mixing products with the 2.304 MHz
+  buck harmonics fall at n × 2.304 ± m × 16 MHz, which PR #57's band scan
+  doesn't cover.
+- **2.304 MHz (option D):** the codec MCLK adds no new frequency; its
+  harmonics are the buck's, already scanned in PR #57 (HF clear by ≥ 88 kHz,
+  6 m flagged for measurement). Every audio clock (MCLK 2.304 MHz, BCLK
+  3.072 MHz at 64 fs, the codec PLL at 98.304 MHz) is then a multiple of
+  768 kHz. The BCLK comb exists in both options.
+- **Supply ripple into the converters.** The ADC and DAC delta-sigma modulators run
+  at 128 × fs = 6.144 MHz (datasheet §10.3.3.2, §10.3.4), and the buck's 8th harmonic
+  is 8 × 2.304 = 18.432 MHz = 3 × 6.144 MHz. Any ripple coupled into the
+  modulator at that harmonic aliases to **0 Hz** when both come from the same
+  oscillator (option D), where AC coupling and the HPF remove it. With the
+  codec on the ESP32-S3 crystal (option B), the two clocks differ by up to
+  about 30 ppm (±10 and ±20 ppm), and the alias becomes a tone at up to
+  18.432 MHz × 30 ppm ≈ **550 Hz**, inside the audio passband. How much ripple
+  reaches the modulator is unknown **(needs bench test)**, but option D removes
+  the mechanism.
+
+**Recommendation: option D.** It costs nothing extra (the oscillator is already
+on the board), removes the 16 MHz net and its 2 m harmonic, keeps every clock
+on one grid, and ties the audio sample clock to the buck so supply ripple can't
+beat into the audio band. The sample clock accuracy is the oscillator's
+(±20 ppm with the option chosen in PR #57), inside ±50 ppm. Conditions:
+
+- The codec is the I2S master (it drives BCLK and WCLK); the ESP32-S3 runs as
+  I2S slave, which the TRM supports (I2S clock ≥ 8 × BCLK).
+- The oscillator drives a third load (two buck SYNC pins plus the codec MCLK).
+  Check its drive strength and add a series resistor at the source; route the
+  clock away from the audio inputs **(verify with the SiT8924B datasheet in PR #57)**.
+- **Fallback:** if the 2.304 MHz oscillator isn't adopted, or the PLL setting
+  fails on the bench, use option B. A DNP 0 Ω link from an ESP32-S3 GPIO to
+  the codec MCLK keeps that fallback without a board respin.
+
+Option C buys nothing: the host side is another clock domain in both modes
+(USB SOF in wired mode, the phone or computer over Bluetooth), and firmware
+already rate-matches there ([ADR-0008](../decisions/ADR-0008-host-links-esp32-s3.md#consequences)).
 
 ## 3. Codec comparison
 
@@ -109,20 +177,22 @@ JLCPCB Basic or Extended part is checked at order time **(verify)**.
 LCSC, 2026-09-24, USD, live product pages. Digi-Key and Mouser blocked
 automated lookups on 2026-09-24 (bot protection), so those cells are blank.
 The maintainer deferred the second-distributor lookups (2026-09-24); they
-don't block ADR-0002.
+don't block ADR-0002. RoHS and REACH are from TI's part pages (2026-09-24),
+checked for the chosen part and its alternates; "not checked" marks rejected
+candidates.
 
-| Part (LCSC #) | Stock | $ @ 1 | $ @ 100 | Digi-Key | Mouser |
-|---|---|---|---|---|---|
-| TLV320AIC3104IRHBR ([C181753](https://www.lcsc.com/product-detail/C181753.html)) | 2,601 | 1.5076 | 0.9305 | | |
-| TLV320AIC3104IRHBT ([C2867364](https://www.lcsc.com/product-detail/C2867364.html)) | 7 | 0.926 | 0.8785 | | |
-| TLV320AIC3104IRHBRQ1 | not found at LCSC | | | | |
-| TLV320AIC3204IRHBR ([C24109](https://www.lcsc.com/product-detail/C24109.html)) | 5,022 | 1.7233 | 1.0498 | | |
-| TAC5112IRGER | not found at LCSC; TI store showed out of stock with a sample-quantity limit | | | | |
-| TAC5212IRGER (pin-compatible sibling, [C44853694](https://www.lcsc.com/product-detail/C44853694.html)) | 207 | 8.2002 | 6.1962 | | |
-| SGTL5000XNLA3R2 ([C2651833](https://www.lcsc.com/product-detail/C2651833.html)) | 1,110 | 9.3462 (@5) | 8.0286 (@50) | | |
-| NAU88C22YG ([C914209](https://www.lcsc.com/product-detail/C914209.html)) | 5,262 | 1.213 | 0.8054 | | |
-| PCM1808PWR ([C55513](https://www.lcsc.com/product-detail/C55513.html)) | 28,212 | 0.7084 | 0.4274 | | |
-| PCM5102APWR ([C107671](https://www.lcsc.com/product-detail/C107671.html)) | 1,616 | 1.4395 | 0.9444 | | |
+| Part (LCSC #) | Stock | $ @ 1 | $ @ 100 | RoHS / REACH | Digi-Key | Mouser |
+|---|---|---|---|---|---|---|
+| TLV320AIC3104IRHBR ([C181753](https://www.lcsc.com/product-detail/C181753.html)) | 2,601 | 1.5076 | 0.9305 | Yes / Yes ([TI](https://www.ti.com/product/TLV320AIC3104/part-details/TLV320AIC3104IRHBR)) | | |
+| TLV320AIC3104IRHBT ([C2867364](https://www.lcsc.com/product-detail/C2867364.html)) | 7 | 0.926 | 0.8785 | not checked | | |
+| TLV320AIC3104IRHBRQ1 | not found at LCSC | | | TI part page not reachable **(verify)** | | |
+| TLV320AIC3204IRHBR ([C24109](https://www.lcsc.com/product-detail/C24109.html)) | 5,022 | 1.7233 | 1.0498 | Yes / Yes ([TI](https://www.ti.com/product/TLV320AIC3204/part-details/TLV320AIC3204IRHBR)) | | |
+| TAC5112IRGER | not found at LCSC; TI store showed out of stock with a sample-quantity limit | | | Yes / Yes ([TI](https://www.ti.com/product/TAC5112/part-details/TAC5112IRGER)) | | |
+| TAC5212IRGER (pin-compatible sibling, [C44853694](https://www.lcsc.com/product-detail/C44853694.html)) | 207 | 8.2002 | 6.1962 | not checked | | |
+| SGTL5000XNLA3R2 ([C2651833](https://www.lcsc.com/product-detail/C2651833.html)) | 1,110 | 9.3462 (@5) | 8.0286 (@50) | not checked | | |
+| NAU88C22YG ([C914209](https://www.lcsc.com/product-detail/C914209.html)) | 5,262 | 1.213 | 0.8054 | not checked | | |
+| PCM1808PWR ([C55513](https://www.lcsc.com/product-detail/C55513.html)) | 28,212 | 0.7084 | 0.4274 | not checked | | |
+| PCM5102APWR ([C107671](https://www.lcsc.com/product-detail/C107671.html)) | 1,616 | 1.4395 | 0.9444 | not checked | | |
 
 ### 3.2 Notes per candidate
 
@@ -170,6 +240,7 @@ don't block ADR-0002.
 | Mounting, size | SMD 6-pin, 12.8 × 9.0 mm, 7.5 mm high; tape and reel (`-5001E`, 400/reel) | Through-hole, 8 pins; outline up to 0.9 in (23 mm) per side, 0.4 oz | Through-hole, 17.7 × 12.7 mm |
 | LCSC, 2026-09-24 | `SM-LP-5001E` [C840532](https://www.lcsc.com/product-detail/C840532.html): 1,086 in stock, $2.3619 @ 1, $1.4848 @ 100. `SM-LP-5001` (tubes) [C7503474](https://www.lcsc.com/product-detail/C7503474.html): 315, $3.065 @ 1, $2.30 @ 53 | not found | [C5361839](https://www.lcsc.com/product-detail/C5361839.html): 252, $4.3237 @ 1, $2.875 @ 100 |
 | Digi-Key / Mouser | deferred (lookup blocked 2026-09-24) | deferred | deferred |
+| RoHS | Compliant (RoHS 2015/863, datasheet); RoHS3 compliant ([LCSC](https://www.lcsc.com/product-detail/C840532.html)); REACH not shown | RoHS 3 (2015/863/EU) from February 2016 manufacturing date (datasheet) | Compliant (datasheet) |
 
 Findings:
 
@@ -232,6 +303,8 @@ contact (tip, ring 1), from the jack inward:
    capacitance must be low enough not to load a 600 Ω source in the audio band.
    Part choice in the schematic issue (TPD1E10B06-class, see
    [`core-devices.md`](core-devices.md#summary)) **(verify working voltage)**.
+   The ESD and RF immunity levels the jack must pass come from EN 301 489-1
+   (EU market) **(verify, #59)**.
 2. **Ferrite bead** in series, then a **C0G capacitor** to the sleeve (for
    example 1–4.7 nF). Chip ferrites are specified at 100 MHz and have less
    impedance at HF, so the RC stage below does the HF work; the bead handles
@@ -303,20 +376,106 @@ the output level control (up to +9 dB, limited by the output swing
 - A series capacitor on the primary blocks any DC offset between the two
   outputs.
 
-## 7. Latency
+## 7. Supplies
+
+The board has one 3.3 V rail from a buck synchronized at 2.304 MHz
+([PR #57](https://github.com/Reid-n0rc/open-bt-rig-interface/pull/57)); there
+is no 5 V rail. TLV320AIC3104 supply limits
+([SLAS510G](../references/index.md#ti-tlv320aic3104-ds) §8.1, §8.3, Table 10-5
+and §12, pages 7, 35 and 91):
+
+| Rail | Range | Notes |
+|---|---|---|
+| AVDD, DRVDD | 2.7–3.6 V | Must stay within 0.1 V of each other (absolute maximum), so one source feeds both |
+| DVDD | 1.525–1.95 V | Recommended range depends on the output common-mode setting (Table 10-5) |
+| IOVDD | 1.1–3.6 V | 3.3 V, the ESP32-S3 I/O level |
+| Sequencing | IOVDD first, then AVDD/DRVDD, then DVDD within 5 ms; analog supplies ≥ DVDD at all times; RESET low until all are stable | |
+
+### 7.1 Analog supply: filtered 3.3 V or a low-noise LDO
+
+| | Ferrite bead + capacitors from 3.3 V | **LDO 3.3 V → 3.0 V** |
+|---|---|---|
+| Parts | Murata BLM18PG221SN1D (0603, 220 Ω at 100 MHz) plus MLCCs | TI **LP5907MFX-3.0/NOPB** (SOT-23-5; < 6.5 µVrms noise, PSRR 82 dB at 1 kHz, 20 mA; [SNVS798Q](../references/index.md#ti-lp5907-ds)) plus 2 × 1 µF |
+| LCSC, 2026-09-24 | [C80165](https://www.lcsc.com/product-detail/C80165.html): 335,150 in stock, $0.0123 @ 500 | [C475492](https://www.lcsc.com/product-detail/C475492.html): 28,780 in stock, $0.2312 @ 50, $0.2018 @ 150 |
+| Buck ripple at 2.304 MHz | Attenuated | Attenuated |
+| Audio-band disturbances on the 3.3 V rail (ESP32-S3 BLE TX bursts up to 340 mA per the [module datasheet](../references/index.md#esp32s3-mini1-ds), the buck's load-step response) | **Not attenuated**: a bead and MLCC have their corner far above 20 kHz | Attenuated by the LDO's PSRR |
+| Extra cost | about $0.02 | about $0.20 |
+
+The codec's own supply rejection is limited: ADC PSRR is 55 dB at 217 Hz and
+44 dB at 1 kHz (single-ended input, signal on DRVDD; datasheet §8.5). A
+disturbance of 1 mVrms on DRVDD at 1 kHz then appears at about 6.3 µVrms at
+the ADC, −101 dBFS against the 0.707 Vrms full scale; 10 mVrms appears at
+about −81 dBFS, above the ADC's 92 dB noise floor. The size of the BLE-burst
+disturbance on the 3.3 V rail depends on the buck's transient response
+(#10, #11) and isn't known yet. The ferrite option can't guarantee the audio
+targets; the LDO can, with its 82 dB at 1 kHz.
+
+**Decision: LP5907MFX-3.0/NOPB for AVDD/DRVDD.** It is the cheapest option
+that keeps the audio targets independent of the buck's load behavior. What
+3.0 V costs:
+
+- **Full scale and SNR: nothing in the datasheet figures.** The output
+  common-mode and range come from an internal bandgap, not the supply
+  (§10.3.4.6), and the electrical characteristics are specified at the 1.35 V
+  output common-mode, which Table 10-5 allows from 2.7 V. At 3.0 V the 1.5 V
+  setting is also allowed; the 1.65 V and 1.8 V settings (for 3.3 V and above)
+  are not needed. The datasheet has no SNR-versus-supply data, so confirm the
+  ADC SNR at 3.0 V on the bench **(needs bench test)**.
+- **Headroom to the rail:** a full-scale differential output (1.414 Vrms)
+  swings each leg about 1.35 ± 1.0 V, so 0.65 V below a 3.0 V rail instead of
+  0.95 V below 3.3 V. The ADC input full scale (0.707 Vrms) is specified at
+  DRVDD = 3.3 V; check it at 3.0 V, and the input swing at 1 Vrms with the
+  −12 dB input level control, which gets tighter at 3.0 V **(verify)**.
+- **LDO headroom:** 300 mV from a 3.3 V input. The LP5907's dropout is 250 mV
+  maximum at 250 mA (SOT-23); the codec draws about 11 mA. The PSRR figures
+  are specified at VIN = VOUT + 1 V, so the PSRR at 0.3 V headroom is lower
+  **(verify against the datasheet curves)**. The buck's output tolerance must
+  keep its minimum above about 3.1 V.
+
+**Alternate:** TI TPS7A2030PDBVR (7 µVrms, PSRR 95 dB at 1 kHz;
+[SBVS338H](../references/index.md#ti-tps7a20-ds)); the genuine TI part wasn't
+found at LCSC on 2026-09-24.
+
+### 7.2 Digital core supply
+
+**TI TPS7A2018PDBVR** (1.8 V, SOT-23-5,
+[SBVS338H](../references/index.md#ti-tps7a20-ds)), fed from the **3.0 V
+AVDD output**, not from 3.3 V. Cascading guarantees the sequencing rule:
+DVDD can't rise before AVDD, and can't exceed it. 1.8 V is inside the
+recommended DVDD range for the 1.35 V and 1.5 V common-mode settings.
+LCSC 2026-09-24: [C963430](https://www.lcsc.com/product-detail/C963430.html),
+19,785 in stock, $0.2071 @ 50, $0.1847 @ 150. Check that it reaches 1.8 V
+within 5 ms of AVDD **(verify)**. Alternate: LP5907MFX-1.8/NOPB.
+
+IOVDD connects to the 3.3 V rail directly. The ESP32-S3 holds the codec's
+RESET low until the supplies are stable.
+
+### 7.3 RoHS and REACH (supply parts)
+
+| Part | RoHS | REACH | Source |
+|---|---|---|---|
+| LP5907MFX-3.0/NOPB | Yes | Yes | [TI part page](https://www.ti.com/product/LP5907/part-details/LP5907MFX-3.0/NOPB), 2026-09-24 |
+| TPS7A2018PDBVR | Yes | Yes | [TI part page](https://www.ti.com/product/TPS7A20/part-details/TPS7A2018PDBVR), 2026-09-24 |
+| BLM18PG221SN1D (not chosen) | RoHS3 compliant | not shown | [LCSC C80165](https://www.lcsc.com/product-detail/C80165.html), 2026-09-24 |
+
+## 8. Latency
 
 Codec filter delays at 48 kHz: ADC 354 µs, DAC 438 µs (datasheet group
 delays). The end-to-end latency (I2S DMA buffers, Bluetooth or USB buffering)
 is fixed by firmware configuration and measured at bring-up
 **(needs bench test)**.
 
-## 8. Open points
+## 9. Open points
 
 - Digi-Key and Mouser price and stock for the chosen parts and alternates:
   deferred by the maintainer (2026-09-24), still needed for the two-source rule.
 - Check TAC5112 availability again; if it stocks at two distributors, it is
   the better codec (see ADR-0002).
 - ADC SNR of the AIC3104 on the first boards (datasheet minimum 80 dB).
-- Crystal tolerance over temperature and ageing for the module's 40 MHz crystal.
+- Bench-confirm the codec PLL at P = 3, R = 8, J = 16, D = 0 from 2.304 MHz
+  (§2.2), and the oscillator's drive into a third load. Fallback: 16 MHz from
+  the ESP32-S3 (option B).
+- ADC SNR and input full scale at AVDD = 3.0 V; LP5907 PSRR at 0.3 V headroom (§7).
+- ESD and immunity levels at the AUDIO jack from EN 301 489-1 (#59).
 - Variant R with the DNP default doesn't meet constraints §6 in wired mode
   (§4.1): amend §6, fit transformers for wired use, or leave it to #12.

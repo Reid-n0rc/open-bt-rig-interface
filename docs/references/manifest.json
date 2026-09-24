@@ -436,7 +436,9 @@
       "url": "https://www.ti.com/lit/ds/symlink/tps7a20.pdf",
       "file": "ti-tps7a20-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
       ],
       "sha256": "663a9ff5bca608643e711652cba00e7b8bf955c0993a9b86fa108d24d58b8ddc",
       "retrieved": "2026-09-24"
@@ -1016,6 +1018,20 @@
         "docs/decisions/ADR-0002-audio-codec.md"
       ],
       "sha256": "bed5eeb82a1e25a517487c97a3eac8b076026967ba406fa22390bf16c442bca4",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-lp5907-ds",
+      "title": "LP5907 250 mA low-noise low-IQ LDO datasheet (SNVS798Q)",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/lp5907.pdf",
+      "file": "ti-lp5907-ds.pdf",
+      "used_in": [
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
+      ],
+      "sha256": "f5deda2f0cd6f251622fa0fbb57fd0ddff831b797f96b9a0a53ed35059e1c4ba",
       "retrieved": "2026-09-24"
     }
   ]

@@ -12,7 +12,8 @@ and tagged independently (see `AGENTS.md`).
 
 - ADR-0002 (proposed): TI TLV320AIC3104 audio codec (alternates TAC5112,
   TLV320AIC3204) and Bourns SM-LP-5001 isolation transformers, with the
-  ESP32-S3 I2S clocking, level plan and RF hardening
+  codec clocked from the 2.304 MHz buck-sync oscillator, 3.0 V / 1.8 V LDO
+  supplies, level plan, RF hardening and RoHS/REACH status
   (`docs/research/audio-codec.md`) (#8).
 - Radio module confirmation (`docs/research/module-selection.md`): the
   ESP32-S3-MINI-1 FCC grant (2AC7Z-ESPS3MINI1: single modular, BLE certified at

@@ -509,6 +509,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `6c888eeb219d47fb…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
+### ti-lp5907-ds
+
+**LP5907 250 mA low-noise low-IQ LDO datasheet (SNVS798Q)** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-lp5907-ds.pdf](cache/ti-lp5907-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/lp5907.pdf>
+- Retrieved: 2026-09-24; SHA-256 `f5deda2f0cd6f251…`
+- Cited in: [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md)
+
 ### ti-pcm1808-ds
 
 **PCM1808 single-ended 24-bit 96 kHz stereo ADC datasheet (SLES177B)** (Texas Instruments, datasheet)
@@ -669,7 +678,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-tps7a20-ds.pdf](cache/ti-tps7a20-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/tps7a20.pdf>
 - Retrieved: 2026-09-24; SHA-256 `663a9ff5bca60864…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md)
 
 ### ti-trs3221e-ds
 

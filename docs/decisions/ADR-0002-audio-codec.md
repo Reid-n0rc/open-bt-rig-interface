@@ -18,7 +18,14 @@ configurations, isolation transformers. Requirements
 line-level in and out, 48 kHz, ADC SNR ≥ 90 dB(A), ±50 ppm sample clock, no
 AGC or voice processing, adjustable TX level, fixed latency, −40 to +85 °C for
 variant M, JLCPCB standard assembly, two sources per key part. Isolation is
-mandatory on variant M and whenever the USB-C data link is used.
+mandatory on variant M and whenever the USB-C data link is used. The maintainer
+added (2026-09-24): optimize for **spurious emissions and cost**, and meet
+**EU requirements** (#59): RoHS-compliant parts, REACH recorded where shown,
+jack ESD and immunity levels from EN 301 489-1.
+
+The board has a single 3.3 V rail from a buck synchronized to a 2.304 MHz
+oscillator ([PR #57](https://github.com/Reid-n0rc/open-bt-rig-interface/pull/57),
+ADR-0004, proposed); there is no 5 V rail.
 
 The issue predates [ADR-0008](ADR-0008-host-links-esp32-s3.md) and asked for
 compatibility with an HFP audio path. Under ADR-0008 there is no HFP: the
@@ -36,7 +43,7 @@ Codecs (datasheet typicals; LCSC price at qty 100 and stock on 2026-09-24):
 
 | Option | Pros | Cons | Sources |
 |---|---|---|---|
-| **A. TI TLV320AIC3104** | ADC 92 dB(A), DAC 102 dB(A) differential; AGC, HPF and effects off at reset; PLL makes exact 48 kHz from a 16 MHz MCLK; −40 to +85 °C; pin-identical **-Q1** (AEC-Q100 grade 2); 2,601 in stock, $0.93 | ADC SNR minimum 80 dB (typical only meets 90 dB); extra 1.8 V rail; TI lists a newer part (TAC5112) | [Datasheet SLAS510G](../references/index.md#ti-tlv320aic3104-ds), [-Q1 SLAS715D](../references/index.md#ti-tlv320aic3104-q1-ds), [TI status](../references/index.md#ti-tlv320aic3104-product), [LCSC C181753](https://www.lcsc.com/product-detail/C181753.html) |
+| **A. TI TLV320AIC3104** | ADC 92 dB(A), DAC 102 dB(A) differential; AGC, HPF and effects off at reset; PLL makes exact 48 kHz with integer settings from the 2.304 MHz sync clock; −40 to +85 °C; pin-identical **-Q1** (AEC-Q100 grade 2); 2,601 in stock, $0.93 | ADC SNR minimum 80 dB (typical only meets 90 dB); extra 1.8 V rail; TI lists a newer part (TAC5112) | [Datasheet SLAS510G](../references/index.md#ti-tlv320aic3104-ds), [-Q1 SLAS715D](../references/index.md#ti-tlv320aic3104-q1-ds), [TI status](../references/index.md#ti-tlv320aic3104-product), [LCSC C181753](https://www.lcsc.com/product-detail/C181753.html) |
 | B. TI TAC5112 | ADC 102 dB(A) single-ended; single 3.3 V supply; −40 to +125 °C; smaller 4 × 4 mm VQFN-24; AGC off at reset | No stock found at LCSC or TI (2026-09-24); new part; not pin-compatible with A | [Datasheet SLASF24A](../references/index.md#ti-tac5112-ds), [-Q1 SLASFC2A](../references/index.md#ti-tac5112-q1-ds) |
 | C. TI TLV320AIC3204 | ADC 93 dB(A); internal LDOs; 5,022 in stock, $1.05 | ADC minimum 80 dB; no automotive grade found; not pin-compatible with A | [Datasheet SLOS602E](../references/index.md#ti-tlv320aic3204-ds), [LCSC C24109](https://www.lcsc.com/product-detail/C24109.html) |
 | D. NXP SGTL5000 | Well known; AVC only inside the DAP, off by default | ADC 90 dB (−60 dB method), THD+N −72 dB; $8.03 @ 50; one package EOL | [Data sheet Rev. 7](../references/index.md#nxp-sgtl5000-ds), [LCSC C2651833](https://www.lcsc.com/product-detail/C2651833.html) |
@@ -72,11 +79,46 @@ required. `TLV320AIC3104IRHBRQ1` is noted only as a pin-identical option
 - Neither alternate is pin-compatible with the AIC3104: changing needs a
   schematic change, not a BOM swap.
 
-**Clocking:** the ESP32-S3 outputs a 16 MHz MCLK (160 MHz ÷ 10, integer
-divide) and the AIC3104 PLL generates exactly 48 kHz (P = 1, R = 1, J = 6,
-D = 1440). The sample clock then inherits the module crystal's ±10 ppm, inside
-the ±50 ppm requirement, without fractional-divider jitter at the converters
-and without a second crystal. I2S master/slave direction is a firmware choice.
+**Clocking:** the codec MCLK comes from the **2.304 MHz buck-sync
+oscillator**, and the AIC3104 PLL makes exactly 48 kHz with integer settings:
+**P = 3, R = 8, J = 16, D = 0** (PLL input 768 kHz, PLL 98.304 MHz; checked
+against the limits in [SLAS510G](../references/index.md#ti-tlv320aic3104-ds)
+§10.3.3.1, page 27: D = 0 needs 512 kHz–20 MHz after P and 80–110 MHz, J 4–55;
+D ≠ 0 would need ≥ 10 MHz and is impossible from 2.304 MHz). The codec is the
+I2S master; the ESP32-S3 is the I2S slave. Compared with a 16 MHz MCLK from
+the ESP32-S3:
+
+- **Spurious:** no new clock frequency on the board (the 16 MHz net's 9th
+  harmonic is 144.000 MHz, in the 2 m band, and its mixing products with the
+  buck comb aren't covered by PR #57's scan); and supply ripple at the buck's
+  8th harmonic (18.432 MHz = 3 × the 6.144 MHz modulator rate) aliases to 0 Hz
+  instead of a tone of up to about 550 Hz.
+- **Cost:** no extra parts (the oscillator exists), one GPIO freed.
+- **Accuracy:** the oscillator's ±20 ppm option (PR #57), inside ±50 ppm.
+
+**Fallback:** 16 MHz from the ESP32-S3 (160 MHz ÷ 10; P = 1, R = 1, J = 6,
+D = 1440), through a DNP 0 Ω link, if the oscillator isn't adopted or the
+2.304 MHz setting fails on the bench.
+
+**Supplies** ([`audio-codec.md` §7](../research/audio-codec.md#7-supplies)):
+
+| Rail | Source | Part (LCSC, 2026-09-24) |
+|---|---|---|
+| AVDD, DRVDD | LDO 3.3 → **3.0 V** | TI **LP5907MFX-3.0/NOPB** ([SNVS798Q](../references/index.md#ti-lp5907-ds)), C475492, $0.20 @ 150, 28,780 in stock. Alternate TPS7A2030PDBVR |
+| DVDD | LDO 3.0 → **1.8 V**, fed from the AVDD output (keeps DVDD ≤ AVDD and the sequence) | TI **TPS7A2018PDBVR** ([SBVS338H](../references/index.md#ti-tps7a20-ds)), C963430, $0.18 @ 150, 19,785 in stock. Alternate LP5907MFX-1.8/NOPB |
+| IOVDD | 3.3 V rail | — |
+
+A ferrite-and-capacitor filter from 3.3 V would save about $0.18 but can't
+reject audio-band disturbances (BLE TX bursts), and the codec's own ADC PSRR
+is only 44 dB at 1 kHz, so it can't guarantee the SNR target. Running at
+3.0 V costs no datasheet performance (full scale and common mode come from an
+internal bandgap; specs are at the 1.35 V common mode, allowed from 2.7 V),
+but reduces the headroom to the rail from 0.95 V to 0.65 V and must be
+confirmed on the bench.
+
+**EU (#59):** the chosen codec, transformer and LDOs are RoHS-compliant, and
+TI's part pages show REACH "Yes" for the codec and LDOs (2026-09-24; see
+[`audio-codec.md`](../research/audio-codec.md#31-price-and-stock) §3.1, §4, §7.3).
 
 **Transformers: Bourns SM-LP-5001E** (600:600, SMD, tape and reel), one each
 for RX and TX. **Alternate:** `SM-LP-5001` (same part in tubes) for sourcing,
@@ -122,14 +164,15 @@ state (off).
   `TAC5112IRGER`, `SM-LP-5001E` and `SM-LP-5001` are still to be recorded, to
   meet the two-source rule. Deferred on 2026-09-24; not a condition for
   accepting this ADR.
-- **Power (#10, #11):** the codec needs AVDD/DRVDD 3.3 V (low-noise LDO,
-  TPS7A20-class per [`core-devices.md`](../research/core-devices.md#5-power-10-11)),
-  DVDD 1.525–1.95 V and IOVDD 3.3 V. The datasheet (§8.5) gives the blocks
+- **Power (#10, #11):** the codec takes AVDD/DRVDD 3.0 V and DVDD 1.8 V from
+  its own two LDOs, and IOVDD 3.3 V. The 3.3 V buck's minimum output must stay
+  above about 3.1 V for the LP5907's headroom. The datasheet (§8.5) gives the blocks
   separately (analog + digital): stereo ADC 4.31 + 2.45 mA, DAC to line-out
   4.9 + 2.3 mA, PLL 1.4 + 0.9 mA. Their sum, about 11 mA analog and 6 mA
   digital, is an upper estimate for the budget.
-- **Firmware:** I2S driver with a 16 MHz MCLK output; codec register setup that
-  leaves AGC, HPF and effects off; per-radio RX gain and TX volume stored in
+- **Firmware:** ESP32-S3 I2S in slave mode (codec is master); codec PLL at
+  P = 3, R = 8, J = 16, D = 0; register setup that leaves AGC, HPF and
+  effects off; per-radio RX gain and TX volume stored in
   the configuration; rate matching toward the host clock domains
   (ADR-0008). Measure end-to-end latency and fix it by configuration.
 - **Schematic (#12 and the hardware issues):** transformer secondary into the
@@ -141,10 +184,14 @@ state (off).
   input with the other leg referenced to ground, and TX drives ring 1 from one
   line output only (0.707 Vrms, 2 Vpp full scale; see
   [`audio-codec.md` §6](../research/audio-codec.md#6-level-plan)).
-- **Risks to verify:** AIC3104 ADC SNR on real boards (80 dB minimum);
-  transformer distortion at 200 Hz and maximum level; input pin swing at 1 Vrms
-  with the −12 dB input level control; module crystal tolerance over
-  temperature; JLCPCB reflow profile versus the SM-LP-5001's 240 °C peak;
+- **Risks to verify:** AIC3104 ADC SNR on real boards (80 dB minimum), at
+  AVDD = 3.0 V; the 2.304 MHz PLL setting (not in the datasheet's example
+  table); the oscillator's drive into a third load; LP5907 PSRR at 0.3 V
+  headroom; transformer distortion at 200 Hz and maximum level; input pin
+  swing at 1 Vrms with the −12 dB input level control at 3.0 V; the
+  oscillator decision in PR #57 (fallback: 16 MHz from the ESP32-S3);
+  AUDIO-jack ESD and immunity levels from EN 301 489-1 **(verify, #59)**;
+  RoHS/REACH of `TLV320AIC3104IRHBRQ1` (TI page not reachable); JLCPCB reflow profile versus the SM-LP-5001's 240 °C peak;
   TI's "newer version available" notice on the AIC3104 (still ACTIVE).
 - [`core-devices.md`](../research/core-devices.md) is updated to point at this
   ADR for the codec and isolation rows.

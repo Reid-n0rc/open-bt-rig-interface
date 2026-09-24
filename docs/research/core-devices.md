@@ -49,7 +49,7 @@ confirmed from the manufacturer's datasheet by the issue named in the
 | Power M: reverse polarity | TI **LM74700-Q1** ideal diode | TI LM74800-Q1 (adds load-dump cut-off) | #10 |
 | Power M: load dump / surge | ADI **LTC4380** surge stopper | TI LM5060-Q1, TVS only (SM8S-class) | #10 |
 | Power M: buck | TI **LMQ62440-Q1** | ADI LT8609S, ADI LT8636 | #10 |
-| Low-noise LDO (audio rail) | TI **TPS7A20** | TI LP5907 | #8, #10, #11 |
+| Low-noise LDO (audio rail) | TI **LP5907** (3.0 V codec AVDD; TPS7A2018 for 1.8 V DVDD) | TI TPS7A20 | #8, [ADR-0002](../decisions/ADR-0002-audio-codec.md) |
 
 | Programming/log port | UART0 header (USB is used as host to the radio) | — | #21 |
 | ESD (USB and radio lines) | TI **TPD4E05U06** / TPD1E10B06 | ST USBLC6-2 | #9 |
