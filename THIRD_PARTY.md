@@ -129,6 +129,7 @@ repository. Licenses were verified from each LICENSE file on 2026-09-24.
 | Digirig hardware | https://github.com/softcomplex/digirig | GPL-3.0 | Wired-interface reference; no schematics or layout copied |
 | Mobilinkd TNC3 firmware | https://github.com/mobilinkd/tnc3-firmware | GPL-3.0 | BLE + audio interface reference |
 | arduino-audio-tools | https://github.com/pschatzmann/arduino-audio-tools | GPL-3.0 | Microcontroller audio streaming reference |
+| Linux kernel USB network drivers (`drivers/net/usb/usbnet.c`, `cdc_ncm.c`, commit 038d61fd6422) | https://github.com/torvalds/linux | GPL-2.0 | CDC-NCM host behavior and interface naming (`usbN` / `ethN`) for the protocol's USB network transport (#13); nothing copied |
 
 Add more rows as sources are consulted. Record unlicensed sources here too,
 marked "no license".

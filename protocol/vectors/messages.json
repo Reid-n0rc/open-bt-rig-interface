@@ -1,0 +1,1121 @@
+{
+  "protocol_version": "0.1.0",
+  "spec": "protocol/SPEC.md",
+  "generated_by": "tools/protocol/make_vectors.py",
+  "messages": [
+    {
+      "name": "hello",
+      "message": "HELLO",
+      "type": "0x01",
+      "direction": "h2d",
+      "token": 1,
+      "fields": {
+        "proto_major": 0,
+        "proto_minor": 1,
+        "proto_patch": 0,
+        "max_payload": 1024,
+        "flags": 0
+      },
+      "payload_hex": "000100000400",
+      "frame_hex": "010100010000040019a8",
+      "wire_hex": "03010102010102040319a800",
+      "note": "Host opens a session and states its protocol version."
+    },
+    {
+      "name": "device_info",
+      "message": "DEVICE_INFO",
+      "type": "0x02",
+      "direction": "d2h",
+      "token": 1,
+      "fields": {
+        "proto_major": 0,
+        "proto_minor": 1,
+        "proto_patch": 0,
+        "fw_major": 0,
+        "fw_minor": 1,
+        "fw_patch": 0,
+        "variant": "R",
+        "hw_revision": "A",
+        "max_payload": 1024,
+        "build": "0.1.0+g1a2b3c4"
+      },
+      "payload_hex": "00010000010052410004302e312e302b6731613262336334",
+      "frame_hex": "020100010000010052410004302e312e302b673161326233633496c1",
+      "wire_hex": "03020102010102010352411204302e312e302b673161326233633496c100",
+      "note": "Reply to HELLO. build is free UTF-8 text."
+    },
+    {
+      "name": "caps_get",
+      "message": "CAPS_GET",
+      "type": "0x03",
+      "direction": "h2d",
+      "token": 2,
+      "fields": {},
+      "payload_hex": "",
+      "frame_hex": "03021e68",
+      "wire_hex": "0503021e6800",
+      "note": "Request the capability list."
+    },
+    {
+      "name": "caps_full",
+      "message": "CAPS",
+      "type": "0x04",
+      "direction": "d2h",
+      "token": 2,
+      "fields": {
+        "tlvs": [
+          {
+            "tlv": "FEATURES",
+            "features": 98303
+          },
+          {
+            "tlv": "SERIAL_JACK",
+            "port": 0,
+            "modes": 15,
+            "min_baud": 4800,
+            "max_baud": 115200,
+            "tx_buffer": 512
+          },
+          {
+            "tlv": "RADIO_USB_SERIAL",
+            "port": 1,
+            "chip": 1,
+            "vid": 4292,
+            "pid": 60016,
+            "interface": 0,
+            "tx_buffer": 512
+          },
+          {
+            "tlv": "RADIO_USB_SERIAL",
+            "port": 2,
+            "chip": 1,
+            "vid": 4292,
+            "pid": 60016,
+            "interface": 1,
+            "tx_buffer": 512
+          },
+          {
+            "tlv": "AUDIO",
+            "directions": 3,
+            "codecs": 1,
+            "rates": 3,
+            "paths": 3,
+            "max_frame_samples": 480,
+            "tx_buffer_samples": 2400
+          },
+          {
+            "tlv": "PTT",
+            "outputs": 7,
+            "keepalive_min_ms": 500,
+            "keepalive_max_ms": 10000,
+            "max_tx_min_s": 10,
+            "max_tx_max_s": 600
+          },
+          {
+            "tlv": "TONE",
+            "max_symbols": 256,
+            "max_tone_index": 15,
+            "shaping": 3,
+            "min_symbol_us": 1000,
+            "max_symbol_us": 2000000
+          },
+          {
+            "tlv": "BLE_TX_POWER",
+            "min_dbm": -24,
+            "max_dbm": 9
+          }
+        ]
+      },
+      "payload_hex": "0104ff7f0100020c000fc012000000c20100000203090101c41070ea00000203090201c41070ea010002040803010303e0016009050907f40110270a005802060c00010f03e803000080841e000702e809",
+      "frame_hex": "04020104ff7f0100020c000fc012000000c20100000203090101c41070ea00000203090201c41070ea010002040803010303e0016009050907f40110270a005802060c00010f03e803000080841e000702e8091c23",
+      "wire_hex": "0804020104ff7f0103020c040fc012010103c201010a0203090101c41070ea010b0203090201c41070ea011402040803010303e0016009050907f40110270a055802060c06010f03e803010480841e070702e8091c2300",
+      "note": "Every TLV. The radio USB entries show a dual-port USB-serial chip (VID/PID are examples)."
+    },
+    {
+      "name": "caps_minimal",
+      "message": "CAPS",
+      "type": "0x04",
+      "direction": "d2h",
+      "token": 0,
+      "fields": {
+        "tlvs": [
+          {
+            "tlv": "FEATURES",
+            "features": 3
+          },
+          {
+            "tlv": "SERIAL_JACK",
+            "port": 0,
+            "modes": 1,
+            "min_baud": 4800,
+            "max_baud": 115200,
+            "tx_buffer": 256
+          },
+          {
+            "tlv": "PTT",
+            "outputs": 1,
+            "keepalive_min_ms": 500,
+            "keepalive_max_ms": 10000,
+            "max_tx_min_s": 10,
+            "max_tx_max_s": 600
+          }
+        ]
+      },
+      "payload_hex": "010403000000020c0001c012000000c201000001050901f40110270a005802",
+      "frame_hex": "0400010403000000020c0001c012000000c201000001050901f40110270a00580278de",
+      "wire_hex": "020404010403010103020c0401c012010103c201010a01050901f40110270a05580278de00",
+      "note": "Unsolicited (token 0) after a change; a device with CAT and PTT only."
+    },
+    {
+      "name": "caps_unknown_tlv",
+      "message": "CAPS",
+      "type": "0x04",
+      "direction": "d2h",
+      "token": 0,
+      "fields": {
+        "tlvs": [
+          {
+            "tlv": "FEATURES",
+            "features": 1
+          },
+          {
+            "tlv": "0x7f",
+            "hex": "0102"
+          }
+        ]
+      },
+      "payload_hex": "0104010000007f020102",
+      "frame_hex": "04000104010000007f020102dcd6",
+      "wire_hex": "0204040104010101077f020102dcd600",
+      "note": "A TLV tag from a newer minor version: receivers skip it by its length."
+    },
+    {
+      "name": "result_ok",
+      "message": "RESULT",
+      "type": "0x05",
+      "direction": "d2h",
+      "token": 3,
+      "fields": {
+        "request_type": 17,
+        "code": 0
+      },
+      "payload_hex": "1100",
+      "frame_hex": "050311009751",
+      "wire_hex": "0405031103975100",
+      "note": "Success for a request with no specific reply."
+    },
+    {
+      "name": "result_unsupported",
+      "message": "RESULT",
+      "type": "0x05",
+      "direction": "d2h",
+      "token": 4,
+      "fields": {
+        "request_type": 64,
+        "code": 4
+      },
+      "payload_hex": "4004",
+      "frame_hex": "050440040da9",
+      "wire_hex": "07050440040da900",
+      "note": "AUDIO_START on a device without the feature."
+    },
+    {
+      "name": "result_frame_error",
+      "message": "RESULT",
+      "type": "0x05",
+      "direction": "d2h",
+      "token": 0,
+      "fields": {
+        "request_type": 0,
+        "code": 10
+      },
+      "payload_hex": "000a",
+      "frame_hex": "0500000acf99",
+      "wire_hex": "020501040acf9900",
+      "note": "A frame failed its CRC; token and type unknown."
+    },
+    {
+      "name": "ping",
+      "message": "PING",
+      "type": "0x06",
+      "direction": "h2d",
+      "token": 5,
+      "fields": {
+        "data": "deadbeef"
+      },
+      "payload_hex": "deadbeef",
+      "frame_hex": "0605deadbeeff164",
+      "wire_hex": "090605deadbeeff16400",
+      "note": "Echo request with opaque data."
+    },
+    {
+      "name": "pong",
+      "message": "PONG",
+      "type": "0x07",
+      "direction": "d2h",
+      "token": 5,
+      "fields": {
+        "data": "deadbeef"
+      },
+      "payload_hex": "deadbeef",
+      "frame_hex": "0705deadbeef5121",
+      "wire_hex": "090705deadbeef512100",
+      "note": "Echo reply."
+    },
+    {
+      "name": "status_get",
+      "message": "STATUS_GET",
+      "type": "0x08",
+      "direction": "h2d",
+      "token": 6,
+      "fields": {},
+      "payload_hex": "",
+      "frame_hex": "080660f4",
+      "wire_hex": "05080660f400",
+      "note": "Request link and device status."
+    },
+    {
+      "name": "status_ble_l2cap",
+      "message": "STATUS",
+      "type": "0x09",
+      "direction": "d2h",
+      "token": 6,
+      "fields": {
+        "host_link": 1,
+        "transport": 2,
+        "phy": 2,
+        "conn_interval_us": 15000,
+        "att_mtu": 247,
+        "coc_mtu": 512,
+        "flags": 11,
+        "audio_path": 2,
+        "supply_mv": 5020,
+        "frame_errors": 0,
+        "cat_overflows": 0
+      },
+      "payload_hex": "010202983a0000f70000020b00029c1300000000",
+      "frame_hex": "0906010202983a0000f70000020b00029c130000000004cf",
+      "wire_hex": "080906010202983a0102f70103020b04029c130101010304cf00",
+      "note": "Bluetooth, L2CAP CoC, 2M PHY, 15 ms interval; radio USB serial and sound card present; time set."
+    },
+    {
+      "name": "status_wired",
+      "message": "STATUS",
+      "type": "0x09",
+      "direction": "d2h",
+      "token": 0,
+      "fields": {
+        "host_link": 2,
+        "transport": 3,
+        "phy": 0,
+        "conn_interval_us": 0,
+        "att_mtu": 0,
+        "coc_mtu": 0,
+        "flags": 4,
+        "audio_path": 1,
+        "supply_mv": 4870,
+        "frame_errors": 2,
+        "cat_overflows": 0
+      },
+      "payload_hex": "0203000000000000000000040001061302000000",
+      "frame_hex": "09000203000000000000000000040001061302000000261b",
+      "wire_hex": "0209030203010101010101010102040501061302010103261b00",
+      "note": "Wired CDC-ACM control port; a radio USB device is attached but not usable."
+    },
+    {
+      "name": "status_usb_network",
+      "message": "STATUS",
+      "type": "0x09",
+      "direction": "d2h",
+      "token": 37,
+      "fields": {
+        "host_link": 2,
+        "transport": 4,
+        "phy": 0,
+        "conn_interval_us": 0,
+        "att_mtu": 0,
+        "coc_mtu": 0,
+        "flags": 24,
+        "audio_path": 1,
+        "supply_mv": 5010,
+        "frame_errors": 0,
+        "cat_overflows": 0
+      },
+      "payload_hex": "0204000000000000000000180001921300000000",
+      "frame_hex": "092502040000000000000000001800019213000000004c5d",
+      "wire_hex": "05092502040101010101010101021804019213010101034c5d00",
+      "note": "Wired, TCP over the USB network interface; time set; USB-C source advertises 1.5 A or more."
+    },
+    {
+      "name": "config_get_line_map",
+      "message": "CONFIG_GET",
+      "type": "0x10",
+      "direction": "h2d",
+      "token": 7,
+      "fields": {
+        "key": 3,
+        "selector": 0
+      },
+      "payload_hex": "0300",
+      "frame_hex": "10070300a44f",
+      "wire_hex": "0410070303a44f00",
+      "note": "Read the RTS/DTR mapping of port 0 (SERIAL jack)."
+    },
+    {
+      "name": "config_set_jack_mode",
+      "message": "CONFIG_SET",
+      "type": "0x11",
+      "direction": "h2d",
+      "token": 8,
+      "fields": {
+        "flags": 1,
+        "config": {
+          "key": "SERIAL_JACK_MODE",
+          "selector": 0,
+          "value": {
+            "mode": 2
+          }
+        }
+      },
+      "payload_hex": "01010002",
+      "frame_hex": "110801010002df32",
+      "wire_hex": "05110801010402df3200",
+      "note": "SERIAL jack to CI-V, persisted."
+    },
+    {
+      "name": "config_set_ptt_targets",
+      "message": "CONFIG_SET",
+      "type": "0x11",
+      "direction": "h2d",
+      "token": 9,
+      "fields": {
+        "flags": 0,
+        "config": {
+          "key": "PTT_TARGETS",
+          "selector": 0,
+          "value": {
+            "targets": 3,
+            "usb_port": 1
+          }
+        }
+      },
+      "payload_hex": "0002000301",
+      "frame_hex": "110900020003012c9e",
+      "wire_hex": "03110902020503012c9e00",
+      "note": "PTT drives the AUDIO-jack closure and RTS on radio USB port 1."
+    },
+    {
+      "name": "config_set_line_map",
+      "message": "CONFIG_SET",
+      "type": "0x11",
+      "direction": "h2d",
+      "token": 10,
+      "fields": {
+        "flags": 1,
+        "config": {
+          "key": "LINE_MAP",
+          "selector": 0,
+          "value": {
+            "rts_action": 1,
+            "dtr_action": 0
+          }
+        }
+      },
+      "payload_hex": "0103000100",
+      "frame_hex": "110a01030001006afa",
+      "wire_hex": "05110a01030201036afa00",
+      "note": "Port 0: RTS keys PTT, DTR ignored."
+    },
+    {
+      "name": "config_set_keepalive",
+      "message": "CONFIG_SET",
+      "type": "0x11",
+      "direction": "h2d",
+      "token": 11,
+      "fields": {
+        "flags": 1,
+        "config": {
+          "key": "PTT_KEEPALIVE_MS",
+          "selector": 0,
+          "value": {
+            "ms": 3000
+          }
+        }
+      },
+      "payload_hex": "010400b80b",
+      "frame_hex": "110b010400b80b19fb",
+      "wire_hex": "05110b010405b80b19fb00",
+      "note": "Keepalive timeout 3 s."
+    },
+    {
+      "name": "config_set_max_tx",
+      "message": "CONFIG_SET",
+      "type": "0x11",
+      "direction": "h2d",
+      "token": 12,
+      "fields": {
+        "flags": 1,
+        "config": {
+          "key": "MAX_TX_S",
+          "selector": 0,
+          "value": {
+            "s": 180
+          }
+        }
+      },
+      "payload_hex": "010500b400",
+      "frame_hex": "110c010500b400eab1",
+      "wire_hex": "05110c010502b403eab100",
+      "note": "Maximum continuous TX 180 s."
+    },
+    {
+      "name": "config_set_audio_path",
+      "message": "CONFIG_SET",
+      "type": "0x11",
+      "direction": "h2d",
+      "token": 13,
+      "fields": {
+        "flags": 0,
+        "config": {
+          "key": "AUDIO_PATH",
+          "selector": 0,
+          "value": {
+            "path": 1
+          }
+        }
+      },
+      "payload_hex": "00060001",
+      "frame_hex": "110d00060001cfd2",
+      "wire_hex": "03110d02060401cfd200",
+      "note": "Force the analog audio path."
+    },
+    {
+      "name": "config_set_tx_level",
+      "message": "CONFIG_SET",
+      "type": "0x11",
+      "direction": "h2d",
+      "token": 14,
+      "fields": {
+        "flags": 1,
+        "config": {
+          "key": "TX_LEVEL",
+          "selector": 0,
+          "value": {
+            "centibel": -120
+          }
+        }
+      },
+      "payload_hex": "01070088ff",
+      "frame_hex": "110e01070088ffca89",
+      "wire_hex": "05110e01070588ffca8900",
+      "note": "TX level -12.0 dB."
+    },
+    {
+      "name": "config_set_rx_attenuator",
+      "message": "CONFIG_SET",
+      "type": "0x11",
+      "direction": "h2d",
+      "token": 15,
+      "fields": {
+        "flags": 1,
+        "config": {
+          "key": "RX_ATTENUATOR",
+          "selector": 0,
+          "value": {
+            "on": 1
+          }
+        }
+      },
+      "payload_hex": "01080001",
+      "frame_hex": "110f01080001f9fb",
+      "wire_hex": "05110f01080401f9fb00",
+      "note": "RX attenuator on."
+    },
+    {
+      "name": "config_set_rx_gain",
+      "message": "CONFIG_SET",
+      "type": "0x11",
+      "direction": "h2d",
+      "token": 16,
+      "fields": {
+        "flags": 0,
+        "config": {
+          "key": "RX_GAIN",
+          "selector": 0,
+          "value": {
+            "centibel": 35
+          }
+        }
+      },
+      "payload_hex": "0009002300",
+      "frame_hex": "1110000900230092c4",
+      "wire_hex": "031110020902230392c400",
+      "note": "RX gain +3.5 dB."
+    },
+    {
+      "name": "config_set_host_mode",
+      "message": "CONFIG_SET",
+      "type": "0x11",
+      "direction": "h2d",
+      "token": 17,
+      "fields": {
+        "flags": 1,
+        "config": {
+          "key": "HOST_MODE",
+          "selector": 0,
+          "value": {
+            "mode": 0
+          }
+        }
+      },
+      "payload_hex": "010a0000",
+      "frame_hex": "1111010a00004a4e",
+      "wire_hex": "051111010a01034a4e00",
+      "note": "Host mode automatic."
+    },
+    {
+      "name": "config_set_ble_tx_power",
+      "message": "CONFIG_SET",
+      "type": "0x11",
+      "direction": "h2d",
+      "token": 18,
+      "fields": {
+        "flags": 1,
+        "config": {
+          "key": "BLE_TX_POWER",
+          "selector": 0,
+          "value": {
+            "dbm": 6
+          }
+        }
+      },
+      "payload_hex": "010b0006",
+      "frame_hex": "1112010b00066ef7",
+      "wire_hex": "051112010b04066ef700",
+      "note": "BLE TX power 6 dBm (must not exceed the BLE_TX_POWER capability maximum)."
+    },
+    {
+      "name": "config_set_wired_profile",
+      "message": "CONFIG_SET",
+      "type": "0x11",
+      "direction": "h2d",
+      "token": 36,
+      "fields": {
+        "flags": 1,
+        "config": {
+          "key": "WIRED_PROFILE",
+          "selector": 0,
+          "value": {
+            "profile": 0
+          }
+        }
+      },
+      "payload_hex": "010c0000",
+      "frame_hex": "1124010c000053d3",
+      "wire_hex": "051124010c010353d300",
+      "note": "Wired profile 'network' (USB network interface instead of the SERIAL-jack serial port)."
+    },
+    {
+      "name": "config_report",
+      "message": "CONFIG",
+      "type": "0x12",
+      "direction": "d2h",
+      "token": 7,
+      "fields": {
+        "config": {
+          "key": "LINE_MAP",
+          "selector": 0,
+          "value": {
+            "rts_action": 1,
+            "dtr_action": 0
+          }
+        }
+      },
+      "payload_hex": "03000100",
+      "frame_hex": "120703000100ed50",
+      "wire_hex": "04120703020103ed5000",
+      "note": "Reply to CONFIG_GET (also sent with token 0 when a value changes)."
+    },
+    {
+      "name": "config_reset",
+      "message": "CONFIG_RESET",
+      "type": "0x13",
+      "direction": "h2d",
+      "token": 19,
+      "fields": {
+        "flags": 1
+      },
+      "payload_hex": "01",
+      "frame_hex": "131301ae90",
+      "wire_hex": "06131301ae9000",
+      "note": "Restore defaults and persist them."
+    },
+    {
+      "name": "serial_open",
+      "message": "SERIAL_OPEN",
+      "type": "0x20",
+      "direction": "h2d",
+      "token": 20,
+      "fields": {
+        "port": 0,
+        "open": 1
+      },
+      "payload_hex": "0001",
+      "frame_hex": "201400010c3c",
+      "wire_hex": "03201404010c3c00",
+      "note": "Open port 0; RTS/DTR arming restarts."
+    },
+    {
+      "name": "serial_close",
+      "message": "SERIAL_OPEN",
+      "type": "0x20",
+      "direction": "h2d",
+      "token": 21,
+      "fields": {
+        "port": 0,
+        "open": 0
+      },
+      "payload_hex": "0000",
+      "frame_hex": "201500001d1b",
+      "wire_hex": "03201501031d1b00",
+      "note": "Close port 0; its lines drop."
+    },
+    {
+      "name": "serial_set",
+      "message": "SERIAL_SET",
+      "type": "0x21",
+      "direction": "h2d",
+      "token": 22,
+      "fields": {
+        "port": 0,
+        "baud": 38400,
+        "data_bits": 8,
+        "parity": 0,
+        "stop_bits": 0
+      },
+      "payload_hex": "0000960000080000",
+      "frame_hex": "21160000960000080000e354",
+      "wire_hex": "0321160102960102080103e35400",
+      "note": "38400 8N1."
+    },
+    {
+      "name": "serial_set_8n2",
+      "message": "SERIAL_SET",
+      "type": "0x21",
+      "direction": "h2d",
+      "token": 23,
+      "fields": {
+        "port": 1,
+        "baud": 4800,
+        "data_bits": 8,
+        "parity": 0,
+        "stop_bits": 2
+      },
+      "payload_hex": "01c0120000080002",
+      "frame_hex": "211701c0120000080002c57c",
+      "wire_hex": "06211701c0120102080402c57c00",
+      "note": "4800 8N2 on radio USB port 1."
+    },
+    {
+      "name": "cat_data_h2d",
+      "message": "CAT_DATA",
+      "type": "0x22",
+      "direction": "both",
+      "token": 0,
+      "fields": {
+        "port": 0,
+        "data": "46413b"
+      },
+      "payload_hex": "0046413b",
+      "frame_hex": "22000046413b90a6",
+      "wire_hex": "0222010646413b90a600",
+      "note": "Host to radio: three opaque CAT bytes."
+    },
+    {
+      "name": "cat_data_d2h_zeros",
+      "message": "CAT_DATA",
+      "type": "0x22",
+      "direction": "both",
+      "token": 0,
+      "fields": {
+        "port": 2,
+        "data": "fefe00e0fd"
+      },
+      "payload_hex": "02fefe00e0fd",
+      "frame_hex": "220002fefe00e0fd59ad",
+      "wire_hex": "02220402fefe05e0fd59ad00",
+      "note": "Radio to host with 0x00 bytes inside (COBS removes them on the wire)."
+    },
+    {
+      "name": "cat_credit",
+      "message": "CAT_CREDIT",
+      "type": "0x23",
+      "direction": "d2h",
+      "token": 0,
+      "fields": {
+        "port": 0,
+        "credit": 256
+      },
+      "payload_hex": "000001",
+      "frame_hex": "23000000014be7",
+      "wire_hex": "0223010104014be700",
+      "note": "256 more bytes may be sent to port 0."
+    },
+    {
+      "name": "modem_lines",
+      "message": "MODEM_LINES",
+      "type": "0x24",
+      "direction": "h2d",
+      "token": 0,
+      "fields": {
+        "port": 0,
+        "lines": 2
+      },
+      "payload_hex": "0002",
+      "frame_hex": "240000023d59",
+      "wire_hex": "02240104023d5900",
+      "note": "RTS asserted, DTR deasserted."
+    },
+    {
+      "name": "modem_status",
+      "message": "MODEM_STATUS",
+      "type": "0x25",
+      "direction": "d2h",
+      "token": 0,
+      "fields": {
+        "port": 1,
+        "lines": 3
+      },
+      "payload_hex": "0103",
+      "frame_hex": "25000103990c",
+      "wire_hex": "0225050103990c00",
+      "note": "CTS and DSR asserted on radio USB port 1."
+    },
+    {
+      "name": "ptt_on",
+      "message": "PTT_SET",
+      "type": "0x30",
+      "direction": "h2d",
+      "token": 24,
+      "fields": {
+        "state": 1
+      },
+      "payload_hex": "01",
+      "frame_hex": "301801c293",
+      "wire_hex": "06301801c29300",
+      "note": "Key PTT (re-send, or KEEPALIVE, within the keepalive time)."
+    },
+    {
+      "name": "ptt_off",
+      "message": "PTT_SET",
+      "type": "0x30",
+      "direction": "h2d",
+      "token": 25,
+      "fields": {
+        "state": 0
+      },
+      "payload_hex": "00",
+      "frame_hex": "301900d2b0",
+      "wire_hex": "03301903d2b000",
+      "note": "Release PTT."
+    },
+    {
+      "name": "ptt_status_keyed",
+      "message": "PTT_STATUS",
+      "type": "0x31",
+      "direction": "d2h",
+      "token": 24,
+      "fields": {
+        "state": 1,
+        "sources": 1,
+        "reason": 0,
+        "remaining_s": 180
+      },
+      "payload_hex": "010100b400",
+      "frame_hex": "3118010100b400c809",
+      "wire_hex": "053118010102b403c80900",
+      "note": "Keyed by the protocol command; 180 s of TX left."
+    },
+    {
+      "name": "ptt_status_keepalive_timeout",
+      "message": "PTT_STATUS",
+      "type": "0x31",
+      "direction": "d2h",
+      "token": 0,
+      "fields": {
+        "state": 0,
+        "sources": 0,
+        "reason": 2,
+        "remaining_s": 0
+      },
+      "payload_hex": "0000020000",
+      "frame_hex": "31000000020000427e",
+      "wire_hex": "0231010102020103427e00",
+      "note": "Unsolicited: PTT dropped because the keepalive expired."
+    },
+    {
+      "name": "keepalive",
+      "message": "KEEPALIVE",
+      "type": "0x32",
+      "direction": "h2d",
+      "token": 0,
+      "fields": {},
+      "payload_hex": "",
+      "frame_hex": "3200f87e",
+      "wire_hex": "023203f87e00",
+      "note": "Refreshes every protocol PTT source."
+    },
+    {
+      "name": "audio_start_rx",
+      "message": "AUDIO_START",
+      "type": "0x40",
+      "direction": "h2d",
+      "token": 26,
+      "fields": {
+        "direction": 1,
+        "codec": 0,
+        "sample_rate": 12000,
+        "frame_samples": 120,
+        "codec_param": 0,
+        "start_time_us": 0
+      },
+      "payload_hex": "0100e02e780000000000000000000000",
+      "frame_hex": "401a0100e02e7800000000000000000000008a79",
+      "wire_hex": "04401a0104e02e7801010101010101010101038a7900",
+      "note": "RX (radio to host) 12 kHz PCM, 10 ms frames, start now."
+    },
+    {
+      "name": "audio_start_tx_scheduled",
+      "message": "AUDIO_START",
+      "type": "0x40",
+      "direction": "h2d",
+      "token": 27,
+      "fields": {
+        "direction": 2,
+        "codec": 0,
+        "sample_rate": 16000,
+        "frame_samples": 160,
+        "codec_param": 0,
+        "start_time_us": 1234567890
+      },
+      "payload_hex": "0200803ea0000000d202964900000000",
+      "frame_hex": "401b0200803ea0000000d2029649000000000959",
+      "wire_hex": "04401b0204803ea0010105d202964901010103095900",
+      "note": "TX 16 kHz PCM; sample 0 plays at device time 1234567890 us."
+    },
+    {
+      "name": "audio_start_lc3",
+      "message": "AUDIO_START",
+      "type": "0x40",
+      "direction": "h2d",
+      "token": 28,
+      "fields": {
+        "direction": 1,
+        "codec": 1,
+        "sample_rate": 16000,
+        "frame_samples": 160,
+        "codec_param": 40,
+        "start_time_us": 0
+      },
+      "payload_hex": "0101803ea00028000000000000000000",
+      "frame_hex": "401c0101803ea00028000000000000000000a13d",
+      "wire_hex": "08401c0101803ea00228010101010101010103a13d00",
+      "note": "Optional LC3, 10 ms frames of 40 bytes."
+    },
+    {
+      "name": "audio_stop",
+      "message": "AUDIO_STOP",
+      "type": "0x41",
+      "direction": "h2d",
+      "token": 29,
+      "fields": {
+        "direction": 1
+      },
+      "payload_hex": "01",
+      "frame_hex": "411d010f83",
+      "wire_hex": "06411d010f8300",
+      "note": "Stop RX audio."
+    },
+    {
+      "name": "audio_frame",
+      "message": "AUDIO_FRAME",
+      "type": "0x42",
+      "direction": "both",
+      "token": 0,
+      "fields": {
+        "seq": 7,
+        "timestamp": 840,
+        "flags": 0,
+        "data": "0000ff7f0180fffe"
+      },
+      "payload_hex": "070048030000000000ff7f0180fffe",
+      "frame_hex": "4200070048030000000000ff7f0180fffeaede",
+      "wire_hex": "024202070348030101010109ff7f0180fffeaede00",
+      "note": "Four PCM16LE samples (0, 32767, -32767, -257) at sample index 840."
+    },
+    {
+      "name": "audio_frame_gap",
+      "message": "AUDIO_FRAME",
+      "type": "0x42",
+      "direction": "both",
+      "token": 0,
+      "fields": {
+        "seq": 65535,
+        "timestamp": 4294967200,
+        "flags": 1,
+        "data": "01000200"
+      },
+      "payload_hex": "ffffa0ffffff0101000200",
+      "frame_hex": "4200ffffa0ffffff01010002005deb",
+      "wire_hex": "024209ffffa0ffffff01010202035deb00",
+      "note": "Discontinuity flag set; seq and timestamp near their wrap points."
+    },
+    {
+      "name": "audio_status",
+      "message": "AUDIO_STATUS",
+      "type": "0x43",
+      "direction": "d2h",
+      "token": 0,
+      "fields": {
+        "direction": 2,
+        "state": 2,
+        "fill_samples": 720,
+        "target_samples": 720,
+        "underruns": 0,
+        "overruns": 0,
+        "first_sample_time_us": 1234567890
+      },
+      "payload_hex": "0202d002d00200000000d202964900000000",
+      "frame_hex": "43000202d002d00200000000d2029649000000000c3d",
+      "wire_hex": "0243070202d002d00201010105d2029649010101030c3d00",
+      "note": "TX running at its target fill."
+    },
+    {
+      "name": "time_req",
+      "message": "TIME_REQ",
+      "type": "0x50",
+      "direction": "h2d",
+      "token": 30,
+      "fields": {
+        "host_t1": 1000000
+      },
+      "payload_hex": "40420f0000000000",
+      "frame_hex": "501e40420f0000000000e0a9",
+      "wire_hex": "06501e40420f0101010103e0a900",
+      "note": "Clock-sync probe; host_t1 is opaque to the device."
+    },
+    {
+      "name": "time_resp",
+      "message": "TIME_RESP",
+      "type": "0x51",
+      "direction": "d2h",
+      "token": 30,
+      "fields": {
+        "host_t1": 1000000,
+        "device_t2": 55000000,
+        "device_t3": 55000120
+      },
+      "payload_hex": "40420f0000000000c03b470300000000383c470300000000",
+      "frame_hex": "511e40420f0000000000c03b470300000000383c47030000000072a0",
+      "wire_hex": "06511e40420f0101010105c03b470301010105383c47030101010372a000",
+      "note": "Device receive and transmit times, microseconds since boot."
+    },
+    {
+      "name": "time_set",
+      "message": "TIME_SET",
+      "type": "0x52",
+      "direction": "h2d",
+      "token": 31,
+      "fields": {
+        "device_time_us": 55000060,
+        "utc_us": 1790000000000000,
+        "uncertainty_us": 8000
+      },
+      "payload_hex": "fc3b47030000000000e025dafe5b0600401f0000",
+      "frame_hex": "521ffc3b47030000000000e025dafe5b0600401f0000fed3",
+      "wire_hex": "07521ffc3b47030101010107e025dafe5b0603401f0103fed300",
+      "note": "UTC at a device time, with the host's error estimate."
+    },
+    {
+      "name": "tone_setup_ft8_example",
+      "message": "TONE_SETUP",
+      "type": "0x60",
+      "direction": "h2d",
+      "token": 32,
+      "fields": {
+        "count": 79,
+        "base_mhz": 1500000,
+        "spacing_mhz": 6250,
+        "symbol_us": 160000,
+        "shaping": 1,
+        "bt_x100": 200,
+        "amplitude": 52000,
+        "ramp_us": 5000,
+        "ptt_lead_ms": 50,
+        "ptt_tail_ms": 20,
+        "flags": 1
+      },
+      "payload_hex": "4f0060e316006a1800000071020001c820cb88133200140001",
+      "frame_hex": "60204f0060e316006a1800000071020001c820cb88133200140001b493",
+      "wire_hex": "0460204f0460e316036a1801010371020801c820cb88133202140401b49300",
+      "note": "Example only (FT8-like: 8 tones, 6.25 Hz, 160 ms, GFSK BT 2.0; verify against the mode's spec)."
+    },
+    {
+      "name": "tone_data",
+      "message": "TONE_DATA",
+      "type": "0x61",
+      "direction": "h2d",
+      "token": 33,
+      "fields": {
+        "offset": 0,
+        "tones": "03010406000502"
+      },
+      "payload_hex": "000003010406000502",
+      "frame_hex": "6121000003010406000502ab58",
+      "wire_hex": "036121010503010406050502ab5800",
+      "note": "First seven tone indices."
+    },
+    {
+      "name": "tone_start",
+      "message": "TONE_START",
+      "type": "0x62",
+      "direction": "h2d",
+      "token": 34,
+      "fields": {
+        "start_utc_us": 1790000015000000
+      },
+      "payload_hex": "c0c10adbfe5b0600",
+      "frame_hex": "6222c0c10adbfe5b06008bb4",
+      "wire_hex": "0a6222c0c10adbfe5b06038bb400",
+      "note": "Start at a UTC time."
+    },
+    {
+      "name": "tone_cancel",
+      "message": "TONE_CANCEL",
+      "type": "0x63",
+      "direction": "h2d",
+      "token": 35,
+      "fields": {},
+      "payload_hex": "",
+      "frame_hex": "63237757",
+      "wire_hex": "056323775700",
+      "note": "Cancel a scheduled or running sequence."
+    },
+    {
+      "name": "tone_status",
+      "message": "TONE_STATUS",
+      "type": "0x64",
+      "direction": "d2h",
+      "token": 0,
+      "fields": {
+        "state": 4,
+        "symbol": 12,
+        "reason": 0
+      },
+      "payload_hex": "040c0000",
+      "frame_hex": "6400040c000039e8",
+      "wire_hex": "026403040c010339e800",
+      "note": "Playing symbol 12."
+    }
+  ]
+}

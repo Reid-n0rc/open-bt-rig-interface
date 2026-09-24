@@ -23,3 +23,11 @@ Used by `.github/workflows/checks.yml`:
 Tests:
 
 - `test_*.py`: unit tests (`python3 -m unittest discover -s tools/kicad_ci -p 'test_*.py'`). KiCad fixtures are strings inside the tests, written to temporary directories; don't commit `.kicad_*` fixtures.
+
+## protocol
+
+Reference encoder/decoder for [`protocol/SPEC.md`](../protocol/SPEC.md), Python standard library only. CI runs it in `.github/workflows/checks.yml` (`Protocol vectors`).
+
+- `proto_codec.py`: framing (COBS + CRC-16), every message, the capability TLVs and the config keys. `python3 tools/protocol/proto_codec.py decode <hex>` decodes a byte stream.
+- `make_vectors.py`: writes `protocol/vectors/*.json` from its examples; `--check` fails if they're out of date.
+- `test_proto_codec.py`: round-trips every vector (`python3 -m unittest discover -s tools/protocol -p 'test_*.py'`).

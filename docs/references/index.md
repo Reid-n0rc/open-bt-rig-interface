@@ -29,6 +29,24 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Notes: The site blocks scripted downloads; save the PDF from a browser.
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
+### android-kconfig-cdc-ncm
+
+**Android kernel/configs commit: Android U requires CONFIG_USB_NET_CDC_NCM=y** (Android Open Source Project, sdk)
+
+- Local copy: [cache/android-kconfig-cdc-ncm.html](cache/android-kconfig-cdc-ncm.html)
+- Original: <https://android.googlesource.com/kernel/configs/+/659aee1b688f245f4dafe4afe7904ed9cd91fbb0>
+- Retrieved: 2026-09-24; SHA-256 `202235b14af01e47…`
+- Cited in: [`protocol/SPEC.md`](../../protocol/SPEC.md), [`docs/decisions/ADR-0007-protocol.md`](../../docs/decisions/ADR-0007-protocol.md)
+
+### apple-forum-802640
+
+**Apple Developer Forums 802640: Custom USB network device driver on iPhone (Quinn, DTS, Oct 2025)** (Apple, web)
+
+- Local copy: [cache/apple-forum-802640.html](cache/apple-forum-802640.html)
+- Original: <https://developer.apple.com/forums/thread/802640>
+- Retrieved: 2026-09-24; SHA-256 `239efd645fae36e9…`
+- Cited in: [`protocol/SPEC.md`](../../protocol/SPEC.md), [`docs/decisions/ADR-0007-protocol.md`](../../docs/decisions/ADR-0007-protocol.md)
+
 ### bourns-lm-np-ds
 
 **Bourns LM-NP/LP 1000 series line matching transformers datasheet** (Bourns, datasheet)
@@ -38,6 +56,24 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `3ad23168c4218a64…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
+### cobs-paper
+
+**Consistent Overhead Byte Stuffing (IEEE/ACM Transactions on Networking, 1999)** (Stuart Cheshire, Mary Baker, standard)
+
+- Local copy: [cache/cobs-paper.pdf](cache/cobs-paper.pdf)
+- Original: <http://www.stuartcheshire.org/papers/COBSforToN.pdf>
+- Retrieved: 2026-09-24; SHA-256 `f6500d18b463ac26…`
+- Cited in: [`protocol/SPEC.md`](../../protocol/SPEC.md), [`docs/decisions/ADR-0007-protocol.md`](../../docs/decisions/ADR-0007-protocol.md)
+
+### crc-catalogue-16
+
+**Catalogue of parametrised CRC algorithms: 16-bit CRCs (CRC-16/IBM-3740)** (Greg Cook (RevEng), web)
+
+- Local copy: [cache/crc-catalogue-16.html](cache/crc-catalogue-16.html)
+- Original: <https://reveng.sourceforge.io/crc-catalogue/16.htm>
+- Retrieved: 2026-09-24; SHA-256 `9bcbee0db3969a58…`
+- Cited in: [`protocol/SPEC.md`](../../protocol/SPEC.md)
+
 ### esp-idf-hfp-hf-readme
 
 **ESP-IDF hfp_hf example README (HFP data paths, mSBC)** (Espressif Systems (Apache-2.0), sdk)
@@ -46,6 +82,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://raw.githubusercontent.com/espressif/esp-idf/048ec57f228afe2d720542431b849cc10c949a15/examples/bluetooth/bluedroid/classic_bt/hfp_hf/README.md>
 - Retrieved: 2026-09-24; SHA-256 `f33f812e42729ca8…`
 - Cited in: [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+
+### esp-usb-device-s3
+
+**ESP-USB programming guide: USB device stack (ESP32-S3), endpoint limits and supported classes** (Espressif Systems, sdk)
+
+- Local copy: [cache/esp-usb-device-s3.html](cache/esp-usb-device-s3.html)
+- Original: <https://docs.espressif.com/projects/esp-usb/en/latest/esp32s3/usb_device.html>
+- Retrieved: 2026-09-24; SHA-256 `015e2a39dc00600b…`
+- Cited in: [`protocol/SPEC.md`](../../protocol/SPEC.md), [`docs/decisions/ADR-0007-protocol.md`](../../docs/decisions/ADR-0007-protocol.md), [`docs/architecture.md`](../../docs/architecture.md)
 
 ### esp-usb-host-kconfig
 
@@ -187,6 +232,33 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://jlcpcb.com/help/article/pcb-assembly-price>
 - Retrieved: 2026-09-24; SHA-256 `7f4c1af2b7bae1d6…`
 - Cited in: [`docs/requirements/pcb-fabrication.md`](../../docs/requirements/pcb-fabrication.md)
+
+### jordemort-android-cdc
+
+**Why Android can't use CDC Ethernet (2023-05-31)** (Jordan Webb, web)
+
+- Local copy: [cache/jordemort-android-cdc.html](cache/jordemort-android-cdc.html)
+- Original: <https://jordemort.dev/blog/why-android-cant-use-cdc-ethernet/>
+- Retrieved: 2026-09-24; SHA-256 `0d4e7dfaa9e8f14c…`
+- Cited in: [`protocol/SPEC.md`](../../protocol/SPEC.md)
+
+### linux-cdc-ncm
+
+**Linux drivers/net/usb/cdc_ncm.c (CDC-NCM host driver; GPL, facts only)** (Linux kernel, sdk)
+
+- Local copy: [cache/linux-cdc-ncm.c](cache/linux-cdc-ncm.c)
+- Original: <https://raw.githubusercontent.com/torvalds/linux/038d61fd642278bab63ee8ef722c50d10ab01e8f/drivers/net/usb/cdc_ncm.c>
+- Retrieved: 2026-09-24; SHA-256 `10a1af035e2d7e61…`
+- Cited in: [`protocol/SPEC.md`](../../protocol/SPEC.md), [`docs/decisions/ADR-0007-protocol.md`](../../docs/decisions/ADR-0007-protocol.md)
+
+### linux-usbnet
+
+**Linux drivers/net/usb/usbnet.c (interface naming usbN/ethN; GPL, facts only)** (Linux kernel, sdk)
+
+- Local copy: [cache/linux-usbnet.c](cache/linux-usbnet.c)
+- Original: <https://raw.githubusercontent.com/torvalds/linux/038d61fd642278bab63ee8ef722c50d10ab01e8f/drivers/net/usb/usbnet.c>
+- Retrieved: 2026-09-24; SHA-256 `9fc89a999b418872…`
+- Cited in: [`protocol/SPEC.md`](../../protocol/SPEC.md)
 
 ### microchip-bm83-spp-kb
 
@@ -404,3 +476,12 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://www.ti.com/lit/ds/symlink/ts3usb221a.pdf>
 - Retrieved: 2026-09-24; SHA-256 `cccebf8c10df6051…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+
+### tinyusb-usbd-h
+
+**TinyUSB src/device/usbd.h (CDC, CDC-NCM and UAC1 descriptor templates)** (TinyUSB (hathach), sdk)
+
+- Local copy: [cache/tinyusb-usbd.h](cache/tinyusb-usbd.h)
+- Original: <https://raw.githubusercontent.com/hathach/tinyusb/dae3f9a366bfcddbf9dcf1b48d7500286a849539/src/device/usbd.h>
+- Retrieved: 2026-09-24; SHA-256 `48040a0ea812b5f0…`
+- Cited in: [`protocol/SPEC.md`](../../protocol/SPEC.md), [`docs/decisions/ADR-0007-protocol.md`](../../docs/decisions/ADR-0007-protocol.md)

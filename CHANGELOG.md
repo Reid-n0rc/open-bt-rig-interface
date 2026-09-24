@@ -10,6 +10,17 @@ and tagged independently (see `AGENTS.md`).
 
 ## Unreleased
 
+- Protocol 0.1.0 draft (`protocol/SPEC.md`), system architecture
+  (`docs/architecture.md`) and ADR-0007 (proposed). One COBS-framed,
+  CRC-checked message stream over BLE GATT, L2CAP CoC, and, in wired mode, TCP
+  over a new USB network interface (CDC-NCM, for iPhone/iPad) and the CDC-ACM
+  control port. Covers capability discovery, CAT with credit flow control,
+  PTT with keepalive, max TX and RTS/DTR arming, BLE audio framing, clock sync,
+  optional tone-sequence TX, a capped BLE TX power, and new GATT UUIDs.
+  Golden vectors in `protocol/vectors/`, a reference codec in
+  `tools/protocol/`, and a `Protocol vectors` CI job. The USB endpoint budget
+  changes the wired USB functions per radio type (`constraints.md` §2,
+  REQ-HOST-003, -010, -013, REQ-PTT-002, REQ-FW-005) (#13).
 - Requirements specification (`docs/requirements/requirements.md`): numbered,
   testable `REQ-<area>-NNN` requirements for both host links (Bluetooth LE and
   wired USB-C), CAT, PTT fail-safes, audio, radio interfaces, isolation, power,
