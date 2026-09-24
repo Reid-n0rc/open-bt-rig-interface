@@ -6,7 +6,9 @@ SPDX-License-Identifier: CC-BY-4.0
 # open-bt-rig-interface: agent and contributor instructions
 
 This is the single source of rules for anyone (human or AI agent) working in this
-repo. `CLAUDE.md` only points here.
+repo. `CLAUDE.md` only points here. Roles and authority (who merges, who releases,
+and what agents may not do) are in [`GOVERNANCE.md`](GOVERNANCE.md). In short,
+agents never merge, approve, release or take `human-task` work.
 
 The project is an open **hardware + firmware** Bluetooth interface between an
 amateur-radio transceiver and a host, carrying CAT serial, PTT (RTS/DTR) and

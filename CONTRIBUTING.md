@@ -22,6 +22,10 @@ alike. In short:
    items, copied text or figures, a firmware dependency) in
    [`THIRD_PARTY.md`](THIRD_PARTY.md) in the same PR.
 
+Who reviews, merges and releases, how decisions are made, and why contributor
+terms are required under dual licensing, is described in
+[`GOVERNANCE.md`](GOVERNANCE.md).
+
 ## Contributor terms
 
 The hardware and firmware are source-available under non-commercial licenses,
