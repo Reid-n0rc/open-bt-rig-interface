@@ -68,8 +68,12 @@ Full analysis, calculations, prices and stock:
    2.2 µF pi filter (corner ≈ 78 kHz, ≈ 59 dB ideal at fsw) with a 100 µF
    50 V AEC-Q200 electrolytic for damping and hold-up. Designed against
    CISPR 25 Class 5 ([TI SLYY136](../references/index.md#ti-slyy136)).
-3. **Regulation:** **LMR43620-Q1** 12 V → 5 V (Buck A), then a second
-   **LMR43620-Q1** 5 V → 3.3 V (Buck B). Both are **synchronized to a
+3. **Regulation:** **LMR43620MC5RPERQ1** 12 V → 5 V (Buck A), then
+   **LMR43620MC3RPERQ1** 5 V → 3.3 V (Buck B). Both are MODE/SYNC variants
+   without spread spectrum; the MSC variants are the alternates. Before the
+   clock starts they free-run at a fixed 2.2 MHz (2.1–2.3 MHz), whose 13th
+   harmonic is in 10 m; that interval is brief and precedes any receive or
+   transmit. Both are **synchronized to a
    2.304 MHz AEC-Q100 oscillator** (SiT8924B), in FPWM, with no spread
    spectrum while synchronized. Worst-case load is 0.42 A at 5 V and 2.4 W at
    the input. There is no VBUS switch to the radio (see ADR-0003, #9).
@@ -110,9 +114,12 @@ constraints §5 requires.
 - **Firmware:** a power-management task handles the SENSE input, the delayed
   HOLD release, the low-battery shutdown and the brownout interrupt. Each gets
   tests per the PTT fail-safe rule.
-- **Risks to verify:** thin stock of the LMR43620-Q1, Q1 and TPS3710-Q1
-  (Digi-Key/Mouser lookups were blocked, so the second distributor is still
-  open); harmonics 22–23 in 6 m, which are unavoidable below 4 MHz and need
+- **Thermal:** accepted as long as TJ stays under the LMR436x0-Q1's 150 °C
+  maximum. Buck A is estimated at ≤ 109 °C worst case and ≤ 101 °C typical
+  (BLE capped at 10.3 dBm) at 85 °C ambient.
+- **Risks to verify:** second-distributor price and stock (Digi-Key/Mouser
+  lookups were blocked; stock levels are recorded as data only); harmonics
+  22–23 in 6 m, which are unavoidable below 4 MHz and need
   measurement; ISO 10605 ESD levels; buck efficiencies.
 - **Bench tests (later human-task):** ISO 7637-2 level IV pulses, ISO 16750-2
   test A/B, jump start, cold crank, ESD, a CISPR 25 pre-scan, and a receiver

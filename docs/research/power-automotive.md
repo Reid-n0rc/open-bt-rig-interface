@@ -323,7 +323,7 @@ therefore filtered as if the MW limit applied.
 
 | Part | Input | fsw / sync | Min on-time | AEC-Q100 | Notes | Source |
 |---|---|---|---|---|---|---|
-| **TI LMR43620-Q1** (MSC variants) | 3.0–36 V, 42 V abs max | Fixed 2.2 MHz; **sync 0.2–2.5 MHz**; FPWM in sync; spread spectrum only when free-running | 65 typ / 75 ns max | Grade 1 (−40 to +125 °C TA) | 2 A, 2 × 2 mm HotRod; 1.2–1.6 µA non-switching IQ; RθJA 84.4 °C/W (JEDEC), 50 °C/W on the EVM | [datasheet](../references/index.md#ti-lmr436x0-q1-ds) |
+| **TI LMR43620-Q1** (MC variants: MODE/SYNC, no spread spectrum) | 3.0–36 V, 42 V abs max | Fixed 2.2 MHz (2.1–2.3 MHz); **sync 0.2–2.5 MHz**; FPWM in sync; MSC variants add spread spectrum, active only when free-running | 65 typ / 75 ns max | Grade 1 (−40 to +125 °C TA) | 2 A, 2 × 2 mm HotRod; 1.2–1.6 µA non-switching IQ; RθJA 84.4 °C/W (JEDEC), 50 °C/W on the EVM | [datasheet](../references/index.md#ti-lmr436x0-q1-ds) |
 | TI LM62440-Q1 / LMQ62440-Q1 | 3–36 V, 42 V load dump | 2.1 MHz / 400 kHz; sync 0.2–**2.2 MHz** | 55 / 70 ns | Grade 1 | 4 A; LMQ has internal input caps (CISPR 25 class 5) | [LM62440](../references/index.md#ti-lm62440-q1-ds), [LMQ62440](../references/index.md#ti-lmq62440-q1-ds) |
 | TI LMR33630-Q1 | 3.8–36 V | Fixed 400 kHz / 1.4 / 2.1 MHz, **no sync** | 68 ns | Grade 1 | 2.1 MHz × 14 = 29.4 MHz, inside 10 m: **rejected** | [datasheet](../references/index.md#ti-lmr33630-q1-ds) |
 | ADI LT8609S, MAX20404 (Silent Switcher / spread spectrum) | — | — | — | — | **Not evaluated**: analog.com blocked scripted access on 2026-09-24. Worth a look in #11 | — |
@@ -388,8 +388,14 @@ clock tolerance, against every band. Findings (1 kHz scan, 0.3–3.0 MHz):
   The ESP32-S3 can't make 2.304 MHz by integer division of its 80 MHz or
   40 MHz clocks; a fractional LEDC divider would add jitter spurs.
 - **Before sync is present** (the first milliseconds, before the 3.3 V rail
-  powers the oscillator) the bucks free-run at 2.2 MHz with spread spectrum.
-  That is brief and happens before any receive or transmit.
+  powers the oscillator), the MC variants (no spread spectrum) free-run at a
+  **fixed 2.2 MHz**, specified as 2.1–2.3 MHz
+  ([datasheet](../references/index.md#ti-lmr436x0-q1-ds), FSW(2p2MHz)).
+  Against the harmonic table, a nominal 2.2 MHz puts only harmonic 13
+  (28.6 MHz) inside a band (10 m). Across the full 2.1–2.3 MHz tolerance,
+  harmonics 8 (17 m), 10 (15 m), 11 (12 m) and 13 (10 m) can fall in bands.
+  This lasts only until the oscillator starts, before any receive or
+  transmit. Behavior if the clock is lost later **(verify)**; presumably the same fallback.
 - The **isolated jack-side supply (#9) must follow the same rule.** The
   SN6505B-Q1 accepts an external clock of 100–1600 kHz and divides it by 2
   ([datasheet](../references/index.md#ti-sn6505-q1-ds)). Its comb would then
@@ -400,13 +406,15 @@ clock tolerance, against every band. Findings (1 kHz scan, 0.3–3.0 MHz):
 
 ### 6.3 Rails
 
-- **Buck A: 12 V → 5.0 V, LMR43620MSC5RPERQ1.** At 2.304 MHz the on-time is
+- **Buck A: 12 V → 5.0 V, LMR43620MC5RPERQ1** (MODE/SYNC, 5 V fixed, no
+  spread spectrum; alternate LMR43620MSC5RPERQ1). At 2.304 MHz the on-time is
   136 ns at 16 V, 121 ns at 18 V and 83 ns at 26 V, all above the 75 ns
   maximum tON-MIN. At 35 V (test B) it is 62 ns: the part folds back in
   frequency for the duration, so harmonics move for ≤ 400 ms. The maximum duty
   cycle from tOFF-MIN (85 ns) is 0.80, so 5 V regulates down to about 6.2 V in;
   below that the part runs in dropout (tON-MAX 6–13 µs, output ≈ Vin − 0.2 V).
-- **Buck B: 5 V → 3.3 V, LMR43620MSC3RPERQ1**, on the same clock. Its input
+- **Buck B: 5 V → 3.3 V, LMR43620MC3RPERQ1** (MODE/SYNC, 3.3 V fixed, no
+  spread spectrum; alternate LMR43620MSC3RPERQ1), on the same clock. Its input
   never sees automotive transients, so no foldback (D = 0.66). It keeps
   3.3 V until the 5 V rail falls to about 3.5 V (input ≈ 3.7–3.8 V).
 - **No VBUS switch to the radio.** The radio port's VBUS is blocked in
@@ -425,10 +433,21 @@ clock tolerance, against every band. Findings (1 kHz scan, 0.3–3.0 MHz):
 
 ### 6.4 Thermal
 
-- Buck A at worst case (P_out 2.1 W): loss ≈ 0.28 W at 88 %. ΔT = 14 °C
-  (50 °C/W EVM) to 24 °C (84.4 °C/W JEDEC), so **TJ ≤ about 109 °C at 85 °C
-  ambient**. Comfortable on 2 layers with a normal ground pour.
-- Buck B: ≈ 0.21 W → ≤ 18 °C rise.
+- **Limit:** LMR436x0-Q1 operating junction temperature −40 to **+150 °C**
+  ([datasheet](../references/index.md#ti-lmr436x0-q1-ds), Recommended
+  Operating Conditions). Heat is acceptable as long as TJ stays below that.
+- Buck A at worst case (P_out 2.1 W, the §2 method): loss ≈ 0.28 W at 88 %.
+  ΔT = 14 °C (50 °C/W EVM) to 24 °C (84.4 °C/W JEDEC), so **TJ ≤ about
+  109 °C at 85 °C ambient**, 41 °C under the limit.
+- **Typical load** (the §2 typical case, ≈ 1.2 W input, 5 V out ≈ 1.0 W):
+  Buck A loss ≈ 0.14 W → ΔT 7–11 °C → **TJ ≤ about 96 °C** at 85 °C ambient.
+- **Typical with BLE TX capped at the FCC-grant power** (10.3 dBm, #7). The
+  datasheet gives 204 mA at +9 dBm and 340 mA at +20 dBm (100 % duty,
+  [datasheet](../references/index.md#esp32s3-mini1-ds) Table 6-5), so about
+  0.2 A. The 3.3 V rail is then ≈ 0.27 A (0.9 W), 5 V out ≈ 1.4 W, input
+  ≈ 1.6 W. Buck A loss ≈ 0.19 W → ΔT 9–16 °C → **TJ ≤ about 101 °C**; Buck B
+  loss ≈ 0.12 W → ΔT 6–10 °C.
+- Buck B at worst case: ≈ 0.21 W → ≤ 18 °C rise.
 - Q1/Q2 conduction: (22 + 21) mΩ × 0.27 A² ≈ 3 mW. L1, CMC and F1 together
   < 20 mW.
 - The electrolytic's life at 105 °C is 2000–5000 h depending on size; at
@@ -517,21 +536,21 @@ parts is **(verify)**.
 | D4 | Vishay SMBJ33CAHE3_B/H | AEC-Q101 (HE3); TJ −55 to +150 °C | C20037758 / 0.1367 / 9,185 | — | blank |
 | C_in | YAGEO AS1206KKX7RYBB104 (100 nF 250 V) | AEC-Q200 | C3881218 / 0.1200 / 5,000 | — | blank |
 | U1 | TI LM74800QDRRRQ1 | AEC-Q100 grade 1 | C3215600 / 1.8652 / 2,276 | 2.074 / 28,516 | blank |
-| Q1 | Diodes DMTH15H017SPSWQ-13 | AEC-Q101; TJ −55 to +175 °C | C19950019 / 5.9072 / **10** | — | blank |
+| Q1 | Diodes DMTH15H017SPSWQ-13 | AEC-Q101; TJ −55 to +175 °C | C19950019 / 5.9072 / 10 | — | blank |
 | Q2 | Vishay SQSA80ENW-T1_GE3 | AEC-Q101; TJ −55 to +175 °C | C511563 / 0.6198 / 1,476 | — | blank |
 | FL1 | TDK ACM70V-701-2PL-TL00 | AEC-Q200; −40 to +125 °C | C76582 / 0.5310 / 6,692 | — | blank |
 | L1 | TDK TFM252012ALMA2R2MTAA | AEC-Q200; −55 to +150 °C | C404804 / 0.2020 / 4,300 | — | blank |
 | C1, C2 | TDK CGA6N3X7R2A225KT0Y0U (2.2 µF 100 V) | AEC-Q200; X7R −55 to +125 °C | C342652 / 0.1978 / 15,660 | — | blank |
 | C_bulk | Panasonic EEE-FK1H101P (100 µF 50 V) | AEC-Q200; −55 to +105 °C | C178548 / 0.3593 / 8,402 | — | blank |
-| U2, U3 | TI LMR43620MSC5RPERQ1 / MSC3RPERQ1 | AEC-Q100 grade 1 | C6979910 / 4.457 / **2**; C3190193 / 4.8281 / **36** | 2.944 / 1,686; 2.944 / 3,000 | blank |
-| U2, U3 alt | TI LMR43620MC5RPERQ1 / MC3RPERQ1 (no spread spectrum) | AEC-Q100 grade 1 | C32594901 / 3.7734 / 5; C41658611 / — / 10 | 2.944 / 3,103; 2.494 / 3,500 | blank |
+| U2, U3 | TI LMR43620MC5RPERQ1 / MC3RPERQ1 (MODE/SYNC, no spread spectrum) | AEC-Q100 grade 1 | C32594901 / 3.7734 / 5; C41658611 / — / 10 | 2.944 / 3,103; 2.494 / 3,500 | blank |
+| U2, U3 alt | TI LMR43620MSC5RPERQ1 / MSC3RPERQ1 (adds spread spectrum) | AEC-Q100 grade 1 | C6979910 / 4.457 / 2; C3190193 / 4.8281 / 36 | 2.944 / 1,686; 2.944 / 3,000 | blank |
 | Y1 | SiTime SiT8924B at 2.304 MHz (programmed) | AEC-Q100 grade 1 option | Not stocked at 2.304 MHz (8 MHz version C401144: 2.9584 / 24) | — | blank (programmable at distributors) |
-| U5 | TI TPS3710QDSERQ1 | AEC-Q100 grade 1 | C2863756 / 1.0411 / **0** | 1.563 / 73 | blank |
+| U5 | TI TPS3710QDSERQ1 | AEC-Q100 grade 1 | C2863756 / 1.0411 / 0 | 1.563 / 73 | blank |
 | U6 | TI LP5907QMFX-3.3Q1 | AEC-Q100 | C130005 / 0.4393 / 7,268 | 0.460 / 16,881 | blank |
 | (U7) | TI SN6505BQDBVRQ1 (isolated supply, #9) | AEC-Q100 grade 1 | C1849490 / 0.7522 / 4,745 | 1.820 / 18,670 | blank |
 
-Sourcing risks: LCSC stock of the LMR43620-Q1, Q1 and TPS3710-Q1 is thin or
-zero. None of the parts above is
+Stock figures are recorded as data only; the maintainer does not treat low
+stock as a concern (2026-09-24). None of the parts above is
 a JLCPCB Basic part, so each adds an extended-part fee
 ([JLCPCB FAQ](../references/index.md#jlcpcb-pcba-faqs)). Alternates to check
 in schematic work: Yageo AC1210KKX7R0BB225 (C1/C2), Murata PLT5BPH5013R1SNL
