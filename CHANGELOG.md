@@ -17,6 +17,11 @@ and tagged independently (see `AGENTS.md`).
   and board integration rules, host label text, user manual statements and a
   Part 15B SDoC checklist. Revision A uses the -N8 ordering code; ADR-0008
   accepted by the maintainer (#7).
+- Requirements specification (`docs/requirements/requirements.md`): numbered,
+  testable `REQ-<area>-NNN` requirements for both host links (Bluetooth LE and
+  wired USB-C), CAT, PTT fail-safes, audio, radio interfaces, isolation, power,
+  regulatory, EMC, firmware, mechanical and manufacturing, with a traceability
+  table and a coverage checklist against `constraints.md` (#4).
 - CI checks (`.github/workflows/checks.yml`): `REUSE lint`, `KiCad version
   consistency` (every KiCad file and the docs against `KICAD_VERSION`, which
   now also records the symbol-library format) and `Silkscreen revision check`

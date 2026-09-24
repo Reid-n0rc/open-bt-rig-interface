@@ -255,7 +255,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://fcc.report/FCC-ID/2AC7Z-ESPS3MINI1/5706883.pdf>
 - Download: manual (the site blocks scripted downloads)
 - Notes: The site blocks scripted downloads; save the PDF from a browser to the cache path.
-- Cited in: [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/requirements/requirements.md`](../../docs/requirements/requirements.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
 ### fcc-2ac7z-esps3mini1-filings
 
