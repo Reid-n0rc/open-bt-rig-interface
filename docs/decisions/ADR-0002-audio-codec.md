@@ -52,15 +52,18 @@ Isolation transformers:
 | Triad TY-250P (600:600 or 10k:10k) | ±1 dB 20–20,000 Hz; −40 to +105 °C | Through-hole, large; not stocked at LCSC | [Datasheet](../references/index.md#triad-ty-250p-ds) |
 | Bourns LM-NP-1001-B1L (600:600) | −0.3 dB 200–3500 Hz; 6.5 kVDC | **−10 to +60 °C** fails both variants; +3 dBm max; through-hole | [Datasheet](../references/index.md#bourns-lm-np-ds), [LCSC C5361839](https://www.lcsc.com/product-detail/C5361839.html) |
 
-Digi-Key and Mouser blocked automated lookups on 2026-09-24; their price and
-stock are still to be recorded (see Consequences).
+Only LCSC price and stock were recorded. Digi-Key and Mouser blocked automated
+lookups on 2026-09-24, and the maintainer deferred those lookups (2026-09-24);
+they don't block this decision.
 
 ## Decision
 
-**Codec: TI TLV320AIC3104** (`TLV320AIC3104IRHBR`) on both variants. It is
-the only candidate that meets every requirement *and* is stocked today; the
-catalog part covers −40 to +85 °C. `TLV320AIC3104IRHBRQ1` is a drop-in
-(same pins and package) where AEC-Q100 is wanted on variant M.
+**Codec: TI TLV320AIC3104** (`TLV320AIC3104IRHBR`, catalog grade) on **both
+variants**, including variant M (maintainer decision, 2026-09-24). It is the
+only candidate that meets every requirement *and* is stocked today; the
+catalog part covers −40 to +85 °C, the variant M range. AEC-Q100 is not
+required. `TLV320AIC3104IRHBRQ1` is noted only as a pin-identical option
+(same pins and package).
 
 - **Alternate 1: TI TAC5112** (`TAC5112IRGER`, `-Q1`: `TAC5112WQRTVRQ1`).
   Technically better and TI's named successor. Switch to it, before the
@@ -80,10 +83,20 @@ for RX and TX. **Alternate:** `SM-LP-5001` (same part in tubes) for sourcing,
 and Triad TY-250P as the through-hole fallback. The LM-NP-1001-B1L listed in
 [`core-devices.md`](../research/core-devices.md) is rejected on temperature range.
 
-**Isolation fitting:** transformers are always fitted on variant M and on any
-board used with the USB-C data link. For variant R over Bluetooth, powered from
-the radio, they are optional; the board provides bypass footprints (0 Ω or
-series capacitors). Fitted by default or as an option is decided in #12.
+**Isolation fitting** (maintainer decision, 2026-09-24):
+
+| Variant | Transformers (RX, TX) | 0 Ω bypass resistors |
+|---|---|---|
+| M | Fitted | Not fitted |
+| R | **Not fitted (DNP) by default** | **Fitted** |
+
+The board carries both footprints, so either build uses one layout.
+
+**Unresolved conflict:** [constraints §6](../requirements/constraints.md#6-safety-and-fail-safe)
+requires AUDIO-jack isolation "on every variant whenever the USB-C data link
+is used". A variant R board built with the DNP default has no audio isolation,
+so it doesn't meet §6 in wired mode. This ADR doesn't resolve that; it is an
+open question for the maintainer (see Consequences).
 
 **Level plan and RF hardening** as in
 [`audio-codec.md` §5–6](../research/audio-codec.md#5-rf-hardening-at-the-audio-jack):
@@ -96,10 +109,19 @@ state (off).
 
 ## Consequences
 
-- **Before this ADR is accepted:** record dated Digi-Key and Mouser price and
-  stock for `TLV320AIC3104IRHBR`, `TLV320AIC3104IRHBRQ1`, `TLV320AIC3204IRHBR`,
-  `TAC5112IRGER`, `SM-LP-5001E` and `SM-LP-5001` (two sources per part).
-  Only LCSC was confirmed on 2026-09-24.
+- **Open question for the maintainer: variant R isolation in wired mode.**
+  With the DNP default, variant R conflicts with constraints §6 whenever the
+  USB-C data link is used. Options:
+  1. amend constraints §6 (for example, isolation required only on variant M,
+     with the wired-mode ground-loop risk on variant R documented for users);
+  2. fit the transformers (and not the bypass resistors) on variant R boards
+     sold or configured for wired use;
+  3. leave it to the variants decision (#12).
+- **Second-distributor sourcing (deferred by the maintainer):** dated Digi-Key
+  and Mouser price and stock for `TLV320AIC3104IRHBR`, `TLV320AIC3204IRHBR`,
+  `TAC5112IRGER`, `SM-LP-5001E` and `SM-LP-5001` are still to be recorded, to
+  meet the two-source rule. Deferred on 2026-09-24; not a condition for
+  accepting this ADR.
 - **Power (#10, #11):** the codec needs AVDD/DRVDD 3.3 V (low-noise LDO,
   TPS7A20-class per [`core-devices.md`](../research/core-devices.md#5-power-10-11)),
   DVDD 1.525–1.95 V and IOVDD 3.3 V. The datasheet (§8.5) gives the blocks
@@ -113,7 +135,12 @@ state (off).
 - **Schematic (#12 and the hardware issues):** transformer secondary into the
   codec's differential line input; differential TX drive with a DC-blocking
   capacitor; decide line-out or headphone-driver drive into the 600 Ω winding;
-  isolated radio-side ground for the AUDIO jack; filter and ESD values.
+  isolated radio-side ground for the AUDIO jack; filter and ESD values. The
+  0 Ω bypass (variant R) must also give a valid single-ended path: the jack
+  sleeve joins the device ground, RX tip feeds one leg of the differential
+  input with the other leg referenced to ground, and TX drives ring 1 from one
+  line output only (0.707 Vrms, 2 Vpp full scale; see
+  [`audio-codec.md` §6](../research/audio-codec.md#6-level-plan)).
 - **Risks to verify:** AIC3104 ADC SNR on real boards (80 dB minimum);
   transformer distortion at 200 Hz and maximum level; input pin swing at 1 Vrms
   with the −12 dB input level control; module crystal tolerance over

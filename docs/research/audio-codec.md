@@ -107,8 +107,9 @@ JLCPCB Basic or Extended part is checked at order time **(verify)**.
 ### 3.1 Price and stock
 
 LCSC, 2026-09-24, USD, live product pages. Digi-Key and Mouser blocked
-automated lookups on 2026-09-24 (bot protection), so those cells are blank
-and must be filled before the ADR is accepted.
+automated lookups on 2026-09-24 (bot protection), so those cells are blank.
+The maintainer deferred the second-distributor lookups (2026-09-24); they
+don't block ADR-0002.
 
 | Part (LCSC #) | Stock | $ @ 1 | $ @ 100 | Digi-Key | Mouser |
 |---|---|---|---|---|---|
@@ -130,8 +131,9 @@ and must be filled before the ADR is accepted.
   first boards **(needs bench test)**. The differential line input has better
   THD (−94 dB) than the single-ended input (−89 dB), which suits a floating
   transformer secondary. The catalog part covers −40 to +85 °C, which meets
-  variant M; the **-Q1** part is pin-for-pin identical (same pin table, same
-  32-pin VQFN) with AEC-Q100 grade 2. Needs a 1.8 V DVDD rail. Filter group
+  variant M; the maintainer chose the catalog part for variant M
+  (2026-09-24). The **-Q1** part is a pin-for-pin identical option (same pin
+  table, same 32-pin VQFN) with AEC-Q100 grade 2, not required. Needs a 1.8 V DVDD rail. Filter group
   delay: ADC 17/fs (354 µs), DAC 21/fs (438 µs) at 48 kHz.
 - **TLV320AIC3204.** Similar performance, internal LDOs, stocked. Not
   pin-compatible with the AIC3104. No automotive grade found.
@@ -167,7 +169,7 @@ and must be filled before the ADR is accepted.
 | Temperature | **−40 to +85 °C** | −40 to +105 °C | **−10 to +60 °C** |
 | Mounting, size | SMD 6-pin, 12.8 × 9.0 mm, 7.5 mm high; tape and reel (`-5001E`, 400/reel) | Through-hole, 8 pins; outline up to 0.9 in (23 mm) per side, 0.4 oz | Through-hole, 17.7 × 12.7 mm |
 | LCSC, 2026-09-24 | `SM-LP-5001E` [C840532](https://www.lcsc.com/product-detail/C840532.html): 1,086 in stock, $2.3619 @ 1, $1.4848 @ 100. `SM-LP-5001` (tubes) [C7503474](https://www.lcsc.com/product-detail/C7503474.html): 315, $3.065 @ 1, $2.30 @ 53 | not found | [C5361839](https://www.lcsc.com/product-detail/C5361839.html): 252, $4.3237 @ 1, $2.875 @ 100 |
-| Digi-Key / Mouser | lookup blocked 2026-09-24 | lookup blocked | lookup blocked |
+| Digi-Key / Mouser | deferred (lookup blocked 2026-09-24) | deferred | deferred |
 
 Findings:
 
@@ -190,25 +192,33 @@ Findings:
   never drives the core past +10 dBm. Check 200 Hz distortion at maximum
   level on the bench **(needs bench test)**.
 
-### 4.1 When isolation can be skipped
+### 4.1 Fitting per variant
 
-Per [constraints §6](../requirements/constraints.md#6-safety-and-fail-safe):
+[Constraints §6](../requirements/constraints.md#6-safety-and-fail-safe)
+makes isolation mandatory on variant M and whenever the USB-C data link is
+used, and optional only for variant R over Bluetooth powered from the radio.
+In that last case the device's only ground is the radio's ground (the
+accessory DC cable), so there is no second path for a ground loop, and
+capacitive coupling into the codec is enough.
 
-- **Variant M:** always fitted.
-- **Any variant with the USB-C data link in use:** always fitted; the
-  computer's ground reaches the device.
-- **Variant R over Bluetooth, powered from the radio:** optional. The device's
-  only ground is the radio's ground (the accessory DC cable), so there is no
-  second path for a loop. Capacitive coupling (a C0G or film series capacitor
-  and a bias network into the codec) is then enough. Variant R powered from a
-  USB-C charger has the charger's output ground as a second reference; whether
-  that forms a loop depends on the charger **(verify)**, so treat it like the
-  wired case.
+The maintainer decided the fitting on 2026-09-24:
 
-Whether variant R fits the transformers by default or leaves them as a fitting
-option (with 0 Ω / capacitor bypass footprints) is open for the variants
-decision (#12). A single board with one footprint that takes either the
-transformer or bypass parts keeps one layout for both.
+| Variant | Transformers (RX, TX) | 0 Ω bypass resistors |
+|---|---|---|
+| M | Fitted | Not fitted |
+| R | **Not fitted (DNP) by default** | **Fitted** |
+
+One layout carries both the transformer footprints and the 0 Ω bypass
+footprints.
+
+**Conflict, not resolved here:** constraints §6 requires isolation "on every
+variant whenever the USB-C data link is used". A variant R board with the DNP
+default has no audio isolation, so it doesn't meet §6 in wired mode (the
+computer's ground then reaches the radio's ground through the device). The
+same applies to variant R powered from a USB-C charger whose output is
+earth-referenced **(verify)**. Options for the maintainer: amend §6; fit the
+transformers on variant R boards sold or configured for wired use; or leave it
+to the variants decision (#12). See [ADR-0002](../decisions/ADR-0002-audio-codec.md#consequences).
 
 ## 5. RF hardening at the AUDIO jack
 
@@ -266,9 +276,20 @@ issue #8; per-radio values come from #5.
 - Firmware applies no automatic gain: levels are set once per radio and stored
   in the configuration.
 
-**TX (codec → radio).** Drive the transformer primary differentially from the
-line outputs: up to 1.414 Vrms (4 Vpp) at 0 dB, which covers the 2.5 Vpp
-maximum of the jack convention.
+**Transformer bypassed (variant R default).** The 0 Ω bypass removes the
+transformer's insertion loss (up to 2 dB), so the RX figures above move up by
+at most 2 dB. The RX path becomes single-ended: tip into one leg of the
+codec's differential input, the other leg referenced to the device ground,
+which the bypass joins to the jack sleeve.
+
+**TX (codec → radio).** With the transformer fitted, drive its primary
+differentially from the line outputs: up to 1.414 Vrms (4 Vpp) at 0 dB, which
+covers the 2.5 Vpp maximum of the jack convention. With the transformer
+bypassed (variant R default), ring 1 is driven single-ended from one line
+output through a DC-blocking capacitor: full scale 0.707 Vrms (2 Vpp), below
+the 2.5 Vpp maximum. Radios whose data input needs more than 2 Vpp would need
+the output level control (up to +9 dB, limited by the output swing
+**(verify)**) or the transformer fitted.
 
 | Control | Range | Use |
 |---|---|---|
@@ -291,10 +312,11 @@ is fixed by firmware configuration and measured at bring-up
 
 ## 8. Open points
 
-- Fill in Digi-Key and Mouser price and stock for every chosen part and
-  alternate before ADR-0002 is accepted.
+- Digi-Key and Mouser price and stock for the chosen parts and alternates:
+  deferred by the maintainer (2026-09-24), still needed for the two-source rule.
 - Check TAC5112 availability again; if it stocks at two distributors, it is
   the better codec (see ADR-0002).
 - ADC SNR of the AIC3104 on the first boards (datasheet minimum 80 dB).
 - Crystal tolerance over temperature and ageing for the module's 40 MHz crystal.
-- Variant R: transformers fitted by default or as a fitting option (#12).
+- Variant R with the DNP default doesn't meet constraints §6 in wired mode
+  (§4.1): amend §6, fit transformers for wired use, or leave it to #12.
