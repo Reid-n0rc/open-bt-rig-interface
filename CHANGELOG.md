@@ -10,6 +10,9 @@ and tagged independently (see `AGENTS.md`).
 
 ## Unreleased
 
+- PCB fabrication and passive-component rules (`docs/requirements/pcb-fabrication.md`):
+  JLCPCB standard process, 2 layers preferred, 0402 resistors, MLCC with a 2×
+  voltage rule and DC-bias check (#49).
 - Core device shortlist for revision A (`docs/research/core-devices.md`):
   candidate key parts per block, with dated module price and stock (#42).
 - ADR-0008 (proposed): Bluetooth LE and wired USB-C host links on the

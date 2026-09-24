@@ -150,6 +150,44 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `80b2cd0b70a20968…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
+### jlcpcb-impedance-stackup
+
+**Controlled impedance PCB layer stackups (JLC04161H-7628) and impedance calculator** (JLCPCB, web)
+
+- Local copy: [cache/jlcpcb-impedance-stackup.html](cache/jlcpcb-impedance-stackup.html)
+- Original: <https://jlcpcb.com/impedance>
+- Retrieved: 2026-09-24; SHA-256 `5a129f759b16cfc7…`
+- Notes: Page is partly rendered by JavaScript; save from a browser if needed.
+- Cited in: [`docs/requirements/pcb-fabrication.md`](../../docs/requirements/pcb-fabrication.md)
+
+### jlcpcb-pcb-capabilities
+
+**PCB manufacturing capabilities (trace/space, drill, via, edge clearance, silkscreen)** (JLCPCB, web)
+
+- Local copy: [cache/jlcpcb-pcb-capabilities.html](cache/jlcpcb-pcb-capabilities.html)
+- Original: <https://jlcpcb.com/capabilities/pcb-capabilities>
+- Retrieved: 2026-09-24; SHA-256 `71bf942baa7ffcb8…`
+- Notes: Page is partly rendered by JavaScript; if the saved copy lacks the tables, save it from a browser (print to PDF also works: change the file name to .pdf).
+- Cited in: [`docs/requirements/pcb-fabrication.md`](../../docs/requirements/pcb-fabrication.md)
+
+### jlcpcb-pcba-faqs
+
+**PCB assembly FAQs (Basic vs Extended parts, feeder loading fee)** (JLCPCB, web)
+
+- Local copy: [cache/jlcpcb-pcba-faqs.html](cache/jlcpcb-pcba-faqs.html)
+- Original: <https://jlcpcb.com/help/article/pcb-assembly-faqs>
+- Retrieved: 2026-09-24; SHA-256 `5ae13211fa1d98eb…`
+- Cited in: [`docs/requirements/pcb-fabrication.md`](../../docs/requirements/pcb-fabrication.md)
+
+### jlcpcb-pcba-price
+
+**PCB assembly cost: what the price includes** (JLCPCB, web)
+
+- Local copy: [cache/jlcpcb-pcba-price.html](cache/jlcpcb-pcba-price.html)
+- Original: <https://jlcpcb.com/help/article/pcb-assembly-price>
+- Retrieved: 2026-09-24; SHA-256 `7f4c1af2b7bae1d6…`
+- Cited in: [`docs/requirements/pcb-fabrication.md`](../../docs/requirements/pcb-fabrication.md)
+
 ### microchip-bm83-spp-kb
 
 **Microchip KB: BM83 BLE and SPP simultaneous connection** (Microchip, web)
