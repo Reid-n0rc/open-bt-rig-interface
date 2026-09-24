@@ -1,0 +1,19 @@
+version = 1
+
+[[annotations]]
+path = ["hardware/**"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Reid Crowe, N0RC"
+SPDX-License-Identifier = "CERN-OHL-P-2.0"
+
+[[annotations]]
+path = ["firmware/**", "tools/**", "protocol/**", ".github/**", ".gitignore", "KICAD_VERSION", "REUSE.toml", "CLAUDE.md"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Reid Crowe, N0RC"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = ["docs/**", "**/*.md", "LICENSE"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Reid Crowe, N0RC"
+SPDX-License-Identifier = "CC-BY-4.0"

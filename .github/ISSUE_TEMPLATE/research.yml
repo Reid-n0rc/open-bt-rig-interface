@@ -1,0 +1,28 @@
+name: Research / decision
+description: An investigation that ends in a findings doc or an ADR in docs/decisions/
+labels: ["research"]
+body:
+  - type: textarea
+    id: question
+    attributes: { label: Question to answer }
+    validations: { required: true }
+  - type: textarea
+    id: constraints
+    attributes: { label: Relevant constraints, description: "Link to docs/requirements/constraints.md sections." }
+  - type: textarea
+    id: candidates
+    attributes: { label: Candidates / scope }
+  - type: textarea
+    id: method
+    attributes: { label: Method and sources, description: "Datasheets, FCC ID lookups, Digi-Key/Mouser/LCSC. Cite everything; license-check any reused design." }
+  - type: textarea
+    id: output
+    attributes: { label: Output, description: "ADR-NNNN or docs path." }
+    validations: { required: true }
+  - type: textarea
+    id: acceptance
+    attributes: { label: Acceptance criteria }
+    validations: { required: true }
+  - type: textarea
+    id: deps
+    attributes: { label: Dependencies }
