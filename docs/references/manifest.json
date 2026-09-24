@@ -10,7 +10,8 @@
       "file": "esp32s3-mini1-ds.pdf",
       "used_in": [
         "docs/decisions/ADR-0008-host-links-esp32-s3.md",
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/power-automotive.md"
       ],
       "sha256": "4d4b7f1c17b484c627aaa0f806566c48a6124a8e466c6d21d99210e6eacdef04",
       "retrieved": "2026-09-24"
@@ -379,7 +380,8 @@
       "url": "https://www.ti.com/lit/ds/symlink/lm74700-q1.pdf",
       "file": "ti-lm74700-q1-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/power-automotive.md"
       ],
       "sha256": "e16b3a8c0023201fafa5825436f5f2dd6f885b92b84e65602b3f50d741c58b6f",
       "retrieved": "2026-09-24"
@@ -392,7 +394,8 @@
       "url": "https://www.analog.com/media/en/technical-documentation/data-sheets/ltc4380.pdf",
       "file": "adi-ltc4380-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/power-automotive.md"
       ],
       "fetch": "manual",
       "notes": "The site blocks scripted downloads; save the PDF from a browser."
@@ -405,7 +408,8 @@
       "url": "https://www.ti.com/lit/ds/symlink/lmq62440-q1.pdf",
       "file": "ti-lmq62440-q1-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/power-automotive.md"
       ],
       "sha256": "6c888eeb219d47fb0c13ea4b53e6412cae876991c01e4ec6256c7789db8e522a",
       "retrieved": "2026-09-24"
@@ -418,7 +422,8 @@
       "url": "https://www.ti.com/lit/ds/symlink/tps7a20.pdf",
       "file": "ti-tps7a20-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/power-automotive.md"
       ],
       "sha256": "663a9ff5bca608643e711652cba00e7b8bf955c0993a9b86fa108d24d58b8ddc",
       "retrieved": "2026-09-24"
@@ -550,7 +555,8 @@
       "url": "https://jlcpcb.com/help/article/pcb-assembly-faqs",
       "file": "jlcpcb-pcba-faqs.html",
       "used_in": [
-        "docs/requirements/pcb-fabrication.md"
+        "docs/requirements/pcb-fabrication.md",
+        "docs/research/power-automotive.md"
       ],
       "sha256": "5ae13211fa1d98ebec23c54a101a8fa7bf9434fcf3e83da7b6af21b5ebd8bd09",
       "retrieved": "2026-09-24"
@@ -566,6 +572,472 @@
         "docs/requirements/pcb-fabrication.md"
       ],
       "sha256": "7f4c1af2b7bae1d6467ac8936d9f2c91469caf377aba31923caae19d9265e73f",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "iso-16750-2-2023-preview",
+      "title": "ISO 16750-2:2023 (5th edition) Road vehicles, electrical loads: official preview (foreword, contents, clauses 1-4.2)",
+      "publisher": "ISO (preview via iTeh Standards)",
+      "kind": "standard",
+      "url": "https://cdn.standards.iteh.ai/samples/76119/f42b46cc6aef47daa9c6612e225b6f35/ISO-16750-2-2023.pdf",
+      "file": "iso-16750-2-2023-preview.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "17166cc7f956a5ab328e4239b2e5be858edf513b74d78df715196a0307a24945",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "iso-7637-2-2011-preview",
+      "title": "ISO 7637-2:2011 (3rd edition) electrical transient conduction along supply lines: official preview (foreword, contents, clauses 1-5.1)",
+      "publisher": "ISO (preview via iTeh Standards)",
+      "kind": "standard",
+      "url": "https://cdn.standards.iteh.ai/samples/50925/cb6a3838eb064cb1b2175258d6a49516/ISO-7637-2-2011.pdf",
+      "file": "iso-7637-2-2011-preview.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "98cdab4d254191dbbfef7a88d99edc26edebfc8ab39c60c1b87ccb4652dd3cc0",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "mchp-ds00006186",
+      "title": "Automotive Cold Crank/Load Dump Standards: Basic Introduction (DS00006186A, Sept 2025; reproduces ISO 16750-2:2023 levels)",
+      "publisher": "Microchip Technology",
+      "kind": "app-note",
+      "url": "https://ww1.microchip.com/downloads/aemDocuments/documents/APID/ApplicationNotes/ApplicationNotes/Automotive-Cold-Crank-Load-Dump-Standards-DS00006186.pdf",
+      "file": "mchp-ds00006186.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "9fbed0f62fe5a10abf7795c1a757315189bc7540ea396a396cf36d0de192c0cb",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "onsemi-tnd6424",
+      "title": "TND6424/D Supplemental data for ISO 7637 pulses (Rev. 0, April 2023; reproduces ISO 7637-2:2011 Annex A severity levels)",
+      "publisher": "onsemi",
+      "kind": "app-note",
+      "url": "https://www.onsemi.com/download/design-notes/pdf/tnd6424-d.pdf",
+      "file": "onsemi-tnd6424.pdf",
+      "fetch": "manual",
+      "notes": "The site blocks scripted downloads; save the PDF from a browser.",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ]
+    },
+    {
+      "id": "nexperia-an50007",
+      "title": "AN50007 Applying ISO standard conducted transients to MOSFETs in reverse battery protection circuits (Rev. 1.0, April 2021)",
+      "publisher": "Nexperia",
+      "kind": "app-note",
+      "url": "https://assets.nexperia.com/documents/application-note/AN50007.pdf",
+      "file": "nexperia-an50007.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "7aea28305e9a12a5cb5d9046d1d7cb3e40084d1b8bf63ebeabee1d812add0926",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-snoaaa1",
+      "title": "SNOAAA1 Protection against unsuppressed load dump in automotive systems using LM74930-Q1 (Nov 2023)",
+      "publisher": "Texas Instruments",
+      "kind": "app-note",
+      "url": "https://www.ti.com/lit/pdf/snoaaa1",
+      "file": "ti-snoaaa1.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "d2a977a4cdca7bae2152d4b6931c625ea353223755fd068b8f7ea6885194543a",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-snoaa13",
+      "title": "SNOAA13 TLV1805-Q1 EVM ISO testing results (Feb 2019; ISO 16750-2 reversed and over-voltage test parameters used)",
+      "publisher": "Texas Instruments",
+      "kind": "app-note",
+      "url": "https://www.ti.com/lit/pdf/snoaa13",
+      "file": "ti-snoaa13.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "f809745409991ba39ee25534f3ba339a2c801790c9d348213600459c3074aaad",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "littelfuse-tvs-load-dump-an",
+      "title": "TVS diodes to meet automotive load dump standard (ISO 16750-2 vs ISO 7637-2, pulse 5a/5b; 2020)",
+      "publisher": "Littelfuse (copy hosted by Digi-Key)",
+      "kind": "app-note",
+      "url": "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/1044/TVS_Diode_AN.pdf",
+      "file": "littelfuse-tvs-load-dump-an.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "8f13f4d9000d6a4ec3f70179a7eb6bd5247b4890555252933f5f18c0bd46682f",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "volta-iso-16750-2-seminar",
+      "title": "ISO 16750-2 seminar slides: edition timeline and Ed. 5 (2023) changes, jump start and transient overvoltage tables (Italian)",
+      "publisher": "Volta S.p.A. (test-equipment distributor)",
+      "kind": "web",
+      "url": "https://www.volta.it/wp-content/uploads/2025/09/ISO-16750-2.pdf",
+      "file": "volta-iso-16750-2-seminar.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "74c5ac3eaffee73db3bfd5b08b3619ea91e24ee5d901fb8bdaab02c627a594a9",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-slyy136",
+      "title": "SLYY136 An overview of conducted EMI specifications for power supplies (CISPR 25 Class 5 limits)",
+      "publisher": "Texas Instruments",
+      "kind": "app-note",
+      "url": "https://www.ti.com/lit/wp/slyy136/slyy136.pdf",
+      "file": "ti-slyy136.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "b181232be6afaef8d2038938da5cd6a11542ad904368e54fbf6afa4b83704d3b",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ecfr-47-97-301",
+      "title": "47 CFR 97.301 Authorized frequency bands (eCFR, current as of 2026-09-24)",
+      "publisher": "U.S. Government Publishing Office (eCFR)",
+      "kind": "web",
+      "url": "https://www.ecfr.gov/current/title-47/chapter-I/subchapter-D/part-97/subpart-D/section-97.301",
+      "file": "ecfr-47-97-301.html",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "e0ad6b5728c57d16c58da11ec7ef161b387e49e8a73ced3ff03ddd1d43249138",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ecfr-47-97-303",
+      "title": "47 CFR 97.303 Frequency sharing requirements (60 m band, paragraph (h))",
+      "publisher": "U.S. Government Publishing Office (eCFR)",
+      "kind": "web",
+      "url": "https://www.ecfr.gov/current/title-47/chapter-I/subchapter-D/part-97/subpart-D/section-97.303",
+      "file": "ecfr-47-97-303.html",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "d0b68c097dd03646f6b9dbee24ec69ea527494a09971d4a0591c6c93c2467f7b",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-lm7480-q1-ds",
+      "title": "LM7480-Q1 (LM74800-Q1/LM74801-Q1) ideal diode controller with load dump protection datasheet (SNOSD95C)",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/lm7480-q1.pdf",
+      "file": "ti-lm7480-q1-ds.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "38ea1e89cc677020c8a10096649fa7933d2aeff8c0cd97ca9a78c1f8f5b9b500",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-lm74502-q1-ds",
+      "title": "LM74502-Q1 reverse polarity protection controller with overvoltage protection datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/lm74502-q1.pdf",
+      "file": "ti-lm74502-q1-ds.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "ff448b94c9ae0f98dbeb15c0644361eea51059792bc296a8fe46726ddd5af34c",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-lm749x0-q1-ds",
+      "title": "LM749x0-Q1 ideal diode with circuit breaker, UV and OV protection datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/lm74900-q1.pdf",
+      "file": "ti-lm749x0-q1-ds.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "97f654c7d718cfb4dd660f7096e05e41b5ba5b06cf33f726c61b05fd8ced991a",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-lm5060-ds",
+      "title": "LM5060 / LM5060-Q1 high-side protection controller datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/lm5060-q1.pdf",
+      "file": "ti-lm5060-ds.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "38a3fbe1f0f9700439bc174f3f65d83f3743c4a5b4fe479dca40976b12dfd125",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-lmr436x0-q1-ds",
+      "title": "LMR43610-Q1 / LMR43620-Q1 36 V 1 A / 2 A automotive buck converter datasheet (SNVSBE0H)",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/lmr43620-q1.pdf",
+      "file": "ti-lmr436x0-q1-ds.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "db767b9234f756c358c8254e682b917f16381eb0db649a2936833e15eb8037fd",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-lm62440-q1-ds",
+      "title": "LM62440-Q1 automotive 36 V 4 A low-EMI synchronous buck converter datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/lm62440-q1.pdf",
+      "file": "ti-lm62440-q1-ds.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "6ae0d287dc6c9e980493a67a5bf0c9370937e52e5923f6ea5ac4221bb9c4118c",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-tps2553-q1-ds",
+      "title": "TPS2553-Q1 automotive adjustable current-limited power-distribution switch datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tps2553-q1.pdf",
+      "file": "ti-tps2553-q1-ds.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "ae020244567f34db96d4095a581b0e54d9c90284ebb7c5488c9b454c17b8c98d",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-tps3710-q1-ds",
+      "title": "TPS3710-Q1 wide-VIN voltage detector datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tps3710-q1.pdf",
+      "file": "ti-tps3710-q1-ds.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "0e01a5ecd0f4f057341504199f974d43cec180cc0353a0dc5e0d13cd0b4b7491",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-sn6505-q1-ds",
+      "title": "SN6505A-Q1 / SN6505B-Q1 / SN6505D-Q1 low-noise transformer drivers for isolated supplies datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/sn6505b-q1.pdf",
+      "file": "ti-sn6505-q1-ds.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "3c8af11607815139d3e551d17d3848ae585d5b1086b4bc3757e39fc924fc098c",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "vishay-smbj-ds",
+      "title": "SMBJ5.0A thru SMBJ188A TRANSZORB TVS datasheet (doc 88392, rev. 09-Jan-2024; HE3 = AEC-Q101)",
+      "publisher": "Vishay",
+      "kind": "datasheet",
+      "url": "https://www.vishay.com/docs/88392/smbj.pdf",
+      "file": "vishay-smbj-ds.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "1b65b57a4311128068c1dec747bbb99f6846ae932d77fcfd39904cb2d7a5cd50",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "littelfuse-tpsmb-ds",
+      "title": "TPSMB series automotive TVS diodes datasheet (rev. 12/03/20)",
+      "publisher": "Littelfuse",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/c4b05efd8433d3cce79b8c6653d5b081.pdf?productCode=C3704846",
+      "file": "littelfuse-tpsmb-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "8cc50e1afb0bea8dc15a76bc24128592d5507d24bbf1bc70a03b690ea4ce2a21",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "diodes-dmth15h017spswq-ds",
+      "title": "DMTH15H017SPSWQ 150 V N-channel MOSFET datasheet (DS43904)",
+      "publisher": "Diodes Incorporated",
+      "kind": "datasheet",
+      "url": "https://www.diodes.com/assets/Datasheets/DMTH15H017SPSWQ.pdf",
+      "file": "diodes-dmth15h017spswq-ds.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "0da72717b3c4d049be89d0cb92f305a866ead202d978b19338fef95022c84f03",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "vishay-sqsa80enw-ds",
+      "title": "SQSA80ENW automotive 80 V N-channel MOSFET datasheet",
+      "publisher": "Vishay",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/820ce060fdeca9ab36378d630e7a1a1c.pdf?productCode=C511563",
+      "file": "vishay-sqsa80enw-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "2ac817cfd59a4bc9fddec7a182dff20d91f63f97939bb892420dde4bc7cdc985",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "littelfuse-437-ds",
+      "title": "437A series AEC-Q200 1206 fast-acting fuse datasheet",
+      "publisher": "Littelfuse",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/989eb483451e1461601b4ba4d406ee9e.pdf?productCode=C720199",
+      "file": "littelfuse-437-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "b5e9190f2e0830fc26512095efd008f5ac1a8da2b6d429af056782bda7d52e26",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "tdk-acm70v-ds",
+      "title": "ACM70V series automotive common-mode filter for power lines datasheet",
+      "publisher": "TDK",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/7dbbec7a3518c807a25ff0e241e82bf2.pdf?productCode=C76582",
+      "file": "tdk-acm70v-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "2cfe83f7f3c5d8d9e1b8c87274443876cb836c5b350bcacaf76277671bfcb57a",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "tdk-tfm252012alma-ds",
+      "title": "TFM252012ALMA automotive thin-film power inductor datasheet",
+      "publisher": "TDK",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/567da1e0fa38100994993507716283be.pdf?productCode=C404804",
+      "file": "tdk-tfm252012alma-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "759ed45e7c629ad40577632e73de9a06b0c4f44c0dd36746a4233ff48ee46276",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "tdk-cga-ds",
+      "title": "CGA series automotive MLCC catalog (Chinese edition; CGA6N3X7R2A225K)",
+      "publisher": "TDK",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/b14bf2a960f4d5ca177fe04a5511bcf7.pdf?productCode=C342652",
+      "file": "tdk-cga-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "b18d46f3b8b040f6a5271850fbcc1684c471255d77ee5285dcf59c80e8afc60d",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yageo-as-ds",
+      "title": "AS series automotive soft-termination MLCC datasheet (AS1206KKX7RYBB104)",
+      "publisher": "YAGEO",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/f5627b61af9bb3f64838787fe6737e2d.pdf?productCode=C3881218",
+      "file": "yageo-as-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "3b197a86eb57888fbaafd1f12900b8f7ca1b6cd4e39aa732aed8f5e238625633",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "panasonic-fk-ds",
+      "title": "FK series SMD aluminum electrolytic capacitors datasheet (Chinese edition; EEE-FK1H101P)",
+      "publisher": "Panasonic",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/71852d117349f018ee270240e3541eac.pdf?productCode=C178548",
+      "file": "panasonic-fk-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "faa0d09d14b65c2ad89ab1bb7b74583a22190171e7d0f4da30907d6d5a76ef6e",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "sitime-sit8924b-ds",
+      "title": "SiT8924B automotive AEC-Q100 programmable oscillator datasheet",
+      "publisher": "SiTime",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/8c96a8aa3d565d5919120c49061d45c5.pdf?productCode=C401144",
+      "file": "sitime-sit8924b-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "7b593d10a0902132c2696ad46d70a1df07b0255b13b5bd45c0f47b5c2d5d4629",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-lmr33630-q1-ds",
+      "title": "LMR33630-Q1 3.8 V to 36 V 3 A synchronous step-down converter datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/lmr33630-q1.pdf",
+      "file": "ti-lmr33630-q1-ds.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "39b2a588749eef7ed3c2aef74ac121aed5f96cc83a486726eaf9240b9befa290",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-lp5907-q1-ds",
+      "title": "LP5907-Q1 automotive 250 mA ultra-low-noise LDO datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/lp5907-q1.pdf",
+      "file": "ti-lp5907-q1-ds.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "9de43625b4950da2f4decb73fe49660e4a2bd06857efcde203e9d1c9f8293556",
       "retrieved": "2026-09-24"
     }
   ]

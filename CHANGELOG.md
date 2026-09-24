@@ -10,6 +10,13 @@ and tagged independently (see `AGENTS.md`).
 
 ## Unreleased
 
+- Variant M automotive 12 V power front end (`docs/research/power-automotive.md`)
+  and ADR-0004 (proposed): ISO 16750-2:2023 / ISO 7637-2:2011 levels confirmed
+  (jump start now 26 V), LM74800-Q1 load-dump cut-off with a 150 V FET and TVS
+  stack, CMC + pi filter, two LMR43620-Q1 bucks synchronized at 2.304 MHz to keep
+  harmonics out of the HF amateur bands, brownout forcing PTT off, and ≤ 7 µA
+  off-state drain. `constraints.md` §3.2/§3.4 and `pcb-fabrication.md` §6.3
+  updated (#10).
 - PCB fabrication and passive-component rules (`docs/requirements/pcb-fabrication.md`):
   JLCPCB standard process, 2 layers preferred, 0402 resistors, MLCC with a 2×
   voltage rule and DC-bias check (#49).
