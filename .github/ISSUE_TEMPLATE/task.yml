@@ -3,7 +3,7 @@ description: One agent-sized unit of work (hardware, firmware, protocol, docs, C
 body:
   - type: markdown
     attributes:
-      value: "Follow AGENTS.md: plan first, branch `<type>/<issue#>-<slug>`, signed commits, PR to `dev` with `Closes #N`."
+      value: "Follow AGENTS.md: plan first, branch `<type>/<issue#>-<slug>`, signed commits preferred (not required), PR to `dev` with `Closes #N`."
   - type: textarea
     id: summary
     attributes: { label: Summary }

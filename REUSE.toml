@@ -1,19 +1,36 @@
 version = 1
 
-[[annotations]]
-path = ["hardware/**"]
-precedence = "aggregate"
-SPDX-FileCopyrightText = "2026 Reid Crowe, N0RC"
-SPDX-License-Identifier = "CERN-OHL-P-2.0"
+# When several annotations match a file, the LAST matching one applies, and an
+# SPDX header inside a file takes precedence ("closest"). Order: permissive
+# defaults first, then the non-commercial hardware/ and firmware/ trees.
 
+# Protocol spec + golden vectors, tools and CI: permissive so any host app
+# (open or commercial) can implement the protocol and interoperate.
 [[annotations]]
-path = ["firmware/**", "tools/**", "protocol/**", ".github/**", ".gitignore", "KICAD_VERSION", "REUSE.toml", "CLAUDE.md"]
-precedence = "aggregate"
+path = ["tools/**", "protocol/**", ".github/**", ".gitignore", "KICAD_VERSION", "REUSE.toml", "CLAUDE.md"]
+precedence = "closest"
 SPDX-FileCopyrightText = "2026 Reid Crowe, N0RC"
 SPDX-License-Identifier = "MIT"
 
+# Documentation (the restriction applies to firmware and hardware only).
 [[annotations]]
 path = ["docs/**", "**/*.md", "LICENSE"]
-precedence = "aggregate"
+precedence = "closest"
 SPDX-FileCopyrightText = "2026 Reid Crowe, N0RC"
 SPDX-License-Identifier = "CC-BY-4.0"
+
+# Hardware: KiCad designs, enclosure CAD and their READMEs. Non-commercial;
+# commercial use needs a commercial license (see COMMERCIAL.md).
+[[annotations]]
+path = ["hardware/**"]
+precedence = "closest"
+SPDX-FileCopyrightText = "2026 Reid Crowe, N0RC"
+SPDX-License-Identifier = "CC-BY-NC-SA-4.0"
+
+# Firmware. Non-commercial; commercial use needs a commercial license.
+# Third-party components inside firmware/ keep their own licenses (THIRD_PARTY.md).
+[[annotations]]
+path = ["firmware/**"]
+precedence = "closest"
+SPDX-FileCopyrightText = "2026 Reid Crowe, N0RC"
+SPDX-License-Identifier = "PolyForm-Noncommercial-1.0.0"

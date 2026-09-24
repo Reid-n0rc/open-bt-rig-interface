@@ -95,13 +95,15 @@ Current reviewers: *none yet.*
 - The project is **dual-licensed**: public non-commercial terms, plus separate
   commercial licenses granted by the maintainer (see [`COMMERCIAL.md`](COMMERCIAL.md)).
   To keep that possible, **every contribution must be made under the contributor
-  terms in [`CONTRIBUTING.md`](CONTRIBUTING.md)** (a contributor license agreement
-  or copyright assignment). Those terms let the maintainer license contributions
+  terms in [`CONTRIBUTING.md`](CONTRIBUTING.md)** (a non-exclusive license grant,
+  including relicensing rights; contributors keep their copyright). Those terms
+  let the maintainer license contributions
   under both the public and the commercial terms. The maintainer won't merge a PR
   whose author hasn't accepted them. This document doesn't restate the license or
   contributor terms themselves.
 - Third-party material must be license-compatible with **both** the public and the
-  commercial terms, and must keep its notices. Sources under GPL, LGPL or AGPL, or
+  commercial terms, and must keep its notices, recorded in
+  [`THIRD_PARTY.md`](THIRD_PARTY.md). Sources under GPL, LGPL or AGPL, or
   with no license, may be used for facts only, never copied.
 
 ## Conduct and reporting
