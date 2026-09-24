@@ -7,7 +7,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 Issue: [#6](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/6).
 Researched 2026-09-24. Design basis:
-[ADR-0008](../decisions/ADR-0008-host-links-esp32-s3.md) (proposed):
+[ADR-0008](../decisions/ADR-0008-host-links-esp32-s3.md):
 ESP32-S3-MINI-1, **Bluetooth LE + wired USB-C** host links, no Bluetooth
 Classic. Per the issue's scope update, SPP, HFP/mSBC and RFCOMM are dropped.
 
