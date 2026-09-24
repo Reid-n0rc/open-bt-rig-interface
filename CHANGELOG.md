@@ -16,7 +16,6 @@ and tagged independently (see `AGENTS.md`).
   and docs stay CC-BY-4.0. Contributor terms were added to
   [`CONTRIBUTING.md`](CONTRIBUTING.md). Earlier copies keep their original
   terms (CERN-OHL-P-2.0 / MIT).
-
 - Repository bootstrap: agent docs, REUSE licensing (CERN-OHL-P-2.0 / MIT /
   CC-BY-4.0), design constraints, directory skeleton, templates.
 - CI: required ERC/DRC merge gate (`KiCad ERC/DRC gate`): ERC on schematic
@@ -27,3 +26,10 @@ and tagged independently (see `AGENTS.md`).
   longer enforces signatures, and the docs and templates were updated to match (#35).
 - Roadmap for revision A (`docs/roadmap.md`): phases, dependency graph, exit
   criteria, and merge gates (ERC for schematic changes, DRC for PCB changes).
+- `GOVERNANCE.md`: roles, decision-making, merge and release authority, and why
+  contributor terms are needed under dual licensing (#25).
+- `CONTRIBUTING.md` expanded into a full contributor guide: ways to contribute,
+  hardware/firmware/docs expectations, safety, third-party material, AI-assisted
+  contributions and conduct (#32).
+- Developer guide (`docs/developer-guide.md`): setup, workflow walkthrough, local
+  checks and recipes (#24).
