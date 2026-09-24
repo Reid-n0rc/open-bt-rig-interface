@@ -10,6 +10,11 @@ and tagged independently (see `AGENTS.md`).
 
 ## Unreleased
 
+- Host compatibility research (`docs/research/host-compatibility.md`): wired
+  USB-C (CDC-ACM, RTS/DTR, UAC1 vs UAC2, voice processing, port power) and
+  Bluetooth LE (2M PHY, DLE, MTU, intervals, L2CAP CoC vs GATT, throughput
+  budget) on iOS/iPadOS, macOS, Android, Windows and Linux. Recommends UAC1 for
+  #44 and NimBLE with L2CAP CoC plus a GATT fallback (#6).
 - PCB fabrication and passive-component rules (`docs/requirements/pcb-fabrication.md`):
   JLCPCB standard process, 2 layers preferred, 0402 resistors, MLCC with a 2×
   voltage rule and DC-bias check (#49).
