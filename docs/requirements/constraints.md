@@ -174,7 +174,11 @@ The device operates next to HF transmitters of 100 W or more.
 ## 10. Firmware
 
 - SDK and all firmware dependencies under permissive licenses (MIT, BSD,
-  Apache-2.0, or similar). NDA-only SDKs are excluded.
+  Apache-2.0, or similar). NDA-only SDKs are excluded. Permissive
+  dependencies keep the project's own firmware licensable under both the
+  non-commercial and the commercial terms ([`COMMERCIAL.md`](../../COMMERCIAL.md)).
+  Dependencies keep their own licenses, with their notices in
+  [`THIRD_PARTY.md`](../../THIRD_PARTY.md).
 - No radio-specific logic in the core (transparent CAT).
 - The protocol is versioned, with capability discovery. Configuration happens
   over Bluetooth.
