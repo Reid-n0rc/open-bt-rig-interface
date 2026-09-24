@@ -14,6 +14,13 @@ and tagged independently (see `AGENTS.md`).
   TLV320AIC3204) and Bourns SM-LP-5001 isolation transformers, with the
   ESP32-S3 I2S clocking, level plan and RF hardening
   (`docs/research/audio-codec.md`) (#8).
+- Radio module confirmation (`docs/research/module-selection.md`): the
+  ESP32-S3-MINI-1 FCC grant (2AC7Z-ESPS3MINI1: single modular, BLE certified at
+  10.3 dBm conducted, 20 cm mobile use), ISED ID, lifecycle and dated LCSC
+  sourcing; supports ADR-0008. New `docs/compliance/fcc.md`: antenna keep-out
+  and board integration rules, host label text, user manual statements and a
+  Part 15B SDoC checklist. Revision A uses the -N8 ordering code; ADR-0008
+  accepted by the maintainer (#7).
 - Requirements specification (`docs/requirements/requirements.md`): numbered,
   testable `REQ-<area>-NNN` requirements for both host links (Bluetooth LE and
   wired USB-C), CAT, PTT fail-safes, audio, radio interfaces, isolation, power,
