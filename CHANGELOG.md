@@ -22,6 +22,9 @@ and tagged independently (see `AGENTS.md`).
   RS-232-tolerant serial modes, a radio USB port and a USB-C port (#42).
 - Reference library: `docs/references/` manifest and index, and
   `tools/refs/refs.py` to fetch local copies into a gitignored cache (#42).
+- `SECURITY.md`: report security and safety problems privately through
+  GitHub private vulnerability reporting (now enabled), linked from
+  `GOVERNANCE.md` and the issue chooser (#47).
 - Relicensed the hardware (CC-BY-NC-SA-4.0) and firmware
   (PolyForm-Noncommercial-1.0.0) as non-commercial, with commercial licenses
   available ([`COMMERCIAL.md`](COMMERCIAL.md)). Protocol, tools and CI stay MIT,
