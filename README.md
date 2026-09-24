@@ -57,6 +57,8 @@ merges and releases, are in [`GOVERNANCE.md`](GOVERNANCE.md). The plan for
 revision A (phases, dependencies, exit criteria and merge gates) is in
 [`docs/roadmap.md`](docs/roadmap.md), and live status is in issue
 [#22](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/22).
+For setup, local checks and step-by-step recipes, see the
+[developer guide](docs/developer-guide.md).
 
 ## Background
 
