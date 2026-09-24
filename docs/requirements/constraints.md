@@ -9,6 +9,8 @@ The hard constraints every hardware, firmware and enclosure decision must meet.
 Values marked **(verify)** are not yet confirmed. Each one belongs to a research
 issue and must be confirmed (or corrected here) before a design depends on it.
 Decisions that settle an open point are recorded in [`../decisions/`](../decisions/).
+The numbered, testable form of these constraints is
+[`requirements.md`](requirements.md).
 
 ## 1. What the device is
 

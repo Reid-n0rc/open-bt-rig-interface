@@ -52,6 +52,7 @@
       "notes": "The site blocks scripted downloads; save the PDF from a browser to the cache path.",
       "used_in": [
         "docs/decisions/ADR-0008-host-links-esp32-s3.md",
+        "docs/requirements/requirements.md",
         "docs/research/core-devices.md"
       ]
     },
