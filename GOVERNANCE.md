@@ -111,7 +111,8 @@ Current reviewers: *none yet.*
 - Be respectful and assume good faith. The maintainer moderates issues, PRs and
   discussions, and may lock threads or block participants who are abusive.
 - Report **security or safety** problems privately to the maintainer, not in a
-  public issue. Examples: firmware that can key PTT unexpectedly, or a power fault
+  public issue, using GitHub's private vulnerability reporting as described in
+  [`SECURITY.md`](SECURITY.md). Examples: firmware that can key PTT unexpectedly, or a power fault
   that can damage a radio.
 
 ## Relationship to other projects
