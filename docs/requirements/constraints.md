@@ -240,7 +240,10 @@ The device operates next to HF transmitters of 100 W or more.
 
 ## 12. Manufacturing and sourcing
 
-- 2–4 layer PCB, assembly-house-friendly parts.
+- PCB and passive components follow [`pcb-fabrication.md`](pcb-fabrication.md):
+  JLCPCB standard (low-cost) process, 2 layers preferred and 4 acceptable,
+  0402 resistors by default, MLCC capacitors rated at least 2× the node's
+  nominal DC voltage with DC-bias derating checked.
 - At least two distributor sources for each key part (e.g. Digi-Key, Mouser, LCSC), with an
   active lifecycle status.
 - BOM cost target: **TBD by maintainer.**
