@@ -10,6 +10,11 @@ and tagged independently (see `AGENTS.md`).
 
 ## Unreleased
 
+- Requirements specification (`docs/requirements/requirements.md`): numbered,
+  testable `REQ-<area>-NNN` requirements for both host links (Bluetooth LE and
+  wired USB-C), CAT, PTT fail-safes, audio, radio interfaces, isolation, power,
+  regulatory, EMC, firmware, mechanical and manufacturing, with a traceability
+  table and a coverage checklist against `constraints.md` (#4).
 - PCB fabrication and passive-component rules (`docs/requirements/pcb-fabrication.md`):
   JLCPCB standard process, 2 layers preferred, 0402 resistors, MLCC with a 2×
   voltage rule and DC-bias check (#49).
