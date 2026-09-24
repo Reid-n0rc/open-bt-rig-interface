@@ -14,3 +14,7 @@ and tagged independently (see `AGENTS.md`).
   CC-BY-4.0), design constraints, directory skeleton, templates.
 - `THIRD_PARTY.md`: a single ledger for third-party material and the notices it
   requires (#31).
+- Signed commits are now preferred but not required: the branch ruleset no
+  longer enforces signatures, and the docs and templates were updated to match (#35).
+- Roadmap for revision A (`docs/roadmap.md`): phases, dependency graph, exit
+  criteria, and merge gates (ERC for schematic changes, DRC for PCB changes).
