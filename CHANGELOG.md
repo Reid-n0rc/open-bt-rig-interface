@@ -14,6 +14,16 @@ and tagged independently (see `AGENTS.md`).
   TLV320AIC3204) and Bourns SM-LP-5001 isolation transformers, with the
   ESP32-S3 I2S clocking, level plan and RF hardening
   (`docs/research/audio-codec.md`) (#8).
+- Requirements specification (`docs/requirements/requirements.md`): numbered,
+  testable `REQ-<area>-NNN` requirements for both host links (Bluetooth LE and
+  wired USB-C), CAT, PTT fail-safes, audio, radio interfaces, isolation, power,
+  regulatory, EMC, firmware, mechanical and manufacturing, with a traceability
+  table and a coverage checklist against `constraints.md` (#4).
+- CI checks (`.github/workflows/checks.yml`): `REUSE lint`, `KiCad version
+  consistency` (every KiCad file and the docs against `KICAD_VERSION`, which
+  now also records the symbol-library format) and `Silkscreen revision check`
+  (title-block revision, `${REVISION}`/`${ISSUE_DATE}`, required markings,
+  `hw-*` tags), with unit tests in `tools/kicad_ci/` (#3).
 - PCB fabrication and passive-component rules (`docs/requirements/pcb-fabrication.md`):
   JLCPCB standard process, 2 layers preferred, 0402 resistors, MLCC with a 2×
   voltage rule and DC-bias check (#49).
