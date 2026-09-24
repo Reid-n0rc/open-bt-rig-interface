@@ -38,6 +38,96 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `3ad23168c4218a64…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
+### ecfr-47-15-101
+
+**47 CFR 15.101 Equipment authorization of unintentional radiators** (eCFR (U.S. Government Publishing Office), standard)
+
+- Local copy: [cache/ecfr-47-15-101.html](cache/ecfr-47-15-101.html)
+- Original: <https://www.ecfr.gov/current/title-47/section-15.101>
+- Retrieved: 2026-09-24; SHA-256 `374d101302a2ed59…`
+- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+
+### ecfr-47-15-105
+
+**47 CFR 15.105 Information to the user (Class A and B statements)** (eCFR (U.S. Government Publishing Office), standard)
+
+- Local copy: [cache/ecfr-47-15-105.html](cache/ecfr-47-15-105.html)
+- Original: <https://www.ecfr.gov/current/title-47/section-15.105>
+- Retrieved: 2026-09-24; SHA-256 `13f3830df801a990…`
+- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+
+### ecfr-47-15-107
+
+**47 CFR 15.107 Conducted limits (unintentional radiators)** (eCFR (U.S. Government Publishing Office), standard)
+
+- Local copy: [cache/ecfr-47-15-107.html](cache/ecfr-47-15-107.html)
+- Original: <https://www.ecfr.gov/current/title-47/section-15.107>
+- Retrieved: 2026-09-24; SHA-256 `64e9da389531c8d6…`
+- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+
+### ecfr-47-15-109
+
+**47 CFR 15.109 Radiated emission limits (unintentional radiators)** (eCFR (U.S. Government Publishing Office), standard)
+
+- Local copy: [cache/ecfr-47-15-109.html](cache/ecfr-47-15-109.html)
+- Original: <https://www.ecfr.gov/current/title-47/section-15.109>
+- Retrieved: 2026-09-24; SHA-256 `d67001d0dc491931…`
+- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+
+### ecfr-47-15-19
+
+**47 CFR 15.19 Labeling requirements** (eCFR (U.S. Government Publishing Office), standard)
+
+- Local copy: [cache/ecfr-47-15-19.html](cache/ecfr-47-15-19.html)
+- Original: <https://www.ecfr.gov/current/title-47/section-15.19>
+- Retrieved: 2026-09-24; SHA-256 `dae15d07a32bef2c…`
+- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+
+### ecfr-47-15-21
+
+**47 CFR 15.21 Information to user** (eCFR (U.S. Government Publishing Office), standard)
+
+- Local copy: [cache/ecfr-47-15-21.html](cache/ecfr-47-15-21.html)
+- Original: <https://www.ecfr.gov/current/title-47/section-15.21>
+- Retrieved: 2026-09-24; SHA-256 `4dc2fa72c763aa9d…`
+- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+
+### ecfr-47-15-212
+
+**47 CFR 15.212 Modular transmitters** (eCFR (U.S. Government Publishing Office), standard)
+
+- Local copy: [cache/ecfr-47-15-212.html](cache/ecfr-47-15-212.html)
+- Original: <https://www.ecfr.gov/current/title-47/section-15.212>
+- Retrieved: 2026-09-24; SHA-256 `80a1878929065d22…`
+- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+
+### ecfr-47-2-1074
+
+**47 CFR 2.1074 Identification (Supplier's Declaration of Conformity)** (eCFR (U.S. Government Publishing Office), standard)
+
+- Local copy: [cache/ecfr-47-2-1074.html](cache/ecfr-47-2-1074.html)
+- Original: <https://www.ecfr.gov/current/title-47/section-2.1074>
+- Retrieved: 2026-09-24; SHA-256 `01209e2cae33e4d0…`
+- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+
+### ecfr-47-2-1077
+
+**47 CFR 2.1077 Compliance information (Supplier's Declaration of Conformity)** (eCFR (U.S. Government Publishing Office), standard)
+
+- Local copy: [cache/ecfr-47-2-1077.html](cache/ecfr-47-2-1077.html)
+- Original: <https://www.ecfr.gov/current/title-47/section-2.1077>
+- Retrieved: 2026-09-24; SHA-256 `2a97f5848c0eece6…`
+- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+
+### ecfr-47-2-938
+
+**47 CFR 2.938 Retention of records** (eCFR (U.S. Government Publishing Office), standard)
+
+- Local copy: [cache/ecfr-47-2-938.html](cache/ecfr-47-2-938.html)
+- Original: <https://www.ecfr.gov/current/title-47/section-2.938>
+- Retrieved: 2026-09-24; SHA-256 `ade234c9def317e4…`
+- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+
 ### esp-idf-hfp-hf-readme
 
 **ESP-IDF hfp_hf example README (HFP data paths, mSBC)** (Espressif Systems (Apache-2.0), sdk)
@@ -90,7 +180,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/esp32s3-hw-design.pdf](cache/esp32s3-hw-design.pdf)
 - Original: <https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32s3/esp-hardware-design-guidelines-en-master-esp32s3.pdf>
 - Retrieved: 2026-09-24; SHA-256 `2ee5e2e340c2b95c…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/module-selection.md`](../../docs/research/module-selection.md), [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
 
 ### esp32s3-mini1-ds
 
@@ -99,7 +189,53 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/esp32s3-mini1-ds.pdf](cache/esp32s3-mini1-ds.pdf)
 - Original: <https://www.espressif.com/sites/default/files/documentation/esp32-s3-mini-1_mini-1u_datasheet_en.pdf>
 - Retrieved: 2026-09-24; SHA-256 `4d4b7f1c17b484c6…`
-- Cited in: [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/module-selection.md`](../../docs/research/module-selection.md), [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+
+### esp32s3-mini1-fcc-grant
+
+**FCC grant of equipment authorization, FCC ID 2AC7Z-ESPS3MINI1 (ESP32-S3-MINI-1), 2022-02-28** (Espressif Systems (copy of the TCB grant), fcc)
+
+- Local copy: [cache/esp32s3-mini1-fcc-grant.pdf](cache/esp32s3-mini1-fcc-grant.pdf)
+- Original: <https://www.espressif.com/sites/default/files/ESP32-S3-MINI-1%20FCC%20Certification.pdf>
+- Retrieved: 2026-09-24; SHA-256 `0344102bc60709ab…`
+- Cited in: [`docs/research/module-selection.md`](../../docs/research/module-selection.md), [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+
+### esp32s3-mini1-fcc-manual
+
+**ESP32-S3-MINI-1 user manual v0.6 (2022-02-24), the FCC user-manual exhibit for 2AC7Z-ESPS3MINI1 (mirror)** (Espressif Systems (mirrored by manuals.plus), fcc)
+
+- Local copy: [cache/esp32s3-mini1-fcc-manual.html](cache/esp32s3-mini1-fcc-manual.html)
+- Original: <https://manuals.plus/espressif/esp32-s3-mini-1-development-board-manual>
+- Download: manual (the site blocks scripted downloads)
+- Notes: Secondary copy of the FCC exhibit; the site blocks scripted downloads. Prefer the User Manual exhibit on the FCC filing list when it can be opened.
+- Cited in: [`docs/research/module-selection.md`](../../docs/research/module-selection.md), [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+
+### esp32s3-mini1-ised-cert
+
+**ISED technical acceptance certificate 21098-ESPS3MINI1 (ESP32-S3-MINI-1), C1PC 2024-08-16** (Espressif Systems (copy of the certificate), web)
+
+- Local copy: [cache/esp32s3-mini1-ised-cert.pdf](cache/esp32s3-mini1-ised-cert.pdf)
+- Original: <https://www.espressif.com/sites/default/files/ESP32-S3-MINI-1%20IC%20Certification.pdf>
+- Retrieved: 2026-09-24; SHA-256 `77618c1572f7f4e2…`
+- Cited in: [`docs/research/module-selection.md`](../../docs/research/module-selection.md), [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+
+### espressif-longevity
+
+**Espressif longevity commitment (ESP32-S3 series: at least 12 years from 2021-01-01)** (Espressif Systems, web)
+
+- Local copy: [cache/espressif-longevity.html](cache/espressif-longevity.html)
+- Original: <https://www.espressif.com/en/products/longevity-commitment>
+- Retrieved: 2026-09-24; SHA-256 `5a6175e2942421df…`
+- Cited in: [`docs/research/module-selection.md`](../../docs/research/module-selection.md)
+
+### espressif-s3-modules
+
+**ESP32-S3 modules page (variants, chips, listed distributors)** (Espressif Systems, web)
+
+- Local copy: [cache/espressif-s3-modules.html](cache/espressif-s3-modules.html)
+- Original: <https://www.espressif.com/en/products/modules/esp32-s3>
+- Retrieved: 2026-09-24; SHA-256 `acb02bf0379ebe1d…`
+- Cited in: [`docs/research/module-selection.md`](../../docs/research/module-selection.md)
 
 ### fcc-2ac7z-espc3mini1
 
@@ -121,6 +257,16 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Notes: The site blocks scripted downloads; save the PDF from a browser to the cache path.
 - Cited in: [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/requirements/requirements.md`](../../docs/requirements/requirements.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
+### fcc-2ac7z-esps3mini1-filings
+
+**FCC ID 2AC7Z-ESPS3MINI1 filing list (grant, user manual, test reports)** (FCC filing (Espressif Systems), fcc)
+
+- Local copy: [cache/fcc-2ac7z-esps3mini1-filings.html](cache/fcc-2ac7z-esps3mini1-filings.html)
+- Original: <https://fcc.report/FCC-ID/2AC7Z-ESPS3MINI1>
+- Download: manual (the site blocks scripted downloads)
+- Notes: The site (and the FCC EAS at apps.fcc.gov/oetcf/eas) blocks scripted access; save the page, and the User Manual exhibit, from a browser.
+- Cited in: [`docs/research/module-selection.md`](../../docs/research/module-selection.md), [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+
 ### fcc-2ahmr-bw16
 
 **FCC ID 2AHMR-BW16 (Ai-Thinker BW16) filing list** (FCC filing (Ai-Thinker), fcc)
@@ -130,6 +276,26 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Download: manual (the site blocks scripted downloads)
 - Notes: The site blocks scripted downloads; save the page from a browser.
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+
+### fcc-kdb-784748
+
+**FCC KDB 784748: labeling and user information (D01 general labeling and notification)** (FCC Office of Engineering and Technology, standard)
+
+- Local copy: [cache/fcc-kdb-784748.html](cache/fcc-kdb-784748.html)
+- Original: <https://apps.fcc.gov/oetcf/kdb/forms/FTSSearchResultPage.cfm?id=27980&switch=P>
+- Download: manual (the site blocks scripted downloads)
+- Notes: apps.fcc.gov blocks scripted access; open it in a browser and save the page (and the D01 attachment as PDF).
+- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+
+### fcc-kdb-996369
+
+**FCC KDB 996369: modules, module certification, 15.212 (D03 OEM manual, D04 module integration guide)** (FCC Office of Engineering and Technology, standard)
+
+- Local copy: [cache/fcc-kdb-996369.html](cache/fcc-kdb-996369.html)
+- Original: <https://apps.fcc.gov/oetcf/kdb/forms/FTSSearchResultPage.cfm?id=44637&switch=P>
+- Download: manual (the site blocks scripted downloads)
+- Notes: apps.fcc.gov blocks scripted access; open it in a browser and save the page (and the D03 and D04 attachments as PDF).
+- Cited in: [`docs/research/module-selection.md`](../../docs/research/module-selection.md), [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
 
 ### fcc-qoq-gm220p
 
@@ -188,6 +354,33 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `7f4c1af2b7bae1d6…`
 - Cited in: [`docs/requirements/pcb-fabrication.md`](../../docs/requirements/pcb-fabrication.md)
 
+### lcsc-esp32s3-mini1-n4r2
+
+**LCSC C3013941: ESP32-S3-MINI-1-N4R2 (price, stock)** (LCSC Electronics, web)
+
+- Local copy: [cache/lcsc-esp32s3-mini1-n4r2.html](cache/lcsc-esp32s3-mini1-n4r2.html)
+- Original: <https://www.lcsc.com/product-detail/C3013941.html>
+- Retrieved: 2026-09-24; SHA-256 `2b6c8debba37bd7c…`
+- Cited in: [`docs/research/module-selection.md`](../../docs/research/module-selection.md)
+
+### lcsc-esp32s3-mini1-n8
+
+**LCSC C2913206: ESP32-S3-MINI-1-N8 (price, stock)** (LCSC Electronics, web)
+
+- Local copy: [cache/lcsc-esp32s3-mini1-n8.html](cache/lcsc-esp32s3-mini1-n8.html)
+- Original: <https://www.lcsc.com/product-detail/C2913206.html>
+- Retrieved: 2026-09-24; SHA-256 `1eb7d558a7f945d8…`
+- Cited in: [`docs/research/module-selection.md`](../../docs/research/module-selection.md)
+
+### lcsc-mdbt50q-p1mv2
+
+**LCSC C5119772: Raytac MDBT50Q-P1MV2 (price, stock)** (LCSC Electronics, web)
+
+- Local copy: [cache/lcsc-mdbt50q-p1mv2.html](cache/lcsc-mdbt50q-p1mv2.html)
+- Original: <https://lcsc.com/product-detail/bluetooth-modules_raytac-mdbt50q-p1mv2_C5119772.html>
+- Retrieved: 2026-09-24; SHA-256 `c79fd0a7e789106a…`
+- Cited in: [`docs/research/module-selection.md`](../../docs/research/module-selection.md)
+
 ### microchip-bm83-spp-kb
 
 **Microchip KB: BM83 BLE and SPP simultaneous connection** (Microchip, web)
@@ -232,7 +425,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/raytac-mdbt50q-ds.pdf](cache/raytac-mdbt50q-ds.pdf)
 - Original: <https://www.raytac.com/download/index.php?index_id=43>
 - Retrieved: 2026-09-24; SHA-256 `61fec8c0c9f8c331…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/module-selection.md`](../../docs/research/module-selection.md)
 
 ### raytac-mdbt50q-fcc
 
