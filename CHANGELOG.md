@@ -19,6 +19,8 @@ and tagged independently (see `AGENTS.md`).
 
 - Repository bootstrap: agent docs, REUSE licensing (CERN-OHL-P-2.0 / MIT /
   CC-BY-4.0), design constraints, directory skeleton, templates.
+- CI: required ERC/DRC merge gate (`KiCad ERC/DRC gate`): ERC on schematic
+  changes, DRC on PCB changes, in the pinned `kicad/kicad` image (#26).
 - `THIRD_PARTY.md`: a single ledger for third-party material and the notices it
   requires (#31).
 - Signed commits are now preferred but not required: the branch ruleset no
