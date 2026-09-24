@@ -14,6 +14,7 @@ import json
 import sys
 import tempfile
 import unittest
+import unittest.mock
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -152,6 +153,7 @@ class VersionCheckTests(unittest.TestCase):
         self.write("AGENTS.md", "KiCad version: see KICAD_VERSION.\n")
         self.assertOneError("AGENTS.md: does not quote the minimum KiCad version")
 
+    @unittest.mock.patch.dict("os.environ", {"GITHUB_ACTIONS": ""})
     def test_cli_exit_codes(self):
         with contextlib.redirect_stdout(io.StringIO()) as out:
             self.assertEqual(ckv.main(["--root", str(self.root)]), 0)

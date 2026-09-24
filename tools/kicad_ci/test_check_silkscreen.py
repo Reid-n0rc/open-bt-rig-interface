@@ -167,6 +167,7 @@ class SilkscreenTests(unittest.TestCase):
     def test_hardware_tag_without_boards_fails(self):
         self.assertOneError("boards: none", tag="hw-R-revA-v1.0")
 
+    @unittest.mock.patch.dict("os.environ", {"GITHUB_ACTIONS": ""})
     def test_cli(self):
         self.write(PCB_PATH, board())
         with contextlib.redirect_stdout(io.StringIO()) as out:
