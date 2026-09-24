@@ -141,10 +141,11 @@ The full rules are in [AGENTS.md → Workflow](../AGENTS.md#workflow). Step by s
 
 ## 4. Local checks
 
-Run what applies to your change before pushing. CI already runs the ERC/DRC
-gate (`.github/workflows/kicad-checks.yml`, from #26). The licensing, KiCad
-version and silkscreen checks arrive with #3; until then, these commands are the
-reference.
+Run what applies to your change before pushing. CI runs the same checks:
+`.github/workflows/checks.yml` (`REUSE lint`, `KiCad version consistency`,
+`Silkscreen revision check`) and `.github/workflows/kicad-checks.yml`
+(`KiCad ERC/DRC gate`). All four always report, so they can be required status
+checks.
 
 **Licensing (every PR):**
 ```sh
@@ -154,16 +155,17 @@ Every new file needs SPDX headers or must be covered by
 [`REUSE.toml`](../REUSE.toml). Which license a path gets is defined there and in
 [AGENTS.md → Licensing](../AGENTS.md#licensing-reuse).
 
-**KiCad version consistency (hardware PRs):** the files must match
-[`KICAD_VERSION`](../KICAD_VERSION). KiCad files record only `generator_version
-"10.0"` plus a format date (`.kicad_sch` `(version 20260306)`, `.kicad_pcb`
-`(version 20260206)`). A quick manual check:
+**KiCad version consistency (every PR):**
 ```sh
-grep -rhoE --include='*.kicad_sch' --include='*.kicad_pcb' \
-  '\((generator_version "[^"]+"|version [0-9]{8})\)' hardware/ | sort | uniq -c
+python3 tools/kicad_ci/check_kicad_version.py
 ```
-The scripted check in `tools/` arrives with #3. If you saved files with a newer
-KiCad, bump `KICAD_VERSION` in the same PR.
+Every `*.kicad_sch`, `*.kicad_pcb`, `*.kicad_sym`, `*.kicad_mod` and
+`*.kicad_pro` must carry the format tokens in [`KICAD_VERSION`](../KICAD_VERSION):
+`generator_version "10.0"` plus the file's format date (`version`), or
+`meta.version` for projects. Footprints use the board format. Docs that quote a
+minimum KiCad version ("KiCad ≥ X.Y.Z", "X.Y.Z or newer", `kicad/kicad:X.Y.Z`)
+must quote `KICAD_MIN_VERSION`. If you saved files with a newer KiCad, bump
+`KICAD_VERSION` (and the docs) in the same PR.
 
 **ERC for schematic changes, DRC for PCB changes (both must pass to merge):**
 ```sh
@@ -181,10 +183,18 @@ A nonzero exit code means violations. Fix them, or document an intentional
 exclusion in the KiCad project (not in CI), and say why in the PR. Agents can run
 the same checks through Konnect's review tools.
 
-**Silkscreen revision (hardware PRs):** the board text must use `${REVISION}`,
-and the title-block revision must match the `rev<X>` folder (see
-[AGENTS.md → Hardware](../AGENTS.md#hardware-kicad)). The automated check comes
-with #3.
+**Silkscreen revision (hardware PRs):**
+```sh
+python3 tools/kicad_ci/check_silkscreen.py                    # every board
+python3 tools/kicad_ci/check_silkscreen.py --tag hw-R-revA-v1.0  # as on a release tag
+```
+For each PCB in `hardware/boards/<board>/rev<X>/`: the title-block revision is
+`<X>` and the date is set; front silkscreen text uses `${REVISION}` and
+`${ISSUE_DATE}`; no silkscreen text hard-codes a revision; and the silkscreen
+shows the project name, "Designed by Reid Crowe, N0RC" and "CC BY-NC-SA 4.0"
+(project text variables are resolved). On an `hw-<variant>-rev<X>-v<semver>`
+tag, a board folder named `<variant>` (or ending in `-<variant>`) must have that
+`rev<X>`. The variant marking itself is still checked by review.
 
 **Firmware and protocol:** host tests and golden-vector tests. Commands are
 added with #14 (firmware) and #13 (protocol).
