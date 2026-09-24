@@ -5,7 +5,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # open-bt-rig-interface
 
-An open-source **hardware + firmware** Bluetooth interface between an amateur-radio
+A source-available **hardware + firmware** Bluetooth interface between an amateur-radio
 transceiver and a phone, tablet or computer. It carries **CAT serial**, **PTT**
 (including RTS/DTR-style control) and **audio** without a cable to the host.
 
@@ -66,9 +66,19 @@ client among many.
 
 Designed by **Reid Crowe, N0RC**.
 
-- Hardware (`hardware/`): **CERN-OHL-P-2.0**
-- Firmware, tools and protocol code: **MIT**
-- Documentation: **CC-BY-4.0**
+The hardware and firmware are **free for personal, amateur and non-commercial
+use**. **Commercial use** (selling boards, kits or units, or using the design or
+firmware in a product) **needs a commercial license**. See
+[`COMMERCIAL.md`](COMMERCIAL.md).
 
-See [`LICENSE`](LICENSE) and [`LICENSES/`](LICENSES/). The repo follows the
+| Part | License |
+|---|---|
+| Hardware (`hardware/`) | **CC-BY-NC-SA-4.0** (non-commercial) |
+| Firmware (`firmware/`) | **PolyForm-Noncommercial-1.0.0** (non-commercial) |
+| Protocol spec + golden vectors, tools, CI | **MIT**: any app, including commercial ones, can implement the protocol |
+| Documentation | **CC-BY-4.0** |
+
+Third-party components keep their own licenses; see
+[`THIRD_PARTY.md`](THIRD_PARTY.md). See [`LICENSE`](LICENSE) and
+[`LICENSES/`](LICENSES/). The repo follows the
 [REUSE](https://reuse.software/) specification.

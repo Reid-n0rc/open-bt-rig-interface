@@ -2,14 +2,30 @@ open-bt-rig-interface — licensing overview
 
 Copyright (c) 2026 Reid Crowe, N0RC
 
-This repository contains hardware designs, firmware/software, and documentation,
-each under its own license. The full license texts are in the LICENSES/ directory,
-and per-file licensing follows the REUSE specification (SPDX headers and
-REUSE.toml).
+This repository is source-available. It contains hardware designs, firmware,
+a host-device protocol, tools and documentation, each under its own license.
+The full license texts are in the LICENSES/ directory, and per-file licensing
+follows the REUSE specification (SPDX headers and REUSE.toml).
 
-  hardware/ (KiCad designs, enclosure CAD)      CERN-OHL-P-2.0   LICENSES/CERN-OHL-P-2.0.txt
-  firmware/, tools/, protocol/ code, CI files   MIT              LICENSES/MIT.txt
-  documentation (docs/, *.md)                   CC-BY-4.0        LICENSES/CC-BY-4.0.txt
+  Path                                          License                          Commercial use
+  hardware/ (KiCad designs, enclosure CAD)      CC-BY-NC-SA-4.0                  commercial license required
+  firmware/                                     PolyForm-Noncommercial-1.0.0     commercial license required
+  protocol/ (spec + golden vectors), tools/,    MIT                              allowed
+    CI files
+  documentation (docs/, *.md)                   CC-BY-4.0                        allowed
+
+Commercial use of the hardware or firmware (for example selling boards, kits
+or assembled units, or putting the design or firmware in a product) requires
+a separate commercial license from the copyright holder. See COMMERCIAL.md.
+
+Third-party components keep their own licenses and are not covered by the
+non-commercial or commercial terms above. Their required notices are in
+THIRD_PARTY.md.
 
 Where a file carries its own SPDX-License-Identifier, that identifier governs
 the file.
+
+Licensing history: before this change (up to and including commit b4041a4 on
+the dev branch), hardware/ was licensed CERN-OHL-P-2.0 and firmware/ was
+licensed MIT. Copies obtained under those earlier terms remain under them; all
+later versions are licensed as described above.
