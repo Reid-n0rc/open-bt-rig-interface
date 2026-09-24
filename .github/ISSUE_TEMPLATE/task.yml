@@ -1,0 +1,40 @@
+name: Task
+description: One agent-sized unit of work (hardware, firmware, protocol, docs, CI, enclosure)
+body:
+  - type: markdown
+    attributes:
+      value: "Follow AGENTS.md: plan first, branch `<type>/<issue#>-<slug>`, signed commits, PR to `dev` with `Closes #N`."
+  - type: textarea
+    id: summary
+    attributes: { label: Summary }
+    validations: { required: true }
+  - type: textarea
+    id: motivation
+    attributes: { label: Motivation }
+  - type: textarea
+    id: current
+    attributes: { label: Current behavior, description: "Real files, sheets, parts." }
+  - type: textarea
+    id: proposed
+    attributes: { label: Proposed behavior, description: "Files to create/edit, and steps. KiCad changes go through Konnect only." }
+    validations: { required: true }
+  - type: textarea
+    id: verify
+    attributes: { label: Verify first, description: "Unconfirmed facts. If false, stop and comment instead of guessing." }
+  - type: textarea
+    id: tests
+    attributes: { label: Tests / checks, description: "Unit tests, ERC/DRC, reuse lint, KiCad version check." }
+    validations: { required: true }
+  - type: textarea
+    id: out
+    attributes: { label: Out of scope }
+  - type: textarea
+    id: acceptance
+    attributes: { label: Acceptance criteria, description: "Checkboxes." }
+    validations: { required: true }
+  - type: textarea
+    id: deps
+    attributes: { label: Dependencies }
+  - type: textarea
+    id: questions
+    attributes: { label: Open questions }

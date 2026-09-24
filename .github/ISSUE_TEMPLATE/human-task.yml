@@ -1,0 +1,25 @@
+name: Human task
+description: Work that needs a person, physical hardware, lab equipment, or an account. Not for agents.
+labels: ["human-task"]
+body:
+  - type: markdown
+    attributes:
+      value: "**Not for agents.** Describe exactly what the person must do and what to record."
+  - type: textarea
+    id: task
+    attributes: { label: What needs doing }
+    validations: { required: true }
+  - type: textarea
+    id: needs
+    attributes: { label: Needs (hardware, equipment, accounts) }
+    validations: { required: true }
+  - type: textarea
+    id: record
+    attributes: { label: What to record, and where, description: "For example docs/bringup/…, measurements, photos." }
+  - type: textarea
+    id: acceptance
+    attributes: { label: Acceptance criteria }
+    validations: { required: true }
+  - type: textarea
+    id: deps
+    attributes: { label: Dependencies / unblocks }
