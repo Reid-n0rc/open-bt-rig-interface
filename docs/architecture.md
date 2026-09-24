@@ -127,6 +127,7 @@ stateDiagram-v2
     Keyed --> Off: every source released (RELEASED)
     Keyed --> Off: keepalive expired, protocol sources dropped (KEEPALIVE_TIMEOUT)
     Keyed --> LockedOut: max-TX timer expired (MAX_TX)
+    Keyed --> Off: hardware PTT watchdog tripped,\neven with the firmware hung (HW_WATCHDOG, reported afterwards)
     LockedOut --> Off: every source released
     LockedOut --> LockedOut: key attempt refused (LOCKED_OUT)
     Keyed --> Off: session end, link or transport lost,\nUSB unplug/suspend/reset, port closed,\nhost-mode or PTT config change
@@ -148,9 +149,11 @@ stateDiagram-v2
     Armed --> Blocked: session start / SERIAL_OPEN / USB reset
 ```
 
-Timers (proposed, for the maintainer to confirm): keepalive 3000 ms, max TX
-180 s (range 10–600 s; can't be disabled). Every fail-safe path gets a
-host-run firmware test (REQ-PTT-010, #14, #15).
+Timers (defaults accepted by the maintainer, all configurable): keepalive
+3000 ms (500–10 000 ms), max TX 180 s (10–600 s; can't be disabled). Behind
+them, a **hardware PTT watchdog** (default 10 minutes, #9) forces PTT off even
+if the firmware is hung; `MAX_TX_S` must not exceed it (REQ-PTT-011). Every
+fail-safe path gets a host-run firmware test (REQ-PTT-010, #14, #15).
 
 ## 6. Host-link and connection state machine
 
@@ -164,7 +167,7 @@ stateDiagram-v2
     state Bluetooth {
         [*] --> Advertising
         Advertising --> Connected: host connects
-        Connected --> Secured: encrypted, bonded
+        Connected --> Secured: encrypted with a bonded host\n(new bonds only inside the pairing window)
         Secured --> Session: HELLO on GATT or L2CAP CoC
         Session --> Session: HELLO again (restart)
         Session --> Advertising: link lost / supervision timeout (PTT off)
@@ -184,6 +187,10 @@ stateDiagram-v2
     Bluetooth --> Detect: a USB host appears on USB-C (auto mode; PTT off)
 ```
 
+- **Pairing window:** new bonds only during a window opened by power-on or a
+  pairing button (default 120 s, configurable), closed early by the first new
+  bond or by entering wired mode. Outside it only bonded hosts get past
+  `Connected` ([SPEC §13.5](../protocol/SPEC.md#135-security-and-pairing)).
 - **Mode switches** restart the USB stack with PTT off throughout
   (REQ-FW-007, REQ-PTT-009). The Bluetooth radio is off in wired mode.
 - **Reconnection:** after a Bluetooth link loss the device advertises again at
@@ -201,5 +208,7 @@ stateDiagram-v2
   port open on Windows and macOS: bench tests (#18).
 - Whether `esp_tinyusb` builds each wired composite, and RAM for lwIP on the
   -N8 (no PSRAM): #44.
-- Maintainer: timer defaults, `WIRED_PROFILE` default, pairing window, and
-  wired iOS with USB-CAT radios ([SPEC open questions](../protocol/SPEC.md#open-questions)).
+- Maintainer: whether a wired host may open the pairing window
+  ([SPEC open questions](../protocol/SPEC.md#open-questions)).
+- Known limitation (accepted): wired iOS/iPadOS with a USB-serial radio has no
+  CAT (§4.2).

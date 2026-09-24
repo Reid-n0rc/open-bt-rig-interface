@@ -128,9 +128,10 @@ class GattVectors(unittest.TestCase):
         self.data = load("gatt.json")
 
     def test_info(self):
-        info = self.data["info"]
-        self.assertEqual(pc.encode_info(info["fields"]).hex(), info["value_hex"])
-        self.assertEqual(pc.decode_info(bytes.fromhex(info["value_hex"])), info["fields"])
+        for key in ("info", "info_pairing_open"):
+            info = self.data[key]
+            self.assertEqual(pc.encode_info(info["fields"]).hex(), info["value_hex"])
+            self.assertEqual(pc.decode_info(bytes.fromhex(info["value_hex"])), info["fields"])
 
     def test_chunking(self):
         c = self.data["chunking"]

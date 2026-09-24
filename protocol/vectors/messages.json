@@ -66,7 +66,7 @@
         "tlvs": [
           {
             "tlv": "FEATURES",
-            "features": 98303
+            "features": 229375
           },
           {
             "tlv": "SERIAL_JACK",
@@ -109,7 +109,8 @@
             "keepalive_min_ms": 500,
             "keepalive_max_ms": 10000,
             "max_tx_min_s": 10,
-            "max_tx_max_s": 600
+            "max_tx_max_s": 600,
+            "hw_max_tx_s": 600
           },
           {
             "tlv": "TONE",
@@ -123,12 +124,19 @@
             "tlv": "BLE_TX_POWER",
             "min_dbm": -24,
             "max_dbm": 9
+          },
+          {
+            "tlv": "PAIRING",
+            "triggers": 3,
+            "window_min_s": 30,
+            "window_max_s": 600,
+            "max_bonds": 8
           }
         ]
       },
-      "payload_hex": "0104ff7f0100020c000fc012000000c20100000203090101c41070ea00000203090201c41070ea010002040803010303e0016009050907f40110270a005802060c00010f03e803000080841e000702e809",
-      "frame_hex": "04020104ff7f0100020c000fc012000000c20100000203090101c41070ea00000203090201c41070ea010002040803010303e0016009050907f40110270a005802060c00010f03e803000080841e000702e8091c23",
-      "wire_hex": "0804020104ff7f0103020c040fc012010103c201010a0203090101c41070ea010b0203090201c41070ea011402040803010303e0016009050907f40110270a055802060c06010f03e803010480841e070702e8091c2300",
+      "payload_hex": "0104ff7f0300020c000fc012000000c20100000203090101c41070ea00000203090201c41070ea010002040803010303e0016009050b07f40110270a0058025802060c00010f03e803000080841e000702e8090806031e00580208",
+      "frame_hex": "04020104ff7f0300020c000fc012000000c20100000203090101c41070ea00000203090201c41070ea010002040803010303e0016009050b07f40110270a0058025802060c00010f03e803000080841e000702e8090806031e005802086704",
+      "wire_hex": "0804020104ff7f0303020c040fc012010103c201010a0203090101c41070ea010b0203090201c41070ea011402040803010303e0016009050b07f40110270a0758025802060c06010f03e803010480841e090702e8090806031e06580208670400",
       "note": "Every TLV. The radio USB entries show a dual-port USB-serial chip (VID/PID are examples)."
     },
     {
@@ -157,13 +165,14 @@
             "keepalive_min_ms": 500,
             "keepalive_max_ms": 10000,
             "max_tx_min_s": 10,
-            "max_tx_max_s": 600
+            "max_tx_max_s": 600,
+            "hw_max_tx_s": 600
           }
         ]
       },
-      "payload_hex": "010403000000020c0001c012000000c201000001050901f40110270a005802",
-      "frame_hex": "0400010403000000020c0001c012000000c201000001050901f40110270a00580278de",
-      "wire_hex": "020404010403010103020c0401c012010103c201010a01050901f40110270a05580278de00",
+      "payload_hex": "010403000000020c0001c012000000c201000001050b01f40110270a0058025802",
+      "frame_hex": "0400010403000000020c0001c012000000c201000001050b01f40110270a00580258020968",
+      "wire_hex": "020404010403010103020c0401c012010103c201010a01050b01f40110270a0758025802096800",
       "note": "Unsolicited (token 0) after a change; a device with CAT and PTT only."
     },
     {
@@ -297,6 +306,30 @@
       "frame_hex": "0906010202983a0000f70000020b00029c130000000004cf",
       "wire_hex": "080906010202983a0102f70103020b04029c130101010304cf00",
       "note": "Bluetooth, L2CAP CoC, 2M PHY, 15 ms interval; radio USB serial and sound card present; time set."
+    },
+    {
+      "name": "status_pairing_open",
+      "message": "STATUS",
+      "type": "0x09",
+      "direction": "d2h",
+      "token": 0,
+      "fields": {
+        "host_link": 1,
+        "transport": 1,
+        "phy": 2,
+        "conn_interval_us": 30000,
+        "att_mtu": 185,
+        "coc_mtu": 0,
+        "flags": 64,
+        "audio_path": 0,
+        "supply_mv": 0,
+        "frame_errors": 0,
+        "cat_overflows": 0
+      },
+      "payload_hex": "01010230750000b9000000400000000000000000",
+      "frame_hex": "090001010230750000b90000004000000000000000007fcb",
+      "wire_hex": "02090601010230750102b90101024001010101010101037fcb00",
+      "note": "Unsolicited: the pairing window is open (flag bit 6)."
     },
     {
       "name": "status_wired",
@@ -616,6 +649,75 @@
       "note": "Wired profile 'network' (USB network interface instead of the SERIAL-jack serial port)."
     },
     {
+      "name": "config_set_serial_default",
+      "message": "CONFIG_SET",
+      "type": "0x11",
+      "direction": "h2d",
+      "token": 38,
+      "fields": {
+        "flags": 1,
+        "config": {
+          "key": "SERIAL_DEFAULT",
+          "selector": 0,
+          "value": {
+            "baud": 9600,
+            "data_bits": 8,
+            "parity": 0,
+            "stop_bits": 0
+          }
+        }
+      },
+      "payload_hex": "010d0080250000080000",
+      "frame_hex": "1126010d008025000008000075ae",
+      "wire_hex": "051126010d038025010208010375ae00",
+      "note": "Port 0 line settings applied at SERIAL_OPEN: 9600 8N1 (the default)."
+    },
+    {
+      "name": "config_set_usb_net_subnet",
+      "message": "CONFIG_SET",
+      "type": "0x11",
+      "direction": "h2d",
+      "token": 39,
+      "fields": {
+        "flags": 1,
+        "config": {
+          "key": "USB_NET_SUBNET",
+          "selector": 0,
+          "value": {
+            "a": 10,
+            "b": 169,
+            "c": 160,
+            "d": 0
+          }
+        }
+      },
+      "payload_hex": "010e000aa9a000",
+      "frame_hex": "1127010e000aa9a000c572",
+      "wire_hex": "051127010e040aa9a003c57200",
+      "note": "USB network /30 subnet 10.169.160.0 (the default); octets in address order."
+    },
+    {
+      "name": "config_set_pairing_window",
+      "message": "CONFIG_SET",
+      "type": "0x11",
+      "direction": "h2d",
+      "token": 40,
+      "fields": {
+        "flags": 1,
+        "config": {
+          "key": "PAIRING_WINDOW_S",
+          "selector": 0,
+          "value": {
+            "s": 120
+          }
+        }
+      },
+      "payload_hex": "010f007800",
+      "frame_hex": "1128010f007800d1b9",
+      "wire_hex": "051128010f027803d1b900",
+      "note": "Pairing window length 120 s (the default)."
+    },
+    {
       "name": "config_report",
       "message": "CONFIG",
       "type": "0x12",
@@ -852,6 +954,23 @@
       "frame_hex": "31000000020000427e",
       "wire_hex": "0231010102020103427e00",
       "note": "Unsolicited: PTT dropped because the keepalive expired."
+    },
+    {
+      "name": "ptt_status_hw_watchdog",
+      "message": "PTT_STATUS",
+      "type": "0x31",
+      "direction": "d2h",
+      "token": 0,
+      "fields": {
+        "state": 0,
+        "sources": 0,
+        "reason": 12,
+        "remaining_s": 0
+      },
+      "payload_hex": "00000c0000",
+      "frame_hex": "310000000c00004365",
+      "wire_hex": "02310101020c0103436500",
+      "note": "Reported after the fact: the hardware PTT watchdog forced PTT off."
     },
     {
       "name": "keepalive",

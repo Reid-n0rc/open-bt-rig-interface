@@ -26,8 +26,8 @@ Key words: **must** and **must not** are requirements; **should** is a
 recommendation; **optional** marks a feature that capability discovery (§5)
 reports. **(verify)** marks a value that bench tests
 ([#18](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/18)) or the
-firmware issues must confirm. **(maintainer)** marks a proposed default that
-the maintainer must confirm.
+firmware issues must confirm. Every default in §6.1 was accepted by the
+maintainer on 2026-09-24, and each one can be changed with a config key.
 
 ## 1. Transports
 
@@ -215,9 +215,10 @@ radio USB-serial chip or sound card enumerates or disappears.
 | 0x02 | `SERIAL_JACK` | `port u8` (0), `modes u8` (bit *n* = SERIAL-jack mode *n* of §6.2 is supported), `min_baud u32`, `max_baud u32`, `tx_buffer u16` (initial CAT credit, §7.4) |
 | 0x03 | `RADIO_USB_SERIAL` | `port u8` (1–4), `chip u8` (0 other, 1 CP210x, 2 FTDI, 3 CH34x, 4 CDC-ACM), `vid u16`, `pid u16`, `interface u8` (USB interface number), `tx_buffer u16` |
 | 0x04 | `AUDIO` | `directions u8` (bit 0 RX, bit 1 TX), `codecs u8` (bit 0 PCM16, bit 1 LC3), `rates u8` (bit 0 12 000 Hz, bit 1 16 000 Hz), `paths u8` (bit 0 analog codec, bit 1 radio USB sound card present now), `max_frame_samples u16`, `tx_buffer_samples u16` |
-| 0x05 | `PTT` | `outputs u8` (bit 0 AUDIO-jack closure, bit 1 RTS on a radio USB-serial port, bit 2 DTR on a radio USB-serial port), `keepalive_min_ms u16`, `keepalive_max_ms u16`, `max_tx_min_s u16`, `max_tx_max_s u16` |
+| 0x05 | `PTT` | `outputs u8` (bit 0 AUDIO-jack closure, bit 1 RTS on a radio USB-serial port, bit 2 DTR on a radio USB-serial port), `keepalive_min_ms u16`, `keepalive_max_ms u16`, `max_tx_min_s u16`, `max_tx_max_s u16`, `hw_max_tx_s u16` (the hardware PTT watchdog's limit, §8.5; 0 = unknown) |
 | 0x06 | `TONE` | `max_symbols u16`, `max_tone_index u8`, `shaping u8` (bit 0 phase-continuous FSK, bit 1 GFSK), `min_symbol_us u32`, `max_symbol_us u32` |
 | 0x07 | `BLE_TX_POWER` | `min_dbm i8`, `max_dbm i8`. `max_dbm` is the firmware cap (§6.3) |
+| 0x08 | `PAIRING` | `triggers u8` (the local actions that open the pairing window: bit 0 power-on, bit 1 pairing button), `window_min_s u16`, `window_max_s u16`, `max_bonds u8` (bonded hosts the device can store) (§13.5) |
 
 ### 5.2 Feature bits
 
@@ -240,6 +241,7 @@ radio USB-serial chip or sound card enumerates or disappears.
 | 14 | `SCHEDULED_AUDIO` | `AUDIO_START.start_time_us` (§9.3) |
 | 15 | `FIRMWARE_UPDATE` | Reserved; always 0 in 0.1 (§15) |
 | 16 | `USB_NETWORK` | Wired USB network interface and TCP transport (§14.2) |
+| 17 | `PAIRING_WINDOW` | Pairing window (§13.5), `PAIRING` TLV |
 
 A message that belongs to an absent feature is answered with `RESULT`
 `UNSUPPORTED`.
@@ -266,16 +268,19 @@ writes flash, so hosts should persist rarely; the device may answer
 |---|---|---|---|---|
 | 0x01 | `SERIAL_JACK_MODE` | 0 | `mode u8` (§6.2) | 0 (3.3 V logic) |
 | 0x02 | `PTT_TARGETS` | 0 | `targets u8` (bit 0 AUDIO-jack closure, bit 1 RTS, bit 2 DTR on radio USB-serial port `usb_port`), `usb_port u8` (1–4, or 0 when bits 1–2 are clear) | closure only (0x01, 0) |
-| 0x03 | `LINE_MAP` | port (0–4, or 0x0F for the wired control port) | `rts_action u8`, `dtr_action u8` (§8.3) | port 0 and 0x0F: RTS → PTT, DTR ignored; ports 1–4: both pass-through **(maintainer)** |
-| 0x04 | `PTT_KEEPALIVE_MS` | 0 | `ms u16`, within the `PTT` TLV limits | 3000 **(maintainer)** |
-| 0x05 | `MAX_TX_S` | 0 | `s u16`, within the `PTT` TLV limits; 0 is not allowed | 180 **(maintainer)** |
+| 0x03 | `LINE_MAP` | port (0–4, or 0x0F for the wired control port) | `rts_action u8`, `dtr_action u8`: 0–2 (§8.3); action 2 only on ports 1–4 | port 0 and 0x0F: RTS → PTT, DTR ignored; ports 1–4: both pass-through |
+| 0x04 | `PTT_KEEPALIVE_MS` | 0 | `ms u16`: 500–10 000 (the device reports its limits in the `PTT` TLV) | 3000 |
+| 0x05 | `MAX_TX_S` | 0 | `s u16`: 10–600 (limits in the `PTT` TLV), and no more than `PTT.hw_max_tx_s` when that is known (otherwise `OUT_OF_RANGE`); 0 is not allowed, so the timer can't be disabled | 180 |
 | 0x06 | `AUDIO_PATH` | 0 | `path u8`: 0 automatic (radio USB sound card when present), 1 analog, 2 radio USB | 0 |
 | 0x07 | `TX_LEVEL` | 0 | `centibel i16`: TX audio level in 0.1 dB, ≤ 0 (0 = full-scale line level) | set in #16 |
 | 0x08 | `RX_ATTENUATOR` | 0 | `on u8` (the about 19 dB AUDIO-jack pad, [radio-connectors](../docs/requirements/radio-connectors.md#audio-jack-35-mm-trrs)) | 0 |
 | 0x09 | `RX_GAIN` | 0 | `centibel i16`: RX gain in 0.1 dB | set in #16 |
 | 0x0A | `HOST_MODE` | 0 | `mode u8`: 0 automatic, 1 force wired, 2 force Bluetooth. Takes effect at the next mode evaluation ([architecture §6](../docs/architecture.md#6-host-link-and-connection-state-machine)) | 0 |
 | 0x0B | `BLE_TX_POWER` | 0 | `dbm i8` (§6.3) | the cap |
-| 0x0C | `WIRED_PROFILE` | 0 | `profile u8`: 0 network, 1 serial. Picks the USB functions for radios whose serial is on the SERIAL jack (§14.1). Takes effect at the next enumeration | **(maintainer)** |
+| 0x0C | `WIRED_PROFILE` | 0 | `profile u8`: 0 network, 1 serial. Picks the USB functions for radios whose serial is on the SERIAL jack (§14.1). Takes effect at the next enumeration | 0 (network) |
+| 0x0D | `SERIAL_DEFAULT` | port (0–4) | `baud u32` (the port's `min_baud`–`max_baud`), `data_bits u8`, `parity u8`, `stop_bits u8` (values as in `SERIAL_SET`, §7.1). Applied when the port is opened (§7.2), and to the wired SERIAL-jack bridge port until the host sets its own line coding | 9600 8N1 |
+| 0x0E | `USB_NET_SUBNET` | 0 | `a u8`, `b u8`, `c u8`, `d u8`: the network address of the USB network /30, in address order (`a.b.c.d`). Must be a private IPv4 address (10/8, 172.16/12 or 192.168/16) with `d` a multiple of 4; the device takes `d`+1, the host gets `d`+2 (§14.2). Takes effect at the next enumeration | 10.169.160.0 |
+| 0x0F | `PAIRING_WINDOW_S` | 0 | `s u16`: how long the pairing window stays open, 30–600 (the device reports its limits in the `PAIRING` TLV) (§13.5) | 120 |
 
 ### 6.2 SERIAL-jack modes
 
@@ -342,7 +347,8 @@ USB network (network profile, §14.1)
 - `SERIAL_SET` applies the settings to the SERIAL jack's UART, or to the
   radio's USB-serial chip (REQ-CAT-004). Supported range: `min_baud` to
   `max_baud` of the port; 4800 to 115 200 at least on port 0 (REQ-CAT-002).
-  Default after open: 9600 8N1 **(maintainer)**.
+  After `SERIAL_OPEN` the port uses its `SERIAL_DEFAULT` settings
+  (default 9600 8N1).
 
 ### 7.3 Chunking
 
@@ -405,9 +411,8 @@ CAT), so the radio's own timers are the only guard for CAT keying.
 
 - While any source that needs a keepalive is active, the host must send
   `KEEPALIVE` (or repeat `PTT_SET` state 1, or `MODEM_LINES`) at least every
-  `PTT_KEEPALIVE_MS` / 3. Proposed defaults: timeout 3000 ms, host interval
-  1000 ms **(maintainer)**; allowed range in the `PTT` TLV (proposed
-  500–10 000 ms).
+  `PTT_KEEPALIVE_MS` / 3. Defaults: timeout 3000 ms, host interval
+  1000 ms; range 500–10 000 ms (`PTT_KEEPALIVE_MS`, §6.1).
 - If `PTT_KEEPALIVE_MS` passes with none of these, the device releases every
   keepalive source (bits 0, 1, 2 and 4), deasserts pass-through lines, and
   sends `PTT_STATUS` with reason `KEEPALIVE_TIMEOUT`.
@@ -470,8 +475,15 @@ any      --session start, SERIAL_OPEN, USB reset/configure,
   every source has been released (for example `PTT_SET` 0 and the mapped
   lines deasserted); a key attempt meanwhile gets `PTT_STATUS` reason
   `LOCKED_OUT`. `MAX_TX_S` can't be 0 or above `max_tx_max_s`, so the timer
-  can't be disabled (REQ-PTT-007). Proposed default 180 s, range 10–600 s
-  **(maintainer)**.
+  can't be disabled (REQ-PTT-007). Default 180 s, range 10–600 s
+  (`MAX_TX_S`, §6.1).
+- **Hardware backstop:** a hardware PTT watchdog, independent of the
+  firmware, forces PTT off after continuous keying longer than its limit
+  (configurable in hardware, default 10 minutes, designed in #9), even if the
+  firmware is hung. `PTT.hw_max_tx_s` reports the limit (0 = unknown), and
+  `MAX_TX_S` must not exceed it. The firmware may have been hung when the
+  hardware timer tripped, so the device reports it afterwards, as
+  `PTT_STATUS` reason `HW_WATCHDOG`, as soon as it can.
 - **PTT is off** at power-on, reset, brownout, watchdog timeout, session end,
   loss of the active transport or the Bluetooth link, USB-C unplug, suspend
   or reset in wired mode, and host-mode change (REQ-PTT-005). After any of
@@ -498,6 +510,7 @@ any      --session start, SERIAL_OPEN, USB reset/configure,
 | 9 | `FAULT` | Brownout, watchdog or another internal fault |
 | 10 | `SEQUENCE_DONE` | A tone sequence ended and released PTT (§11) |
 | 11 | `BOOT` | First status after power-on or reset |
+| 12 | `HW_WATCHDOG` | The hardware PTT watchdog forced PTT off (§8.5); reported after the fact |
 
 ### 8.7 Session end
 
@@ -729,7 +742,7 @@ L2CAP PSM first. The format is frozen across major versions (§4.1).
 | 0 | `proto_major u8` | Protocol version |
 | 1 | `proto_minor u8` | |
 | 2 | `proto_patch u8` | |
-| 3 | `flags u8` | Bit 0: L2CAP CoC available |
+| 3 | `flags u8` | Bit 0: L2CAP CoC available. Bit 1: the pairing window is open (§13.5) |
 | 4 | `psm u16` | L2CAP PSM for the CoC channel (0 when not available) |
 
 A host must read the PSM from here, not hard-code it: the device may choose
@@ -770,11 +783,30 @@ can show link quality.
   (LE Secure Connections). The device rejects an unauthenticated ATT request
   with *Insufficient Authentication*, which makes Apple and other hosts start
   pairing ([host compatibility §3.1](../docs/research/host-compatibility.md#31-capabilities-per-os)).
+  The Info characteristic stays readable without a bond.
 - The device has no display or keypad, so pairing is "Just Works", which
-  gives no protection against an active attacker during pairing. When the
-  device accepts new bonds (for example only for a short window after
-  power-on or a button press) is an open question for the firmware and
-  hardware issues (#9, #15).
+  gives no protection against an active attacker during pairing. The
+  **pairing window** limits when that can happen (maintainer decision,
+  2026-09-24):
+  - **New bonds are accepted only while the pairing window is open.** A
+    local action on the device opens it: power-on, or a press of a pairing
+    button. `PAIRING.triggers` reports which of these the hardware has; the
+    exact trigger and whether a button exists belong to the firmware and
+    hardware issues (#14, #9) **(verify)**.
+  - The window closes after `PAIRING_WINDOW_S` (default 120 s), after the
+    first new bond, or when the device enters wired mode, whichever comes
+    first.
+  - **Outside the window, only bonded hosts can use the device.** Any host
+    can still connect and read Info, but the device refuses pairing
+    requests, so an unbonded host never reaches RX, TX or the L2CAP channel.
+  - The window's state is shown by Info `flags` bit 1 (readable before
+    bonding, so an app can tell the user to press the button) and by
+    `STATUS.flags` bit 6.
+  - When all `PAIRING.max_bonds` slots are in use, a new bond replaces the
+    oldest **(verify with NimBLE's bond storage, #14)**.
+- The protocol has **no message that opens the pairing window**. Whether the
+  wired control port or the USB network could open it (both need physical
+  access to the USB-C cable) is an open question; this spec proposes **no**.
 
 ## 14. Wired USB-C transports
 
@@ -827,8 +859,10 @@ mode (it probes the radio port as USB host first **(verify, #44)**):
 | SERIAL-jack serial + analog audio, profile **network** (0) | NCM + UAC1 | 3 / 2 | CAT (`CAT_DATA` port 0), PTT and configuration over TCP; the device's sound card |
 | SERIAL-jack serial + analog audio, profile **serial** (1) | CDC-ACM bridge + UAC1 | 3 / 2 | A native serial port bridged to the SERIAL jack, whose RTS/DTR key PTT (`LINE_MAP` selector 0); the device's sound card. No protocol transport in wired mode |
 
-The `WIRED_PROFILE` key picks between the last two rows; its default is for
-the maintainer to set. That `esp_tinyusb` builds each of these composites is
+The `WIRED_PROFILE` key picks between the last two rows. The default is
+**network**, the only profile that works for iOS/iPadOS hosts; desktop users
+who want a native COM port choose **serial**. The function sets and the
+missing wired CAT below were accepted by the maintainer on 2026-09-24. That `esp_tinyusb` builds each of these composites is
 **(verify, #44)**: its guide documents composite devices, CDC-ACM and an
 NCM network driver, and UAC1 comes from TinyUSB's own audio class. An asynchronous UAC1 OUT endpoint with explicit
 feedback would add one IN endpoint, which still fits every row above.
@@ -866,16 +900,16 @@ Consequences, stated plainly:
   ([Webb 2023](../docs/references/index.md#jordemort-android-cdc)). Use
   addresses from the module's factory MAC allocation **(verify, #44)**.
   Android support as a whole is **(verify, #18)**.
-- **IPv4 addressing:** the device runs a DHCP server on the link, on the
-  fixed subnet **10.169.160.0/30**: the device is **10.169.160.1**, the host
-  gets 10.169.160.2. The lease has no router and no DNS server, so hosts never
-  send internet traffic to the device. A small, randomly chosen /30 makes a
-  clash with the host's other networks unlikely. The subnet is a project
-  default **(maintainer)**.
+- **IPv4 addressing:** the device runs a DHCP server on the link, on a /30
+  subnet set by `USB_NET_SUBNET` (default **10.169.160.0/30**: the device is
+  **10.169.160.1**, the host gets 10.169.160.2). The lease has no router and
+  no DNS server, so hosts never send internet traffic to the device. A small,
+  randomly chosen /30 makes a clash with the host's other networks unlikely;
+  a user whose network does clash can move it.
 - **IPv6:** the device also answers on its IPv6 link-local address.
 - **Discovery:** DNS-SD over mDNS, service type **`_rig-interface._tcp`**,
-  instance name = the device name. Hosts may also connect straight to
-  10.169.160.1. Registering the service name with IANA is a follow-up **(verify)**.
+  instance name = the device name. Hosts may also connect straight to the
+  device address (10.169.160.1 by default). Registering the service name with IANA is a follow-up **(verify)**.
 - **Port:** TCP **51621** (in the dynamic range, so no registration is
   needed), and the port in the DNS-SD record wins if they differ. One
   connection at a time; a new connection's `HELLO` takes over (§14).
@@ -966,7 +1000,7 @@ which will choose how signed images (REQ-FW-006) travel. For this protocol:
 `STATUS.flags`: bit 0 radio USB-serial chip present; bit 1 radio USB sound
 card present; bit 2 a device is attached to the radio USB port but isn't usable (enumeration failed or unsupported class); bit 3
 UTC mapping fresh (§10.3); bit 4 USB-C source advertises 1.5 A or more; bit 5
-audio running. Other bits reserved.
+audio running; bit 6 pairing window open (§13.5). Other bits reserved.
 
 ## 17. Golden vectors and the reference codec
 
@@ -986,13 +1020,11 @@ audio running. Other bits reserved.
 
 For the maintainer (not decided here):
 
-1. **Defaults:** keepalive timeout 3000 ms (host sends every 1000 ms), range
-   500–10 000 ms; max TX 180 s, range 10–600 s; `LINE_MAP` defaults; serial
-   default 9600 8N1; `WIRED_PROFILE` default (network or serial); the USB
-   network subnet 10.169.160.0/30.
-2. **Pairing window** for new bonds (§13.5), with #9 and #15.
-3. **Wired iOS with a USB-CAT radio** gets no CAT (§14.1). Accept, or look
-   for another route in #44.
+1. **Opening the pairing window from a wired host.** Should the wired control
+   port or the USB network be able to open the pairing window (§13.5), for
+   example only from a host that is already trusted? This spec proposes no.
 
-Bluetooth control while wired to iOS is no longer open: the maintainer chose
-the USB network interface instead (2026-09-24, ADR-0007).
+Settled on 2026-09-24 (maintainer, ADR-0007): the defaults in §6.1 (all
+configurable), the wired function sets and the missing wired CAT for iOS with
+USB-serial radios (§14.1), the pairing window (§13.5), and the USB network
+interface instead of Bluetooth control while wired to iOS.

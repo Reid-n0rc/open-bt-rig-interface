@@ -172,10 +172,12 @@ CAP_TLVS = {
     0x04: ("AUDIO", [("directions", "u8"), ("codecs", "u8"), ("rates", "u8"), ("paths", "u8"),
                      ("max_frame_samples", "u16"), ("tx_buffer_samples", "u16")]),
     0x05: ("PTT", [("outputs", "u8"), ("keepalive_min_ms", "u16"), ("keepalive_max_ms", "u16"),
-                   ("max_tx_min_s", "u16"), ("max_tx_max_s", "u16")]),
+                   ("max_tx_min_s", "u16"), ("max_tx_max_s", "u16"), ("hw_max_tx_s", "u16")]),
     0x06: ("TONE", [("max_symbols", "u16"), ("max_tone_index", "u8"), ("shaping", "u8"),
                     ("min_symbol_us", "u32"), ("max_symbol_us", "u32")]),
     0x07: ("BLE_TX_POWER", [("min_dbm", "i8"), ("max_dbm", "i8")]),
+    0x08: ("PAIRING", [("triggers", "u8"), ("window_min_s", "u16"), ("window_max_s", "u16"),
+                       ("max_bonds", "u8")]),
 }
 _CAP_BY_NAME = {name: (tag, schema) for tag, (name, schema) in CAP_TLVS.items()}
 
@@ -234,6 +236,10 @@ CONFIG_KEYS = {
     0x0A: ("HOST_MODE", [("mode", "u8")]),
     0x0B: ("BLE_TX_POWER", [("dbm", "i8")]),
     0x0C: ("WIRED_PROFILE", [("profile", "u8")]),
+    0x0D: ("SERIAL_DEFAULT", [("baud", "u32"), ("data_bits", "u8"), ("parity", "u8"),
+                              ("stop_bits", "u8")]),
+    0x0E: ("USB_NET_SUBNET", [("a", "u8"), ("b", "u8"), ("c", "u8"), ("d", "u8")]),
+    0x0F: ("PAIRING_WINDOW_S", [("s", "u16")]),
 }
 _KEY_BY_NAME = {name: (key, schema) for key, (name, schema) in CONFIG_KEYS.items()}
 

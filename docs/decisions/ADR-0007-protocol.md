@@ -75,6 +75,11 @@ version 0.1.0) is one framed byte stream:
   PTT source; a maximum TX time that can't be disabled, with lockout until
   every source is released; an arming rule so that a port open that raises
   RTS and DTR together never keys; PTT off at every session end.
+- **Hardware PTT watchdog** (maintainer decision, 2026-09-24, designed in
+  #9): a hardware timer (configurable, default 10 minutes) forces PTT off
+  even if the firmware is hung. It backs up `MAX_TX_S`, which must not exceed
+  it. The `PTT` capability reports the limit (`hw_max_tx_s`, 0 = unknown),
+  and `PTT_STATUS` reason `HW_WATCHDOG` reports a trip after the fact.
 - **Audio:** PCM16 at 12 or 16 kHz (LC3 optional), 10 ms frames with a
   sequence number and a sample timestamp, one direction at a time, the
   device's sample clock as the stream clock, and optional scheduled start.
@@ -84,10 +89,33 @@ version 0.1.0) is one framed byte stream:
   (at or below the grant's 10.3 dBm) can't be exceeded.
 - **OTA transport:** deferred to #14. Message types 0xE0–0xEF and a feature
   bit are reserved; wired mode may use USB DFU (ADR-0008).
+- **Pairing window** (maintainer decision, 2026-09-24): new BLE bonds are
+  accepted only during a window opened by a local action on the device
+  (power-on or a pairing button; the exact trigger is for #14 and the
+  hardware **(verify)**). It closes after `PAIRING_WINDOW_S` (default 120 s),
+  after the first new bond, or on entering wired mode. Outside the window
+  only bonded hosts can use the device. Info `flags` bit 1 and `STATUS.flags`
+  bit 6 show the window; the `PAIRING` capability reports the triggers, the
+  allowed window lengths and the bond capacity. No protocol message opens the
+  window.
+- **Configurable defaults** (maintainer decision, 2026-09-24): keepalive
+  3000 ms (500–10 000), max TX 180 s (10–600, can't be disabled), serial
+  9600 8N1 (`SERIAL_DEFAULT`), `LINE_MAP` (SERIAL-jack and control-port RTS →
+  PTT, DTR ignored; radio ports pass-through), `WIRED_PROFILE` network, USB
+  network subnet 10.169.160.0/30 (`USB_NET_SUBNET`), pairing window 120 s.
+  Each has a config key with a documented range (SPEC §6.1).
 
-This **extends ADR-0008's wired link** with the USB network interface. It
-also changes ADR-0008's wired function list, because that list doesn't fit the
-ESP32-S3 (next section). ADR-0008 itself is not edited.
+### Relationship to ADR-0008
+
+This ADR **extends ADR-0008's wired link** with the USB network interface, and
+**supersedes ADR-0008's wired function list**: the "Wired USB-C mode: the
+computer sees" column of its radio-side table, and its statement that the
+device "always adds its own USB serial port in wired mode for configuration
+and for PTT on the AUDIO jack". That list doesn't fit the ESP32-S3 (next
+section) and is replaced by the four function sets below. The rest of
+ADR-0008 stands. ADR-0008 itself is not edited (accepted ADRs are never
+changed, [`README.md`](README.md)); the maintainer accepted this change on
+2026-09-24.
 
 ### Endpoint budget (checked for W1)
 
@@ -112,23 +140,26 @@ full-speed composite is **(verify, #44)**.
   analog audio), and, for SERIAL-jack radios, either NCM + UAC1 (profile
   *network*, CAT over TCP) or CDC-ACM bridge + UAC1 (profile *serial*, native
   COM port and RTS/DTR PTT). Each uses at most 4 IN and 2 OUT endpoints.
-- A new `WIRED_PROFILE` setting picks the SERIAL-jack profile; the default is
-  for the maintainer.
+- A new `WIRED_PROFILE` setting picks the SERIAL-jack profile. The default is
+  *network*, the only profile iOS/iPadOS hosts can use.
+- The maintainer accepted these four function sets on 2026-09-24.
 
 ## Consequences
 
 - One reference codec and one set of golden vectors (`protocol/vectors/`)
   cover every transport. CI checks them (`Protocol vectors` job).
 - **iPhone and iPad in wired mode** get CAT, PTT and configuration over the
-  network interface with SERIAL-jack radios. With radios whose serial is USB,
-  the radio's chip sits behind the hub where iOS apps can't reach it: iOS gets
-  audio, AUDIO-jack PTT and configuration, but **no CAT**, in wired mode.
-  Bluetooth mode has full CAT.
+  network interface with SERIAL-jack radios.
+- **Known limitation (accepted by the maintainer, 2026-09-24):** with radios
+  whose serial is USB, the radio's chip sits behind the hub where iOS apps
+  can't reach it. iOS gets audio, AUDIO-jack PTT and configuration, but **no
+  CAT**, in wired mode. Bluetooth mode has full CAT (REQ-HOST-003).
 - **ADR-0008's "always a USB serial port for configuration and AUDIO-jack PTT"
   no longer holds** for every radio type: with USB-serial + analog-audio
   radios, and with SERIAL-jack radios in the network profile, configuration
   and PTT use the network interface. `constraints.md` §2 and REQ-HOST-003,
-  REQ-HOST-010, REQ-HOST-013 and REQ-FW-005 are updated to match.
+  REQ-HOST-010, REQ-HOST-013, REQ-HOST-014 and REQ-FW-005 are updated to
+  match.
 - **Windows 10** has no in-box NCM driver; it uses the serial profile, the
   control port where present, or Bluetooth.
 - Firmware (#44) needs a TCP/IP stack (lwIP in ESP-IDF), a DHCP server and
@@ -138,6 +169,7 @@ full-speed composite is **(verify, #44)**.
 - To verify on hardware (#18): NCM on iOS, iPadOS, macOS and Android;
   Windows and macOS RTS/DTR behavior at port open; BLE throughput per OS; the
   clock-sync accuracy against ±20 ms.
-- Maintainer to confirm: keepalive and max-TX defaults (3000 ms / 180 s
-  proposed), `LINE_MAP` and `WIRED_PROFILE` defaults, the USB network subnet,
-  the pairing window, and whether iOS wired with USB-CAT radios is acceptable.
+- Firmware (#14) needs a pairing-window state machine and a trigger; the
+  hardware (#9) decides whether there is a pairing button.
+- Still open for the maintainer: whether the wired control port or the USB
+  network may open the pairing window. This ADR proposes no.
