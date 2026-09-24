@@ -9,4 +9,5 @@ Closes #
 - [ ] KiCad changes made through Konnect only; `KICAD_VERSION` unchanged, or bumped to match the files
 - [ ] Silkscreen revision uses `${REVISION}` (hardware PRs)
 - [ ] New files have SPDX headers or a `REUSE.toml` entry
+- [ ] Third-party material (if any) recorded in `THIRD_PARTY.md` with its notices
 - [ ] Docs, ADRs and constraints updated if a decision or a verified value changed

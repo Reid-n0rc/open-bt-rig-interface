@@ -74,4 +74,5 @@ Designed by **Reid Crowe, N0RC**.
 - Documentation: **CC-BY-4.0**
 
 See [`LICENSE`](LICENSE) and [`LICENSES/`](LICENSES/). The repo follows the
-[REUSE](https://reuse.software/) specification.
+[REUSE](https://reuse.software/) specification. Third-party material and its
+required notices are recorded in [`THIRD_PARTY.md`](THIRD_PARTY.md).

@@ -18,6 +18,9 @@ alike. In short:
 6. KiCad work uses **KiCad ≥ 10.0.6** through the Konnect tools. Keep
    [`KICAD_VERSION`](KICAD_VERSION) in step with the files.
 7. Add SPDX/REUSE licensing for every new file (`uvx reuse lint`).
+8. Record any material brought in from another project (code, KiCad library
+   items, copied text or figures, a firmware dependency) in
+   [`THIRD_PARTY.md`](THIRD_PARTY.md) in the same PR.
 
 By contributing you agree your contribution is licensed under the license of the
 path it touches (see [`LICENSE`](LICENSE)).
