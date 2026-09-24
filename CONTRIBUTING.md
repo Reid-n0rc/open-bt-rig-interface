@@ -22,5 +22,26 @@ alike. In short:
    items, copied text or figures, a firmware dependency) in
    [`THIRD_PARTY.md`](THIRD_PARTY.md) in the same PR.
 
-By contributing you agree your contribution is licensed under the license of the
-path it touches (see [`LICENSE`](LICENSE)).
+## Contributor terms
+
+The hardware and firmware are source-available under non-commercial licenses,
+with commercial licenses available from the copyright holder (see
+[`COMMERCIAL.md`](COMMERCIAL.md)). Offering those commercial licenses requires
+rights to every contribution, so by submitting a contribution (a pull request,
+patch, design file or other material) you agree that:
+
+1. **You have the right to contribute it.** It is your own original work, or
+   you have permission to submit it under these terms, and it contains no
+   third-party material except with its license and notices recorded in
+   [`THIRD_PARTY.md`](THIRD_PARTY.md).
+2. **Your contribution is licensed under the license of the path it touches**
+   (see [`LICENSE`](LICENSE)).
+3. **You also grant Reid Crowe, N0RC** (and any successor maintainer of this
+   project) a perpetual, worldwide, non-exclusive, royalty-free, irrevocable
+   license to use, copy, modify, distribute, sublicense and relicense your
+   contribution, **including under commercial license terms**.
+4. You keep the copyright in your contribution. This grant does not transfer
+   ownership.
+
+If you can't agree to these terms, open an issue describing the change instead
+of submitting it.
