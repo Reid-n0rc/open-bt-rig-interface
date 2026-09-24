@@ -5,7 +5,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # ADR-0008: Bluetooth LE and wired USB-C host links on the ESP32-S3-MINI-1, with a common radio side
 
-- **Status:** proposed
+- **Status:** accepted (2026-09-24)
 - **Date:** 2026-09-24
 - **Issue:** #42
 
