@@ -196,7 +196,7 @@ The device operates next to HF transmitters of 100 W or more.
 ## 12. Manufacturing and sourcing
 
 - 2–4 layer PCB, assembly-house-friendly parts.
-- At least two distributor sources for each key part (Avnet, Digi-Key, Mouser, LCSC), with an
+- At least two distributor sources for each key part (e.g. Digi-Key, Mouser, LCSC), with an
   active lifecycle status.
 - BOM cost target: **TBD by maintainer.**
 

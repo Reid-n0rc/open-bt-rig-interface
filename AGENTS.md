@@ -54,8 +54,9 @@ name or protocol to a particular host application.
 
 - **FCC-certified radio modules preferred.** Record the FCC ID and follow the
   module's integration guide (antenna, keep-out area, trace).
-- Sourcing: the `avnet-parts:avnet-parts` skill (Avnet API credentials are
-  supplied at runtime, never committed), plus Digi-Key, Mouser and LCSC searches.
+- Sourcing: search authorized distributors (e.g. Digi-Key, Mouser, LCSC) with
+  whatever tools you have. Never commit credentials. Describe private or
+  credentialed tooling only in your untracked `AGENTS.local.md` / `CLAUDE.local.md`.
 - Each key part needs at least two sources and an active lifecycle. Record the chosen part and its
   alternates in the relevant ADR or BOM notes.
 

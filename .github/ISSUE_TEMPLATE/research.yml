@@ -14,7 +14,7 @@ body:
     attributes: { label: Candidates / scope }
   - type: textarea
     id: method
-    attributes: { label: Method and sources, description: "Datasheets, FCC ID lookups, Avnet/Digi-Key/Mouser/LCSC. Cite everything; license-check any reused design." }
+    attributes: { label: Method and sources, description: "Datasheets, FCC ID lookups, Digi-Key/Mouser/LCSC. Cite everything; license-check any reused design." }
   - type: textarea
     id: output
     attributes: { label: Output, description: "ADR-NNNN or docs path." }
