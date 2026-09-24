@@ -52,7 +52,10 @@ PTT, CAT (TTL/RS-232/CI-V), and a USB host for radios that expose only USB. See
 
 Every change starts from an issue and lands through a PR to `dev`. Read
 [`AGENTS.md`](AGENTS.md) (the rules for humans and AI agents alike) and
-[`CONTRIBUTING.md`](CONTRIBUTING.md).
+[`CONTRIBUTING.md`](CONTRIBUTING.md). The plan for revision A (phases,
+dependencies, exit criteria and merge gates) is in
+[`docs/roadmap.md`](docs/roadmap.md), and live status is in issue
+[#22](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/22).
 
 ## Background
 

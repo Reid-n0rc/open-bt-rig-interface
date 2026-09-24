@@ -25,8 +25,11 @@ name or protocol to a particular host application.
 - **PR to `dev`** with `Closes #N`. `dev` is pre-release and the default branch.
 - **`main` is for releases only**, updated by a `dev` → `main` PR per release.
   Never commit directly to `main` or `dev` (a ruleset enforces PRs).
-- **Signed commits (SSH or GPG) are preferred, not required.** If your
-  environment signs automatically, keep it on; don't change someone else's signing config.
+- **Signed commits (SSH or GPG) are preferred but not required.** The branch
+  ruleset doesn't enforce signatures; PRs are still required for `main` and `dev`.
+  If your environment signs automatically, keep it on: don't pass `--no-gpg-sign`
+  or change signing config. If signing fails, report it rather than silently
+  committing unsigned.
 - Research and decision issues end in a written artifact: a findings doc
   or an ADR in [`docs/decisions/`](docs/decisions/) (copy `ADR-0000-template.md`).
 - If an issue's "Verify first" fact turns out false, stop and comment on the
@@ -92,11 +95,14 @@ name or protocol to a particular host application.
   contributor terms in [`CONTRIBUTING.md`](CONTRIBUTING.md#contributor-terms)).
 - Every new file needs SPDX headers, or must be covered by
   [`REUSE.toml`](REUSE.toml). Check with `uvx reuse lint`.
-- Third-party code must be license-compatible and keep its notices. Record its
-  required notices in [`THIRD_PARTY.md`](THIRD_PARTY.md). Third-party components
-  keep their own licenses and are excluded from the non-commercial and
-  commercial terms. GPL/LGPL/AGPL or unlicensed sources may be used for
-  facts only, never copied.
+- Third-party material (code, library symbols/footprints/3D models, copied
+  text or figures, and bundled firmware dependencies) must be
+  license-compatible, keep its notices, and be recorded in
+  [`THIRD_PARTY.md`](THIRD_PARTY.md) in the same PR, following its rules.
+  GPL/LGPL/AGPL or unlicensed sources may be used for facts only, never
+  copied, and are listed there under "Facts only".
+  Third-party components keep their own licenses and are excluded from the
+  non-commercial and commercial terms.
 
 ## Releases and tags
 
