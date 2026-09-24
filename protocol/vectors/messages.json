@@ -639,14 +639,35 @@
           "key": "WIRED_PROFILE",
           "selector": 0,
           "value": {
+            "profile": 1
+          }
+        }
+      },
+      "payload_hex": "010c0001",
+      "frame_hex": "1124010c000172c3",
+      "wire_hex": "051124010c040172c300",
+      "note": "Wired profile 'serial' (the default): CDC-ACM bridge port for SERIAL-jack radios."
+    },
+    {
+      "name": "config_set_wired_profile_network",
+      "message": "CONFIG_SET",
+      "type": "0x11",
+      "direction": "h2d",
+      "token": 41,
+      "fields": {
+        "flags": 1,
+        "config": {
+          "key": "WIRED_PROFILE",
+          "selector": 0,
+          "value": {
             "profile": 0
           }
         }
       },
       "payload_hex": "010c0000",
-      "frame_hex": "1124010c000053d3",
-      "wire_hex": "051124010c010353d300",
-      "note": "Wired profile 'network' (USB network interface instead of the SERIAL-jack serial port)."
+      "frame_hex": "1129010c000029f2",
+      "wire_hex": "051129010c010329f200",
+      "note": "Wired profile 'network' (for iPhone/iPad): USB network interface instead of the serial port."
     },
     {
       "name": "config_set_serial_default",

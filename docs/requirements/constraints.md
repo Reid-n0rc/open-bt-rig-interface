@@ -54,7 +54,7 @@ Consequences:
   a USB serial port for configuration and AUDIO-jack PTT only with
   USB-serial + USB-audio radios, and, for SERIAL-jack radios, either the
   network interface or a USB serial port bridged to the SERIAL jack
-  (a setting) ([protocol §14.1](../../protocol/SPEC.md#141-usb-functions-and-the-endpoint-budget)).
+  (a setting; the serial port by default) ([protocol §14.1](../../protocol/SPEC.md#141-usb-functions-and-the-endpoint-budget)).
 - **No OS shows a Bluetooth LE device as a serial port or audio device
   natively.** Over Bluetooth, hosts need apps or host software that implement
   the protocol. User documentation must state this plainly.

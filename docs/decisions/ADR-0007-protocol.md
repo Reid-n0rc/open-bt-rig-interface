@@ -102,12 +102,13 @@ version 0.1.0) is one framed byte stream:
   after the first new bond, or on entering wired mode. Outside the window
   only bonded hosts can use the device. Info `flags` bit 1 and `STATUS.flags`
   bit 6 show the window; the `PAIRING` capability reports the triggers, the
-  allowed window lengths and the bond capacity. No protocol message opens the
-  window.
+  allowed window lengths and the bond capacity. Only a local action opens
+  the window: no protocol message, and neither the wired control port nor
+  the USB network, can open it (maintainer decision, 2026-09-24).
 - **Configurable defaults** (maintainer decision, 2026-09-24): keepalive
   3000 ms (500–10 000), max TX 180 s (10–600, can't be disabled), serial
   9600 8N1 (`SERIAL_DEFAULT`), `LINE_MAP` (SERIAL-jack and control-port RTS →
-  PTT, DTR ignored; radio ports pass-through), `WIRED_PROFILE` network, USB
+  PTT, DTR ignored; radio ports pass-through), `WIRED_PROFILE` serial, USB
   network subnet 10.169.160.0/30 (`USB_NET_SUBNET`), pairing window 120 s.
   Each has a config key with a documented range (SPEC §6.1).
 
@@ -147,7 +148,8 @@ full-speed composite is **(verify, #44)**.
   *network*, CAT over TCP) or CDC-ACM bridge + UAC1 (profile *serial*, native
   COM port and RTS/DTR PTT). Each uses at most 4 IN and 2 OUT endpoints.
 - A new `WIRED_PROFILE` setting picks the SERIAL-jack profile. The default is
-  *network*, the only profile iOS/iPadOS hosts can use.
+  *serial* (maintainer decision, 2026-09-24), so desktop radio software gets a
+  native COM port. iPhone and iPad users set *network*.
 - The maintainer accepted these four function sets on 2026-09-24.
 
 ## Consequences
@@ -177,5 +179,6 @@ full-speed composite is **(verify, #44)**.
   clock-sync accuracy against ±20 ms.
 - Firmware (#14) needs a pairing-window state machine and a trigger; the
   hardware (#9) decides whether there is a pairing button.
-- Still open for the maintainer: whether the wired control port or the USB
-  network may open the pairing window. This ADR proposes no.
+- Open: EU conformity (RED Delegated Regulation 2022/30, EN 18031-1) may
+  add access-control or authentication requirements to the wired control
+  port and the USB-network TCP transport; #59 will report back.

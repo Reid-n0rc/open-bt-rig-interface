@@ -277,7 +277,7 @@ writes flash, so hosts should persist rarely; the device may answer
 | 0x09 | `RX_GAIN` | 0 | `centibel i16`: RX gain in 0.1 dB | set in #16 |
 | 0x0A | `HOST_MODE` | 0 | `mode u8`: 0 automatic, 1 force wired, 2 force Bluetooth. Takes effect at the next mode evaluation ([architecture §6](../docs/architecture.md#6-host-link-and-connection-state-machine)) | 0 |
 | 0x0B | `BLE_TX_POWER` | 0 | `dbm i8` (§6.3) | the cap |
-| 0x0C | `WIRED_PROFILE` | 0 | `profile u8`: 0 network, 1 serial. Picks the USB functions for radios whose serial is on the SERIAL jack (§14.1). Takes effect at the next enumeration | 0 (network) |
+| 0x0C | `WIRED_PROFILE` | 0 | `profile u8`: 0 network, 1 serial. Picks the USB functions for radios whose serial is on the SERIAL jack (§14.1). Takes effect at the next enumeration | 1 (serial) |
 | 0x0D | `SERIAL_DEFAULT` | port (0–4) | `baud u32` (the port's `min_baud`–`max_baud`), `data_bits u8`, `parity u8`, `stop_bits u8` (values as in `SERIAL_SET`, §7.1). Applied when the port is opened (§7.2), and to the wired SERIAL-jack bridge port until the host sets its own line coding | 9600 8N1 |
 | 0x0E | `USB_NET_SUBNET` | 0 | `a u8`, `b u8`, `c u8`, `d u8`: the network address of the USB network /30, in address order (`a.b.c.d`). Must be a private IPv4 address (10/8, 172.16/12 or 192.168/16) with `d` a multiple of 4; the device takes `d`+1, the host gets `d`+2 (§14.2). Takes effect at the next enumeration | 10.169.160.0 |
 | 0x0F | `PAIRING_WINDOW_S` | 0 | `s u16`: how long the pairing window stays open, 30–600 (the device reports its limits in the `PAIRING` TLV) (§13.5) | 120 |
@@ -819,9 +819,9 @@ can show link quality.
     `STATUS.flags` bit 6.
   - When all `PAIRING.max_bonds` slots are in use, a new bond replaces the
     oldest **(verify with NimBLE's bond storage, #14)**.
-- The protocol has **no message that opens the pairing window**. Whether the
-  wired control port or the USB network could open it (both need physical
-  access to the USB-C cable) is an open question; this spec proposes **no**.
+- **Only a local action on the device opens the pairing window.** No
+  protocol message opens it, over any transport: neither the wired control
+  port nor the USB network can (maintainer decision, 2026-09-24).
 
 ## 14. Wired USB-C transports
 
@@ -875,8 +875,9 @@ mode (it probes the radio port as USB host first **(verify, #44)**):
 | SERIAL-jack serial + analog audio, profile **serial** (1) | CDC-ACM bridge + UAC1 | 3 / 2 | A native serial port bridged to the SERIAL jack, whose RTS/DTR key PTT (`LINE_MAP` selector 0); the device's sound card. No protocol transport in wired mode |
 
 The `WIRED_PROFILE` key picks between the last two rows. The default is
-**network**, the only profile that works for iOS/iPadOS hosts; desktop users
-who want a native COM port choose **serial**. The function sets and the
+**serial** (maintainer decision, 2026-09-24): a native COM/tty port that any
+radio software can use with no protocol support. iPhone and iPad users, who
+can't open USB serial ports, set **network**. The function sets and the
 missing wired CAT below were accepted by the maintainer on 2026-09-24. That `esp_tinyusb` builds each of these composites is
 **(verify, #44)**: its guide documents composite devices, CDC-ACM and an
 NCM network driver, and UAC1 comes from TinyUSB's own audio class. An asynchronous UAC1 OUT endpoint with explicit
@@ -1033,13 +1034,12 @@ audio running; bit 6 pairing window open (§13.5). Other bits reserved.
 
 ## Open questions
 
-For the maintainer (not decided here):
+None open in this version. Settled on 2026-09-24 (maintainer, ADR-0007):
+the defaults in §6.1 (all configurable, `WIRED_PROFILE` serial), the wired
+function sets and the missing wired CAT for iOS with USB-serial radios
+(§14.1), the pairing window, which only a local action opens (§13.5), and the
+USB network interface instead of Bluetooth control while wired to iOS.
 
-1. **Opening the pairing window from a wired host.** Should the wired control
-   port or the USB network be able to open the pairing window (§13.5), for
-   example only from a host that is already trusted? This spec proposes no.
-
-Settled on 2026-09-24 (maintainer, ADR-0007): the defaults in §6.1 (all
-configurable), the wired function sets and the missing wired CAT for iOS with
-USB-serial radios (§14.1), the pairing window (§13.5), and the USB network
-interface instead of Bluetooth control while wired to iOS.
+EU conformity ([#59](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/59))
+may add access-control requirements to the wired transports (§14); that
+issue will report back.

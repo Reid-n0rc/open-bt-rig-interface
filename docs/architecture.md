@@ -100,7 +100,7 @@ the device's sample clock ([SPEC §9](../protocol/SPEC.md#9-audio-over-bluetooth
 
 ### 4.2 Wired mode
 
-| Function | Radio with USB serial + USB audio | Radio with USB serial + analog audio | SERIAL-jack radio, profile network | SERIAL-jack radio, profile serial |
+| Function | Radio with USB serial + USB audio | Radio with USB serial + analog audio | SERIAL-jack radio, profile network | SERIAL-jack radio, profile serial (default) |
 |---|---|---|---|---|
 | **USB functions** | Radio's chips (via hub) + NCM + CDC-ACM control port | Radio's serial (via hub) + NCM + UAC1 | NCM + UAC1 | CDC-ACM bridge + UAC1 |
 | **CAT** | Host ↔ radio's own USB-serial chip (native driver) | Same | Protocol `CAT_DATA` over TCP ↔ SERIAL jack | Native COM/tty port ↔ SERIAL jack |
@@ -208,7 +208,6 @@ stateDiagram-v2
   port open on Windows and macOS: bench tests (#18).
 - Whether `esp_tinyusb` builds each wired composite, and RAM for lwIP on the
   -N8 (no PSRAM): #44.
-- Maintainer: whether a wired host may open the pairing window
-  ([SPEC open questions](../protocol/SPEC.md#open-questions)).
+- EU conformity (#59) may add access control to the wired transports.
 - Known limitation (accepted): wired iOS/iPadOS with a USB-serial radio has no
   CAT (§4.2).
