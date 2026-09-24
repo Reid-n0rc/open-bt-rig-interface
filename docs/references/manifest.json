@@ -513,6 +513,60 @@
       "used_in": [
         "docs/research/core-devices.md"
       ]
+    },
+    {
+      "id": "jlcpcb-pcb-capabilities",
+      "title": "PCB manufacturing capabilities (trace/space, drill, via, edge clearance, silkscreen)",
+      "publisher": "JLCPCB",
+      "kind": "web",
+      "url": "https://jlcpcb.com/capabilities/pcb-capabilities",
+      "file": "jlcpcb-pcb-capabilities.html",
+      "used_in": [
+        "docs/requirements/pcb-fabrication.md"
+      ],
+      "notes": "Page is partly rendered by JavaScript; if the saved copy lacks the tables, save it from a browser (print to PDF also works: change the file name to .pdf).",
+      "sha256": "71bf942baa7ffcb8fd53b43fc64cac809b1d1e14d948924df5b1c368b297dafa",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "jlcpcb-impedance-stackup",
+      "title": "Controlled impedance PCB layer stackups (JLC04161H-7628) and impedance calculator",
+      "publisher": "JLCPCB",
+      "kind": "web",
+      "url": "https://jlcpcb.com/impedance",
+      "file": "jlcpcb-impedance-stackup.html",
+      "used_in": [
+        "docs/requirements/pcb-fabrication.md"
+      ],
+      "notes": "Page is partly rendered by JavaScript; save from a browser if needed.",
+      "sha256": "5a129f759b16cfc7c6f6a5542ec652ed66f1da9ece3afd89e67eb461bf67fee7",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "jlcpcb-pcba-faqs",
+      "title": "PCB assembly FAQs (Basic vs Extended parts, feeder loading fee)",
+      "publisher": "JLCPCB",
+      "kind": "web",
+      "url": "https://jlcpcb.com/help/article/pcb-assembly-faqs",
+      "file": "jlcpcb-pcba-faqs.html",
+      "used_in": [
+        "docs/requirements/pcb-fabrication.md"
+      ],
+      "sha256": "5ae13211fa1d98ebec23c54a101a8fa7bf9434fcf3e83da7b6af21b5ebd8bd09",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "jlcpcb-pcba-price",
+      "title": "PCB assembly cost: what the price includes",
+      "publisher": "JLCPCB",
+      "kind": "web",
+      "url": "https://jlcpcb.com/help/article/pcb-assembly-price",
+      "file": "jlcpcb-pcba-price.html",
+      "used_in": [
+        "docs/requirements/pcb-fabrication.md"
+      ],
+      "sha256": "7f4c1af2b7bae1d6467ac8936d9f2c91469caf377aba31923caae19d9265e73f",
+      "retrieved": "2026-09-24"
     }
   ]
 }

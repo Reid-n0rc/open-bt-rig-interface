@@ -13,7 +13,7 @@ rule applies; it leaves margin for yield. Deviations need a note in the
 schematic or layout and a reason in the PR.
 
 JLCPCB capability figures below were read from its
-[PCB capabilities page](https://jlcpcb.com/capabilities/pcb-capabilities) on
+[PCB capabilities page](../references/index.md#jlcpcb-pcb-capabilities) on
 2026-09-24. Re-check them when #21 sets up the KiCad design rules.
 
 ## 1. Board
@@ -32,15 +32,15 @@ JLCPCB capability figures below were read from its
 
 Start with **2 layers**. Move to 4 layers (JLCPCB's standard 4-layer stackup
 **JLC04161H-7628**, 1.6 mm, which supports impedance-controlled 90 Ω
-differential pairs) only when one of these can't be met on 2 layers, and record
+differential pairs; see [JLCPCB impedance stackups](../references/index.md#jlcpcb-impedance-stackup)) only when one of these can't be met on 2 layers, and record
 the reason in the board's design notes:
 
 1. **USB high-speed pairs.** The wired-mode USB hub (#9) runs at 480 Mbit/s
    between the USB-C port and the hub. A 90 Ω differential pair is impractical
    on a 1.6 mm 2-layer board. Options on 2 layers: keep the high-speed run very
    short (hub next to the USB-C connector), or use a thinner board (0.8–1.0 mm)
-   so a 90 Ω pair is a practical width **(verify with JLCPCB's impedance
-   calculator)**. Full-speed links (12 Mbit/s: the radio port and the
+   so a 90 Ω pair is a practical width **(verify with
+   [JLCPCB's impedance calculator](../references/index.md#jlcpcb-impedance-stackup))**. Full-speed links (12 Mbit/s: the radio port and the
    ESP32-S3) don't need controlled impedance.
 2. **EMC next to HF transmitters** ([constraints §5](constraints.md#5-rf-environment)).
    A solid ground reference under every signal is required. If the 2-layer
@@ -76,8 +76,11 @@ before the surge stopper).
 ## 4. Assembly
 
 - **Top-side assembly only**, JLCPCB standard PCBA.
-- **Prefer JLCPCB Basic parts.** Extended parts add a per-part loading fee
-  **(verify current fee)**, so use one only when no Basic part meets the
+- **Prefer JLCPCB Basic parts.** Extended parts add a per-part feeder loading
+  fee (JLCPCB's [assembly FAQ](../references/index.md#jlcpcb-pcba-faqs) lists
+  $3 per unique extended part, and "preferred extended" parts are exempt on
+  economic assembly; see also [what the assembly price includes](../references/index.md#jlcpcb-pcba-price);
+  **verify at order time**), so use one only when no Basic part meets the
   electrical requirement, and consolidate values (for example one 100 nF part
   everywhere) to keep the number of unique extended parts low.
 - Every part still needs two distributor sources and an active lifecycle
