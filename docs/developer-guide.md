@@ -96,7 +96,7 @@ Every directory has a `README.md` explaining its purpose. Read it before adding 
 terms. Which license applies to which path, and any commercial-use or
 governance terms, are defined in [`LICENSE`](../LICENSE),
 [`REUSE.toml`](../REUSE.toml) and [`AGENTS.md`](../AGENTS.md#licensing-reuse),
-plus `COMMERCIAL.md` and `GOVERNANCE.md` at the repo root once they are added.
+plus [`COMMERCIAL.md`](../COMMERCIAL.md) and [`GOVERNANCE.md`](../GOVERNANCE.md).
 
 ---
 
@@ -141,8 +141,10 @@ The full rules are in [AGENTS.md → Workflow](../AGENTS.md#workflow). Step by s
 
 ## 4. Local checks
 
-Run what applies to your change before pushing. CI runs the same checks once #3
-lands; until then, these commands are the reference.
+Run what applies to your change before pushing. CI already runs the ERC/DRC
+gate (`.github/workflows/kicad-checks.yml`, from #26). The licensing, KiCad
+version and silkscreen checks arrive with #3; until then, these commands are the
+reference.
 
 **Licensing (every PR):**
 ```sh
@@ -171,6 +173,10 @@ kicad-cli sch erc --severity-all --exit-code-violations --format json \
 kicad-cli pcb drc --schematic-parity --severity-all --exit-code-violations \
   --format json -o drc.json hardware/boards/<board>/rev<X>/<board>.kicad_pcb
 ```
+CI runs the same checks with the scripts in [`tools/kicad_ci/`](../tools/kicad_ci/),
+inside the `kicad/kicad` image pinned by `KICAD_VERSION`. Their unit tests:
+`python3 -m unittest discover -s tools/kicad_ci -p 'test_*.py'`.
+
 A nonzero exit code means violations. Fix them, or document an intentional
 exclusion in the KiCad project (not in CI), and say why in the PR. Agents can run
 the same checks through Konnect's review tools.
@@ -191,7 +197,8 @@ added with #14 (firmware) and #13 (protocol).
 1. Answer every question in the issue, with a source for each claim. Check the
    license of any design or code you look at and follow the third-party rules
    in [AGENTS.md → Licensing](../AGENTS.md#licensing-reuse): reuse only
-   license-compatible material, keeping its notices. GPL, LGPL, AGPL and
+   license-compatible material, keeping its notices and recording it in
+   [`THIRD_PARTY.md`](../THIRD_PARTY.md). GPL, LGPL, AGPL and
    unlicensed sources are **facts only, never copied**.
 2. Write findings to the path the issue names, and for decisions copy
    [`ADR-0000-template.md`](decisions/ADR-0000-template.md) to

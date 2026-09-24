@@ -1,6 +1,6 @@
 <!--
 SPDX-FileCopyrightText: 2026 Reid Crowe, N0RC
-SPDX-License-Identifier: CC-BY-4.0
+SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 -->
 
 # firmware/test
