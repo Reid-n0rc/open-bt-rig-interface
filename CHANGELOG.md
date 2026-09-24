@@ -12,3 +12,5 @@ and tagged independently (see `AGENTS.md`).
 
 - Repository bootstrap: agent docs, REUSE licensing (CERN-OHL-P-2.0 / MIT /
   CC-BY-4.0), design constraints, directory skeleton, templates.
+- `THIRD_PARTY.md`: a single ledger for third-party material and the notices it
+  requires (#31).

@@ -85,9 +85,12 @@ name or protocol to a particular host application.
 - Copyright holder: **Reid Crowe, N0RC** (plus contributors).
 - Every new file needs SPDX headers, or must be covered by
   [`REUSE.toml`](REUSE.toml). Check with `uvx reuse lint`.
-- Third-party code must be license-compatible, keep its notices, and be listed
-  in the relevant README. GPL/LGPL/AGPL or unlicensed sources may be used for
-  facts only, never copied.
+- Third-party material (code, library symbols/footprints/3D models, copied
+  text or figures, and bundled firmware dependencies) must be
+  license-compatible, keep its notices, and be recorded in
+  [`THIRD_PARTY.md`](THIRD_PARTY.md) in the same PR, following its rules.
+  GPL/LGPL/AGPL or unlicensed sources may be used for facts only, never
+  copied, and are listed there under "Facts only".
 
 ## Releases and tags
 
