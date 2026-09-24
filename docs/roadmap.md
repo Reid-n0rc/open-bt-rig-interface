@@ -65,7 +65,7 @@ required status checks.
 
 - #4 Requirements spec (app-neutral)
 - #5 Research: per-radio power and interface table
-- #6 Research: five-OS host compatibility matrix (SPP, RTS/DTR, HFP/mSBC, BLE)
+- #6 Research: five-OS host compatibility matrix (BLE throughput, host bridge, USB wired mode)
 - #8 Decision: audio codec and isolation transformers (ADR-0002)
 - #9 Research/design: CAT/PTT/RTS/DTR circuits and USB-host block (ADR-0003)
 - #10 Research/design: variant M automotive 12 V front end (ADR-0004)
@@ -77,7 +77,7 @@ corrected or has a follow-up issue.
 
 ### Phase 2: Key decisions
 
-- #7 Decision: dual-mode FCC-certified radio module (ADR-0001), finalized after #6
+- #7 Decision: confirm the ESP32-S3-MINI-1 BLE module (ADR-0001), per ADR-0008
 - #12 Decision: variants, board strategy, folder layout, tag scheme (ADR-0006)
 - #13 Architecture and app-neutral versioned protocol spec with golden vectors (ADR-0007)
 
@@ -91,8 +91,8 @@ corrected or has a follow-up issue.
 ### Phase 3: Firmware (on the module vendor's dev kit before custom hardware)
 
 - #14 Firmware: portable core, HAL skeleton, host tests, firmware CI
-- #15 Firmware: transparent CAT bridge over SPP and BLE with PTT/RTS/DTR fail-safes
-- #16 Firmware: standard HFP audio path (mSBC), the primary audio
+- #15 Firmware: transparent CAT bridge over BLE with PTT/RTS/DTR fail-safes
+- #16 Firmware: audio pipeline (analog codec and radio USB sound card to the BLE stream)
 - #17 Firmware (optional): BLE L2CAP audio and on-device scheduled tone-sequence TX
 - 👤 #18 Bench test the audio paths against a wired interface on all five OSes
 
@@ -181,7 +181,7 @@ flowchart LR
   I13 --> I14
   I14 --> I15["#15 FW CAT bridge + PTT"]
   I13 --> I15
-  I14 --> I16["#16 FW HFP audio"]
+  I14 --> I16["#16 FW audio pipeline"]
   I8 --> I16
   I14 --> I17["#17 FW BLE audio + tone TX (optional)"]
   I13 --> I17

@@ -33,3 +33,6 @@ __pycache__/
 # OS junk
 .DS_Store
 Thumbs.db
+
+# Reference library copies (third-party, not redistributable; see docs/references/README.md)
+docs/references/cache/

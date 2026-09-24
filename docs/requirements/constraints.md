@@ -22,37 +22,38 @@ tablet or computer). It carries:
 
 ## 2. Host compatibility
 
-The device must appear as **both an audio device and a serial connection** on
-all five host platforms:
+The host link is **Bluetooth LE only** ([ADR-0008](../decisions/ADR-0008-ble-only-esp32-s3.md)).
+The device carries serial, PTT control and audio over this project's versioned
+Bluetooth LE protocol ([`../../protocol/`](../../protocol/)) on all five host platforms:
 
 | Host | Serial | Audio (in + out) |
 |---|---|---|
-| Windows | Classic Bluetooth SPP, shown as a COM port | HFP, shown as a headset device |
-| macOS | SPP, shown as `/dev/cu.*` | HFP input/output device |
-| Linux | SPP, shown as `rfcomm` (BlueZ) | HFP via PipeWire's native backend |
-| Android | SPP, opened by apps through `BluetoothSocket` | HFP (apps start the SCO link) |
-| iOS | **Bluetooth LE only, app-level only** (see below) | HFP (any headset; no MFi needed) |
+| Windows | Host bridge or USB dongle presents a COM port | Host bridge or USB dongle presents an audio device |
+| macOS | Host bridge or USB dongle presents a serial port | Host bridge or USB dongle presents an audio device |
+| Linux | Host bridge or USB dongle presents a tty | Host bridge (PipeWire) or USB dongle |
+| Android | App-level, apps implementing the protocol | App-level |
+| iOS | App-level, apps implementing the protocol | App-level |
 
 Consequences:
 
-- **Dual-mode Bluetooth is mandatory:** Classic BR/EDR (SPP + HFP) and Bluetooth LE,
-  running at the same time. A Bluetooth-LE-only radio (for example ESP32-S3/C3/C6/C5
-  or Nordic nRF) cannot be the only radio.
-- **HFP must support wideband speech (mSBC, 16 kHz).** CVSD (8 kHz) is the
-  fallback. FT8-class audio (about 200–3000 Hz) fits in both.
-- **iOS has no SPP** for accessories outside Apple's MFi program. On iOS, serial
-  is available only to apps that implement this project's Bluetooth LE protocol
-  (see [`../../protocol/`](../../protocol/)). This platform limitation must be
-  stated in user documentation.
-- **RTS/DTR over SPP:** RFCOMM carries modem-status signals, which the device may
-  map to PTT. Whether each host OS passes an application's RTS/DTR changes through
-  is **(verify)**. PTT through the device's own control channel, or through the
-  radio's CAT command, must work regardless.
-- **HFP limits:** codec artifacts, packet-loss concealment and host OS voice
-  processing may degrade weak-signal decoding **(verify per OS)**. An optional
-  higher-quality Bluetooth LE audio channel (L2CAP) may be offered to apps that
-  support it. It supplements the standard HFP path and doesn't replace it.
-- Not required: Hamlib/FLrig-specific features, Wi-Fi, LE Audio (LC3).
+- **No Bluetooth Classic.** SPP, HFP and RFCOMM are not used. Any Bluetooth LE
+  module that meets §4 and §10 qualifies; revision A uses the ESP32-S3-MINI-1.
+- **No OS shows a Bluetooth LE device as a serial port or audio device natively.**
+  Desktops need either host bridge software or a USB dongle that presents
+  standard USB CDC-ACM serial and USB Audio Class audio. Which one (or both) is
+  an open decision tracked in its own issue. User documentation must state that
+  phones and tablets work only with apps that implement the protocol.
+- **Audio over Bluetooth LE:** at least 12 kHz / 16-bit mono, one direction at a
+  time (192 kbit/s), over an L2CAP connection-oriented channel or GATT, using the
+  2M PHY where the host supports it. Throughput to each OS **(verify)**,
+  especially iOS. LC3 compression (permissively licensed implementation) is the
+  fallback if raw PCM doesn't fit.
+- **RTS/DTR:** carried as protocol messages. Host bridges map them to their
+  serial port where the OS allows it (pseudo-terminals on macOS and Linux do not
+  carry modem-control lines). PTT through the protocol's control channel, or
+  through the radio's CAT command, must work regardless.
+- Not required: Hamlib/FLrig-specific features, Wi-Fi, LE Audio (LC3 as a
+  Bluetooth profile).
 
 ## 3. Power
 
@@ -107,7 +108,7 @@ Design guidance (confirmed in the power-front-end issue):
 
 | Load | Estimate |
 |---|---|
-| Radio module, Classic + BLE active | about 0.1–0.25 A @ 3.3 V |
+| Radio module (ESP32-S3-MINI-1), BLE active | about 0.1 A typical, 0.34 A peak (BLE TX at +20 dBm, datasheet) @ 3.3 V |
 | Audio codec | about 50 mA |
 | USB host VBUS to the radio | up to about 0.5 A (current-limited switch) |
 | Target total | about 1.5 W typical, 3 W peak |
@@ -149,15 +150,26 @@ The device operates next to HF transmitters of 100 W or more.
   bus); 4800–115200 baud.
 - **PTT:** isolated closure to ground; RTS/DTR outputs at RS-232 levels for
   cables that expect them.
-- **USB host:** for radios whose only CAT/audio path is their own USB port
-  (CP210x, FTDI, CDC-ACM serial chips). Supplies current-limited VBUS (3.1).
-- **Connectors:** per-radio cables or harnesses (mini-DIN, 3.5 mm, DB9) rather than
-  per-radio boards, where practical.
+- **USB host:** for radios with their own USB port. The device is the USB host to
+  the radio's USB-serial chip (CP210x including dual-port CP2105, FTDI, CH34x,
+  CDC-ACM) **and** its built-in USB sound card (USB Audio Class 1.0), including
+  through a USB hub inside the radio. Full speed (12 Mbit/s) is enough. Supplies
+  current-limited VBUS (3.1).
+- **Connectors:** two 3.5 mm TRRS jacks (AUDIO and SERIAL) with a fixed pinout
+  that is compatible with existing cables made for that convention, plus a USB-A
+  host port. Per-radio cables or harnesses (mini-DIN, 3.5 mm, DB9, USB), not
+  per-radio boards. See [`radio-connectors.md`](radio-connectors.md).
 
 ## 8. Audio
 
-- The internal codec runs at 48 kHz. The host path is at least 12 kHz / 16-bit
-  where the transport allows (HFP is limited to 16 kHz mSBC or 8 kHz CVSD).
+- **Two radio audio paths, both on every board:** analog (the internal codec,
+  line level, isolated per §6) and USB (the radio's built-in USB sound card, §7).
+  The firmware uses USB audio when a radio sound card enumerates, with a manual
+  override.
+- The internal codec runs at 48 kHz. The host path is at least 12 kHz / 16-bit (§2).
+- **Rate matching:** a radio's USB sound card runs on its own clock. The firmware
+  matches rates between it and the Bluetooth LE stream without audible artifacts
+  or tone shift.
 - ADC SNR ≥ 90 dB (A-weighted) **(verify with codec choice)**.
 - Sample clock accuracy ±50 ppm or better (no tone shift).
 - No automatic gain control, noise suppression or voice processing in the

@@ -14,16 +14,16 @@ transceiver and a phone, tablet or computer. It carries **CAT serial**, **PTT**
 
 ## Host support (target)
 
-The device appears as a **standard Bluetooth audio device plus a serial
-connection**:
+The device links to the host over **Bluetooth LE** using this project's
+[protocol](protocol/) ([ADR-0008](docs/decisions/ADR-0008-ble-only-esp32-s3.md)):
 
 | Host | Serial | Audio |
 |---|---|---|
-| Windows | COM port (Bluetooth SPP) | Headset device (HFP, mSBC) |
-| macOS | `/dev/cu.*` (SPP) | Input/output device (HFP) |
-| Linux | `rfcomm` (SPP) | PipeWire (HFP) |
-| Android | SPP (app-level `BluetoothSocket`) | HFP |
-| iOS | **Bluetooth LE, app-level only.** Apps must implement the [protocol](protocol/); iOS offers no SPP to non-MFi accessories | HFP |
+| Windows, macOS, Linux | Serial port via host bridge software or a USB dongle (to be decided) | Audio device via host bridge software or a USB dongle |
+| Android, iOS | Apps that implement the protocol | Apps that implement the protocol |
+
+It connects to the radio through analog audio in/out **or** the radio's own USB
+port (built-in USB sound card and USB-serial chip).
 
 ## Planned variants
 
@@ -32,8 +32,9 @@ connection**:
 - **M: mobile/automotive.** A 12 V input built for a harsh automotive environment
   (ISO 16750-2 / ISO 7637-2 targets).
 
-Both share one core design: a dual-mode Bluetooth module, audio codec, isolated
-PTT, CAT (TTL/RS-232/CI-V), and a USB host for radios that expose only USB. See
+Both share one core design: an ESP32-S3-MINI-1 Bluetooth LE module, audio codec,
+isolated PTT, CAT (TTL/RS-232/CI-V), and a USB host for the radio's USB sound
+card and USB-serial chip. See
 [`docs/requirements/constraints.md`](docs/requirements/constraints.md).
 
 ## Repository layout

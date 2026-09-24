@@ -118,6 +118,10 @@ The rest of CI and the full command list are added by the CI issue (#3). Until t
 
 - KiCad CLI (macOS): `/Applications/KiCad/KiCad.app/Contents/MacOS/kicad-cli`.
 - License check: `uvx reuse lint`.
+- Reference library: `python3 tools/refs/refs.py check` (manifest valid, index current);
+  `python3 tools/refs/refs.py fetch` downloads local copies into the gitignored
+  `docs/references/cache/`. Cite third-party documents through
+  [`docs/references/`](docs/references/README.md), never by committing copies.
 
 ### ERC/DRC merge gate (required)
 
