@@ -12,3 +12,5 @@ and tagged independently (see `AGENTS.md`).
 
 - Repository bootstrap: agent docs, REUSE licensing (CERN-OHL-P-2.0 / MIT /
   CC-BY-4.0), design constraints, directory skeleton, templates.
+- Roadmap for revision A (`docs/roadmap.md`): phases, dependency graph, exit
+  criteria, and merge gates (ERC for schematic changes, DRC for PCB changes).
