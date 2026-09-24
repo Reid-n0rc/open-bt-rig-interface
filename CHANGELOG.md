@@ -10,6 +10,9 @@ and tagged independently (see `AGENTS.md`).
 
 ## Unreleased
 
+- Core device shortlist for revision A (`docs/research/core-devices.md`):
+  candidate key parts per block, and radio-module candidates checked against
+  the hard constraints (#42).
 - Relicensed the hardware (CC-BY-NC-SA-4.0) and firmware
   (PolyForm-Noncommercial-1.0.0) as non-commercial, with commercial licenses
   available ([`COMMERCIAL.md`](COMMERCIAL.md)). Protocol, tools and CI stay MIT,
