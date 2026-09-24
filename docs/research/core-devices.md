@@ -29,8 +29,8 @@ confirmed from the manufacturer's datasheet by the issue named in the
 | Block | Primary candidate | Alternates | Settled by |
 |---|---|---|---|
 | Bluetooth LE radio + MCU | Espressif **ESP32-S3-MINI-1-N8** (`-1U` for an external antenna) | ESP32-S3-MINI-1-N4R2 (adds PSRAM); Raytac MDBT50Q (nRF52840) as the non-Espressif fallback | #7, ADR-0008 |
-| Audio codec | TI **TLV320AIC3104** (`-Q1` for variant M) | TI TLV320AIC3204, NXP SGTL5000, Nuvoton NAU88C22, Cirrus WM8960 | #8 |
-| Audio isolation | Bourns **LM-NP-1001-B1L** (600:600 Ω) | Bourns LM-LP-1001 (SMD), Triad / Xicon 600:600 Ω line transformers | #8 |
+| Audio codec | TI **TLV320AIC3104** (`-Q1` optional for variant M) | TI TAC5112, TI TLV320AIC3204 (WM8960 is end of life) | #8, [ADR-0002](../decisions/ADR-0002-audio-codec.md) |
+| Audio isolation | Bourns **SM-LP-5001** (600:600 Ω, SMD) | Triad TY-250P (LM-NP-1001-B1L rejected: −10 to +60 °C) | #8, [ADR-0002](../decisions/ADR-0002-audio-codec.md) |
 | RS-232 CAT (1 driver, 1 receiver; drivers high-Z when off) | TI **TRS3221E** | MaxLinear SP3221E, ADI ADM3101E | #9 |
 | SERIAL-jack mode switching (RS-232 tolerant) | TI **TMUX6219** (36 V SPDT), one per contact | Small signal relays | #9 |
 | TTL CAT level shift (behind the mode switch) | TI **SN74LXC1T45** / TXU0102 | Nexperia 74LVC1T45 | #9 |
@@ -119,6 +119,10 @@ USB sound card use the USB path (§4) instead.
 
 Everest ES8388 was dropped from the list: datasheet quality and authorized
 distributor availability outside China are weak.
+
+Superseded by [ADR-0002](../decisions/ADR-0002-audio-codec.md) and
+[`audio-codec.md`](audio-codec.md), which choose the TLV320AIC3104 and the
+Bourns SM-LP-5001; the note below is kept for the record.
 
 **Isolation transformers:** Bourns LM-NP-1001-B1L, 600:600 Ω, 200–3500 Hz,
 insertion loss ≤ 1.5 dB ([Bourns LM-NP/LP datasheet](../references/index.md#bourns-lm-np-ds)).

@@ -10,6 +10,10 @@ and tagged independently (see `AGENTS.md`).
 
 ## Unreleased
 
+- ADR-0002 (proposed): TI TLV320AIC3104 audio codec (alternates TAC5112,
+  TLV320AIC3204) and Bourns SM-LP-5001 isolation transformers, with the
+  ESP32-S3 I2S clocking, level plan and RF hardening
+  (`docs/research/audio-codec.md`) (#8).
 - PCB fabrication and passive-component rules (`docs/requirements/pcb-fabrication.md`):
   JLCPCB standard process, 2 layers preferred, 0402 resistors, MLCC with a 2×
   voltage rule and DC-bias check (#49).

@@ -10,7 +10,9 @@
       "file": "esp32s3-mini1-ds.pdf",
       "used_in": [
         "docs/decisions/ADR-0008-host-links-esp32-s3.md",
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
       ],
       "sha256": "4d4b7f1c17b484c627aaa0f806566c48a6124a8e466c6d21d99210e6eacdef04",
       "retrieved": "2026-09-24"
@@ -36,7 +38,9 @@
       "url": "https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32s3/esp-hardware-design-guidelines-en-master-esp32s3.pdf",
       "file": "esp32s3-hw-design.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
       ],
       "sha256": "2ee5e2e340c2b95c13bd37b611596e1c24023b179bd21930e6f6aa7e2a8a542b",
       "retrieved": "2026-09-24"
@@ -236,7 +240,9 @@
       "url": "https://www.ti.com/lit/ds/symlink/tlv320aic3104.pdf",
       "file": "ti-tlv320aic3104-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
       ],
       "sha256": "17ce38b2b2b35e44fedaad6c44fcb9c2133722dccfd5ef80e9ec2e3b8f281e9a",
       "retrieved": "2026-09-24"
@@ -249,7 +255,9 @@
       "url": "https://www.ti.com/lit/ds/symlink/tlv320aic3104-q1.pdf",
       "file": "ti-tlv320aic3104-q1-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
       ],
       "sha256": "6a9633798673cdb85d441a708ef684f5ffc8c7f6661448fea4a68fcc889835c4",
       "retrieved": "2026-09-24"
@@ -262,7 +270,9 @@
       "url": "https://www.ti.com/lit/ds/symlink/tlv320aic3204.pdf",
       "file": "ti-tlv320aic3204-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
       ],
       "sha256": "31b8b4e12b86f4e5c44a125ef671bac9a9d1dd6f20e6c37986da4f2945887ccd",
       "retrieved": "2026-09-24"
@@ -275,7 +285,9 @@
       "url": "https://www.bourns.com/pdfs/LMNPLP.pdf",
       "file": "bourns-lm-np-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
       ],
       "sha256": "3ad23168c4218a64b7c7741608681cb28d36c11a3f240273e166819f2f2b2f20",
       "retrieved": "2026-09-24"
@@ -566,6 +578,160 @@
         "docs/requirements/pcb-fabrication.md"
       ],
       "sha256": "7f4c1af2b7bae1d6467ac8936d9f2c91469caf377aba31923caae19d9265e73f",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-tac5112-ds",
+      "title": "TAC5112 low-power stereo audio codec datasheet (SLASF24A)",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tac5112.pdf",
+      "file": "ti-tac5112-ds.pdf",
+      "used_in": [
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
+      ],
+      "sha256": "54b43ca9dea36e363f05c2992992dde6099fa4c5ef59266f032b4fceee4f0eab",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-tac5112-q1-ds",
+      "title": "TAC5112-Q1 automotive low-power stereo audio codec datasheet (SLASFC2A)",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tac5112-q1.pdf",
+      "file": "ti-tac5112-q1-ds.pdf",
+      "used_in": [
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
+      ],
+      "sha256": "c25893a63f6f11ddd2d7f4ef6c3e082717abff843be6ef2ab80bbe6fc1d65617",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-pcm1808-ds",
+      "title": "PCM1808 single-ended 24-bit 96 kHz stereo ADC datasheet (SLES177B)",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/pcm1808.pdf",
+      "file": "ti-pcm1808-ds.pdf",
+      "used_in": [
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
+      ],
+      "sha256": "4ac1a7ec0c05ee972ba52ad8ebbd7cc661ce1c4dff59cf33429b684ca0595547",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-pcm5102a-ds",
+      "title": "PCM510xA 2.1 VRMS stereo DAC with PLL datasheet (SLAS859C)",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/pcm5102a.pdf",
+      "file": "ti-pcm5102a-ds.pdf",
+      "used_in": [
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
+      ],
+      "sha256": "a522083606b8e994875883215046fbdb92fd362996ca97719d259fbe9df07a85",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "nxp-sgtl5000-ds",
+      "title": "SGTL5000 low power stereo codec with headphone amp data sheet (Rev. 7)",
+      "publisher": "NXP Semiconductors",
+      "kind": "datasheet",
+      "url": "https://www.nxp.com/docs/en/data-sheet/SGTL5000.pdf",
+      "file": "nxp-sgtl5000-ds.pdf",
+      "fetch": "manual",
+      "notes": "The site blocks scripted downloads; save the PDF from a browser.",
+      "used_in": [
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
+      ]
+    },
+    {
+      "id": "nuvoton-nau88c22-ds",
+      "title": "NAU88C22 24-bit stereo audio codec with speaker driver datasheet (Rev 0.8)",
+      "publisher": "Nuvoton Technology",
+      "kind": "datasheet",
+      "url": "https://www.nuvoton.com/export/resource-files/DS_NAU88C22_DataSheet_EN_Rev0.8.pdf",
+      "file": "nuvoton-nau88c22-ds.pdf",
+      "used_in": [
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
+      ],
+      "sha256": "55697a9f6460857676f002cf85575bb9ec5ffcb1709b67e1c0edcded1eb6e7ef",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "cirrus-eol",
+      "title": "Discontinued products (last-time-buy and last-time-ship dates, including WM8960 and WM8731)",
+      "publisher": "Cirrus Logic",
+      "kind": "web",
+      "url": "https://www.cirrus.com/products/eol",
+      "file": "cirrus-eol.html",
+      "used_in": [
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
+      ],
+      "sha256": "9921fc8adabf9b10fb2642cfa7df87badaedf81963ab8672d35b229264e72d3d",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-tlv320aic3104-product",
+      "title": "TLV320AIC3104 product page (status, newer-version notice)",
+      "publisher": "Texas Instruments",
+      "kind": "web",
+      "url": "https://www.ti.com/product/TLV320AIC3104",
+      "file": "ti-tlv320aic3104-product.html",
+      "used_in": [
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
+      ],
+      "sha256": "2baba19fd4ec8e1bb8c7b665ff4bc58e2e3e618c73b299c8055ea3d942df117f",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "esp32s3-trm",
+      "title": "ESP32-S3 technical reference manual (v1.8), chapter 28 I2S controller",
+      "publisher": "Espressif Systems",
+      "kind": "datasheet",
+      "url": "https://www.espressif.com/sites/default/files/documentation/esp32-s3_technical_reference_manual_en.pdf",
+      "file": "esp32s3-trm.pdf",
+      "used_in": [
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
+      ],
+      "sha256": "4484bf8a69035ec42a731c58c64ada6fbd1f1618c5559409f134d9ea083f444f",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "bourns-sm-lp-5001-ds",
+      "title": "SM-LP-5001 series surface-mount line matching transformers datasheet",
+      "publisher": "Bourns",
+      "kind": "datasheet",
+      "url": "https://www.bourns.com/docs/product-datasheets/smlp5001.pdf",
+      "file": "bourns-sm-lp-5001-ds.pdf",
+      "used_in": [
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
+      ],
+      "sha256": "ea7435c6eaa58358ea7f2f00f579f3a3e2770702975cd1b247d366b814f28d07",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "triad-ty-250p-ds",
+      "title": "TY-250P PC-mount audio transformer datasheet",
+      "publisher": "Triad Magnetics",
+      "kind": "datasheet",
+      "url": "https://catalog.triadmagnetics.com/asset/ty-250p.pdf",
+      "file": "triad-ty-250p-ds.pdf",
+      "used_in": [
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
+      ],
+      "sha256": "bed5eeb82a1e25a517487c97a3eac8b076026967ba406fa22390bf16c442bca4",
       "retrieved": "2026-09-24"
     }
   ]
