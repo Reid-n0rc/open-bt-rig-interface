@@ -5,25 +5,28 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # open-bt-rig-interface
 
-A source-available **hardware + firmware** Bluetooth interface between an amateur-radio
-transceiver and a phone, tablet or computer. It carries **CAT serial**, **PTT**
-(including RTS/DTR-style control) and **audio** without a cable to the host.
+A source-available **hardware + firmware** interface between an amateur-radio
+transceiver and a phone, tablet or computer, over **Bluetooth LE** or **wired
+USB-C**. It carries **CAT serial**, **PTT** (including RTS/DTR-style control)
+and **audio**.
 
 > **Status:** planning and research. No hardware or firmware yet. See the open
 > issues.
 
 ## Host support (target)
 
-The device links to the host over **Bluetooth LE** using this project's
-[protocol](protocol/) ([ADR-0008](docs/decisions/ADR-0008-ble-only-esp32-s3.md)):
+See [ADR-0008](docs/decisions/ADR-0008-host-links-esp32-s3.md):
 
-| Host | Serial | Audio |
+| Host | Wired USB-C | Bluetooth LE |
 |---|---|---|
-| Windows, macOS, Linux | Serial port via host bridge software or a USB dongle (to be decided) | Audio device via host bridge software or a USB dongle |
-| Android, iOS | Apps that implement the protocol | Apps that implement the protocol |
+| Windows, macOS, Linux | Native serial port and sound card, no drivers | Apps or host software that implement the [protocol](protocol/) |
+| Android | Sound card natively; serial through apps | Apps that implement the protocol |
+| iOS / iPadOS | Sound card natively | Apps that implement the protocol |
 
-It connects to the radio through analog audio in/out **or** the radio's own USB
-port (built-in USB sound card and USB-serial chip).
+On the radio side it supports, in both modes, radios with a built-in USB-serial
+chip and sound card, radios with USB serial and analog audio, and radios with
+RS-232, 3.3 V logic or Icom CI-V serial and analog audio. In wired mode, radios
+with their own USB port appear to the computer directly through an on-board hub.
 
 ## Planned variants
 

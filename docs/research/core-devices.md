@@ -7,7 +7,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 Issue: [#42](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/42).
 Researched 2026-09-24. Host link and module decision:
-[ADR-0008](../decisions/ADR-0008-ble-only-esp32-s3.md) (Bluetooth LE only,
+[ADR-0008](../decisions/ADR-0008-host-links-esp32-s3.md) (Bluetooth LE only,
 ESP32-S3-MINI-1, analog **and** USB radio audio).
 
 This is the **shortlist of key parts** for revision A: one primary candidate
@@ -31,12 +31,17 @@ confirmed from the manufacturer's datasheet by the issue named in the
 | Bluetooth LE radio + MCU | Espressif **ESP32-S3-MINI-1-N8** (`-1U` for an external antenna) | ESP32-S3-MINI-1-N4R2 (adds PSRAM); Raytac MDBT50Q (nRF52840) as the non-Espressif fallback | #7, ADR-0008 |
 | Audio codec | TI **TLV320AIC3104** (`-Q1` for variant M) | TI TLV320AIC3204, NXP SGTL5000, Nuvoton NAU88C22, Cirrus WM8960 | #8 |
 | Audio isolation | Bourns **LM-NP-1001-B1L** (600:600 Ω) | Bourns LM-LP-1001 (SMD), Triad / Xicon 600:600 Ω line transformers | #8 |
-| RS-232 CAT + RTS/DTR | TI **TRS3232E** | ADI MAX3232E, MaxLinear SP3232E | #9 |
-| TTL CAT level shift | TI **SN74LXC1T45** / TXU0102 | Nexperia 74LVC1T45 | #9 |
+| RS-232 CAT (1 driver, 1 receiver; drivers high-Z when off) | TI **TRS3221E** | MaxLinear SP3221E, ADI ADM3101E | #9 |
+| SERIAL-jack mode switching (RS-232 tolerant) | TI **TMUX6219** (36 V SPDT), one per contact | Small signal relays | #9 |
+| TTL CAT level shift (behind the mode switch) | TI **SN74LXC1T45** / TXU0102 | Nexperia 74LVC1T45 | #9 |
 | CI-V bus | Open-drain buffer **74LVC1G07** + pull-up | Discrete NPN/N-MOSFET | #9 |
 | CAT isolation | TI **ISO7721** | Skyworks Si8621, ADI ADuM1201 | #9 |
 | PTT closure | Panasonic **AQY212EH** PhotoMOS | Littelfuse/IXYS CPC1017N, Toshiba TLP-series photorelay | #9 |
 | USB host (radio's USB sound card + USB-serial chip) | **ESP32-S3 built-in USB OTG** + `espressif/esp-usb` | MAX3421E (SPI), only if the fallback module is used | #9 |
+| USB hub (wired mode) | Microchip **USB2422** (2-port) | Genesys GL850G, WCH CH334 | #9 |
+| USB routing switches (×2) | TI **TS3USB221A** | onsemi FSUSB42 | #9 |
+| USB-C port | HRO **TYPE-C-31-M-12** + 5.1 kΩ Rd, ESD TPD2E2U06 | ST USBLC6-2 | #9, #11 |
+| Radio USB isolator (fitting option, variant M) | ADI **ADuM4160** (full speed) | ADI ADuM3160 | #9, #10 |
 | VBUS supply to the radio | TI **TPS2553** (`-Q1` for M) | Diodes AP22653, TI TPS2051C | #9, #11 |
 | Supervisor / watchdog | TI **TPS3430** window watchdog | TI TPS3840 (reset only) | #9, #14 |
 | Power R: source mux | TI **TPS2121** | Two ideal-diode controllers (LM66100-class) | #11 |
@@ -45,7 +50,7 @@ confirmed from the manufacturer's datasheet by the issue named in the
 | Power M: load dump / surge | ADI **LTC4380** surge stopper | TI LM5060-Q1, TVS only (SM8S-class) | #10 |
 | Power M: buck | TI **LMQ62440-Q1** | ADI LT8609S, ADI LT8636 | #10 |
 | Low-noise LDO (audio rail) | TI **TPS7A20** | TI LP5907 | #8, #10, #11 |
-| USB-C sink (R) | Receptacle + 5.1 kΩ Rd on CC1/CC2 | — | #11 |
+
 | Programming/log port | UART0 header (USB is used as host to the radio) | — | #21 |
 | ESD (USB and radio lines) | TI **TPD4E05U06** / TPD1E10B06 | ST USBLC6-2 | #9 |
 
@@ -83,7 +88,7 @@ USB audio path needs (§4).
 ### 1.2 Why Bluetooth Classic was dropped
 
 Dual mode (Classic SPP + HFP with BLE) was the original requirement. These
-dual-mode candidates were checked before [ADR-0008](../decisions/ADR-0008-ble-only-esp32-s3.md)
+dual-mode candidates were checked before [ADR-0008](../decisions/ADR-0008-host-links-esp32-s3.md)
 replaced it; the findings are kept for the record.
 
 | Candidate | Result | Reason (source) |
@@ -123,20 +128,37 @@ SMD sibling (LM-LP-1001) suits assembly houses better.
 
 ## 3. CAT, CI-V, RTS/DTR and PTT (#9)
 
-- **RS-232:** TRS3232E / MAX3232E / SP3232E are pin-compatible second sources
-  (2 drivers, 2 receivers). Two drivers cover TXD + one of RTS/DTR; RTS **and**
-  DTR plus TXD needs a 3-driver part (e.g. MAX3243E-class) **(verify)**.
+The SERIAL and AUDIO jack pinouts are fixed by
+[`radio-connectors.md`](../requirements/radio-connectors.md). Prices and stock:
+LCSC, 2026-09-24, USD at quantity 100.
+
+- **RS-232:** the SERIAL jack carries only data (tip out, ring 1 in), so one
+  driver and one receiver are enough: TRS3221E ($0.51, 1,780 in stock),
+  SP3221E ($0.67), ADM3101E ($1.21). Pulling FORCEOFF low shuts the TRS3221E
+  driver off (datasheet); confirm the off-state output leakage so the tip can
+  serve the other modes **(verify)**. The
+  jacks have no RS-232 RTS/DTR contacts; host RTS/DTR maps to the PTT closure on
+  the AUDIO jack or to the radio's USB-serial chip.
+- **Mode switching:** tip and ring 1 each go through a 36 V SPDT analog switch
+  (TMUX6219, $2.16, 3,110 in stock) selecting the RS-232 path or the logic/CI-V
+  path, so RS-232 levels never reach the 3.3 V parts. The switch needs a dual
+  supply that spans the RS-232 swing (±4.5 V to ±18 V per its datasheet), e.g.
+  from a small charge pump on the isolated side; its behavior with signals
+  present while unpowered **(verify)**. Signal relays are the alternative (more
+  robust, larger, no negative rail). Default at power-on: logic path.
 - **TTL 3.3/5 V:** a direction-controlled level translator (SN74LXC1T45 or
-  74LVC1T45) per line, 5 V tolerant.
-- **CI-V:** single wire, open collector. 74LVC1G07 drives it low; the radio side
-  sets the pull-up voltage. Echo and collision handling is a firmware matter.
-- **Isolation (variant M, separately powered R):** ISO7721 (one channel each
-  way, ≥ 115.2 kBd). The radio-side supply of the isolator is an open question
-  for #9: a small isolated converter, or power taken from the radio's port.
-- **PTT:** a PhotoMOS (AQY212EH, 60 V) gives an isolated closure to ground and
-  is **off unless its LED is driven**, which meets the hardware default-off
-  rule. Drive it through a gate that a window watchdog (TPS3430) can hold off,
-  so a hung MCU cannot key the radio.
+  74LVC1T45) per line, 5 V tolerant, behind the mode switch, with series
+  resistance and clamps.
+- **CI-V:** single wire on the tip, open drain. 74LVC1G07 pulls it low; the
+  radio sets the pull-up. Echo and collision handling is a firmware matter.
+- **Isolation (variant M, and whenever USB-C data is used):** ISO7721 (one
+  channel each way, ≥ 115.2 kBd). The radio-side supply of the isolated section
+  (switches, RS-232, logic) is an open question for #9: a small isolated
+  converter is the likely answer.
+- **PTT:** a PhotoMOS (AQY212EH, 60 V) gives an isolated closure to ground on
+  AUDIO-jack ring 2 and is **off unless its LED is driven**, which meets the
+  hardware default-off rule. Drive it through a gate that a window watchdog
+  (TPS3430) can hold off, so a hung MCU cannot key the radio.
 
 ## 4. USB host: the radio's USB sound card and USB-serial chip (#9)
 
@@ -184,14 +206,31 @@ the 10 m band. Each power ADR must include this harmonic check.
 - Cold crank to 6 V: the 3.3 V rail survives with a low-dropout buck, but the
   5 V VBUS to the radio may need a buck-boost or must drop out safely with PTT off.
 
+## 5a. USB routing for wired USB-C mode (#9)
+
+Wired mode ([ADR-0008](../decisions/ADR-0008-host-links-esp32-s3.md)) needs the
+computer to reach the radio's own USB chips and the ESP32-S3 at the same time,
+but the ESP32-S3 has one USB controller. An on-board hub and two USB switches
+solve it:
+
+| Part | Role | $ @100 | LCSC stock |
+|---|---|---|---|
+| Microchip USB2422 | 2-port USB 2.0 hub: upstream to USB-C; ports to the radio USB-A and the ESP32-S3 | 1.47 | 885 |
+| Genesys GL850G / WCH CH334 | Cheaper 4-port hub alternates | 0.37 / 0.26 | 20,644 / 38,000 |
+| TI TS3USB221A (×2) | USB 2.0 1:2 switches: radio port and ESP32-S3 each go to the hub (wired) or to each other (Bluetooth, ESP32-S3 as host) | 0.21 | 92,257 |
+| HRO TYPE-C-31-M-12 | USB-C receptacle (data + 5 V sink) | 0.15 | 92,244 |
+| TI TPD2E2U06 / ST USBLC6-2 | USB ESD protection | 0.26 / 0.14 | 8,738 / 29,521 |
+| ADI ADuM4160 | Optional full-speed USB isolator on the radio port (variant M) | 7.31 | 5,581 |
+
 ## 6. What this shortlist changes in the open issues
 
 - **#7:** confirm the ESP32-S3-MINI-1 per ADR-0008 (dated second-distributor
   check, FCC integration notes); MDBT50Q is the fallback.
 - **#8:** the codec connects to the ESP32-S3 over I2S and serves the analog
-  radio audio path.
-- **#9:** no separate USB host controller; design the USB host port (connector,
-  VBUS switch, ESD) for the radio's sound card, USB-serial chip and hub.
+  radio audio path in both host modes.
+- **#9:** no separate USB host controller. Design the radio USB port, the USB-C
+  port, the hub and switch routing, the RS-232-tolerant SERIAL-jack mode
+  switching, and jack isolation.
 - **#10 / #11:** use the same buck family in both variants where the input range
   allows, to share layout and the HF harmonic analysis. Budget the module at
-  340 mA peak.
+  340 mA peak and respect the 500 mA USB-C default in wired mode.

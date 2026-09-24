@@ -9,7 +9,7 @@
       "url": "https://www.espressif.com/sites/default/files/documentation/esp32-s3-mini-1_mini-1u_datasheet_en.pdf",
       "file": "esp32s3-mini1-ds.pdf",
       "used_in": [
-        "docs/decisions/ADR-0008-ble-only-esp32-s3.md",
+        "docs/decisions/ADR-0008-host-links-esp32-s3.md",
         "docs/research/core-devices.md"
       ],
       "sha256": "4d4b7f1c17b484c627aaa0f806566c48a6124a8e466c6d21d99210e6eacdef04",
@@ -51,7 +51,7 @@
       "fetch": "manual",
       "notes": "The site blocks scripted downloads; save the PDF from a browser to the cache path.",
       "used_in": [
-        "docs/decisions/ADR-0008-ble-only-esp32-s3.md",
+        "docs/decisions/ADR-0008-host-links-esp32-s3.md",
         "docs/research/core-devices.md"
       ]
     },
@@ -102,7 +102,7 @@
       "url": "https://www.raytac.com/news/ins.php?index_id=101",
       "file": "raytac-mdbt50q-fcc.html",
       "used_in": [
-        "docs/decisions/ADR-0008-ble-only-esp32-s3.md",
+        "docs/decisions/ADR-0008-host-links-esp32-s3.md",
         "docs/research/core-devices.md"
       ],
       "sha256": "70b71413a61c877768de5aaed19945ae21ddce7fa8957039ba7c6657f6f27a50",
@@ -129,7 +129,7 @@
       "url": "https://raw.githubusercontent.com/espressif/esp-usb/bf0f0aa36227cc60ea9d241d14ef62944af5fb94/host/class/uac/usb_host_uac/README.md",
       "file": "esp-usb-uac-readme.md",
       "used_in": [
-        "docs/decisions/ADR-0008-ble-only-esp32-s3.md",
+        "docs/decisions/ADR-0008-host-links-esp32-s3.md",
         "docs/research/core-devices.md"
       ],
       "sha256": "d9cd03095210444e6162dc95d05e40fbd83292b16516a81d85b4e04d9ba7a08c",
@@ -143,7 +143,7 @@
       "url": "https://raw.githubusercontent.com/espressif/esp-usb/bf0f0aa36227cc60ea9d241d14ef62944af5fb94/host/usb/Kconfig",
       "file": "esp-usb-host-kconfig.txt",
       "used_in": [
-        "docs/decisions/ADR-0008-ble-only-esp32-s3.md",
+        "docs/decisions/ADR-0008-host-links-esp32-s3.md",
         "docs/research/core-devices.md"
       ],
       "sha256": "e3ab7801e8e267ce09b6d8a6f52f672a10df902fa6c30e2eb5d3cd1649366af9",
@@ -157,7 +157,7 @@
       "url": "https://raw.githubusercontent.com/espressif/esp-idf/048ec57f228afe2d720542431b849cc10c949a15/examples/bluetooth/bluedroid/classic_bt/hfp_hf/README.md",
       "file": "esp-idf-hfp-hf-readme.md",
       "used_in": [
-        "docs/decisions/ADR-0008-ble-only-esp32-s3.md",
+        "docs/decisions/ADR-0008-host-links-esp32-s3.md",
         "docs/research/core-devices.md"
       ],
       "sha256": "f33f812e42729ca8510a31a1acdab9c304165081830aa373e1025de6eeb15ca9",
@@ -278,19 +278,6 @@
         "docs/research/core-devices.md"
       ],
       "sha256": "3ad23168c4218a64b7c7741608681cb28d36c11a3f240273e166819f2f2b2f20",
-      "retrieved": "2026-09-24"
-    },
-    {
-      "id": "ti-trs3232e-ds",
-      "title": "TRS3232E RS-232 line driver/receiver datasheet",
-      "publisher": "Texas Instruments",
-      "kind": "datasheet",
-      "url": "https://www.ti.com/lit/ds/symlink/trs3232e.pdf",
-      "file": "ti-trs3232e-ds.pdf",
-      "used_in": [
-        "docs/research/core-devices.md"
-      ],
-      "sha256": "ac7524ad04e3e5d168843d48e85f7cf43275a01e64f22899dd1e4f89591b79b6",
       "retrieved": "2026-09-24"
     },
     {
@@ -448,6 +435,84 @@
       ],
       "sha256": "c167cf1e72a5473a4d2c59b6a3c0251498701da05b7785919b9ceaae3b3e02c6",
       "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-trs3221e-ds",
+      "title": "TRS3221E 1-driver/1-receiver RS-232 transceiver datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/trs3221e.pdf",
+      "file": "ti-trs3221e-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "3978592d390b01cc806e335d286836e42003fe8b55156cc01fc37c8c51fd1b6b",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-tmux6219-ds",
+      "title": "TMUX6219 36 V SPDT analog switch datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tmux6219.pdf",
+      "file": "ti-tmux6219-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "216e5fe55ce423e3d2e4702dd88ad203e7550e57d3b306ac7d1f31dae06394c0",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-ts3usb221a-ds",
+      "title": "TS3USB221A USB 2.0 1:2 multiplexer/demultiplexer datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/ts3usb221a.pdf",
+      "file": "ti-ts3usb221a-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "cccebf8c10df605133d24bd3ab3abeb97a19dbf539d3465b53562fc19f7a242e",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-tpd2e2u06-ds",
+      "title": "TPD2E2U06 2-channel ESD protection datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tpd2e2u06.pdf",
+      "file": "ti-tpd2e2u06-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "a133b86ea3d3c3d34667339b92d3b5e98d541d10e9775d63e7cdfa153794f4ed",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "microchip-usb2422-ds",
+      "title": "USB2422 2-port USB 2.0 hub controller datasheet",
+      "publisher": "Microchip",
+      "kind": "datasheet",
+      "url": "https://ww1.microchip.com/downloads/en/DeviceDoc/00001726B.pdf",
+      "file": "microchip-usb2422-ds.pdf",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ],
+      "sha256": "4a9ad71cd6535368f9535d08924dbff9c21c0554d5fbf01cf06ae0d92a44fc0d",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "adi-adum4160-ds",
+      "title": "ADuM4160 full/low-speed USB digital isolator datasheet",
+      "publisher": "Analog Devices",
+      "kind": "datasheet",
+      "url": "https://www.analog.com/media/en/technical-documentation/data-sheets/ADuM4160.pdf",
+      "file": "adi-adum4160-ds.pdf",
+      "fetch": "manual",
+      "notes": "The site blocks scripted downloads; save the PDF from a browser.",
+      "used_in": [
+        "docs/research/core-devices.md"
+      ]
     }
   ]
 }

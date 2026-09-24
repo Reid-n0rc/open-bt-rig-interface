@@ -9,6 +9,16 @@ Generated from [`manifest.json`](manifest.json) by `tools/refs/refs.py index`. D
 
 Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch` to download them; the **Local copy** links work once the cache is populated. See [README.md](README.md).
 
+### adi-adum4160-ds
+
+**ADuM4160 full/low-speed USB digital isolator datasheet** (Analog Devices, datasheet)
+
+- Local copy: [cache/adi-adum4160-ds.pdf](cache/adi-adum4160-ds.pdf)
+- Original: <https://www.analog.com/media/en/technical-documentation/data-sheets/ADuM4160.pdf>
+- Download: manual (the site blocks scripted downloads)
+- Notes: The site blocks scripted downloads; save the PDF from a browser.
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+
 ### adi-ltc4380-ds
 
 **LTC4380 low quiescent current surge stopper datasheet** (Analog Devices, datasheet)
@@ -35,7 +45,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/esp-idf-hfp-hf-readme.md](cache/esp-idf-hfp-hf-readme.md)
 - Original: <https://raw.githubusercontent.com/espressif/esp-idf/048ec57f228afe2d720542431b849cc10c949a15/examples/bluetooth/bluedroid/classic_bt/hfp_hf/README.md>
 - Retrieved: 2026-09-24; SHA-256 `f33f812e42729ca8…`
-- Cited in: [`docs/decisions/ADR-0008-ble-only-esp32-s3.md`](../../docs/decisions/ADR-0008-ble-only-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
 ### esp-usb-host-kconfig
 
@@ -44,7 +54,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/esp-usb-host-kconfig.txt](cache/esp-usb-host-kconfig.txt)
 - Original: <https://raw.githubusercontent.com/espressif/esp-usb/bf0f0aa36227cc60ea9d241d14ef62944af5fb94/host/usb/Kconfig>
 - Retrieved: 2026-09-24; SHA-256 `e3ab7801e8e267ce…`
-- Cited in: [`docs/decisions/ADR-0008-ble-only-esp32-s3.md`](../../docs/decisions/ADR-0008-ble-only-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
 ### esp-usb-uac-readme
 
@@ -53,7 +63,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/esp-usb-uac-readme.md](cache/esp-usb-uac-readme.md)
 - Original: <https://raw.githubusercontent.com/espressif/esp-usb/bf0f0aa36227cc60ea9d241d14ef62944af5fb94/host/class/uac/usb_host_uac/README.md>
 - Retrieved: 2026-09-24; SHA-256 `d9cd03095210444e…`
-- Cited in: [`docs/decisions/ADR-0008-ble-only-esp32-s3.md`](../../docs/decisions/ADR-0008-ble-only-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
 ### esp32-wroom-32e-ds
 
@@ -89,7 +99,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/esp32s3-mini1-ds.pdf](cache/esp32s3-mini1-ds.pdf)
 - Original: <https://www.espressif.com/sites/default/files/documentation/esp32-s3-mini-1_mini-1u_datasheet_en.pdf>
 - Retrieved: 2026-09-24; SHA-256 `4d4b7f1c17b484c6…`
-- Cited in: [`docs/decisions/ADR-0008-ble-only-esp32-s3.md`](../../docs/decisions/ADR-0008-ble-only-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
 ### fcc-2ac7z-espc3mini1
 
@@ -109,7 +119,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://fcc.report/FCC-ID/2AC7Z-ESPS3MINI1/5706883.pdf>
 - Download: manual (the site blocks scripted downloads)
 - Notes: The site blocks scripted downloads; save the PDF from a browser to the cache path.
-- Cited in: [`docs/decisions/ADR-0008-ble-only-esp32-s3.md`](../../docs/decisions/ADR-0008-ble-only-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
 ### fcc-2ahmr-bw16
 
@@ -150,6 +160,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Notes: Rendered by JavaScript; save the page from a browser (print to PDF also works: change the file name to .pdf).
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
+### microchip-usb2422-ds
+
+**USB2422 2-port USB 2.0 hub controller datasheet** (Microchip, datasheet)
+
+- Local copy: [cache/microchip-usb2422-ds.pdf](cache/microchip-usb2422-ds.pdf)
+- Original: <https://ww1.microchip.com/downloads/en/DeviceDoc/00001726B.pdf>
+- Retrieved: 2026-09-24; SHA-256 `4a9ad71cd6535368…`
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+
 ### pico-btstack-license
 
 **pico-sdk BTstack licence for Raspberry Pi products (LICENSE.RP)** (Raspberry Pi / BlueKitchen, license)
@@ -184,7 +203,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/raytac-mdbt50q-fcc.html](cache/raytac-mdbt50q-fcc.html)
 - Original: <https://www.raytac.com/news/ins.php?index_id=101>
 - Retrieved: 2026-09-24; SHA-256 `70b71413a61c8777…`
-- Cited in: [`docs/decisions/ADR-0008-ble-only-esp32-s3.md`](../../docs/decisions/ADR-0008-ble-only-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
 ### ti-iso7721-ds
 
@@ -258,6 +277,24 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `31b8b4e12b86f4e5…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
+### ti-tmux6219-ds
+
+**TMUX6219 36 V SPDT analog switch datasheet** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-tmux6219-ds.pdf](cache/ti-tmux6219-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/tmux6219.pdf>
+- Retrieved: 2026-09-24; SHA-256 `216e5fe55ce423e3…`
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+
+### ti-tpd2e2u06-ds
+
+**TPD2E2U06 2-channel ESD protection datasheet** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-tpd2e2u06-ds.pdf](cache/ti-tpd2e2u06-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/tpd2e2u06.pdf>
+- Retrieved: 2026-09-24; SHA-256 `a133b86ea3d3c3d3…`
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+
 ### ti-tpd4e05u06-ds
 
 **TPD4E05U06 4-channel ESD protection datasheet** (Texas Instruments, datasheet)
@@ -312,11 +349,20 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `663a9ff5bca60864…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
-### ti-trs3232e-ds
+### ti-trs3221e-ds
 
-**TRS3232E RS-232 line driver/receiver datasheet** (Texas Instruments, datasheet)
+**TRS3221E 1-driver/1-receiver RS-232 transceiver datasheet** (Texas Instruments, datasheet)
 
-- Local copy: [cache/ti-trs3232e-ds.pdf](cache/ti-trs3232e-ds.pdf)
-- Original: <https://www.ti.com/lit/ds/symlink/trs3232e.pdf>
-- Retrieved: 2026-09-24; SHA-256 `ac7524ad04e3e5d1…`
+- Local copy: [cache/ti-trs3221e-ds.pdf](cache/ti-trs3221e-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/trs3221e.pdf>
+- Retrieved: 2026-09-24; SHA-256 `3978592d390b01cc…`
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+
+### ti-ts3usb221a-ds
+
+**TS3USB221A USB 2.0 1:2 multiplexer/demultiplexer datasheet** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-ts3usb221a-ds.pdf](cache/ti-ts3usb221a-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/ts3usb221a.pdf>
+- Retrieved: 2026-09-24; SHA-256 `cccebf8c10df6051…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)

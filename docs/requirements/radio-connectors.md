@@ -6,7 +6,8 @@ SPDX-License-Identifier: CC-BY-4.0
 # Radio-side connectors
 
 The radio side of the interface uses **two 3.5 mm TRRS jacks** (AUDIO and
-SERIAL) plus a **USB host port**. The two jacks follow a pinout convention that
+SERIAL) plus a **radio USB port**; the host side has a **USB-C port** (and
+Bluetooth LE). The radio side works the same with either host link. The two jacks follow a pinout convention that
 is already widely used by 3.5 mm TRRS digital-mode interfaces, so **existing
 per-radio cables made for that convention work unchanged**. Keep this pinout
 exactly: changing a contact's function breaks cable compatibility.
@@ -49,29 +50,57 @@ Mode behavior:
   receive levels.
 - **3.3 V out** on ring 2 is off unless selected, and short-circuit protected.
 - The convention selects modes with solder jumpers. **This design selects them
-  in firmware** (analog switches or driver enables), stored in the device
-  configuration and set over the protocol. The contact functions stay as in
-  the table. A mode change never asserts PTT.
+  in firmware**, stored in the device configuration and set over the protocol
+  or the wired control port. The contact functions stay as in the table. A mode
+  change never asserts PTT.
+- **Every mode must survive any cable.** RS-232 levels (up to ±15 V) can appear
+  on tip or ring 1 with the wrong mode selected. The tip and ring 1 paths are
+  therefore routed through high-voltage analog switches (TMUX6219-class, 36 V)
+  or signal relays, and the RS-232 transceiver's drivers go high-impedance when
+  disabled (MAX3243E-class). The logic and CI-V paths add series resistance and
+  clamps as a second line of defense.
 - Baud rates: 4800–115200 ([constraints §7](constraints.md#7-radio-interfaces)).
 
-## USB host port
+## Radio USB port
 
 A **USB-A receptacle** (the radio end of the cable is usually USB-B or
 micro/mini-B). It connects to the radio's own USB port, for radios with a
-built-in USB-serial chip and USB sound card
-([ADR-0008](../decisions/ADR-0008-ble-only-esp32-s3.md)). The interface supplies
+built-in USB-serial chip, with or without a USB sound card
+([ADR-0008](../decisions/ADR-0008-host-links-esp32-s3.md)). The interface supplies
 current-limited 5 V VBUS.
+
+- **Bluetooth mode:** the ESP32-S3 is USB host to the radio's chips.
+- **Wired mode:** the port is switched to the on-board USB hub, so the computer
+  sees the radio's USB-serial chip (and sound card) directly, as if connected
+  by a cable.
 
 When a radio USB sound card is present, audio uses the USB path and the AUDIO
 jack's audio is idle; PTT can still use ring 2 of the AUDIO jack, the radio's
 CAT command, or RTS/DTR on the radio's USB-serial chip.
 
+## USB-C port (host link and power)
+
+A **USB-C receptacle** that is both the wired host link and a 5 V power input
+(5.1 kΩ Rd on CC1 and CC2; no USB PD). It connects to the upstream port of the
+on-board 2-port USB hub. What the computer sees in wired mode:
+
+| Radio | Computer sees |
+|---|---|
+| USB-serial + USB sound card | The radio's USB-serial and sound card, plus the device's control/PTT serial port |
+| USB-serial + analog audio | The radio's USB-serial, the device's USB sound card, and the device's control/PTT serial port |
+| RS-232 / 3.3 V logic / CI-V + analog audio | The device's USB serial port (bridged to the SERIAL jack, RTS/DTR native), USB sound card, and control/PTT serial port |
+
+A USB-C charger with no data connection powers the device and leaves it in
+Bluetooth mode.
+
 ## Isolation and protection
 
-- Variant M, and variant R when powered separately from the radio, isolate the
-  radio side ([constraints §6](constraints.md#6-safety-and-fail-safe)): audio
-  transformers, isolated PTT closure, digital isolators on the SERIAL jack. The
-  jacks' sleeves are then the isolated radio-side ground.
+- The AUDIO and SERIAL jacks are isolated on variant M and **whenever the USB-C
+  data link is used** ([constraints §6](constraints.md#6-safety-and-fail-safe)):
+  audio transformers, isolated PTT closure, digital isolators on the SERIAL jack.
+  The jacks' sleeves are then the isolated radio-side ground.
+- The radio USB port isn't isolated by default; a full-speed USB isolator
+  (ADuM4160-class) is a fitting option, recommended for variant M.
 - Every contact gets ESD protection and RF filtering (ferrite plus a small
   capacitor to its sleeve) at the jack
   ([constraints §5](constraints.md#5-rf-environment)).
