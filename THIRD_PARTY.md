@@ -130,6 +130,9 @@ repository. Licenses were verified from each LICENSE file on 2026-09-24.
 | Mobilinkd TNC3 firmware | https://github.com/mobilinkd/tnc3-firmware | GPL-3.0 | BLE + audio interface reference |
 | arduino-audio-tools | https://github.com/pschatzmann/arduino-audio-tools | GPL-3.0 | Microcontroller audio streaming reference |
 | Linux kernel `drivers/usb/serial/ftdi_sio.h` | https://github.com/torvalds/linux/blob/f2c53ea949c5048f96b3dbb5a5ee7131ce4ff2de/drivers/usb/serial/ftdi_sio.h | GPL-2.0 | FTDI vendor request codes (modem control) checked against esp-usb for #9; nothing copied |
+| Linux kernel (`cdc-acm`, `snd-usb-audio`) | https://github.com/torvalds/linux (v6.16, `038d61fd`) | GPL-2.0 | Host driver behavior for USB CDC-ACM line state and USB Audio Class versions (#6) |
+| BlueZ | https://github.com/bluez/bluez (5.87, `65d11ede`) | GPL-2.0 / LGPL-2.1 (`COPYING`, `COPYING.LIB`) | L2CAP LE CoC socket API and GATT D-Bus docs (#6) |
+| Linux kernel USB network drivers (`drivers/net/usb/usbnet.c`, `cdc_ncm.c`, commit 038d61fd6422) | https://github.com/torvalds/linux | GPL-2.0 | CDC-NCM host behavior and interface naming (`usbN` / `ethN`) for the protocol's USB network transport (#13); nothing copied |
 
 Add more rows as sources are consulted. Record unlicensed sources here too,
 marked "no license".

@@ -22,7 +22,7 @@ interface drives the contact toward the radio.
 
 | Contact | Signal | Direction | Electrical |
 |---|---|---|---|
-| Tip | RX audio (radio's audio/speaker/data output) | In | Line level, AC-coupled, high impedance. Provide about 19 dB of switchable attenuation, or an equivalent input gain range, for radios with a hot speaker output (the convention uses a 100 kΩ / 12 kΩ divider that can be bypassed). Maximum input level **(verify)** from the radio table (#5). |
+| Tip | RX audio (radio's audio/speaker/data output) | In | Line level, AC-coupled, high impedance. Provide about 19 dB of switchable attenuation, or an equivalent input gain range, for radios with a hot speaker output (the convention uses a 100 kΩ / 12 kΩ divider that can be bypassed). Documented line outputs reach about 0.3–1.2 Vpp; speaker and headphone outputs are hotter ([`radio-interfaces.md`](../research/radio-interfaces.md#audio-and-ptt-electrical-levels)). Maximum input level **(verify)** by measurement. |
 | Ring 1 | TX audio (radio's mic/data input) | Out | Line level, AC-coupled, up to about 2.5 V peak-to-peak, adjustable down to microphone level. |
 | Ring 2 | PTT | Out | **Closure to sleeve (ground), active = keyed.** The radio pulls the line up. The convention uses an open-collector NPN rated for high voltage; this design uses an isolated photo-MOSFET closure, which is electrically compatible. Hardware default off ([constraints §6](constraints.md#6-safety-and-fail-safe)). |
 | Sleeve | Ground | — | Radio signal ground; reference for tip, ring 1 and ring 2. |

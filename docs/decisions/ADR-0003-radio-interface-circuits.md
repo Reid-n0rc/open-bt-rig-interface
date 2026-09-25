@@ -33,7 +33,7 @@ Maintainer decisions and directions made while this issue was open
 2. **No external PTT timer** (2026-09-25, superseding a 2026-09-24 request
    for a hardware PTT timer): lock-up protection is the ESP32-S3's internal
    watchdogs, and the maximum TX time is a firmware setting (default
-   5 minutes, no upper limit; protocol PR #58). An external TPL5111 timer and
+   5 minutes, no upper limit, can be disabled; [ADR-0007](ADR-0007-protocol.md)). An external TPL5111 timer and
    TPS3430 window watchdog, proposed earlier in this PR, are rejected: no
    external PTT timer is wanted, and they cost money.
 3. **No 5 V rail**: one 3.3 V buck synchronized to a 2.304 MHz master clock

@@ -2,6 +2,130 @@
   "_comment": "Source of truth for cited third-party documents. Edit this file, then run: python3 tools/refs/refs.py fetch && python3 tools/refs/refs.py index. Copies live in docs/references/cache/ (gitignored, never committed). See docs/references/README.md.",
   "references": [
     {
+      "id": "crc-catalogue-16",
+      "title": "Catalogue of parametrised CRC algorithms: 16-bit CRCs (CRC-16/IBM-3740)",
+      "publisher": "Greg Cook (RevEng)",
+      "kind": "web",
+      "url": "https://reveng.sourceforge.io/crc-catalogue/16.htm",
+      "file": "crc-catalogue-16.html",
+      "used_in": [
+        "protocol/SPEC.md"
+      ],
+      "sha256": "9bcbee0db3969a581c27e78be00eb75824c9d95d28684e46aaae6ecb6f6e0896",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "cobs-paper",
+      "title": "Consistent Overhead Byte Stuffing (IEEE/ACM Transactions on Networking, 1999)",
+      "publisher": "Stuart Cheshire, Mary Baker",
+      "kind": "standard",
+      "url": "http://www.stuartcheshire.org/papers/COBSforToN.pdf",
+      "file": "cobs-paper.pdf",
+      "used_in": [
+        "protocol/SPEC.md",
+        "docs/decisions/ADR-0007-protocol.md"
+      ],
+      "sha256": "f6500d18b463ac266b2b2146a09a76d3db92f2730f416564b7917af5180fda19",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "esp-usb-device-s3",
+      "title": "ESP-USB programming guide: USB device stack (ESP32-S3), endpoint limits and supported classes",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://docs.espressif.com/projects/esp-usb/en/latest/esp32s3/usb_device.html",
+      "file": "esp-usb-device-s3.html",
+      "used_in": [
+        "protocol/SPEC.md",
+        "docs/decisions/ADR-0007-protocol.md",
+        "docs/architecture.md"
+      ],
+      "sha256": "015e2a39dc00600bc2894e5d25c4163211d7bfb7855fd5a680e4f62a00f2b134",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "tinyusb-usbd-h",
+      "title": "TinyUSB src/device/usbd.h (CDC, CDC-NCM and UAC1 descriptor templates)",
+      "publisher": "TinyUSB (hathach)",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/hathach/tinyusb/dae3f9a366bfcddbf9dcf1b48d7500286a849539/src/device/usbd.h",
+      "file": "tinyusb-usbd.h",
+      "used_in": [
+        "protocol/SPEC.md",
+        "docs/decisions/ADR-0007-protocol.md"
+      ],
+      "sha256": "48040a0ea812b5f099bab557c81aa83fb9386d7eb2dfd814b1eba9aa2468b298",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "linux-cdc-ncm",
+      "title": "Linux drivers/net/usb/cdc_ncm.c (CDC-NCM host driver; GPL, facts only)",
+      "publisher": "Linux kernel",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/038d61fd642278bab63ee8ef722c50d10ab01e8f/drivers/net/usb/cdc_ncm.c",
+      "file": "linux-cdc-ncm.c",
+      "used_in": [
+        "protocol/SPEC.md",
+        "docs/decisions/ADR-0007-protocol.md"
+      ],
+      "sha256": "10a1af035e2d7e6173b491eb47a509268233893800bc6850f5ca5641325b4452",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "linux-usbnet",
+      "title": "Linux drivers/net/usb/usbnet.c (interface naming usbN/ethN; GPL, facts only)",
+      "publisher": "Linux kernel",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/038d61fd642278bab63ee8ef722c50d10ab01e8f/drivers/net/usb/usbnet.c",
+      "file": "linux-usbnet.c",
+      "used_in": [
+        "protocol/SPEC.md"
+      ],
+      "sha256": "9fc89a999b418872fdad8a30346b95bc34fa21fe32d68eea6f3a69785120da1f",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "android-kconfig-cdc-ncm",
+      "title": "Android kernel/configs commit: Android U requires CONFIG_USB_NET_CDC_NCM=y",
+      "publisher": "Android Open Source Project",
+      "kind": "sdk",
+      "url": "https://android.googlesource.com/kernel/configs/+/659aee1b688f245f4dafe4afe7904ed9cd91fbb0",
+      "file": "android-kconfig-cdc-ncm.html",
+      "used_in": [
+        "protocol/SPEC.md",
+        "docs/decisions/ADR-0007-protocol.md"
+      ],
+      "sha256": "202235b14af01e47e8e5a9c8719e5c5f7ecfa77a9aa877fac2c41302ccf76ff1",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "apple-forum-802640",
+      "title": "Apple Developer Forums 802640: Custom USB network device driver on iPhone (Quinn, DTS, Oct 2025)",
+      "publisher": "Apple",
+      "kind": "web",
+      "url": "https://developer.apple.com/forums/thread/802640",
+      "file": "apple-forum-802640.html",
+      "used_in": [
+        "protocol/SPEC.md",
+        "docs/decisions/ADR-0007-protocol.md"
+      ],
+      "sha256": "239efd645fae36e90c1a1bfea925ac6c820b55d6d7e37027d8778ecac7692366",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "jordemort-android-cdc",
+      "title": "Why Android can't use CDC Ethernet (2023-05-31)",
+      "publisher": "Jordan Webb",
+      "kind": "web",
+      "url": "https://jordemort.dev/blog/why-android-cant-use-cdc-ethernet/",
+      "file": "jordemort-android-cdc.html",
+      "used_in": [
+        "protocol/SPEC.md"
+      ],
+      "sha256": "0d4e7dfaa9e8f14ca4ef1eeeb03a13c6a314d9b063bfeb4cafa9d5f92c9f8520",
+      "retrieved": "2026-09-24"
+    },
+    {
       "id": "esp32s3-mini1-ds",
       "title": "ESP32-S3-MINI-1 & ESP32-S3-MINI-1U datasheet",
       "publisher": "Espressif Systems",
@@ -9,10 +133,14 @@
       "url": "https://www.espressif.com/sites/default/files/documentation/esp32-s3-mini-1_mini-1u_datasheet_en.pdf",
       "file": "esp32s3-mini1-ds.pdf",
       "used_in": [
+        "docs/compliance/fcc.md",
+        "docs/decisions/ADR-0002-audio-codec.md",
         "docs/decisions/ADR-0008-host-links-esp32-s3.md",
+        "docs/research/audio-codec.md",
         "docs/research/core-devices.md",
         "docs/research/module-selection.md",
-        "docs/compliance/fcc.md"
+        "docs/research/power-automotive.md",
+        "docs/research/power-radio-usbc.md"
       ],
       "sha256": "4d4b7f1c17b484c627aaa0f806566c48a6124a8e466c6d21d99210e6eacdef04",
       "retrieved": "2026-09-24"
@@ -25,7 +153,8 @@
       "url": "https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf",
       "file": "esp32s3-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/host-compatibility.md"
       ],
       "sha256": "2d5a7cb7fd559d8d972bd88db32669c0196d23f22d7afaafb0f63d099b589a3f",
       "retrieved": "2026-09-24"
@@ -38,9 +167,11 @@
       "url": "https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32s3/esp-hardware-design-guidelines-en-master-esp32s3.pdf",
       "file": "esp32s3-hw-design.pdf",
       "used_in": [
+        "docs/compliance/fcc.md",
+        "docs/decisions/ADR-0002-audio-codec.md",
+        "docs/research/audio-codec.md",
         "docs/research/core-devices.md",
-        "docs/research/module-selection.md",
-        "docs/compliance/fcc.md"
+        "docs/research/module-selection.md"
       ],
       "sha256": "2ee5e2e340c2b95c13bd37b611596e1c24023b179bd21930e6f6aa7e2a8a542b",
       "retrieved": "2026-09-24"
@@ -244,7 +375,11 @@
       "url": "https://www.ti.com/lit/ds/symlink/tlv320aic3104.pdf",
       "file": "ti-tlv320aic3104-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/decisions/ADR-0002-audio-codec.md",
+        "docs/research/audio-codec.md",
+        "docs/research/core-devices.md",
+        "docs/research/power-automotive.md",
+        "docs/research/power-radio-usbc.md"
       ],
       "sha256": "17ce38b2b2b35e44fedaad6c44fcb9c2133722dccfd5ef80e9ec2e3b8f281e9a",
       "retrieved": "2026-09-24"
@@ -257,6 +392,8 @@
       "url": "https://www.ti.com/lit/ds/symlink/tlv320aic3104-q1.pdf",
       "file": "ti-tlv320aic3104-q1-ds.pdf",
       "used_in": [
+        "docs/decisions/ADR-0002-audio-codec.md",
+        "docs/research/audio-codec.md",
         "docs/research/core-devices.md"
       ],
       "sha256": "6a9633798673cdb85d441a708ef684f5ffc8c7f6661448fea4a68fcc889835c4",
@@ -270,6 +407,8 @@
       "url": "https://www.ti.com/lit/ds/symlink/tlv320aic3204.pdf",
       "file": "ti-tlv320aic3204-ds.pdf",
       "used_in": [
+        "docs/decisions/ADR-0002-audio-codec.md",
+        "docs/research/audio-codec.md",
         "docs/research/core-devices.md"
       ],
       "sha256": "31b8b4e12b86f4e5c44a125ef671bac9a9d1dd6f20e6c37986da4f2945887ccd",
@@ -283,6 +422,8 @@
       "url": "https://www.bourns.com/pdfs/LMNPLP.pdf",
       "file": "bourns-lm-np-ds.pdf",
       "used_in": [
+        "docs/decisions/ADR-0002-audio-codec.md",
+        "docs/research/audio-codec.md",
         "docs/research/core-devices.md"
       ],
       "sha256": "3ad23168c4218a64b7c7741608681cb28d36c11a3f240273e166819f2f2b2f20",
@@ -349,8 +490,8 @@
       "url": "https://www.ti.com/lit/ds/symlink/tps3430.pdf",
       "file": "ti-tps3430-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md",
-        "docs/decisions/ADR-0003-radio-interface-circuits.md"
+        "docs/decisions/ADR-0003-radio-interface-circuits.md",
+        "docs/research/core-devices.md"
       ],
       "sha256": "f9887a28788bac6ae6743e211ae50dddd809e3ff7bf0d6a3447c8d71f62c6b4d",
       "retrieved": "2026-09-24"
@@ -363,7 +504,9 @@
       "url": "https://www.ti.com/lit/ds/symlink/tps2121.pdf",
       "file": "ti-tps2121-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/decisions/ADR-0005-power-radio-usbc.md",
+        "docs/research/core-devices.md",
+        "docs/research/power-radio-usbc.md"
       ],
       "sha256": "b2f5950f596dc2c4ca33e4ebac27fd35e4dcc68ea63e173466123e1118e91a06",
       "retrieved": "2026-09-24"
@@ -376,7 +519,8 @@
       "url": "https://www.ti.com/lit/ds/symlink/tps62933.pdf",
       "file": "ti-tps62933-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/power-radio-usbc.md"
       ],
       "sha256": "16ec2eac43c7374eb9e7edd7df7bdb24de6862f695e1582c68716ced4820e5f6",
       "retrieved": "2026-09-24"
@@ -389,7 +533,8 @@
       "url": "https://www.ti.com/lit/ds/symlink/lm74700-q1.pdf",
       "file": "ti-lm74700-q1-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/power-automotive.md"
       ],
       "sha256": "e16b3a8c0023201fafa5825436f5f2dd6f885b92b84e65602b3f50d741c58b6f",
       "retrieved": "2026-09-24"
@@ -402,7 +547,8 @@
       "url": "https://www.analog.com/media/en/technical-documentation/data-sheets/ltc4380.pdf",
       "file": "adi-ltc4380-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/power-automotive.md"
       ],
       "fetch": "manual",
       "notes": "The site blocks scripted downloads; save the PDF from a browser."
@@ -415,7 +561,8 @@
       "url": "https://www.ti.com/lit/ds/symlink/lmq62440-q1.pdf",
       "file": "ti-lmq62440-q1-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/power-automotive.md"
       ],
       "sha256": "6c888eeb219d47fb0c13ea4b53e6412cae876991c01e4ec6256c7789db8e522a",
       "retrieved": "2026-09-24"
@@ -428,7 +575,10 @@
       "url": "https://www.ti.com/lit/ds/symlink/tps7a20.pdf",
       "file": "ti-tps7a20-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/decisions/ADR-0002-audio-codec.md",
+        "docs/research/audio-codec.md",
+        "docs/research/core-devices.md",
+        "docs/research/power-radio-usbc.md"
       ],
       "sha256": "663a9ff5bca608643e711652cba00e7b8bf955c0993a9b86fa108d24d58b8ddc",
       "retrieved": "2026-09-24"
@@ -510,9 +660,10 @@
       "url": "https://ww1.microchip.com/downloads/en/DeviceDoc/00001726B.pdf",
       "file": "microchip-usb2422-ds.pdf",
       "used_in": [
+        "docs/decisions/ADR-0003-radio-interface-circuits.md",
         "docs/research/core-devices.md",
-        "docs/research/radio-interface-circuits.md",
-        "docs/decisions/ADR-0003-radio-interface-circuits.md"
+        "docs/research/power-radio-usbc.md",
+        "docs/research/radio-interface-circuits.md"
       ],
       "sha256": "4a9ad71cd6535368f9535d08924dbff9c21c0554d5fbf01cf06ae0d92a44fc0d",
       "retrieved": "2026-09-24"
@@ -525,11 +676,11 @@
       "url": "https://www.analog.com/media/en/technical-documentation/data-sheets/ADuM4160.pdf",
       "file": "adi-adum4160-ds.pdf",
       "fetch": "manual",
-      "notes": "The site blocks scripted downloads; save the PDF from a browser. #9 read Rev. D from a mirror (https://download.mikroe.com/documents/datasheets/ADuM4160.pdf); check against the current revision.",
+      "notes": "The site blocks scripted downloads; save the PDF from a browser.",
       "used_in": [
+        "docs/decisions/ADR-0003-radio-interface-circuits.md",
         "docs/research/core-devices.md",
-        "docs/research/radio-interface-circuits.md",
-        "docs/decisions/ADR-0003-radio-interface-circuits.md"
+        "docs/research/radio-interface-circuits.md"
       ]
     },
     {
@@ -568,7 +719,8 @@
       "url": "https://jlcpcb.com/help/article/pcb-assembly-faqs",
       "file": "jlcpcb-pcba-faqs.html",
       "used_in": [
-        "docs/requirements/pcb-fabrication.md"
+        "docs/requirements/pcb-fabrication.md",
+        "docs/research/power-automotive.md"
       ],
       "sha256": "5ae13211fa1d98ebec23c54a101a8fa7bf9434fcf3e83da7b6af21b5ebd8bd09",
       "retrieved": "2026-09-24"
@@ -594,8 +746,8 @@
       "url": "https://www.espressif.com/sites/default/files/ESP32-S3-MINI-1%20FCC%20Certification.pdf",
       "file": "esp32s3-mini1-fcc-grant.pdf",
       "used_in": [
-        "docs/research/module-selection.md",
-        "docs/compliance/fcc.md"
+        "docs/compliance/fcc.md",
+        "docs/research/module-selection.md"
       ],
       "sha256": "0344102bc60709abc518d532b2cadafa5d3fef3f7f8981cf33a7c5ac10a5d768",
       "retrieved": "2026-09-24"
@@ -608,8 +760,8 @@
       "url": "https://www.espressif.com/sites/default/files/ESP32-S3-MINI-1%20IC%20Certification.pdf",
       "file": "esp32s3-mini1-ised-cert.pdf",
       "used_in": [
-        "docs/research/module-selection.md",
-        "docs/compliance/fcc.md"
+        "docs/compliance/fcc.md",
+        "docs/research/module-selection.md"
       ],
       "sha256": "77618c1572f7f4e2a819fb7d022bfd081d755140c37117c50a437ef3c11a437a",
       "retrieved": "2026-09-24"
@@ -624,8 +776,8 @@
       "fetch": "manual",
       "notes": "The site (and the FCC EAS at apps.fcc.gov/oetcf/eas) blocks scripted access; save the page, and the User Manual exhibit, from a browser.",
       "used_in": [
-        "docs/research/module-selection.md",
-        "docs/compliance/fcc.md"
+        "docs/compliance/fcc.md",
+        "docs/research/module-selection.md"
       ]
     },
     {
@@ -638,8 +790,8 @@
       "fetch": "manual",
       "notes": "Secondary copy of the FCC exhibit; the site blocks scripted downloads. Prefer the User Manual exhibit on the FCC filing list when it can be opened.",
       "used_in": [
-        "docs/research/module-selection.md",
-        "docs/compliance/fcc.md"
+        "docs/compliance/fcc.md",
+        "docs/research/module-selection.md"
       ]
     },
     {
@@ -821,8 +973,8 @@
       "fetch": "manual",
       "notes": "apps.fcc.gov blocks scripted access; open it in a browser and save the page (and the D03 and D04 attachments as PDF).",
       "used_in": [
-        "docs/research/module-selection.md",
-        "docs/compliance/fcc.md"
+        "docs/compliance/fcc.md",
+        "docs/research/module-selection.md"
       ]
     },
     {
@@ -862,6 +1014,1849 @@
         "docs/compliance/fcc.md"
       ],
       "sha256": "d67001d0dc491931674b4dcefca686fc87fe31410d93af81045b2a73a24a395a",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ms-usbser",
+      "title": "USB serial driver (Usbser.sys)",
+      "publisher": "Microsoft",
+      "kind": "web",
+      "url": "https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-driver-installation-based-on-compatible-ids",
+      "file": "ms-usbser.html",
+      "notes": "Page dated 2025-06-11.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "9ef39679004812bc0c5c862a70e8ae6b7000767d2865373cdd01baad4a15f6bc",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ms-usb-classes",
+      "title": "USB device class drivers included in Windows",
+      "publisher": "Microsoft",
+      "kind": "web",
+      "url": "https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/supported-usb-classes",
+      "file": "ms-usb-classes.html",
+      "notes": "Page dated 2025-06-11.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "56057fe32fe8879f4cfe4f58b9f99767cda9a5b5e88697946db9e37dbbd47c60",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ms-usbaudio2",
+      "title": "USB Audio 2.0 drivers (usbaudio2.sys)",
+      "publisher": "Microsoft",
+      "kind": "web",
+      "url": "https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/usb-2-0-audio-drivers",
+      "file": "ms-usbaudio2.html",
+      "notes": "Page dated 2025-10-27.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "3fb2b2a7ad3b06b00dc9919130213428fdd0ddfeccd41006ebed9e60a79919d0",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ms-usbccgp",
+      "title": "USB generic parent driver (Usbccgp.sys)",
+      "publisher": "Microsoft",
+      "kind": "web",
+      "url": "https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-common-class-generic-parent-driver",
+      "file": "ms-usbccgp.html",
+      "notes": "Page dated 2025-10-31.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "f03bad93d808df7612c069e6fe3e2e575a64260375d348dc153bb448dd64dcbe",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ms-audio-modes",
+      "title": "Audio signal processing modes",
+      "publisher": "Microsoft",
+      "kind": "web",
+      "url": "https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/audio-signal-processing-modes",
+      "file": "ms-audio-modes.html",
+      "notes": "Page dated 2025-03-26.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "af4d28f756a43308b6fdae928e1a5293476f4b22df5027c7e9a5df12e42ea964",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ms-voice-clarity",
+      "title": "Announcing Windows 11 Insider Preview Build 26040 (Voice Clarity)",
+      "publisher": "Microsoft (Windows Insider blog)",
+      "kind": "web",
+      "url": "https://blogs.windows.com/windows-insider/2024/01/26/announcing-windows-11-insider-preview-build-26040-canary-channel/",
+      "file": "ms-voice-clarity.html",
+      "notes": "Blog post dated 2024-01-26.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "685408de0a1f3389d040f2b04ac03d2e59df86b7600c7083ca29471e9eabe82f",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ms-winrt-serialdevice",
+      "title": "Windows.Devices.SerialCommunication.SerialDevice class",
+      "publisher": "Microsoft",
+      "kind": "web",
+      "url": "https://learn.microsoft.com/en-us/uwp/api/windows.devices.serialcommunication.serialdevice",
+      "file": "ms-winrt-serialdevice.html",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "f44dfc3b63e2a998c887927910cdf0ccc799cbb98a9ca571508ce1957a583857",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ms-winrt-bluetooth",
+      "title": "Windows.Devices.Bluetooth namespace",
+      "publisher": "Microsoft",
+      "kind": "web",
+      "url": "https://learn.microsoft.com/en-us/uwp/api/windows.devices.bluetooth",
+      "file": "ms-winrt-bluetooth.html",
+      "notes": "Checked 2026-09-24 for LE L2CAP CoC classes: none listed.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "38864ddd174384803479c3ef07a063e76879cebf0217b0b0b871fb071b413563",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ms-winrt-ble-connparams",
+      "title": "BluetoothLEPreferredConnectionParameters class",
+      "publisher": "Microsoft",
+      "kind": "web",
+      "url": "https://learn.microsoft.com/en-us/uwp/api/windows.devices.bluetooth.bluetoothlepreferredconnectionparameters",
+      "file": "ms-winrt-ble-connparams.html",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "be106c1f434c0bd99ca2bfa365763de01166de783dd22eb3fec735e607e6ce94",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ms-winrt-ble-phy",
+      "title": "BluetoothLEConnectionPhy class",
+      "publisher": "Microsoft",
+      "kind": "web",
+      "url": "https://learn.microsoft.com/en-us/uwp/api/windows.devices.bluetooth.bluetoothleconnectionphy",
+      "file": "ms-winrt-ble-phy.html",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "d20b17e2fc5e2673ffcc3329562bdc6c0caa294c4bf929379871091bed77942b",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ms-winrt-gatt-maxpdu",
+      "title": "GattSession.MaxPduSize property",
+      "publisher": "Microsoft",
+      "kind": "web",
+      "url": "https://learn.microsoft.com/en-us/uwp/api/windows.devices.bluetooth.genericattributeprofile.gattsession.maxpdusize",
+      "file": "ms-winrt-gatt-maxpdu.html",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "55d26a23a17172ca8382d2e89001dcaf37bc94f4b6d5d87cafe736554611baa8",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ms-le-audio",
+      "title": "Bluetooth Low Energy (LE) Audio (Windows drivers)",
+      "publisher": "Microsoft",
+      "kind": "web",
+      "url": "https://learn.microsoft.com/en-us/windows-hardware/drivers/bluetooth/bluetooth-low-energy-audio",
+      "file": "ms-le-audio.html",
+      "notes": "Page dated 2025-05-05.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "2c95878fe24d3d753c9ee576403c2c42576f2299f706605dcb06b625a8718895",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "apple-tn3190",
+      "title": "TN3190: USB audio device design considerations",
+      "publisher": "Apple",
+      "kind": "web",
+      "url": "https://developer.apple.com/documentation/technotes/tn3190-usb-audio-device-design-considerations",
+      "file": "apple-tn3190.json",
+      "fetch": "manual",
+      "notes": "First published 2025-10-07; obsoletes TN2274. The page is rendered by JavaScript: save the JSON from https://developer.apple.com/tutorials/data/documentation/technotes/tn3190-usb-audio-device-design-considerations.json to the cache path.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ]
+    },
+    {
+      "id": "apple-adg",
+      "title": "Accessory Design Guidelines for Apple Devices, Release R31",
+      "publisher": "Apple",
+      "kind": "standard",
+      "url": "https://developer.apple.com/accessories/Accessory-Design-Guidelines.pdf",
+      "file": "apple-adg.pdf",
+      "notes": "Release R31, pages dated 2026-09-21. Section 58 covers Bluetooth LE.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "b631b8b25d6b4fba85f90dff494a7a7edc9996e357cbc97093aedc9d9bd6f2c9",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "apple-forum-772812",
+      "title": "Developer forums thread 772812: ESP32 USB-C to iPhone 16 USB-C communication (DTS replies, January 2025)",
+      "publisher": "Apple Developer Forums",
+      "kind": "web",
+      "url": "https://developer.apple.com/forums/thread/772812",
+      "file": "apple-forum-772812.html",
+      "fetch": "manual",
+      "notes": "Replies by Apple DTS engineers (Quinn \"The Eskimo!\", Kevin Elliott), January 2025. Rendered by JavaScript; save the page from a browser.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ]
+    },
+    {
+      "id": "apple-forum-747847",
+      "title": "Developer forums thread 747847: Working around the lack of USB FTDI (DTS reply, June 2026)",
+      "publisher": "Apple Developer Forums",
+      "kind": "web",
+      "url": "https://developer.apple.com/forums/thread/747847",
+      "file": "apple-forum-747847.html",
+      "fetch": "manual",
+      "notes": "Reply by Apple DTS engineer Kevin Elliott, June 2026. Rendered by JavaScript; save the page from a browser.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ]
+    },
+    {
+      "id": "apple-forum-770717",
+      "title": "Developer forums thread 770717: Core Bluetooth throughput issues (DTS replies, December 2024)",
+      "publisher": "Apple Developer Forums",
+      "kind": "web",
+      "url": "https://developer.apple.com/forums/thread/770717",
+      "file": "apple-forum-770717.html",
+      "fetch": "manual",
+      "notes": "Replies by Apple DTS engineer Argun Tekant, December 2024. Rendered by JavaScript; save the page from a browser.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ]
+    },
+    {
+      "id": "apple-cb-openl2cap",
+      "title": "CBPeripheral.openL2CAPChannel(_:)",
+      "publisher": "Apple",
+      "kind": "web",
+      "url": "https://developer.apple.com/documentation/corebluetooth/cbperipheral/openl2capchannel(_:)",
+      "file": "apple-cb-openl2cap.json",
+      "fetch": "manual",
+      "notes": "Availability: iOS/iPadOS 11.0, macOS 10.14. Rendered by JavaScript: save https://developer.apple.com/tutorials/data/documentation/corebluetooth/cbperipheral/openl2capchannel(_:).json",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ]
+    },
+    {
+      "id": "apple-cb-background",
+      "title": "Core Bluetooth Programming Guide: Core Bluetooth background processing for iOS apps",
+      "publisher": "Apple",
+      "kind": "web",
+      "url": "https://developer.apple.com/library/archive/documentation/NetworkingInternetWeb/Conceptual/CoreBluetooth_concepts/CoreBluetoothBackgroundProcessingForIOSApps/PerformingTasksWhileYourAppIsInTheBackground.html",
+      "file": "apple-cb-background.html",
+      "notes": "Archive document, revision 2013-09-18.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "7bfe22aaf560e7b247ab21da931ad39db8dd20272fd79b4885d7b640ee01dc6a",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "apple-avaudiosession-measurement",
+      "title": "AVAudioSession.Mode.measurement",
+      "publisher": "Apple",
+      "kind": "web",
+      "url": "https://developer.apple.com/documentation/avfaudio/avaudiosession/mode-swift.struct/measurement",
+      "file": "apple-avaudiosession-measurement.json",
+      "fetch": "manual",
+      "notes": "Rendered by JavaScript: save https://developer.apple.com/tutorials/data/documentation/avfaudio/avaudiosession/mode-swift.struct/measurement.json",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ]
+    },
+    {
+      "id": "apple-voice-processing",
+      "title": "AVAudioIONode.setVoiceProcessingEnabled(_:)",
+      "publisher": "Apple",
+      "kind": "web",
+      "url": "https://developer.apple.com/documentation/avfaudio/avaudioionode/setvoiceprocessingenabled(_:)",
+      "file": "apple-voice-processing.json",
+      "fetch": "manual",
+      "notes": "Availability: iOS 13, macOS 10.15. Rendered by JavaScript: save https://developer.apple.com/tutorials/data/documentation/avfaudio/avaudioionode/setvoiceprocessingenabled(_:).json",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ]
+    },
+    {
+      "id": "apple-iphone-usbc",
+      "title": "Charge and connect with the USB-C connector on your iPhone",
+      "publisher": "Apple",
+      "kind": "web",
+      "url": "https://support.apple.com/en-us/105099",
+      "file": "apple-iphone-usbc.html",
+      "notes": "Published 2026-09-17.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "0ac71bcc443e590449a89e167e70a947de787ff4a5b0412d4e61b497d841f460",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "apple-ipad-usbc",
+      "title": "Charge and connect with the USB-C port on your iPad",
+      "publisher": "Apple",
+      "kind": "web",
+      "url": "https://support.apple.com/en-us/108894",
+      "file": "apple-ipad-usbc.html",
+      "notes": "Published 2026-03-10.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "3e5e90d9e44d32715daadd6de1f823d64c11f7cc464e4f4795fc50b25152506f",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "android-usb-audio",
+      "title": "USB digital audio (AOSP)",
+      "publisher": "Google (Android Open Source Project)",
+      "kind": "web",
+      "url": "https://source.android.com/docs/core/audio/usb",
+      "file": "android-usb-audio.html",
+      "notes": "Last updated 2025-02-27.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "2fc839d19515f25e8848381c0dc3975431cd9ba160e5aee8e845695d2a8d1515",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "android-cdd-16",
+      "title": "Android 16 Compatibility Definition Document",
+      "publisher": "Google (Android Open Source Project)",
+      "kind": "standard",
+      "url": "https://source.android.com/docs/compatibility/16/android-16-cdd",
+      "file": "android-cdd-16.html",
+      "notes": "Sections 5.4.2, 5.11, 7.7.2, 7.8.2.2.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "a7f8a1d64cacbc30fb76e107fc9b380247f99d49469c48ee980d739f94f98b28",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "android-cdd-13",
+      "title": "Android 13 Compatibility Definition Document",
+      "publisher": "Google (Android Open Source Project)",
+      "kind": "standard",
+      "url": "https://source.android.com/docs/compatibility/13/android-13-cdd",
+      "file": "android-cdd-13.html",
+      "notes": "Same USB host and voice-recognition capture clauses as the Android 16 CDD (checked 2026-09-24).",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "35a15e91b35531c5a53715f2afb8c754bd16d6d537b740a1213ec3952a3a20d0",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "android-usb-host",
+      "title": "USB host overview (Android developers)",
+      "publisher": "Google",
+      "kind": "web",
+      "url": "https://developer.android.com/develop/connectivity/usb/host",
+      "file": "android-usb-host.html",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "8dc77191c028ba46d643484d3d3c530301da652d8fca108dd7f08f2d0523ddcd",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "android-bluetoothdevice",
+      "title": "android.bluetooth.BluetoothDevice API reference",
+      "publisher": "Google",
+      "kind": "web",
+      "url": "https://developer.android.com/reference/android/bluetooth/BluetoothDevice",
+      "file": "android-bluetoothdevice.html",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "604c67b0ac88c2e95ffbad189d5dadf66863b48383b7222a16fb8e76a4c8a4d5",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "android-bluetoothgatt",
+      "title": "android.bluetooth.BluetoothGatt API reference",
+      "publisher": "Google",
+      "kind": "web",
+      "url": "https://developer.android.com/reference/android/bluetooth/BluetoothGatt",
+      "file": "android-bluetoothgatt.html",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "0b5bb6393dcca37507f728fd2c25c549e19f9fca3448eb550d4fba50460094da",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "android-fgs-types",
+      "title": "Foreground service types (Android developers)",
+      "publisher": "Google",
+      "kind": "web",
+      "url": "https://developer.android.com/develop/background-work/services/fgs/service-types",
+      "file": "android-fgs-types.html",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "5bc14643c097959d92211c40466c7f1ef6c091c86b0bc62b7ca1ae0e8900c876",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "android-le-audio",
+      "title": "Bluetooth Low Energy Audio overview (Android developers)",
+      "publisher": "Google",
+      "kind": "web",
+      "url": "https://developer.android.com/develop/connectivity/bluetooth/ble-audio/overview",
+      "file": "android-le-audio.html",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "474d4b303d7c3a0e4167f917ac70088f4bb9ba373090750ae86d1060218994a7",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "linux-cdc-acm",
+      "title": "Linux v6.16 drivers/usb/class/cdc-acm.c",
+      "publisher": "Linux kernel",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/038d61fd642278bab63ee8ef722c50d10ab01e8f/drivers/usb/class/cdc-acm.c",
+      "file": "linux-cdc-acm.c",
+      "notes": "GPL-2.0: facts only, never copied (THIRD_PARTY.md).",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "06e97f9ec51d41e4552a4943113e52fd99f94053358c606e10911b68419c1cf6",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "linux-snd-usb-card",
+      "title": "Linux v6.16 sound/usb/card.c (snd-usb-audio)",
+      "publisher": "Linux kernel",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/038d61fd642278bab63ee8ef722c50d10ab01e8f/sound/usb/card.c",
+      "file": "linux-snd-usb-card.c",
+      "notes": "GPL-2.0: facts only, never copied (THIRD_PARTY.md).",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "3368af08c5f18a109d88d1e25ff334e72ab9f6c9f4dbc5cac94a1a64b27c49c7",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "bluez-l2cap",
+      "title": "BlueZ 5.87 doc/l2cap-protocol.rst (L2CAP socket API)",
+      "publisher": "BlueZ project",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/bluez/bluez/65d11edee469c24dcc8d075b8be9c040cebaaf98/doc/l2cap-protocol.rst",
+      "file": "bluez-l2cap-protocol.rst",
+      "notes": "GPL/LGPL project: facts only.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "89ebc1d0023938bccfc46909c6ab0632d57cee35e384c6a774b8c3d0851be0c0",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "bluez-main-conf",
+      "title": "BlueZ 5.87 src/main.conf",
+      "publisher": "BlueZ project",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/bluez/bluez/65d11edee469c24dcc8d075b8be9c040cebaaf98/src/main.conf",
+      "file": "bluez-main.conf",
+      "notes": "GPL/LGPL project: facts only.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "d3762eb24785530885ffa51fffc81b078f5bb362d83cf2462989dbb6b2081912",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "bluez-gatt-characteristic",
+      "title": "BlueZ 5.87 doc/org.bluez.GattCharacteristic.rst",
+      "publisher": "BlueZ project",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/bluez/bluez/65d11edee469c24dcc8d075b8be9c040cebaaf98/doc/org.bluez.GattCharacteristic.rst",
+      "file": "bluez-gatt-characteristic.rst",
+      "notes": "GPL/LGPL project: facts only.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "3fb3cf4b511a9048751b2c296a188457f7a03c10d6bad845f8ce63e8a69bf39c",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "pipewire-echo-cancel",
+      "title": "PipeWire module: Echo Cancel",
+      "publisher": "PipeWire project",
+      "kind": "web",
+      "url": "https://docs.pipewire.org/page_module_echo_cancel.html",
+      "file": "pipewire-echo-cancel.html",
+      "notes": "PipeWire 1.6.9 documentation.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "588fde03eb0ac6f59497bc66ac998d3200f840561e12a0e01fcd168b79a0066f",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "wireplumber-bluetooth",
+      "title": "WirePlumber Bluetooth configuration",
+      "publisher": "PipeWire project",
+      "kind": "web",
+      "url": "https://pipewire.pages.freedesktop.org/wireplumber/daemon/configuration/bluetooth.html",
+      "file": "wireplumber-bluetooth.html",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "a77b416edfb9d19f09a3766aa44345e6e266e59103a844a59132a9b1e59677d5",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "esp-idf-nimble-coc-readme",
+      "title": "ESP-IDF v6.1 NimBLE L2CAP CoC peripheral example README",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/fff9895c82d744c7237be8847347bdd1b07c6643/examples/bluetooth/nimble/ble_l2cap_coc/coc_bleprph/README.md",
+      "file": "esp-idf-nimble-coc-readme.md",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "092a950ecaee1841fe13c8d87d0734f0b512204cbf691068a63d654840123b54",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "esp-idf-nimble-kconfig",
+      "title": "ESP-IDF v6.1 NimBLE host Kconfig",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/fff9895c82d744c7237be8847347bdd1b07c6643/components/bt/host/nimble/Kconfig.in",
+      "file": "esp-idf-nimble-kconfig.txt",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "d7c66583d864a8105d30049607e8490788335964eade5bf2e9afe929278a9044",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "esp-idf-bluedroid-kconfig",
+      "title": "ESP-IDF v6.1 Bluedroid host Kconfig",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/fff9895c82d744c7237be8847347bdd1b07c6643/components/bt/host/bluedroid/Kconfig.in",
+      "file": "esp-idf-bluedroid-kconfig.txt",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "cd07e67d496e70f87e47b9386fe0366d15fc6d02e1da5d877d9efa43361f4f1f",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "esp-idf-nimble-throughput",
+      "title": "ESP-IDF v6.1 NimBLE GATT throughput example README",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/fff9895c82d744c7237be8847347bdd1b07c6643/examples/bluetooth/nimble/throughput_app/README.md",
+      "file": "esp-idf-nimble-throughput.md",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "9f210d184659938ce2c375899370576d6ee8b05b682f69a87aab6dedf75ed6d9",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "esp-idf-bluedroid-throughput",
+      "title": "ESP-IDF v6.1 Bluedroid BLE throughput server README",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/fff9895c82d744c7237be8847347bdd1b07c6643/examples/bluetooth/bluedroid/ble/ble_throughput/throughput_server/README.md",
+      "file": "esp-idf-bluedroid-throughput.md",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "cc573f575e7a6f45334aa274038c0b58c506a8c905e8f8f8d8c6d751bc623c45",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "tinyusb-readme",
+      "title": "TinyUSB 0.21.0 README (supported device classes)",
+      "publisher": "TinyUSB project",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/hathach/tinyusb/dae3f9a366bfcddbf9dcf1b48d7500286a849539/README.rst",
+      "file": "tinyusb-readme.rst",
+      "notes": "MIT.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "144a766b6be13072339ba16683c21f53ed2ffc26b74d0a90299b7aeb5dbdb0b0",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "tinyusb-audio-device-h",
+      "title": "TinyUSB 0.21.0 src/class/audio/audio_device.h (feedback notes)",
+      "publisher": "TinyUSB project",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/hathach/tinyusb/dae3f9a366bfcddbf9dcf1b48d7500286a849539/src/class/audio/audio_device.h",
+      "file": "tinyusb-audio-device.h",
+      "notes": "MIT.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "01f350443090d96a4503bc01f217758a0a8b396ed0564b5770ff27ac495b53ff",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "usb-typec-r25",
+      "title": "USB Type-C Cable and Connector Specification, Release 2.5 (March 2026)",
+      "publisher": "USB Implementers Forum",
+      "kind": "standard",
+      "url": "https://www.usb.org/document-library/usb-type-cr-cable-and-connector-specification-release-25",
+      "file": "usb-typec-r25.zip",
+      "fetch": "manual",
+      "notes": "Download the ZIP from the page; section 2.3.4 covers USB Type-C Current.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ]
+    },
+    {
+      "id": "bt-core-spec",
+      "title": "Bluetooth Core Specification (current version)",
+      "publisher": "Bluetooth SIG",
+      "kind": "standard",
+      "url": "https://www.bluetooth.com/specifications/specs/core-specification-6-1/",
+      "file": "bt-core-spec.pdf",
+      "fetch": "manual",
+      "notes": "Vol 6 Part B (Link Layer): PDU format, T_IFS; Vol 3 Part A (L2CAP). Download from the page.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ]
+    },
+    {
+      "id": "yaesu-ft891-om",
+      "title": "FT-891 Operating Manual (EH065H201, 1611A-BO-2)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-891_OM_ENG_EH065H201_1611A-BO-2.pdf",
+      "file": "yaesu-ft891-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "17154a29374ffc2637e274ed8294d8dd8acad8cc191c8a2aefa35e2d7fd3ef4b",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yaesu-ft891-adv",
+      "title": "FT-891 Advance Manual (1806-F)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-891_Advance_Manual_ENG_1806-F.pdf",
+      "file": "yaesu-ft891-adv.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "7fc016e7ee72c3f6f2e6ccb9cd1ad0ecba2483e806fde65ec4757b7fee5373fa",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yaesu-ft891-cat",
+      "title": "FT-891 CAT Operation Reference Book (1909-C)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-891_CAT_OM_ENG_1909-C.pdf",
+      "file": "yaesu-ft891-cat.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "59e2295177633b970408bec10aae62f697c3bde5fe48a3be25282d992bc3bbb0",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yaesu-ft710-om",
+      "title": "FT-710 Operation Manual (EH080H201, 2307N-GS)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-710_OM_ENG_EH080H201_2307N-GS.pdf",
+      "file": "yaesu-ft710-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "e1afabe5f292c945d39e9e752b91dab1db2dccbb256c8f8a752c2fe5db4c61af",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yaesu-ft710-cat",
+      "title": "FT-710 CAT Operation Reference Manual (2306-C)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-710_CAT_OM_ENG_2306-C.pdf",
+      "file": "yaesu-ft710-cat.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "fdf62b8a5c89e321381d69c53292a6ded045f1ceeeaf04ae21ce856e8e2ff8c2",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yaesu-ft991a-om",
+      "title": "FT-991A Operating Manual (EH067M205, 2111A-KS-1)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-991A_OM_ENG_EH067M205_2111A-KS-1.pdf",
+      "file": "yaesu-ft991a-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "bb1ce04b24ab94eb2258809023fcf76f5121671d0535064575922e815bd1eee6",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yaesu-ft991a-cat",
+      "title": "FT-991A CAT Operation Reference Manual (1711-D)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-991A_CAT_OM_ENG_1711-D.pdf",
+      "file": "yaesu-ft991a-cat.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "52164f737e37a3ffc8276eccedf8ecb524607198c38d386ae4ff7b2fc1d60c95",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yaesu-ft818-om",
+      "title": "FT-818ND Operating Manual (E13772004, 2003u-ES-1)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-818ND_OM_ENG_E13772004_2003u-ES-1.pdf",
+      "file": "yaesu-ft818-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "e723eab91774d62bfcc525681a60f66a4a801d014d368d64c88a534a8d9df802",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yaesu-ft817nd-om",
+      "title": "FT-817ND Operating Manual (E13771011)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-817ND_OM_ENG_E13771011.pdf",
+      "file": "yaesu-ft817nd-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "d43dff0803f0544f39a1d502f986093a1606552d5de1827f9fc24e01e13595c0",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yaesu-vcp-driver",
+      "title": "Virtual COM Port Driver Installation Manual (2205-E)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/BB2B47AE-1018-01AF-FAE48FDCB1919193/USB_Driver_Installation_Manual_ENG_2205-E.pdf",
+      "file": "yaesu-vcp-driver.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "ce826e20bf5ea92b5e30286d2033dc1ae4a771a3e5e94db72504ddc0b388939f",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "icom-ic7300-full",
+      "title": "IC-7300 Full Manual (English, v6)",
+      "publisher": "Icom (hosted by Icom UK)",
+      "kind": "manual",
+      "url": "https://icomuk.co.uk/files/icom/PDF/advancedManuals/IC-7300_Full_English%20v6.pdf",
+      "file": "icom-ic7300-full.pdf",
+      "notes": "Also on icomjapan.com/support/manual/2271/ behind a click-through agreement.",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "9beb3c4969ade0cd9a74eae680e0daaf424a29fda4cbfc40efe4ede963323d38",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "icom-ic705-basic",
+      "title": "IC-705 Basic Manual (English)",
+      "publisher": "Icom (hosted by Icom UK)",
+      "kind": "manual",
+      "url": "https://icomuk.co.uk/files/icom/PDF/productManual/IC-705_ENG_Basic_1.pdf",
+      "file": "icom-ic705-basic.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "062b9e38d3afff649b27b9dd413d57bdbf561722de1318bd2f84496cfb579b9e",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "icom-ic705-adv",
+      "title": "IC-705 Advanced Manual (English)",
+      "publisher": "Icom (hosted by Icom UK)",
+      "kind": "manual",
+      "url": "https://icomuk.co.uk/files/icom/PDF/advancedManuals/IC-705_ENG_Advanced_1a.pdf",
+      "file": "icom-ic705-adv.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "fcd505049f8168979566fe0fc997a06c16359998215ad973b6c17925aff73411",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "kenwood-ts590sg-im",
+      "title": "TS-590SG Instruction Manual (B5A-0180-20)",
+      "publisher": "JVCKENWOOD",
+      "kind": "manual",
+      "url": "https://manuals.jvckenwood.com/download/files/B5A-0180-20.pdf",
+      "file": "kenwood-ts590sg-im.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "849df372130dce74ce95fcfa61787ea8ff930256d47f422cf3ce8f315f96f291",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "kenwood-ts590sg-usb-audio",
+      "title": "TS-590SG USB Audio Setting Manual (rev. 1, 2018-08-30)",
+      "publisher": "JVCKENWOOD",
+      "kind": "manual",
+      "url": "https://www.kenwood.com/i/products/info/amateur/ts_590g/pdf/ts590g_usb_audio_manual_e_rev1.pdf",
+      "file": "kenwood-ts590sg-usb-audio.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "c2fbbbec84c95edeb71cc95753fb5e06852cb9b5fb52e82a69e55abd53e4cd25",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "kenwood-ts590s-im",
+      "title": "TS-590S Instruction Manual (B62-2243-30)",
+      "publisher": "JVCKENWOOD (copy hosted by RigPix)",
+      "kind": "manual",
+      "url": "https://www.rigpix.com/kenwood/ts590s_manual.pdf",
+      "file": "kenwood-ts590s-im.pdf",
+      "notes": "No manufacturer-hosted copy found on 2026-09-24; this is a third-party mirror of the manufacturer's manual.",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "f7c244849ea7d88c65237a998e53141d173cc36d51cfe276eac983f2b820ed18",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "elecraft-k3-om",
+      "title": "K3 Owner's Manual, rev. D10",
+      "publisher": "Elecraft",
+      "kind": "manual",
+      "url": "https://ftp.elecraft.com/K3/Manuals%20Downloads/E740107%20K3%20Owner's%20man%20D10.pdf",
+      "file": "elecraft-k3-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "b7c3c70b78694d23045edd671b26cee7a80ab8468a13ee006085aff8aff19f74",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "elecraft-k3s-om",
+      "title": "K3S Owner's Manual, rev. A1",
+      "publisher": "Elecraft",
+      "kind": "manual",
+      "url": "https://ftp.elecraft.com/K3S/Manuals%20Downloads/K3S%20Owner's%20man%20A1.pdf",
+      "file": "elecraft-k3s-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "7eb4c4bb7aab862cb8ff09ab0110226ee99538eda42f50cc9495fef7942523c7",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "elecraft-kx3-om",
+      "title": "KX3 Owner's Manual, rev. C5",
+      "publisher": "Elecraft",
+      "kind": "manual",
+      "url": "https://ftp.elecraft.com/KX3/Manuals%20Downloads/E740163%20KX3%20Owner's%20man%20Rev%20C5.pdf",
+      "file": "elecraft-kx3-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "d99a6ef6033abe7498cb996021f67578e91956139e1d820839db1e21a7b83ff0",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "elecraft-kx2-om",
+      "title": "KX2 Owner's Manual, rev. B2",
+      "publisher": "Elecraft",
+      "kind": "manual",
+      "url": "https://ftp.elecraft.com/KX2/Manuals%20Downloads/KX2%20owner's%20man%20B2.pdf",
+      "file": "elecraft-kx2-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "e02760b05a2c7e1e35ec175f07b435198868aebd0e2221573aff02eaece113f3",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "elecraft-k4-om",
+      "title": "K4 Operating Manual, rev. C17",
+      "publisher": "Elecraft",
+      "kind": "manual",
+      "url": "https://ftp.elecraft.com/K4/Manuals%20Downloads/Operating%20Manual%20%20Rev%20C17.pdf",
+      "file": "elecraft-k4-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "f4ef6975e969967f0d86f609143ee14317efc2feaba937fe029e7f596bb66ca5",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "xiegu-x6100-um",
+      "title": "X6100 User Manual (2021-11-23)",
+      "publisher": "Chongqing Xiegu Technology (hosted by Radioddity)",
+      "kind": "manual",
+      "url": "https://radioddity.s3.amazonaws.com/Xiegu_X6100_User_Manual_20211123.pdf",
+      "file": "xiegu-x6100-um.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "4c526436f59729ac7a25ced725839171c49c16d2db4629e72b87fa724e59a623",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "radioddity-x6100-ext",
+      "title": "Extended manual for Xiegu X6100, v1.0 (2024-01-19)",
+      "publisher": "Radioddity (distributor)",
+      "kind": "manual",
+      "url": "https://radioddity.s3.amazonaws.com/2024-01-19_Extended_manual_for_Xiegu_X6100_v1.0.pdf",
+      "file": "radioddity-x6100-ext.pdf",
+      "notes": "Secondary source (distributor, not the manufacturer).",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "ed66c73012980fc86d597dbfdc0609c05107b405751e3685ad48afb9fba372d6",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "digirig-ft8xx-cables",
+      "title": "Yaesu FT-8xx cables build (DATA and ACC pinouts)",
+      "publisher": "Digirig",
+      "kind": "web",
+      "url": "https://digirig.net/yaesu-ft-8xx-cables-build/",
+      "file": "digirig-ft8xx-cables.html",
+      "notes": "Secondary source (interface maker). Pinout images: connector-ft817-audio.png, connector-ft817-cat.png. Facts only; Digirig hardware is GPL-3.0 (THIRD_PARTY.md).",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "c6751abb6548e665b99a42eb78fbc6276661b8b6d6a3349945b274cbdc46cba4",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "digirig-dr891-manual",
+      "title": "Digirig DR-891 setup manual",
+      "publisher": "Digirig",
+      "kind": "web",
+      "url": "https://digirig.net/digirig-dr-891-setup-manual/",
+      "file": "digirig-dr891-manual.html",
+      "notes": "Secondary source (interface maker). Facts only.",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "6ee8ebd0d7b75176627b844e135ed279b13cabdae17034adcf1558fa074559cf",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "digirig-kx-cables",
+      "title": "Elecraft KX Digirig cables set",
+      "publisher": "Digirig",
+      "kind": "web",
+      "url": "https://digirig.net/product/elecraft-kx-cables/",
+      "file": "digirig-kx-cables.html",
+      "notes": "Secondary source (interface maker). Facts only.",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "64aac219975a802f5097694405d4809ecec0de5a74abb29729bb6ad04067c670",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "iso-16750-2-2023-preview",
+      "title": "ISO 16750-2:2023 (5th edition) Road vehicles, electrical loads: official preview (foreword, contents, clauses 1-4.2)",
+      "publisher": "ISO (preview via iTeh Standards)",
+      "kind": "standard",
+      "url": "https://cdn.standards.iteh.ai/samples/76119/f42b46cc6aef47daa9c6612e225b6f35/ISO-16750-2-2023.pdf",
+      "file": "iso-16750-2-2023-preview.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "17166cc7f956a5ab328e4239b2e5be858edf513b74d78df715196a0307a24945",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "iso-7637-2-2011-preview",
+      "title": "ISO 7637-2:2011 (3rd edition) electrical transient conduction along supply lines: official preview (foreword, contents, clauses 1-5.1)",
+      "publisher": "ISO (preview via iTeh Standards)",
+      "kind": "standard",
+      "url": "https://cdn.standards.iteh.ai/samples/50925/cb6a3838eb064cb1b2175258d6a49516/ISO-7637-2-2011.pdf",
+      "file": "iso-7637-2-2011-preview.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "98cdab4d254191dbbfef7a88d99edc26edebfc8ab39c60c1b87ccb4652dd3cc0",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "mchp-ds00006186",
+      "title": "Automotive Cold Crank/Load Dump Standards: Basic Introduction (DS00006186A, Sept 2025; reproduces ISO 16750-2:2023 levels)",
+      "publisher": "Microchip Technology",
+      "kind": "app-note",
+      "url": "https://ww1.microchip.com/downloads/aemDocuments/documents/APID/ApplicationNotes/ApplicationNotes/Automotive-Cold-Crank-Load-Dump-Standards-DS00006186.pdf",
+      "file": "mchp-ds00006186.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "9fbed0f62fe5a10abf7795c1a757315189bc7540ea396a396cf36d0de192c0cb",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "onsemi-tnd6424",
+      "title": "TND6424/D Supplemental data for ISO 7637 pulses (Rev. 0, April 2023; reproduces ISO 7637-2:2011 Annex A severity levels)",
+      "publisher": "onsemi",
+      "kind": "app-note",
+      "url": "https://www.onsemi.com/download/design-notes/pdf/tnd6424-d.pdf",
+      "file": "onsemi-tnd6424.pdf",
+      "fetch": "manual",
+      "notes": "The site blocks scripted downloads; save the PDF from a browser.",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ]
+    },
+    {
+      "id": "nexperia-an50007",
+      "title": "AN50007 Applying ISO standard conducted transients to MOSFETs in reverse battery protection circuits (Rev. 1.0, April 2021)",
+      "publisher": "Nexperia",
+      "kind": "app-note",
+      "url": "https://assets.nexperia.com/documents/application-note/AN50007.pdf",
+      "file": "nexperia-an50007.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "7aea28305e9a12a5cb5d9046d1d7cb3e40084d1b8bf63ebeabee1d812add0926",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-snoaaa1",
+      "title": "SNOAAA1 Protection against unsuppressed load dump in automotive systems using LM74930-Q1 (Nov 2023)",
+      "publisher": "Texas Instruments",
+      "kind": "app-note",
+      "url": "https://www.ti.com/lit/pdf/snoaaa1",
+      "file": "ti-snoaaa1.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "d2a977a4cdca7bae2152d4b6931c625ea353223755fd068b8f7ea6885194543a",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-snoaa13",
+      "title": "SNOAA13 TLV1805-Q1 EVM ISO testing results (Feb 2019; ISO 16750-2 reversed and over-voltage test parameters used)",
+      "publisher": "Texas Instruments",
+      "kind": "app-note",
+      "url": "https://www.ti.com/lit/pdf/snoaa13",
+      "file": "ti-snoaa13.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "f809745409991ba39ee25534f3ba339a2c801790c9d348213600459c3074aaad",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "littelfuse-tvs-load-dump-an",
+      "title": "TVS diodes to meet automotive load dump standard (ISO 16750-2 vs ISO 7637-2, pulse 5a/5b; 2020)",
+      "publisher": "Littelfuse (copy hosted by Digi-Key)",
+      "kind": "app-note",
+      "url": "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/1044/TVS_Diode_AN.pdf",
+      "file": "littelfuse-tvs-load-dump-an.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "8f13f4d9000d6a4ec3f70179a7eb6bd5247b4890555252933f5f18c0bd46682f",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "volta-iso-16750-2-seminar",
+      "title": "ISO 16750-2 seminar slides: edition timeline and Ed. 5 (2023) changes, jump start and transient overvoltage tables (Italian)",
+      "publisher": "Volta S.p.A. (test-equipment distributor)",
+      "kind": "web",
+      "url": "https://www.volta.it/wp-content/uploads/2025/09/ISO-16750-2.pdf",
+      "file": "volta-iso-16750-2-seminar.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "74c5ac3eaffee73db3bfd5b08b3619ea91e24ee5d901fb8bdaab02c627a594a9",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-slyy136",
+      "title": "SLYY136 An overview of conducted EMI specifications for power supplies (CISPR 25 Class 5 limits)",
+      "publisher": "Texas Instruments",
+      "kind": "app-note",
+      "url": "https://www.ti.com/lit/wp/slyy136/slyy136.pdf",
+      "file": "ti-slyy136.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "b181232be6afaef8d2038938da5cd6a11542ad904368e54fbf6afa4b83704d3b",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ecfr-47-97-301",
+      "title": "47 CFR 97.301 Authorized frequency bands (eCFR, current as of 2026-09-24)",
+      "publisher": "U.S. Government Publishing Office (eCFR)",
+      "kind": "web",
+      "url": "https://www.ecfr.gov/current/title-47/chapter-I/subchapter-D/part-97/subpart-D/section-97.301",
+      "file": "ecfr-47-97-301.html",
+      "used_in": [
+        "docs/decisions/ADR-0004-power-automotive.md",
+        "docs/research/power-automotive.md",
+        "docs/research/power-radio-usbc.md"
+      ],
+      "sha256": "e0ad6b5728c57d16c58da11ec7ef161b387e49e8a73ced3ff03ddd1d43249138",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ecfr-47-97-303",
+      "title": "47 CFR 97.303 Frequency sharing requirements (60 m band, paragraph (h))",
+      "publisher": "U.S. Government Publishing Office (eCFR)",
+      "kind": "web",
+      "url": "https://www.ecfr.gov/current/title-47/chapter-I/subchapter-D/part-97/subpart-D/section-97.303",
+      "file": "ecfr-47-97-303.html",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "d0b68c097dd03646f6b9dbee24ec69ea527494a09971d4a0591c6c93c2467f7b",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-lm7480-q1-ds",
+      "title": "LM7480-Q1 (LM74800-Q1/LM74801-Q1) ideal diode controller with load dump protection datasheet (SNOSD95C)",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/lm7480-q1.pdf",
+      "file": "ti-lm7480-q1-ds.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "38ea1e89cc677020c8a10096649fa7933d2aeff8c0cd97ca9a78c1f8f5b9b500",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-lm74502-q1-ds",
+      "title": "LM74502-Q1 reverse polarity protection controller with overvoltage protection datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/lm74502-q1.pdf",
+      "file": "ti-lm74502-q1-ds.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "ff448b94c9ae0f98dbeb15c0644361eea51059792bc296a8fe46726ddd5af34c",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-lm749x0-q1-ds",
+      "title": "LM749x0-Q1 ideal diode with circuit breaker, UV and OV protection datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/lm74900-q1.pdf",
+      "file": "ti-lm749x0-q1-ds.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "97f654c7d718cfb4dd660f7096e05e41b5ba5b06cf33f726c61b05fd8ced991a",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-lm5060-ds",
+      "title": "LM5060 / LM5060-Q1 high-side protection controller datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/lm5060-q1.pdf",
+      "file": "ti-lm5060-ds.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "38a3fbe1f0f9700439bc174f3f65d83f3743c4a5b4fe479dca40976b12dfd125",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-lmr436x0-q1-ds",
+      "title": "LMR43610-Q1 / LMR43620-Q1 36 V 1 A / 2 A automotive buck converter datasheet (SNVSBE0H)",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/lmr43620-q1.pdf",
+      "file": "ti-lmr436x0-q1-ds.pdf",
+      "used_in": [
+        "docs/decisions/ADR-0004-power-automotive.md",
+        "docs/research/power-automotive.md",
+        "docs/research/power-radio-usbc.md"
+      ],
+      "sha256": "db767b9234f756c358c8254e682b917f16381eb0db649a2936833e15eb8037fd",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-lm62440-q1-ds",
+      "title": "LM62440-Q1 automotive 36 V 4 A low-EMI synchronous buck converter datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/lm62440-q1.pdf",
+      "file": "ti-lm62440-q1-ds.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "6ae0d287dc6c9e980493a67a5bf0c9370937e52e5923f6ea5ac4221bb9c4118c",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-tps3710-q1-ds",
+      "title": "TPS3710-Q1 wide-VIN voltage detector datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tps3710-q1.pdf",
+      "file": "ti-tps3710-q1-ds.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "0e01a5ecd0f4f057341504199f974d43cec180cc0353a0dc5e0d13cd0b4b7491",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-sn6505-q1-ds",
+      "title": "SN6505A-Q1 / SN6505B-Q1 / SN6505D-Q1 low-noise transformer drivers for isolated supplies datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/sn6505b-q1.pdf",
+      "file": "ti-sn6505-q1-ds.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "3c8af11607815139d3e551d17d3848ae585d5b1086b4bc3757e39fc924fc098c",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "vishay-smbj-ds",
+      "title": "SMBJ5.0A thru SMBJ188A TRANSZORB TVS datasheet (doc 88392, rev. 09-Jan-2024; HE3 = AEC-Q101)",
+      "publisher": "Vishay",
+      "kind": "datasheet",
+      "url": "https://www.vishay.com/docs/88392/smbj.pdf",
+      "file": "vishay-smbj-ds.pdf",
+      "used_in": [
+        "docs/decisions/ADR-0004-power-automotive.md",
+        "docs/decisions/ADR-0005-power-radio-usbc.md",
+        "docs/research/power-automotive.md",
+        "docs/research/power-radio-usbc.md"
+      ],
+      "sha256": "1b65b57a4311128068c1dec747bbb99f6846ae932d77fcfd39904cb2d7a5cd50",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "littelfuse-tpsmb-ds",
+      "title": "TPSMB series automotive TVS diodes datasheet (rev. 12/03/20)",
+      "publisher": "Littelfuse",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/c4b05efd8433d3cce79b8c6653d5b081.pdf?productCode=C3704846",
+      "file": "littelfuse-tpsmb-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "8cc50e1afb0bea8dc15a76bc24128592d5507d24bbf1bc70a03b690ea4ce2a21",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "diodes-dmth15h017spswq-ds",
+      "title": "DMTH15H017SPSWQ 150 V N-channel MOSFET datasheet (DS43904)",
+      "publisher": "Diodes Incorporated",
+      "kind": "datasheet",
+      "url": "https://www.diodes.com/assets/Datasheets/DMTH15H017SPSWQ.pdf",
+      "file": "diodes-dmth15h017spswq-ds.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "0da72717b3c4d049be89d0cb92f305a866ead202d978b19338fef95022c84f03",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "vishay-sqsa80enw-ds",
+      "title": "SQSA80ENW automotive 80 V N-channel MOSFET datasheet",
+      "publisher": "Vishay",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/820ce060fdeca9ab36378d630e7a1a1c.pdf?productCode=C511563",
+      "file": "vishay-sqsa80enw-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "2ac817cfd59a4bc9fddec7a182dff20d91f63f97939bb892420dde4bc7cdc985",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "littelfuse-437-ds",
+      "title": "437A series AEC-Q200 1206 fast-acting fuse datasheet",
+      "publisher": "Littelfuse",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/989eb483451e1461601b4ba4d406ee9e.pdf?productCode=C720199",
+      "file": "littelfuse-437-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "b5e9190f2e0830fc26512095efd008f5ac1a8da2b6d429af056782bda7d52e26",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "tdk-acm70v-ds",
+      "title": "ACM70V series automotive common-mode filter for power lines datasheet",
+      "publisher": "TDK",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/7dbbec7a3518c807a25ff0e241e82bf2.pdf?productCode=C76582",
+      "file": "tdk-acm70v-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "2cfe83f7f3c5d8d9e1b8c87274443876cb836c5b350bcacaf76277671bfcb57a",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "tdk-tfm252012alma-ds",
+      "title": "TFM252012ALMA automotive thin-film power inductor datasheet",
+      "publisher": "TDK",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/567da1e0fa38100994993507716283be.pdf?productCode=C404804",
+      "file": "tdk-tfm252012alma-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "759ed45e7c629ad40577632e73de9a06b0c4f44c0dd36746a4233ff48ee46276",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "tdk-cga-ds",
+      "title": "CGA series automotive MLCC catalog (Chinese edition; CGA6N3X7R2A225K)",
+      "publisher": "TDK",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/b14bf2a960f4d5ca177fe04a5511bcf7.pdf?productCode=C342652",
+      "file": "tdk-cga-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "b18d46f3b8b040f6a5271850fbcc1684c471255d77ee5285dcf59c80e8afc60d",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yageo-as-ds",
+      "title": "AS series automotive soft-termination MLCC datasheet (AS1206KKX7RYBB104)",
+      "publisher": "YAGEO",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/f5627b61af9bb3f64838787fe6737e2d.pdf?productCode=C3881218",
+      "file": "yageo-as-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "3b197a86eb57888fbaafd1f12900b8f7ca1b6cd4e39aa732aed8f5e238625633",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "panasonic-fk-ds",
+      "title": "FK series SMD aluminum electrolytic capacitors datasheet (Chinese edition; EEE-FK1H101P)",
+      "publisher": "Panasonic",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/71852d117349f018ee270240e3541eac.pdf?productCode=C178548",
+      "file": "panasonic-fk-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "faa0d09d14b65c2ad89ab1bb7b74583a22190171e7d0f4da30907d6d5a76ef6e",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "sitime-sit8924b-ds",
+      "title": "SiT8924B automotive AEC-Q100 programmable oscillator datasheet",
+      "publisher": "SiTime",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/8c96a8aa3d565d5919120c49061d45c5.pdf?productCode=C401144",
+      "file": "sitime-sit8924b-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/research/power-radio-usbc.md"
+      ],
+      "sha256": "7b593d10a0902132c2696ad46d70a1df07b0255b13b5bd45c0f47b5c2d5d4629",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-lmr33630-q1-ds",
+      "title": "LMR33630-Q1 3.8 V to 36 V 3 A synchronous step-down converter datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/lmr33630-q1.pdf",
+      "file": "ti-lmr33630-q1-ds.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "39b2a588749eef7ed3c2aef74ac121aed5f96cc83a486726eaf9240b9befa290",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-lp5907-q1-ds",
+      "title": "LP5907-Q1 automotive 250 mA ultra-low-noise LDO datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/lp5907-q1.pdf",
+      "file": "ti-lp5907-q1-ds.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "9de43625b4950da2f4decb73fe49660e4a2bd06857efcde203e9d1c9f8293556",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "littelfuse-0466-ds",
+      "title": "466 series very fast-acting 1206 fuse datasheet (0466002.NRHF)",
+      "publisher": "Littelfuse",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/6219a627c4d940b38430cad44a96cd77.pdf?productCode=C3105",
+      "file": "littelfuse-0466-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/decisions/ADR-0005-power-radio-usbc.md",
+        "docs/research/power-automotive.md",
+        "docs/research/power-radio-usbc.md"
+      ],
+      "sha256": "33f71340c39d8991607a0be589732a29bb11fbfcae8565bc52f849703dfb0276",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "onsemi-fdn86246-ds",
+      "title": "FDN86246 150 V N-channel MOSFET datasheet",
+      "publisher": "onsemi",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/63662462dad465bccb2e0b205f368922.pdf?productCode=C891118",
+      "file": "onsemi-fdn86246-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "accf947409c85e7849b7361cfd6adc8e87cd016da0e73364b37cd223aaa2d4b4",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "infineon-irlml0100-ds",
+      "title": "IRLML0100 100 V N-channel MOSFET datasheet",
+      "publisher": "Infineon",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/749828b75c4e4bb491f31b3834aa41e4.pdf?productCode=C53658",
+      "file": "infineon-irlml0100-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "6425a1834096e6c06c266e89b6ec6fd62fc6f01191c244a21fa7effa03edff35",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "murata-dlw5btm-ds",
+      "title": "DLW5BTM series common-mode choke coils for power lines datasheet",
+      "publisher": "Murata",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/30a0ce533b0a729b4ac313a89031b565.pdf?productCode=C341531",
+      "file": "murata-dlw5btm-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "74d4e96b61d81462ebef2db59a058aa477bd2c66c51198a0d6b490b0281bf2e7",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "psa-fs32-ds",
+      "title": "FS series MLCC datasheet (FS32X225K101EGG, 2.2 µF 100 V X7R 1210)",
+      "publisher": "Prosperity Dielectrics (PSA)",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/a99e0252a05e00d2f66d6d299a8ef975.pdf?productCode=C153036",
+      "file": "psa-fs32-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "6fa8e355c7556df7ba03e938dd328b2799af97a28a11ee3c2684028b95531672",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "huawei-vd-ds",
+      "title": "VD series SMD aluminum electrolytic capacitors datasheet (VD1H101MF105000CE0)",
+      "publisher": "Changzhou Huawei Electronic",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/978998647283dc41171a70946be24af9.pdf?productCode=C189260",
+      "file": "huawei-vd-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "1f503fd3eef963802f341b7079c25c30a9fb8af6cde052778ebd6d06cfa6fbbc",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "samwha-cs-ds",
+      "title": "CS series MLCC datasheet (CS3216X7R226K160NRI, 22 µF 16 V X7R 1206)",
+      "publisher": "Samwha Capacitor",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/ca4d6c85966a5af7ff669d92a1dcc834.pdf?productCode=C5252682",
+      "file": "samwha-cs-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "da5381c67232a407747e0dfc4234ad177c365aaed2680332b2381db489c30d30",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "yxc-yso110tr-ds",
+      "title": "YSO110TR wide-voltage crystal oscillator datasheet (OT322518.432MJBA4SL)",
+      "publisher": "YXC",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/b336a5b52993e15e0134a8f3d7decec7.pdf?productCode=C2831385",
+      "file": "yxc-yso110tr-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/decisions/ADR-0004-power-automotive.md",
+        "docs/research/power-automotive.md",
+        "docs/research/power-radio-usbc.md"
+      ],
+      "sha256": "d155dd2bc59fe81f90c6c434328061beb8159ce3c6d0538de4ce96c34d44b8e5",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "ti-sn74lvc1g80-ds",
+      "title": "SN74LVC1G80 single positive-edge-triggered D-type flip-flop datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1g80.pdf",
+      "file": "ti-sn74lvc1g80-ds.pdf",
+      "used_in": [
+        "docs/decisions/ADR-0004-power-automotive.md",
+        "docs/research/power-automotive.md",
+        "docs/research/power-radio-usbc.md"
+      ],
+      "sha256": "73b5b60e38105033bdbd978cdc17961e6487dbc848e32b26f53fac3a22fd34e6",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "ti-tps3710-ds",
+      "title": "TPS3710 wide-VIN voltage detector datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tps3710.pdf",
+      "file": "ti-tps3710-ds.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "b47e24e09ad64ac7d930bb8b41ede63d833d66191ddca5694efda1da526293b2",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "ti-lmr436x0-ds",
+      "title": "LMR43610 / LMR43620 36 V 1 A / 2 A buck converter datasheet (commercial, SNVSBY5B)",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/lmr43620.pdf",
+      "file": "ti-lmr436x0-ds.pdf",
+      "used_in": [
+        "docs/decisions/ADR-0005-power-radio-usbc.md",
+        "docs/research/power-automotive.md",
+        "docs/research/power-radio-usbc.md"
+      ],
+      "sha256": "18b2cc488ccfa848f103ba5bd6303dfc1ac74e80832510f2a8a59feb39a59711",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "etsi-en-301-489-1",
+      "title": "ETSI EN 301 489-1 V2.2.3 (2019-11) EMC standard for radio equipment; Part 1: common technical requirements",
+      "publisher": "ETSI",
+      "kind": "standard",
+      "url": "https://www.etsi.org/deliver/etsi_en/301400_301499/30148901/02.02.03_60/en_30148901v020203p.pdf",
+      "file": "etsi-en-301-489-1.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "b616362dbee141e4670dd664f141e8e51323ea19dd41652d43d399c8db849d24",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "ti-tidub49",
+      "title": "TIDUB49 automotive wide-VIN power front-end reference design (ISO 7637-2:2004 pulse table)",
+      "publisher": "Texas Instruments",
+      "kind": "app-note",
+      "url": "https://www.ti.com/lit/ug/tidub49/tidub49.pdf",
+      "file": "ti-tidub49.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "370754a5744f29edfa8ba2dbeaf4e7c22c3306c45b918b625e38b76df73763e8",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "sitime-sit8008-ds",
+      "title": "SiT8008B programmable 1–110 MHz MEMS oscillator datasheet",
+      "publisher": "SiTime",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/e884cf0cc5d2c9b8d1f5ed7f6655e679.pdf?productCode=C1184488",
+      "file": "sitime-sit8008-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "ea4a3c7ea2e6d0c0a080d3ee6ccdc00d0f189125a01af0a82c1d416fc9dc84ef",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "ti-tac5112-ds",
+      "title": "TAC5112 low-power stereo audio codec datasheet (SLASF24A)",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tac5112.pdf",
+      "file": "ti-tac5112-ds.pdf",
+      "used_in": [
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
+      ],
+      "sha256": "54b43ca9dea36e363f05c2992992dde6099fa4c5ef59266f032b4fceee4f0eab",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-tac5112-q1-ds",
+      "title": "TAC5112-Q1 automotive low-power stereo audio codec datasheet (SLASFC2A)",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tac5112-q1.pdf",
+      "file": "ti-tac5112-q1-ds.pdf",
+      "used_in": [
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
+      ],
+      "sha256": "c25893a63f6f11ddd2d7f4ef6c3e082717abff843be6ef2ab80bbe6fc1d65617",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-pcm1808-ds",
+      "title": "PCM1808 single-ended 24-bit 96 kHz stereo ADC datasheet (SLES177B)",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/pcm1808.pdf",
+      "file": "ti-pcm1808-ds.pdf",
+      "used_in": [
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
+      ],
+      "sha256": "4ac1a7ec0c05ee972ba52ad8ebbd7cc661ce1c4dff59cf33429b684ca0595547",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-pcm5102a-ds",
+      "title": "PCM510xA 2.1 VRMS stereo DAC with PLL datasheet (SLAS859C)",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/pcm5102a.pdf",
+      "file": "ti-pcm5102a-ds.pdf",
+      "used_in": [
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
+      ],
+      "sha256": "a522083606b8e994875883215046fbdb92fd362996ca97719d259fbe9df07a85",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "nxp-sgtl5000-ds",
+      "title": "SGTL5000 low power stereo codec with headphone amp data sheet (Rev. 7)",
+      "publisher": "NXP Semiconductors",
+      "kind": "datasheet",
+      "url": "https://www.nxp.com/docs/en/data-sheet/SGTL5000.pdf",
+      "file": "nxp-sgtl5000-ds.pdf",
+      "fetch": "manual",
+      "notes": "The site blocks scripted downloads; save the PDF from a browser.",
+      "used_in": [
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
+      ]
+    },
+    {
+      "id": "nuvoton-nau88c22-ds",
+      "title": "NAU88C22 24-bit stereo audio codec with speaker driver datasheet (Rev 0.8)",
+      "publisher": "Nuvoton Technology",
+      "kind": "datasheet",
+      "url": "https://www.nuvoton.com/export/resource-files/DS_NAU88C22_DataSheet_EN_Rev0.8.pdf",
+      "file": "nuvoton-nau88c22-ds.pdf",
+      "used_in": [
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
+      ],
+      "sha256": "55697a9f6460857676f002cf85575bb9ec5ffcb1709b67e1c0edcded1eb6e7ef",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "cirrus-eol",
+      "title": "Discontinued products (last-time-buy and last-time-ship dates, including WM8960 and WM8731)",
+      "publisher": "Cirrus Logic",
+      "kind": "web",
+      "url": "https://www.cirrus.com/products/eol",
+      "file": "cirrus-eol.html",
+      "used_in": [
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
+      ],
+      "sha256": "9921fc8adabf9b10fb2642cfa7df87badaedf81963ab8672d35b229264e72d3d",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-tlv320aic3104-product",
+      "title": "TLV320AIC3104 product page (status, newer-version notice)",
+      "publisher": "Texas Instruments",
+      "kind": "web",
+      "url": "https://www.ti.com/product/TLV320AIC3104",
+      "file": "ti-tlv320aic3104-product.html",
+      "used_in": [
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
+      ],
+      "sha256": "2baba19fd4ec8e1bb8c7b665ff4bc58e2e3e618c73b299c8055ea3d942df117f",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "esp32s3-trm",
+      "title": "ESP32-S3 technical reference manual (v1.8), chapter 28 I2S controller",
+      "publisher": "Espressif Systems",
+      "kind": "datasheet",
+      "url": "https://www.espressif.com/sites/default/files/documentation/esp32-s3_technical_reference_manual_en.pdf",
+      "file": "esp32s3-trm.pdf",
+      "used_in": [
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
+      ],
+      "sha256": "4484bf8a69035ec42a731c58c64ada6fbd1f1618c5559409f134d9ea083f444f",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "bourns-sm-lp-5001-ds",
+      "title": "SM-LP-5001 series surface-mount line matching transformers datasheet",
+      "publisher": "Bourns",
+      "kind": "datasheet",
+      "url": "https://www.bourns.com/docs/product-datasheets/smlp5001.pdf",
+      "file": "bourns-sm-lp-5001-ds.pdf",
+      "used_in": [
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
+      ],
+      "sha256": "ea7435c6eaa58358ea7f2f00f579f3a3e2770702975cd1b247d366b814f28d07",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "triad-ty-250p-ds",
+      "title": "TY-250P PC-mount audio transformer datasheet",
+      "publisher": "Triad Magnetics",
+      "kind": "datasheet",
+      "url": "https://catalog.triadmagnetics.com/asset/ty-250p.pdf",
+      "file": "triad-ty-250p-ds.pdf",
+      "used_in": [
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
+      ],
+      "sha256": "bed5eeb82a1e25a517487c97a3eac8b076026967ba406fa22390bf16c442bca4",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-lp5907-ds",
+      "title": "LP5907 250 mA low-noise low-IQ LDO datasheet (SNVS798Q)",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/lp5907.pdf",
+      "file": "ti-lp5907-ds.pdf",
+      "used_in": [
+        "docs/research/audio-codec.md",
+        "docs/decisions/ADR-0002-audio-codec.md"
+      ],
+      "sha256": "f5deda2f0cd6f251622fa0fbb57fd0ddff831b797f96b9a0a53ed35059e1c4ba",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "usb-typec-r20",
+      "title": "USB Type-C Cable and Connector Specification, Release 2.0 (August 2019)",
+      "publisher": "USB Implementers Forum",
+      "kind": "standard",
+      "url": "https://www.usb.org/sites/default/files/USB%20Type-C%20Spec%20R2.0%20-%20August%202019.pdf",
+      "file": "usb-typec-r20.pdf",
+      "notes": "Tables 4-17 (power precedence), 4-24 (Rp), 4-25 (Rd), 4-36 (sink CC voltages); section 4.6.1.1 (suspend). The current release (R2.5) is a manual download (#6).",
+      "used_in": [
+        "docs/research/power-radio-usbc.md",
+        "docs/decisions/ADR-0005-power-radio-usbc.md"
+      ],
+      "sha256": "87d15160bf8bd25129b27e0b7c5e261ed0b1806b3b0d3a7b5d8b1eb783dc9981",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-tps2660-ds",
+      "title": "TPS2660x 60 V, 2 A industrial eFuse with integrated reverse input polarity protection datasheet (SLVSDG2G)",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tps2660.pdf",
+      "file": "ti-tps2660-ds.pdf",
+      "used_in": [
+        "docs/research/power-radio-usbc.md",
+        "docs/decisions/ADR-0005-power-radio-usbc.md"
+      ],
+      "sha256": "b781cbce51984715771bde540df2b36404b4fae4b41e27166c84c19b6598e1de",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ti-sn6505-ds",
+      "title": "SN6505x low-noise 1 A transformer drivers for isolated power supplies datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/sn6505b.pdf",
+      "file": "ti-sn6505-ds.pdf",
+      "used_in": [
+        "docs/research/power-radio-usbc.md"
+      ],
+      "sha256": "dfc57cb042218cb698436970611710640cde6eebf54ae0dc2e53c74fadb2ef46",
       "retrieved": "2026-09-24"
     },
     {

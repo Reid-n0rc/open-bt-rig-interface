@@ -71,8 +71,10 @@ name or protocol to a particular host application.
   in `firmware/platform/<sdk>/` behind a small hardware-abstraction interface.
 - Permissively licensed SDKs and dependencies only. This keeps the firmware
   licensable under both the non-commercial and the commercial terms.
-- **PTT fail-safe is mandatory:** PTT off at boot, on reset, on disconnect and on
-  watchdog timeout, plus a maximum-TX timer. Every new code path gets a test.
+- **PTT fail-safe is mandatory:** PTT off at boot, on reset, on disconnect, on
+  keepalive expiry and after a watchdog reset (lock-up), plus a user-configurable
+  maximum-TX timer (default 5 minutes, no upper limit, can be disabled; see
+  ADR-0007). Every new code path gets a test.
 
 ## Protocol
 
