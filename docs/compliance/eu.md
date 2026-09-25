@@ -90,8 +90,8 @@ no Art. 10(10) restrictions to print on the packaging.
 
 **Against the FCC cap.** The FCC grant certifies BLE at 10.3 dBm
 **conducted** ([`fcc.md`](fcc.md) §1.3). Espressif's EU certificate lists BLE
-at **9.96 dBm e.i.r.p.** ("conducted power for mobile technologies and EIRP for
-other technologies", annex A.6). The antenna gain isn't published: the
+at **9.96 dBm e.i.r.p.** (annex A.6, whose footnote gives e.i.r.p. for
+non-cellular technologies). The antenna gain isn't published: the
 certificate leaves it blank and the datasheet doesn't give it **(verify, from
 Espressif's EN 300 328 report R2112A1104-R1V1)**. So:
 
@@ -146,8 +146,8 @@ list above does.
 vehicular equipment: conducted emissions on the DC power port, RF common-mode
 immunity, and **transients and surges in the vehicular environment**
 (EN 301 489-1 §9.6: ISO 7637-2 (2004) pulses 1, 2a, 2b, 3a, 3b and 4 at
-**test level III**). It also states that equipment "capable of being powered for
-intended use by the main battery of a vehicle" counts as vehicular.
+**test level III**). It also treats portable equipment that can be powered from a
+vehicle's main battery in its intended use as vehicular.
 
 - Variant M is vehicular. Its [#10](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/10)
   targets (ISO 7637-2:2011 level IV, PR #57) are stricter than level III.
@@ -416,7 +416,7 @@ access)**.
 
 | | Reading A: RED only | Reading B: RED plus an R10 declaration |
 |---|---|---|
-| Basis | The device isn't a vehicle component under type approval; the RED applies to radio equipment installed in vehicles ([RED guide](../references/index.md#ec-red-guide-2018) §1.6.3.10), and EN 301 489-1/-17 already contain the vehicular clauses (§3.3). ETSI removed its aftermarket-vehicle annex "following the demise of the EU motor vehicle EMC Directive" (EN 301 489-1 V2.2.3 history) | R10 §3.2.9 describes exactly this case: aftermarket equipment with no immunity-related function, self-declared |
+| Basis | The device isn't a vehicle component under type approval; the RED applies to radio equipment installed in vehicles ([RED guide](../references/index.md#ec-red-guide-2018) §1.6.3.10), and EN 301 489-1/-17 already contain the vehicular clauses (§3.3). ETSI removed its aftermarket-vehicle annex when the EU motor-vehicle EMC Directive ended (EN 301 489-1 V2.2.3 history) | R10 §3.2.9 describes exactly this case: aftermarket equipment with no immunity-related function, self-declared |
 | E-mark | None | None: §3.2.9 needs no type approval, so no E-mark |
 | Extra work | None beyond §3.3 | Test to the R10 ESA emission limits (CISPR 25 methods **(verify)**) and write the declaration. PR #57 already targets CISPR 25 Class 3, so the extra cost is mainly the report |
 | Risk | A vehicle manufacturer, dealer or fleet may ask for R10 evidence | Small |
