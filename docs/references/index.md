@@ -269,7 +269,16 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/bourns-lm-np-ds.pdf](cache/bourns-lm-np-ds.pdf)
 - Original: <https://www.bourns.com/pdfs/LMNPLP.pdf>
 - Retrieved: 2026-09-24; SHA-256 `3ad23168c4218a64…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md), [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+
+### bourns-sm-lp-5001-ds
+
+**SM-LP-5001 series surface-mount line matching transformers datasheet** (Bourns, datasheet)
+
+- Local copy: [cache/bourns-sm-lp-5001-ds.pdf](cache/bourns-sm-lp-5001-ds.pdf)
+- Original: <https://www.bourns.com/docs/product-datasheets/smlp5001.pdf>
+- Retrieved: 2026-09-24; SHA-256 `ea7435c6eaa58358…`
+- Cited in: [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md)
 
 ### bt-core-spec
 
@@ -280,6 +289,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Download: manual (the site blocks scripted downloads)
 - Notes: Vol 6 Part B (Link Layer): PDU format, T_IFS; Vol 3 Part A (L2CAP). Download from the page.
 - Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### cirrus-eol
+
+**Discontinued products (last-time-buy and last-time-ship dates, including WM8960 and WM8731)** (Cirrus Logic, web)
+
+- Local copy: [cache/cirrus-eol.html](cache/cirrus-eol.html)
+- Original: <https://www.cirrus.com/products/eol>
+- Retrieved: 2026-09-24; SHA-256 `9921fc8adabf9b10…`
+- Cited in: [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md)
 
 ### cobs-paper
 
@@ -597,7 +615,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/esp32s3-hw-design.pdf](cache/esp32s3-hw-design.pdf)
 - Original: <https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32s3/esp-hardware-design-guidelines-en-master-esp32s3.pdf>
 - Retrieved: 2026-09-24; SHA-256 `2ee5e2e340c2b95c…`
-- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/module-selection.md`](../../docs/research/module-selection.md)
+- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md), [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md), [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/module-selection.md`](../../docs/research/module-selection.md)
 
 ### esp32s3-mini1-ds
 
@@ -606,7 +624,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/esp32s3-mini1-ds.pdf](cache/esp32s3-mini1-ds.pdf)
 - Original: <https://www.espressif.com/sites/default/files/documentation/esp32-s3-mini-1_mini-1u_datasheet_en.pdf>
 - Retrieved: 2026-09-24; SHA-256 `4d4b7f1c17b484c6…`
-- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md), [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/module-selection.md`](../../docs/research/module-selection.md), [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
+- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md), [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md), [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/module-selection.md`](../../docs/research/module-selection.md), [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
 
 ### esp32s3-mini1-fcc-grant
 
@@ -635,6 +653,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://www.espressif.com/sites/default/files/ESP32-S3-MINI-1%20IC%20Certification.pdf>
 - Retrieved: 2026-09-24; SHA-256 `77618c1572f7f4e2…`
 - Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md), [`docs/research/module-selection.md`](../../docs/research/module-selection.md)
+
+### esp32s3-trm
+
+**ESP32-S3 technical reference manual (v1.8), chapter 28 I2S controller** (Espressif Systems, datasheet)
+
+- Local copy: [cache/esp32s3-trm.pdf](cache/esp32s3-trm.pdf)
+- Original: <https://www.espressif.com/sites/default/files/documentation/esp32-s3_technical_reference_manual_en.pdf>
+- Retrieved: 2026-09-24; SHA-256 `4484bf8a69035ec4…`
+- Cited in: [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md)
 
 ### espressif-longevity
 
@@ -1150,6 +1177,25 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `7aea28305e9a12a5…`
 - Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
 
+### nuvoton-nau88c22-ds
+
+**NAU88C22 24-bit stereo audio codec with speaker driver datasheet (Rev 0.8)** (Nuvoton Technology, datasheet)
+
+- Local copy: [cache/nuvoton-nau88c22-ds.pdf](cache/nuvoton-nau88c22-ds.pdf)
+- Original: <https://www.nuvoton.com/export/resource-files/DS_NAU88C22_DataSheet_EN_Rev0.8.pdf>
+- Retrieved: 2026-09-24; SHA-256 `55697a9f64608576…`
+- Cited in: [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md)
+
+### nxp-sgtl5000-ds
+
+**SGTL5000 low power stereo codec with headphone amp data sheet (Rev. 7)** (NXP Semiconductors, datasheet)
+
+- Local copy: [cache/nxp-sgtl5000-ds.pdf](cache/nxp-sgtl5000-ds.pdf)
+- Original: <https://www.nxp.com/docs/en/data-sheet/SGTL5000.pdf>
+- Download: manual (the site blocks scripted downloads)
+- Notes: The site blocks scripted downloads; save the PDF from a browser.
+- Cited in: [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md)
+
 ### onsemi-fdn86246-ds
 
 **FDN86246 150 V N-channel MOSFET datasheet** (onsemi, datasheet)
@@ -1405,6 +1451,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `db767b9234f756c3…`
 - Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/decisions/ADR-0004-power-automotive.md`](../../docs/decisions/ADR-0004-power-automotive.md)
 
+### ti-lp5907-ds
+
+**LP5907 250 mA low-noise low-IQ LDO datasheet (SNVS798Q)** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-lp5907-ds.pdf](cache/ti-lp5907-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/lp5907.pdf>
+- Retrieved: 2026-09-24; SHA-256 `f5deda2f0cd6f251…`
+- Cited in: [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md)
+
 ### ti-lp5907-q1-ds
 
 **LP5907-Q1 automotive 250 mA ultra-low-noise LDO datasheet** (Texas Instruments, datasheet)
@@ -1413,6 +1468,24 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://www.ti.com/lit/ds/symlink/lp5907-q1.pdf>
 - Retrieved: 2026-09-24; SHA-256 `9de43625b4950da2…`
 - Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
+
+### ti-pcm1808-ds
+
+**PCM1808 single-ended 24-bit 96 kHz stereo ADC datasheet (SLES177B)** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-pcm1808-ds.pdf](cache/ti-pcm1808-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/pcm1808.pdf>
+- Retrieved: 2026-09-24; SHA-256 `4ac1a7ec0c05ee97…`
+- Cited in: [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md)
+
+### ti-pcm5102a-ds
+
+**PCM510xA 2.1 VRMS stereo DAC with PLL datasheet (SLAS859C)** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-pcm5102a-ds.pdf](cache/ti-pcm5102a-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/pcm5102a.pdf>
+- Retrieved: 2026-09-24; SHA-256 `a522083606b8e994…`
+- Cited in: [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md)
 
 ### ti-slyy136
 
@@ -1477,6 +1550,24 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `d2a977a4cdca7bae…`
 - Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
 
+### ti-tac5112-ds
+
+**TAC5112 low-power stereo audio codec datasheet (SLASF24A)** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-tac5112-ds.pdf](cache/ti-tac5112-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/tac5112.pdf>
+- Retrieved: 2026-09-24; SHA-256 `54b43ca9dea36e36…`
+- Cited in: [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md)
+
+### ti-tac5112-q1-ds
+
+**TAC5112-Q1 automotive low-power stereo audio codec datasheet (SLASFC2A)** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-tac5112-q1-ds.pdf](cache/ti-tac5112-q1-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/tac5112-q1.pdf>
+- Retrieved: 2026-09-24; SHA-256 `c25893a63f6f11dd…`
+- Cited in: [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md)
+
 ### ti-tidub49
 
 **TIDUB49 automotive wide-VIN power front-end reference design (ISO 7637-2:2004 pulse table)** (Texas Instruments, app-note)
@@ -1493,7 +1584,16 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-tlv320aic3104-ds.pdf](cache/ti-tlv320aic3104-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/tlv320aic3104.pdf>
 - Retrieved: 2026-09-24; SHA-256 `17ce38b2b2b35e44…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
+- Cited in: [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md), [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
+
+### ti-tlv320aic3104-product
+
+**TLV320AIC3104 product page (status, newer-version notice)** (Texas Instruments, web)
+
+- Local copy: [cache/ti-tlv320aic3104-product.html](cache/ti-tlv320aic3104-product.html)
+- Original: <https://www.ti.com/product/TLV320AIC3104>
+- Retrieved: 2026-09-24; SHA-256 `2baba19fd4ec8e1b…`
+- Cited in: [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md)
 
 ### ti-tlv320aic3104-q1-ds
 
@@ -1502,7 +1602,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-tlv320aic3104-q1-ds.pdf](cache/ti-tlv320aic3104-q1-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/tlv320aic3104-q1.pdf>
 - Retrieved: 2026-09-24; SHA-256 `6a9633798673cdb8…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md), [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
 ### ti-tlv320aic3204-ds
 
@@ -1511,7 +1611,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-tlv320aic3204-ds.pdf](cache/ti-tlv320aic3204-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/tlv320aic3204.pdf>
 - Retrieved: 2026-09-24; SHA-256 `31b8b4e12b86f4e5…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md), [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
 ### ti-tmux6219-ds
 
@@ -1601,7 +1701,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-tps7a20-ds.pdf](cache/ti-tps7a20-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/tps7a20.pdf>
 - Retrieved: 2026-09-24; SHA-256 `663a9ff5bca60864…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md), [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
 ### ti-trs3221e-ds
 
@@ -1649,6 +1749,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://raw.githubusercontent.com/hathach/tinyusb/dae3f9a366bfcddbf9dcf1b48d7500286a849539/src/device/usbd.h>
 - Retrieved: 2026-09-24; SHA-256 `48040a0ea812b5f0…`
 - Cited in: [`protocol/SPEC.md`](../../protocol/SPEC.md), [`docs/decisions/ADR-0007-protocol.md`](../../docs/decisions/ADR-0007-protocol.md)
+
+### triad-ty-250p-ds
+
+**TY-250P PC-mount audio transformer datasheet** (Triad Magnetics, datasheet)
+
+- Local copy: [cache/triad-ty-250p-ds.pdf](cache/triad-ty-250p-ds.pdf)
+- Original: <https://catalog.triadmagnetics.com/asset/ty-250p.pdf>
+- Retrieved: 2026-09-24; SHA-256 `bed5eeb82a1e25a5…`
+- Cited in: [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md)
 
 ### usb-typec-r25
 

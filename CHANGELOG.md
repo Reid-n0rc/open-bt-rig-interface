@@ -10,6 +10,11 @@ and tagged independently (see `AGENTS.md`).
 
 ## Unreleased
 
+- ADR-0002 (proposed): TI TLV320AIC3104 audio codec (alternates TAC5112,
+  TLV320AIC3204) and Bourns SM-LP-5001 isolation transformers, with the
+  codec clocked from the 2.304 MHz buck-sync oscillator, 3.0 V / 1.8 V LDO
+  supplies, level plan, RF hardening and RoHS/REACH status
+  (`docs/research/audio-codec.md`) (#8).
 - Variant M automotive 12 V power front end (`docs/research/power-automotive.md`)
   and ADR-0004 (proposed): ISO 16750-2:2023 / ISO 7637-2:2011 levels confirmed
   (jump start now 26 V), LM74800-Q1 load-dump cut-off with a 150 V FET and TVS
