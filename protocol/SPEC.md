@@ -286,6 +286,7 @@ writes flash, so hosts should persist rarely; the device may answer
 | 0x0E | `USB_NET_SUBNET` | 0 | `a u8`, `b u8`, `c u8`, `d u8`: the network address of the USB network /30, in address order (`a.b.c.d`). Must be a private IPv4 address (10/8, 172.16/12 or 192.168/16) with `d` a multiple of 4; the device takes `d`+1, the host gets `d`+2 (§14.2). Takes effect at the next enumeration | 10.169.160.0 |
 | 0x0F | `PAIRING_WINDOW_S` | 0 | `s u16`: how long the pairing window stays open, 30–600 (the device reports its limits in the `PAIRING` TLV) (§13.5) | 120 |
 | 0x10 | `POWER_DOWN_DELAY_S` | 0 | `s u16`: how long after the radio (or, on variant M, the ignition) turns off the device powers itself down: 5–3600, or 0 = never. With 0, variant M can exceed its off-state drain target (REQ-PWR-016); that is the user's choice. The delay runs only while no USB host is connected on USB-C: the device stays awake in wired mode. Powering down ends the session first, which turns PTT off (§8.7) (REQ-PWR-018) | 30 |
+| 0x11 | `WIRED_PORT_LOCK` | 0 | `level u8`: 0–3, what the plain wired USB ports allow (§15.2). Only an authorized host can change it; it takes effect at the next enumeration and never asserts PTT | 0 (open) |
 
 ### 6.2 SERIAL-jack modes
 
@@ -954,6 +955,9 @@ Consequences, stated plainly:
 Present in the first row of the table in §14.1.
 
 - The port's baud rate and line format are ignored.
+- It needs no approval for its native RTS/DTR, but protocol messages on it
+  do (§15.2). `WIRED_PORT_LOCK` 1 stops its lines from keying PTT, and 2 or
+  higher removes it.
 - Its **native RTS/DTR** are PTT sources through `LINE_MAP` selector 0x0F
   (default RTS → PTT). The RTS/DTR of the SERIAL-jack bridge port (serial
   profile) use selector 0. Native lines follow the arming rules of §8.4 and
@@ -1005,10 +1009,24 @@ A wired link has no pairing of its own, so the device approves **hosts**:
 - The token travels unencrypted over the USB cable. Encrypting the TCP
   transport (the EN 18031-1 level) is planned and costed in #64, not
   specified here.
-- **Native USB serial functions aren't protocol transports.** The RTS/DTR
-  line state and data of the device's CDC-ACM ports (§14.3) work like any USB
-  serial adapter, with no approval. Whether that is acceptable at the CRA
-  level is reviewed in #64.
+- **Plain USB ports stay open without approval** (maintainer decision,
+  2026-09-25). The device's native CDC-ACM serial ports (data and RTS/DTR,
+  §14.3) and the radio's own USB devices passed through the hub (serial chip,
+  sound card) work like any USB cable or adapter: a physical cable
+  connection counts as the owner's consent. Only the USB network (IP) and
+  protocol control need approval. An approved host can close the plain ports
+  with `WIRED_PORT_LOCK` (§6.1):
+
+  | Level | Effect (at the next enumeration; each level includes the ones above it) |
+  |---|---|
+  | 0 | Open (default) |
+  | 1 | Native serial ports are present, but their RTS/DTR never key PTT (`LINE_MAP` is ignored for ports 0 and 0x0F) |
+  | 2 | Native serial ports aren't enumerated; wired control goes through the USB network only |
+  | 3 | Also isolates the radio USB port from the hub, so the host can't reach the radio's own USB devices. The USB switch on the radio port can disconnect it ([ADR-0008](../docs/decisions/ADR-0008-host-links-esp32-s3.md) topology); that the chosen switch has a disconnect state is **(verify, #9)**, and the level is reported unsupported (`OUT_OF_RANGE`) if the hardware can't |
+
+  Only an authorized host can change it, like every configuration key. A
+  change never asserts PTT; a change to level 1 or higher releases any PTT
+  keyed from a native line first.
 
 | Type | Message | Dir. | Payload |
 |---|---|---|---|

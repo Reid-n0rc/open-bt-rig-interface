@@ -820,6 +820,48 @@
       "note": "Never power down automatically (user's choice; variant M may exceed its off-state drain target)."
     },
     {
+      "name": "config_set_wired_port_lock",
+      "message": "CONFIG_SET",
+      "type": "0x11",
+      "direction": "h2d",
+      "token": 53,
+      "fields": {
+        "flags": 1,
+        "config": {
+          "key": "WIRED_PORT_LOCK",
+          "selector": 0,
+          "value": {
+            "level": 1
+          }
+        }
+      },
+      "payload_hex": "01110001",
+      "frame_hex": "1135011100014b6c",
+      "wire_hex": "051135011104014b6c00",
+      "note": "Native serial ports stay, but their RTS/DTR never key PTT."
+    },
+    {
+      "name": "config_set_wired_port_lock_isolate",
+      "message": "CONFIG_SET",
+      "type": "0x11",
+      "direction": "h2d",
+      "token": 54,
+      "fields": {
+        "flags": 1,
+        "config": {
+          "key": "WIRED_PORT_LOCK",
+          "selector": 0,
+          "value": {
+            "level": 3
+          }
+        }
+      },
+      "payload_hex": "01110003",
+      "frame_hex": "113601110003dba2",
+      "wire_hex": "05113601110403dba200",
+      "note": "No native serial ports, and the radio's own USB devices are isolated from the host."
+    },
+    {
       "name": "config_report",
       "message": "CONFIG",
       "type": "0x12",

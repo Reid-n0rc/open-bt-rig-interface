@@ -120,9 +120,18 @@ version 0.1.0) is one framed byte stream:
   - `TRUST_LIST_GET` / `TRUST_LIST` / `TRUST_REMOVE` list and remove bonds and
     approved hosts, and `FACTORY_RESET` erases them with all configuration.
   - Firmware accepts only signed images.
+  - **Plain USB ports stay open** (maintainer decision, 2026-09-25): the
+    device's native CDC-ACM serial ports (data and RTS/DTR) and the radio's
+    own USB devices behind the hub need no approval. Rationale: a physical
+    cable connection counts as the owner's consent, and legacy radio
+    software must keep working with no protocol support. Only the USB network
+    (IP) and protocol control need approval. An approved host can close the
+    plain ports with `WIRED_PORT_LOCK`: 1 = native RTS/DTR never key PTT,
+    2 = no native serial ports, 3 = also isolate the radio's USB devices
+    (if the radio-port switch can disconnect, **(verify, #9)**). The risk
+    assessment behind this belongs to #64.
   - **Not specified here:** the EN 18031-1 level (for example an encrypted
-    TCP transport, and whether the native USB serial ports need access
-    control) is planned and costed in #64.
+    TCP transport) is planned and costed in #64.
 - **Pairing window** (maintainer decision, 2026-09-24): new BLE bonds are
   accepted only during a window opened by a local action on the device
   (power-on or a pairing button; the exact trigger is for #14 and the
