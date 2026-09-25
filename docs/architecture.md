@@ -126,7 +126,7 @@ stateDiagram-v2
     Keyed --> Keyed: KEEPALIVE / PTT_SET 1 / MODEM_LINES\n(refresh keepalive)
     Keyed --> Off: every source released (RELEASED)
     Keyed --> Off: keepalive expired, protocol sources dropped (KEEPALIVE_TIMEOUT)
-    Keyed --> LockedOut: max-TX timer expired (MAX_TX)
+    Keyed --> LockedOut: max-TX timer expired (MAX_TX;\nnever, if the user disabled the timer)
     Keyed --> Off: firmware lock-up, internal watchdog resets the device\n(PTT off during and after; WATCHDOG reported afterwards)
     LockedOut --> Off: every source released
     LockedOut --> LockedOut: key attempt refused (LOCKED_OUT)
@@ -150,8 +150,8 @@ stateDiagram-v2
 ```
 
 Timers (defaults accepted by the maintainer, all configurable): keepalive
-3000 ms (500–10 000 ms), max TX 300 s (at least 10 s, no upper bound; can't
-be switched off). There is no external hardware PTT timer: after a firmware
+3000 ms (500–10 000 ms), max TX 300 s (at least 10 s, no upper bound; the
+user can disable it). There is no external hardware PTT timer: after a firmware
 lock-up the ESP32-S3's internal watchdog resets the device, with PTT off
 during and after the reset (REQ-PTT-011). Every
 fail-safe path gets a host-run firmware test (REQ-PTT-010, #14, #15).

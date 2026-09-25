@@ -270,7 +270,7 @@ writes flash, so hosts should persist rarely; the device may answer
 | 0x02 | `PTT_TARGETS` | 0 | `targets u8` (bit 0 AUDIO-jack closure, bit 1 RTS, bit 2 DTR on radio USB-serial port `usb_port`), `usb_port u8` (1–4, or 0 when bits 1–2 are clear) | closure only (0x01, 0) |
 | 0x03 | `LINE_MAP` | port (0–4, or 0x0F for the wired control port) | `rts_action u8`, `dtr_action u8`: 0–2 (§8.3); action 2 only on ports 1–4 | port 0 and 0x0F: RTS → PTT, DTR ignored; ports 1–4: both pass-through |
 | 0x04 | `PTT_KEEPALIVE_MS` | 0 | `ms u16`: 500–10 000 (the device reports its limits in the `PTT` TLV) | 3000 |
-| 0x05 | `MAX_TX_S` | 0 | `s u32`: at least `PTT.max_tx_min_s` (10), with **no upper bound** (maintainer decision, 2026-09-25); 0 is refused with `OUT_OF_RANGE`, so the timer can't be switched off, only set as long as the user wants | 300 |
+| 0x05 | `MAX_TX_S` | 0 | `s u32`: **0 disables the timer**; otherwise at least `PTT.max_tx_min_s` (10), with **no upper bound** (maintainer decisions, 2026-09-25). Values from 1 to `max_tx_min_s` − 1 are refused with `OUT_OF_RANGE` | 300 |
 | 0x06 | `AUDIO_PATH` | 0 | `path u8`: 0 automatic (radio USB sound card when present), 1 analog, 2 radio USB | 0 |
 | 0x07 | `TX_LEVEL` | 0 | `centibel i16`: TX audio level in 0.1 dB, ≤ 0 (0 = full-scale line level) | set in #16 |
 | 0x08 | `RX_ATTENUATOR` | 0 | `on u8` (the about 19 dB AUDIO-jack pad, [radio-connectors](../docs/requirements/radio-connectors.md#audio-jack-35-mm-trrs)) | 0 |
@@ -382,7 +382,8 @@ PTT safety is the most important part of this protocol
 the protocol's side of REQ-PTT-001 to REQ-PTT-011. The device-side state
 machine is in [architecture §5](../docs/architecture.md#5-ptt-safety-state-machine).
 The maintainer approved this section on 2026-09-24, and amended the max-TX
-bound and the lock-up handling on 2026-09-25
+timer (no upper bound, can be disabled) and the lock-up handling on
+2026-09-25
 ([ADR-0007](../docs/decisions/ADR-0007-protocol.md)). Later changes need the
 maintainer's explicit approval again
 ([`GOVERNANCE.md`](../GOVERNANCE.md#safety-and-compliance)).
@@ -408,7 +409,7 @@ CAT), so the radio's own timers are the only guard for CAT keying.
 | Type | Message | Dir. | Payload |
 |---|---|---|---|
 | `0x30` | `PTT_SET` | H→D | `state u8` (0 release, 1 key). Reply: `PTT_STATUS` |
-| `0x31` | `PTT_STATUS` | D→H | `state u8` (logical PTT), `sources u8` (active sources, bits above), `reason u8` (§8.6), `remaining_s u32` (max-TX time left; 0 when off). Sent on every change and as the reply to `PTT_SET` |
+| `0x31` | `PTT_STATUS` | D→H | `state u8` (logical PTT), `sources u8` (active sources, bits above), `reason u8` (§8.6), `remaining_s u32` (max-TX time left; 0 when off or when the timer is disabled). Sent on every change and as the reply to `PTT_SET` |
 | `0x32` | `KEEPALIVE` | H→D | none. Refreshes the keepalive of every source that needs one |
 
 ### 8.2 Keepalive
@@ -478,9 +479,10 @@ any      --session start, SERIAL_OPEN, USB reset/configure,
   and sends `PTT_STATUS` reason `MAX_TX`. PTT then stays **locked out** until
   every source has been released (for example `PTT_SET` 0 and the mapped
   lines deasserted); a key attempt meanwhile gets `PTT_STATUS` reason
-  `LOCKED_OUT`. `MAX_TX_S` can't be 0, so the timer can't be switched off
-  (REQ-PTT-007); it has no upper bound. Default 300 s, minimum 10 s
-  (`MAX_TX_S`, §6.1).
+  `LOCKED_OUT`. Default 300 s, minimum 10 s, no upper bound; the user can
+  disable the timer with `MAX_TX_S` = 0 (REQ-PTT-007, §6.1). The other
+  fail-safes (keepalive, session end, watchdog reset) still apply when it is
+  disabled.
 - **Firmware lock-up:** there is no separate hardware PTT timer. The
   ESP32-S3's internal watchdog resets the device within a few seconds of a
   firmware lock-up. PTT is off during the reset (the output is off unless
@@ -501,7 +503,8 @@ any      --session start, SERIAL_OPEN, USB reset/configure,
 
 - **Wired RTS/DTR has no keepalive.** A desktop program that hangs while it
   holds RTS or DTR on a wired CDC-ACM port keeps PTT keyed until `MAX_TX_S`
-  expires or the USB link goes away.
+  expires or the USB link goes away; with the max-TX timer disabled, only
+  the USB link going away ends it.
 - **CAT keying is invisible to the device.** PTT keyed by a CAT command in the
   byte stream isn't seen by the device (§8.1), so only the radio's own timers
   guard it.

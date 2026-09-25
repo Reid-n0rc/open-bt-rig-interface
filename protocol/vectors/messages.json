@@ -516,7 +516,28 @@
       "payload_hex": "01050080510100",
       "frame_hex": "112b01050080510100ff71",
       "wire_hex": "05112b01050480510103ff7100",
-      "note": "Maximum continuous TX 24 h: no upper bound, but never 0 (off)."
+      "note": "Maximum continuous TX 24 h: there is no upper bound."
+    },
+    {
+      "name": "config_set_max_tx_disabled",
+      "message": "CONFIG_SET",
+      "type": "0x11",
+      "direction": "h2d",
+      "token": 45,
+      "fields": {
+        "flags": 1,
+        "config": {
+          "key": "MAX_TX_S",
+          "selector": 0,
+          "value": {
+            "s": 0
+          }
+        }
+      },
+      "payload_hex": "01050000000000",
+      "frame_hex": "112d01050000000000c376",
+      "wire_hex": "05112d01050101010103c37600",
+      "note": "Maximum-TX timer disabled by the user (0)."
     },
     {
       "name": "config_set_audio_path",

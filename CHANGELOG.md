@@ -15,7 +15,8 @@ and tagged independently (see `AGENTS.md`).
   CRC-checked message stream over BLE GATT, L2CAP CoC, and, in wired mode, TCP
   over a new USB network interface (CDC-NCM, for iPhone/iPad) and the CDC-ACM
   control port. Covers capability discovery, CAT with credit flow control,
-  PTT with keepalive, max TX and RTS/DTR arming, BLE audio framing, clock sync,
+  PTT with keepalive, a user-configurable max TX (default 5 min, can be
+  disabled; `AGENTS.md`, `CONTRIBUTING.md`, constraints §6 updated) and RTS/DTR arming, BLE audio framing, clock sync,
   optional tone-sequence TX, a capped BLE TX power, a BLE pairing window,
   watchdog-reset reporting (`WATCHDOG`), configurable defaults
   (serial defaults, USB network subnet, pairing window, power-down delay),

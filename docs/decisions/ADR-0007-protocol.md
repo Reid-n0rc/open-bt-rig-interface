@@ -72,8 +72,8 @@ version 0.1.0) is one framed byte stream:
   10.169.160.0/30, DNS-SD `_rig-interface._tcp`, TCP port 51621); and the
   CDC-ACM control port where the endpoint budget allows.
 - **PTT safety in the protocol:** a keepalive for every protocol-originated
-  PTT source; a maximum TX time that can't be disabled, with lockout until
-  every source is released; an arming rule so that a port open that raises
+  PTT source; a user-configurable maximum TX time, with lockout until every
+  source is released; an arming rule so that a port open that raises
   RTS and DTR together never keys; PTT off at every session end.
 - **SPEC §8 (PTT rules) approved by the maintainer, 2026-09-24**, together
   with three user-facing notes in §8.5: wired CDC-ACM RTS/DTR needs no
@@ -82,9 +82,10 @@ version 0.1.0) is one framed byte stream:
   the device and guarded only by the radio's timers; RTS and DTR rising
   together count as a port open and don't key (map only one line to PTT).
 - **Max TX and lock-ups** (maintainer decisions, 2026-09-25, changing the
-  approved §8): `MAX_TX_S` defaults to 300 s and has **no upper bound**, but
-  can't be 0, so the timer required by `AGENTS.md` can't be switched off,
-  only set as long as the user wants. There is **no external hardware PTT
+  approved §8): `MAX_TX_S` defaults to 300 s, has **no upper bound**, and
+  **the user can disable it** with 0. This relaxes the earlier rule (in
+  `constraints.md` §6, REQ-PTT-007 and `AGENTS.md`) that the timer couldn't
+  be disabled; those are updated to match. There is **no external hardware PTT
   timer**: the ESP32-S3's internal watchdog resets the device after a
   firmware lock-up, PTT is off during and after the reset, and `PTT_STATUS`
   reason `WATCHDOG` reports it afterwards.
@@ -113,8 +114,8 @@ version 0.1.0) is one framed byte stream:
   the window: no protocol message, and neither the wired control port nor
   the USB network, can open it (maintainer decision, 2026-09-24).
 - **Configurable defaults** (maintainer decision, 2026-09-24): keepalive
-  3000 ms (500–10 000), max TX 300 s (at least 10 s, no upper bound, can't be
-  switched off), serial
+  3000 ms (500–10 000), max TX 300 s (at least 10 s, no upper bound, 0
+  disables it), serial
   9600 8N1 (`SERIAL_DEFAULT`), `LINE_MAP` (SERIAL-jack and control-port RTS →
   PTT, DTR ignored; radio ports pass-through), `WIRED_PROFILE` serial, USB
   network subnet 10.169.160.0/30 (`USB_NET_SUBNET`), pairing window 120 s.

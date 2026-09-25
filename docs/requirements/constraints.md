@@ -161,7 +161,9 @@ The device operates next to HF transmitters of 100 W or more.
 - PTT is **off** at power-on, reset, brownout, Bluetooth disconnect and watchdog timeout.
 - **Hardware default off:** a pull-down, or an opto/MOSFET that must be
   actively driven, so a hung MCU cannot key the radio.
-- The firmware enforces a maximum continuous TX time (configurable, cannot be disabled).
+- The firmware enforces a maximum continuous TX time: user-configurable,
+  default 5 minutes, no upper limit, and the user can disable it
+  ([ADR-0007](../decisions/ADR-0007-protocol.md), maintainer decision 2026-09-25).
 - **Galvanic isolation** of the AUDIO and SERIAL jacks toward the radio:
   transformer-coupled audio, isolated PTT, and digital isolators on the serial
   lines. **Required for variant M, and on every variant whenever the USB-C data
