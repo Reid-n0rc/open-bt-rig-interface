@@ -67,10 +67,13 @@ From the [ESP32-S3 TRM v1.8](../references/index.md#esp32s3-trm), §28.6, and th
 
 ### 2.2 Can the codec PLL run from the 2.304 MHz buck-sync clock?
 
-The power design ([PR #57](https://github.com/Reid-n0rc/open-bt-rig-interface/pull/57),
-ADR-0004, proposed) synchronizes the 3.3 V buck to a **2.304 MHz** oscillator
-(2.304 MHz = 48 × 48 kHz; SiTime SiT8924B, ±20 ppm option, no spread
-spectrum). Checked against the TLV320AIC3104 datasheet
+The shared board clock is defined in [ADR-0004](https://github.com/Reid-n0rc/open-bt-rig-interface/pull/57) (proposed, PR #57): an
+**18.432 MHz ±20 ppm oscillator** (YXC OT322518.432MJBA4SL, 0.7 ps maximum
+phase jitter) divided by 8 with SN74LVC1G80 flip-flops to **2.304 MHz**
+(= 48 × 48 kHz), star-distributed through 33 Ω series resistors to the buck
+SYNC, the codec MCLK and the isolated supply. No spread spectrum. ADR-0004
+rejected feeding the codec the 18.432 MHz clock directly (the non-PLL path)
+for emissions. Checked against the TLV320AIC3104 datasheet
 ([SLAS510G](../references/index.md#ti-tlv320aic3104-ds) §10.3.3.1, pages 26–28):
 
 - With the PLL off, fs = CLKDIV_IN / (128 × Q) with Q ≥ 2, so MCLK must be at
@@ -99,20 +102,20 @@ limits above and must be confirmed on the bench **(needs bench test)**.
 |---|---|---|---|
 | A. ESP32-S3 outputs 12.288 MHz | 160 MHz ÷ 13.0208 (fractional) | Crystal, ±10 ppm | Fractional-divider jitter at the converters; a 12.288 MHz clock net |
 | B. ESP32-S3 outputs 16 MHz; codec PLL | 160 MHz ÷ 10; P = 1, R = 1, J = 6, D = 1440 (Table 10-1) | Crystal, ±10 ppm | Adds a **16 MHz** clock net and its harmonics; no parts; uses one GPIO |
-| **D. Codec MCLK from the 2.304 MHz buck-sync oscillator; codec PLL** | P = 3, R = 8, J = 16, D = 0 (§2.2); codec is I2S master, ESP32-S3 is I2S slave | Oscillator, ±20 ppm option | **No new clock frequency on the board**; no parts beyond a series resistor on the clock trace; frees one GPIO |
+| **D. Codec MCLK from the 2.304 MHz shared clock (ADR-0004); codec PLL** | P = 3, R = 8, J = 16, D = 0 (§2.2); codec is I2S master, ESP32-S3 is I2S slave | Oscillator, ±20 ppm | **No new clock frequency on the board**; its 33 Ω series resistor and clock branch are part of ADR-0004; frees one GPIO |
 | C. Separate 12.288 MHz crystal at the codec | Codec is I2S master | That crystal | Adds a part and a third clock domain |
 
 Spurious comparison between B and D (US amateur bands per 47 CFR 97.301, as
-used in PR #57):
+used in ADR-0004):
 
 - **16 MHz (option B):** no harmonic lands in an HF band (16 and 32 MHz are
   outside 1.8–29.7 MHz; the 6 m band 50–54 MHz falls between 48 and 64 MHz),
   but the 9th harmonic, **144.000 MHz**, is at the bottom edge of the 2 m band.
   It is also a second, unrelated comb: its mixing products with the 2.304 MHz
-  buck harmonics fall at n × 2.304 ± m × 16 MHz, which PR #57's band scan
+  buck harmonics fall at n × 2.304 ± m × 16 MHz, which ADR-0004's band scan
   doesn't cover.
 - **2.304 MHz (option D):** the codec MCLK adds no new frequency; its
-  harmonics are the buck's, already scanned in PR #57 (HF clear by ≥ 88 kHz,
+  harmonics are the buck's, already scanned in ADR-0004 (HF clear by ≥ 88 kHz,
   6 m flagged for measurement). Every audio clock (MCLK 2.304 MHz, BCLK
   3.072 MHz at 64 fs, the codec PLL at 98.304 MHz) is then a multiple of
   768 kHz. The BCLK comb exists in both options.
@@ -127,18 +130,17 @@ used in PR #57):
   reaches the modulator is unknown **(needs bench test)**, but option D removes
   the mechanism.
 
-**Recommendation: option D.** It costs nothing extra (the oscillator is already
-on the board), removes the 16 MHz net and its 2 m harmonic, keeps every clock
+**Recommendation: option D.** It costs nothing extra (the shared clock is
+already on the board, ADR-0004), removes the 16 MHz net and its 2 m harmonic, keeps every clock
 on one grid, and ties the audio sample clock to the buck so supply ripple can't
 beat into the audio band. The sample clock accuracy is the oscillator's
-(±20 ppm with the option chosen in PR #57), inside ±50 ppm. Conditions:
+(±20 ppm, ADR-0004), inside ±50 ppm. Conditions:
 
 - The codec is the I2S master (it drives BCLK and WCLK); the ESP32-S3 runs as
   I2S slave, which the TRM supports (I2S clock ≥ 8 × BCLK).
-- The oscillator drives a third load (two buck SYNC pins plus the codec MCLK).
-  Check its drive strength and add a series resistor at the source; route the
-  clock away from the audio inputs **(verify with the SiT8924B datasheet in PR #57)**.
-- **Fallback:** if the 2.304 MHz oscillator isn't adopted, or the PLL setting
+- The codec MCLK is one branch of ADR-0004's star distribution, with its own
+  33 Ω series resistor. Route it away from the audio inputs.
+- **Fallback:** if ADR-0004's clock isn't adopted, or the PLL setting
   fails on the bench, use option B. A DNP 0 Ω link from an ESP32-S3 GPIO to
   the codec MCLK keeps that fallback without a board respin.
 
@@ -379,7 +381,7 @@ the output level control (up to +9 dB, limited by the output swing
 ## 7. Supplies
 
 The board has one 3.3 V rail from a buck synchronized at 2.304 MHz
-([PR #57](https://github.com/Reid-n0rc/open-bt-rig-interface/pull/57)); there
+([ADR-0004](https://github.com/Reid-n0rc/open-bt-rig-interface/pull/57), PR #57); there
 is no 5 V rail. TLV320AIC3104 supply limits
 ([SLAS510G](../references/index.md#ti-tlv320aic3104-ds) §8.1, §8.3, Table 10-5
 and §12, pages 7, 35 and 91):
@@ -473,7 +475,7 @@ is fixed by firmware configuration and measured at bring-up
   the better codec (see ADR-0002).
 - ADC SNR of the AIC3104 on the first boards (datasheet minimum 80 dB).
 - Bench-confirm the codec PLL at P = 3, R = 8, J = 16, D = 0 from 2.304 MHz
-  (§2.2), and the oscillator's drive into a third load. Fallback: 16 MHz from
+  (§2.2). Fallback: 16 MHz from
   the ESP32-S3 (option B).
 - ADC SNR and input full scale at AVDD = 3.0 V; LP5907 PSRR at 0.3 V headroom (§7).
 - ESD and immunity levels at the AUDIO jack from EN 301 489-1 (#59).

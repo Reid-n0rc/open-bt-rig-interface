@@ -23,9 +23,12 @@ added (2026-09-24): optimize for **spurious emissions and cost**, and meet
 **EU requirements** (#59): RoHS-compliant parts, REACH recorded where shown,
 jack ESD and immunity levels from EN 301 489-1.
 
-The board has a single 3.3 V rail from a buck synchronized to a 2.304 MHz
-oscillator ([PR #57](https://github.com/Reid-n0rc/open-bt-rig-interface/pull/57),
-ADR-0004, proposed); there is no 5 V rail.
+The board has a single 3.3 V rail from a buck synchronized to the shared
+2.304 MHz clock defined in [ADR-0004](https://github.com/Reid-n0rc/open-bt-rig-interface/pull/57) (proposed, PR #57): an 18.432 MHz
+±20 ppm oscillator (YXC OT322518.432MJBA4SL, 0.7 ps maximum phase jitter)
+÷ 8 with SN74LVC1G80 flip-flops, star-distributed through 33 Ω series
+resistors to the buck SYNC, the codec MCLK and the isolated supply. There is
+no 5 V rail.
 
 The issue predates [ADR-0008](ADR-0008-host-links-esp32-s3.md) and asked for
 compatibility with an HFP audio path. Under ADR-0008 there is no HFP: the
@@ -79,8 +82,8 @@ required. `TLV320AIC3104IRHBRQ1` is noted only as a pin-identical option
 - Neither alternate is pin-compatible with the AIC3104: changing needs a
   schematic change, not a BOM swap.
 
-**Clocking:** the codec MCLK comes from the **2.304 MHz buck-sync
-oscillator**, and the AIC3104 PLL makes exactly 48 kHz with integer settings:
+**Clocking:** the codec MCLK comes from the **2.304 MHz shared clock
+(ADR-0004)**, and the AIC3104 PLL makes exactly 48 kHz with integer settings:
 **P = 3, R = 8, J = 16, D = 0** (PLL input 768 kHz, PLL 98.304 MHz; checked
 against the limits in [SLAS510G](../references/index.md#ti-tlv320aic3104-ds)
 §10.3.3.1, page 27: D = 0 needs 512 kHz–20 MHz after P and 80–110 MHz, J 4–55;
@@ -90,14 +93,18 @@ the ESP32-S3:
 
 - **Spurious:** no new clock frequency on the board (the 16 MHz net's 9th
   harmonic is 144.000 MHz, in the 2 m band, and its mixing products with the
-  buck comb aren't covered by PR #57's scan); and supply ripple at the buck's
+  buck comb aren't covered by ADR-0004's scan); and supply ripple at the buck's
   8th harmonic (18.432 MHz = 3 × the 6.144 MHz modulator rate) aliases to 0 Hz
   instead of a tone of up to about 550 Hz.
-- **Cost:** no extra parts (the oscillator exists), one GPIO freed.
-- **Accuracy:** the oscillator's ±20 ppm option (PR #57), inside ±50 ppm.
+- **Cost:** no extra parts (the clock and its codec branch are in ADR-0004),
+  one GPIO freed.
+- **Accuracy:** ±20 ppm (ADR-0004's 18.432 MHz oscillator), inside ±50 ppm.
+
+Feeding the codec 18.432 MHz directly (no PLL) was rejected in ADR-0004 for
+emissions; the codec gets the ÷ 8 output.
 
 **Fallback:** 16 MHz from the ESP32-S3 (160 MHz ÷ 10; P = 1, R = 1, J = 6,
-D = 1440), through a DNP 0 Ω link, if the oscillator isn't adopted or the
+D = 1440), through a DNP 0 Ω link, if ADR-0004's clock isn't adopted or the
 2.304 MHz setting fails on the bench.
 
 **Supplies** ([`audio-codec.md` §7](../research/audio-codec.md#7-supplies)):
@@ -186,10 +193,10 @@ state (off).
   [`audio-codec.md` §6](../research/audio-codec.md#6-level-plan)).
 - **Risks to verify:** AIC3104 ADC SNR on real boards (80 dB minimum), at
   AVDD = 3.0 V; the 2.304 MHz PLL setting (not in the datasheet's example
-  table); the oscillator's drive into a third load; LP5907 PSRR at 0.3 V
+  table); LP5907 PSRR at 0.3 V
   headroom; transformer distortion at 200 Hz and maximum level; input pin
   swing at 1 Vrms with the −12 dB input level control at 3.0 V; the
-  oscillator decision in PR #57 (fallback: 16 MHz from the ESP32-S3);
+  acceptance of ADR-0004 (fallback: 16 MHz from the ESP32-S3);
   AUDIO-jack ESD and immunity levels from EN 301 489-1 **(verify, #59)**;
   RoHS/REACH of `TLV320AIC3104IRHBRQ1` (TI page not reachable); JLCPCB reflow profile versus the SM-LP-5001's 240 °C peak;
   TI's "newer version available" notice on the AIC3104 (still ACTIVE).
