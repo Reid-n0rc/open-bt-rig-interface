@@ -128,13 +128,14 @@
             "triggers": 3,
             "window_min_s": 30,
             "window_max_s": 600,
-            "max_bonds": 8
+            "max_bonds": 8,
+            "max_wired_hosts": 4
           }
         ]
       },
-      "payload_hex": "0104ff7f0300020c000fc012000000c20100000203090101c41070ea00000203090201c41070ea010002040803010303e0016009050907f40110270a000000060c00010f03e803000080841e000702e8090806031e00580208",
-      "frame_hex": "04020104ff7f0300020c000fc012000000c20100000203090101c41070ea00000203090201c41070ea010002040803010303e0016009050907f40110270a000000060c00010f03e803000080841e000702e8090806031e005802089da5",
-      "wire_hex": "0804020104ff7f0303020c040fc012010103c201010a0203090101c41070ea010b0203090201c41070ea011402040803010303e0016009050907f40110270a010103060c06010f03e803010480841e090702e8090806031e065802089da500",
+      "payload_hex": "0104ff7f0300020c000fc012000000c20100000203090101c41070ea00000203090201c41070ea010002040803010303e0016009050907f40110270a000000060c00010f03e803000080841e000702e8090807031e0058020804",
+      "frame_hex": "04020104ff7f0300020c000fc012000000c20100000203090101c41070ea00000203090201c41070ea010002040803010303e0016009050907f40110270a000000060c00010f03e803000080841e000702e8090807031e0058020804187f",
+      "wire_hex": "0804020104ff7f0303020c040fc012010103c201010a0203090101c41070ea010b0203090201c41070ea011402040803010303e0016009050907f40110270a010103060c06010f03e803010480841e090702e8090807031e0758020804187f00",
       "note": "Every TLV. The radio USB entries show a dual-port USB-serial chip (VID/PID are examples)."
     },
     {
@@ -1336,6 +1337,146 @@
       "frame_hex": "6400040c000039e8",
       "wire_hex": "026403040c010339e800",
       "note": "Playing symbol 12."
+    },
+    {
+      "name": "result_not_authorized",
+      "message": "RESULT",
+      "type": "0x05",
+      "direction": "d2h",
+      "token": 46,
+      "fields": {
+        "request_type": 48,
+        "code": 13
+      },
+      "payload_hex": "300d",
+      "frame_hex": "052e300d7a71",
+      "wire_hex": "07052e300d7a7100",
+      "note": "PTT_SET from a wired host that hasn't been approved yet."
+    },
+    {
+      "name": "auth",
+      "message": "AUTH",
+      "type": "0x70",
+      "direction": "h2d",
+      "token": 47,
+      "fields": {
+        "host_token": "3f9a1c0e7b5d42a8916e0c3b5f7d2e14"
+      },
+      "payload_hex": "3f9a1c0e7b5d42a8916e0c3b5f7d2e14",
+      "frame_hex": "702f3f9a1c0e7b5d42a8916e0c3b5f7d2e1438d4",
+      "wire_hex": "15702f3f9a1c0e7b5d42a8916e0c3b5f7d2e1438d400",
+      "note": "Wired host identifies itself with its random 128-bit token (example value only)."
+    },
+    {
+      "name": "auth_status_not_approved",
+      "message": "AUTH_STATUS",
+      "type": "0x71",
+      "direction": "d2h",
+      "token": 47,
+      "fields": {
+        "state": 1,
+        "slot": 255
+      },
+      "payload_hex": "01ff",
+      "frame_hex": "712f01ff3737",
+      "wire_hex": "07712f01ff373700",
+      "note": "Unknown host and no approval window open: press the device's button, then retry."
+    },
+    {
+      "name": "auth_status_approved",
+      "message": "AUTH_STATUS",
+      "type": "0x71",
+      "direction": "d2h",
+      "token": 48,
+      "fields": {
+        "state": 0,
+        "slot": 2
+      },
+      "payload_hex": "0002",
+      "frame_hex": "71300002e655",
+      "wire_hex": "0371300402e65500",
+      "note": "Approved (known host, or approved during the window) in wired-host slot 2."
+    },
+    {
+      "name": "trust_list_get",
+      "message": "TRUST_LIST_GET",
+      "type": "0x72",
+      "direction": "h2d",
+      "token": 49,
+      "fields": {},
+      "payload_hex": "",
+      "frame_hex": "72314655",
+      "wire_hex": "057231465500",
+      "note": "List bonded BLE hosts and approved wired hosts."
+    },
+    {
+      "name": "trust_list",
+      "message": "TRUST_LIST",
+      "type": "0x73",
+      "direction": "d2h",
+      "token": 49,
+      "fields": {
+        "records": [
+          {
+            "kind": 1,
+            "slot": 0,
+            "ident": "c0ffee123456"
+          },
+          {
+            "kind": 2,
+            "slot": 2,
+            "ident": "8d41e07a2b9c"
+          }
+        ]
+      },
+      "payload_hex": "0100c0ffee12345602028d41e07a2b9c",
+      "frame_hex": "73310100c0ffee12345602028d41e07a2b9cd12d",
+      "wire_hex": "0473310111c0ffee12345602028d41e07a2b9cd12d00",
+      "note": "One BLE bond (identity address) and one wired host (token-hash prefix); example values."
+    },
+    {
+      "name": "trust_remove",
+      "message": "TRUST_REMOVE",
+      "type": "0x74",
+      "direction": "h2d",
+      "token": 50,
+      "fields": {
+        "kind": 1,
+        "slot": 0
+      },
+      "payload_hex": "0100",
+      "frame_hex": "74320100b094",
+      "wire_hex": "0474320103b09400",
+      "note": "Remove BLE bond 0."
+    },
+    {
+      "name": "trust_remove_all_wired",
+      "message": "TRUST_REMOVE",
+      "type": "0x74",
+      "direction": "h2d",
+      "token": 51,
+      "fields": {
+        "kind": 2,
+        "slot": 255
+      },
+      "payload_hex": "02ff",
+      "frame_hex": "743302ff23e8",
+      "wire_hex": "07743302ff23e800",
+      "note": "Remove every approved wired host."
+    },
+    {
+      "name": "factory_reset",
+      "message": "FACTORY_RESET",
+      "type": "0x75",
+      "direction": "h2d",
+      "token": 52,
+      "fields": {
+        "confirm": 1413829458
+      },
+      "payload_hex": "52534554",
+      "frame_hex": "753452534554e0fa",
+      "wire_hex": "09753452534554e0fa00",
+      "note": "Factory reset; confirm must be 0x54455352 (bytes 'RSET')."
     }
   ]
 }

@@ -49,7 +49,7 @@ EXAMPLES = [
          "min_symbol_us": 1000, "max_symbol_us": 2000000},
         {"tlv": "BLE_TX_POWER", "min_dbm": -24, "max_dbm": 9},
         {"tlv": "PAIRING", "triggers": 3, "window_min_s": 30, "window_max_s": 600,
-         "max_bonds": 8},
+         "max_bonds": 8, "max_wired_hosts": 4},
      ]}, "Every TLV. The radio USB entries show a dual-port USB-serial chip (VID/PID are examples)."),
     ("caps_minimal", "CAPS", 0, {"tlvs": [
         {"tlv": "FEATURES", "features": 0x0003},
@@ -223,6 +223,23 @@ EXAMPLES = [
     ("tone_start", "TONE_START", 34, {"start_utc_us": 1790000015000000}, "Start at a UTC time."),
     ("tone_cancel", "TONE_CANCEL", 35, {}, "Cancel a scheduled or running sequence."),
     ("tone_status", "TONE_STATUS", 0, {"state": 4, "symbol": 12, "reason": 0}, "Playing symbol 12."),
+    ("result_not_authorized", "RESULT", 46, {"request_type": 0x30, "code": 13},
+     "PTT_SET from a wired host that hasn't been approved yet."),
+    ("auth", "AUTH", 47, {"host_token": "3f9a1c0e7b5d42a8916e0c3b5f7d2e14"},
+     "Wired host identifies itself with its random 128-bit token (example value only)."),
+    ("auth_status_not_approved", "AUTH_STATUS", 47, {"state": 1, "slot": 255},
+     "Unknown host and no approval window open: press the device's button, then retry."),
+    ("auth_status_approved", "AUTH_STATUS", 48, {"state": 0, "slot": 2},
+     "Approved (known host, or approved during the window) in wired-host slot 2."),
+    ("trust_list_get", "TRUST_LIST_GET", 49, {}, "List bonded BLE hosts and approved wired hosts."),
+    ("trust_list", "TRUST_LIST", 49, {"records": [
+        {"kind": 1, "slot": 0, "ident": "c0ffee123456"},
+        {"kind": 2, "slot": 2, "ident": "8d41e07a2b9c"},
+     ]}, "One BLE bond (identity address) and one wired host (token-hash prefix); example values."),
+    ("trust_remove", "TRUST_REMOVE", 50, {"kind": 1, "slot": 0}, "Remove BLE bond 0."),
+    ("trust_remove_all_wired", "TRUST_REMOVE", 51, {"kind": 2, "slot": 255}, "Remove every approved wired host."),
+    ("factory_reset", "FACTORY_RESET", 52, {"confirm": 0x54455352},
+     "Factory reset; confirm must be 0x54455352 (bytes 'RSET')."),
 ]
 
 INVALID = [

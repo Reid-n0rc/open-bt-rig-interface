@@ -112,8 +112,16 @@ def _pack_fields(schema, values: dict) -> bytes:
             if len(b) != 1:
                 raise ProtocolError(f"field '{name}' must be one ASCII character")
             out += b
+        elif kind.startswith("b") and kind[1:].isdigit():  # fixed-length bytes, hex in JSON
+            b = bytes.fromhex(v)
+            if len(b) != int(kind[1:]):
+                raise ProtocolError(f"field '{name}' must be {kind[1:]} bytes")
+            out += b
         elif kind == "hex":
             out += bytes.fromhex(v)
+        elif kind == "trust":
+            for rec in v:
+                out += _pack_fields(TRUST_RECORD, rec)
         elif kind == "utf8":
             out += v.encode("utf-8")
         elif kind == "tlv":
@@ -140,6 +148,12 @@ def _unpack_fields(schema, data: bytes, where: str) -> dict:
                 raise ProtocolError(f"{where}: too short for field '{name}'")
             values[name] = data[pos:pos + 1].decode("ascii")
             pos += 1
+        elif kind.startswith("b") and kind[1:].isdigit():
+            size = int(kind[1:])
+            if pos + size > len(data):
+                raise ProtocolError(f"{where}: too short for field '{name}'")
+            values[name] = data[pos:pos + size].hex()
+            pos += size
         else:  # trailing kinds take the rest of the payload
             rest = data[pos:]
             pos = len(data)
@@ -152,6 +166,11 @@ def _unpack_fields(schema, data: bytes, where: str) -> dict:
                     raise ProtocolError(f"{where}: field '{name}' is not UTF-8") from None
             elif kind == "tlv":
                 values[name] = _unpack_tlvs(rest)
+            elif kind == "trust":
+                if len(rest) % TRUST_RECORD_SIZE:
+                    raise ProtocolError(f"{where}: truncated trust record")
+                values[name] = [_unpack_fields(TRUST_RECORD, rest[i:i + TRUST_RECORD_SIZE], where)
+                                for i in range(0, len(rest), TRUST_RECORD_SIZE)]
             elif kind == "config":
                 values[name] = _unpack_config(rest)
             else:
@@ -177,7 +196,7 @@ CAP_TLVS = {
                     ("min_symbol_us", "u32"), ("max_symbol_us", "u32")]),
     0x07: ("BLE_TX_POWER", [("min_dbm", "i8"), ("max_dbm", "i8")]),
     0x08: ("PAIRING", [("triggers", "u8"), ("window_min_s", "u16"), ("window_max_s", "u16"),
-                       ("max_bonds", "u8")]),
+                       ("max_bonds", "u8"), ("max_wired_hosts", "u8")]),
 }
 _CAP_BY_NAME = {name: (tag, schema) for tag, (name, schema) in CAP_TLVS.items()}
 
@@ -261,7 +280,13 @@ def _unpack_config(data: bytes) -> dict:
             "value": _unpack_fields(schema, data[2:], f"config {name}")}
 
 
-# --- Messages (SPEC.md §4 to §11) ----------------------------------------------
+# --- Trust list records (SPEC.md §15) -------------------------------------------
+# kind: 1 BLE bond, 2 approved wired host; ident: BLE identity address, or the
+# first 6 bytes of SHA-256(host_token) for a wired host.
+TRUST_RECORD = [("kind", "u8"), ("slot", "u8"), ("ident", "b6")]
+TRUST_RECORD_SIZE = 8
+
+# --- Messages (SPEC.md §4 to §11, §15) ----------------------------------------------
 # type: (name, direction, fields). Direction: "h2d", "d2h" or "both".
 
 MESSAGES = {
@@ -325,6 +350,13 @@ MESSAGES = {
     0x62: ("TONE_START", "h2d", [("start_utc_us", "u64")]),
     0x63: ("TONE_CANCEL", "h2d", []),
     0x64: ("TONE_STATUS", "d2h", [("state", "u8"), ("symbol", "u16"), ("reason", "u8")]),
+    # Security (SPEC.md §15)
+    0x70: ("AUTH", "h2d", [("host_token", "b16")]),
+    0x71: ("AUTH_STATUS", "d2h", [("state", "u8"), ("slot", "u8")]),
+    0x72: ("TRUST_LIST_GET", "h2d", []),
+    0x73: ("TRUST_LIST", "d2h", [("records", "trust")]),
+    0x74: ("TRUST_REMOVE", "h2d", [("kind", "u8"), ("slot", "u8")]),
+    0x75: ("FACTORY_RESET", "h2d", [("confirm", "u32")]),
 }
 _MSG_BY_NAME = {name: (t, schema) for t, (name, _d, schema) in MESSAGES.items()}
 

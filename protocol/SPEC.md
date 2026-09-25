@@ -151,16 +151,20 @@ always identify any device: the framing (§3), `HELLO`, `DEVICE_INFO`,
 
 ### 4.2 Session start
 
-1. The host connects (Bluetooth: subscribes to TX, or opens the L2CAP channel;
-   wired: opens the control port) and sends `HELLO`.
+1. The host connects (Bluetooth: bonds, then subscribes to TX or opens the
+   L2CAP channel; wired: opens the control port or the TCP connection) and
+   sends `HELLO`.
 2. The device answers `DEVICE_INFO`. It always answers, whatever the host's
    version.
 3. If the major versions differ (or, while major is 0, the minors differ), the
    device answers every later request except `HELLO`, `CAPS_GET` and `PING`
    with `RESULT` `VERSION_MISMATCH`. The host should tell the user to update
    the app or the firmware.
-4. The host sends `CAPS_GET` and uses only what `CAPS` reports.
-5. The host reads or sets configuration, opens serial ports, and sets the time
+4. **Wired hosts** send `AUTH` with their host token and must be approved
+   before anything else works (§15.2). Bluetooth hosts are already
+   authenticated by their bond.
+5. The host sends `CAPS_GET` and uses only what `CAPS` reports.
+6. The host reads or sets configuration, opens serial ports, and sets the time
    as needed.
 
 A new `HELLO` restarts the session: the device first does everything it does
@@ -218,7 +222,7 @@ radio USB-serial chip or sound card enumerates or disappears.
 | 0x05 | `PTT` | `outputs u8` (bit 0 AUDIO-jack closure, bit 1 RTS on a radio USB-serial port, bit 2 DTR on a radio USB-serial port), `keepalive_min_ms u16`, `keepalive_max_ms u16`, `max_tx_min_s u32` (the smallest `MAX_TX_S`; there is no upper bound) |
 | 0x06 | `TONE` | `max_symbols u16`, `max_tone_index u8`, `shaping u8` (bit 0 phase-continuous FSK, bit 1 GFSK), `min_symbol_us u32`, `max_symbol_us u32` |
 | 0x07 | `BLE_TX_POWER` | `min_dbm i8`, `max_dbm i8`. `max_dbm` is the firmware cap (§6.3) |
-| 0x08 | `PAIRING` | `triggers u8` (the local actions that open the pairing window: bit 0 power-on, bit 1 pairing button), `window_min_s u16`, `window_max_s u16`, `max_bonds u8` (bonded hosts the device can store) (§13.5) |
+| 0x08 | `PAIRING` | `triggers u8` (the local actions that open the pairing window: bit 0 power-on, bit 1 pairing button), `window_min_s u16`, `window_max_s u16`, `max_bonds u8` (bonded hosts the device can store), `max_wired_hosts u8` (approved wired hosts it can store) (§13.5, §15) |
 
 ### 5.2 Feature bits
 
@@ -239,7 +243,7 @@ radio USB-serial chip or sound card enumerates or disappears.
 | 12 | `RX_ATTENUATOR` | Switchable AUDIO-jack RX attenuator |
 | 13 | `CONFIG_PERSIST` | Configuration survives power cycles |
 | 14 | `SCHEDULED_AUDIO` | `AUDIO_START.start_time_us` (§9.3) |
-| 15 | `FIRMWARE_UPDATE` | Reserved; always 0 in 0.1 (§15) |
+| 15 | `FIRMWARE_UPDATE` | Reserved; always 0 in 0.1 (§15.4) |
 | 16 | `USB_NETWORK` | Wired USB network interface and TCP transport (§14.2) |
 | 17 | `PAIRING_WINDOW` | Pairing window (§13.5), `PAIRING` TLV |
 
@@ -711,6 +715,7 @@ it with a 1500 Hz base tone.
 | 10 | `FRAME_ERROR` | A frame failed COBS, length or CRC checks |
 | 11 | `RATE_LIMITED` | Too many requests of this kind (§12.2) |
 | 12 | `INTERNAL` | Device fault |
+| 13 | `NOT_AUTHORIZED` | The host isn't approved (wired) or bonded (Bluetooth) yet (§15) |
 
 ### 12.2 Limits
 
@@ -799,7 +804,8 @@ can show link quality.
 ### 13.5 Security and pairing
 
 - RX, TX and the L2CAP channel need an **encrypted link with a bonded host**
-  (LE Secure Connections). The device rejects an unauthenticated ATT request
+  using **LE Secure Connections**; the device refuses LE legacy pairing, and
+  an unbonded central can read only the Info characteristic (§15.1). The device rejects an unauthenticated ATT request
   with *Insufficient Authentication*, which makes Apple and other hosts start
   pairing ([host compatibility §3.1](../docs/research/host-compatibility.md#31-capabilities-per-os)).
   The Info characteristic stays readable without a bond.
@@ -813,8 +819,9 @@ can show link quality.
     exact trigger and whether a button exists belong to the firmware and
     hardware issues (#14, #9) **(verify)**.
   - The window closes after `PAIRING_WINDOW_S` (default 120 s), after the
-    first new bond, or when the device enters wired mode, whichever comes
-    first.
+    first new bond or wired-host approval, or when the host mode changes,
+    whichever comes first. The same window approves new **wired** hosts
+    (§15.2).
   - **Outside the window, only bonded hosts can use the device.** Any host
     can still connect and read Info, but the device refuses pairing
     requests, so an unbonded host never reaches RX, TX or the L2CAP channel.
@@ -840,11 +847,12 @@ network interface** (TCP), and, where the endpoint budget allows, over a
 Rules for both:
 
 - They carry **the same framed stream** as Bluetooth (§3), with the same
-  session rules (§4.2). Only one session is active at a time: a `HELLO` on
+  session rules (§4.2). A host must be **approved** before it can use them
+  (§15.2). Only one session is active at a time: a `HELLO` on
   another transport takes over, and the device closes the previous one's
   session (PTT off, §8.7).
-- Available messages: session, `CAPS`, `STATUS`, configuration, `PTT_*`,
-  `KEEPALIVE`, clock sync and tone sequences. `CAT_DATA`, `SERIAL_*` and
+- Available messages: session, security (§15), `CAPS`, `STATUS`,
+  configuration, `PTT_*`, `KEEPALIVE`, clock sync and tone sequences. `CAT_DATA`, `SERIAL_*` and
   `MODEM_LINES` are available only for port 0 in the **network** profile
   (§14.1), where no native serial port exists. Audio messages get
   `UNSUPPORTED`: wired audio uses USB Audio Class.
@@ -956,16 +964,82 @@ Present in the first row of the table in §14.1.
   ([host compatibility §6.3](../docs/research/host-compatibility.md#63-user-facing-limitations-per-os));
   they use the network transport.
 
-## 15. Firmware update (deferred)
+## 15. Security
 
-The OTA transport is **not decided here**. It is deferred to the firmware core
-issue ([#14](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/14)),
-which will choose how signed images (REQ-FW-006) travel. For this protocol:
+The device keys a transmitter, so every link that can reach it needs
+authorization. This project designs to the **Cyber Resilience Act** level
+(maintainer decision, 2026-09-25,
+[#64](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/64),
+[ADR-0007](../docs/decisions/ADR-0007-protocol.md)). There is **no default
+password** anywhere.
 
-- message types 0xE0–0xEF are reserved for a firmware-update extension, added
-  in a minor version and reported by `FEATURES` bit 15;
-- wired mode may use USB DFU instead, outside this protocol
-  ([ADR-0008](../docs/decisions/ADR-0008-host-links-esp32-s3.md)).
+### 15.1 Bluetooth LE
+
+- **Bonding with LE Secure Connections is required.** LE legacy pairing is
+  refused.
+- An **unbonded central gets only the Info characteristic** (§13.2). RX, TX
+  and the L2CAP channel need an encrypted link with a bonded host.
+- New bonds are made only during the pairing window (§13.5).
+
+### 15.2 Wired hosts (USB network and CDC-ACM control port)
+
+A wired link has no pairing of its own, so the device approves **hosts**:
+
+- **Host identity:** each host generates a random 128-bit **host token** once
+  (from a cryptographically secure random source) and keeps it. It sends the
+  token in `AUTH` after `HELLO`. The token identifies the host; it isn't a
+  password the user types, and the device has no default one.
+- **Approval:** an unknown token is approved only while the pairing window
+  is open, and the window is opened only by the same **local action on the
+  device** that allows new Bluetooth bonds (§13.5). The device then stores
+  the host (it should store a hash of the token, not the token itself
+  **(verify, #64)**) and closes the window. Approved hosts are remembered
+  across power cycles, up to `PAIRING.max_wired_hosts`.
+- **Until a host is approved** the device answers only `HELLO`, `CAPS_GET`,
+  `PING` and `AUTH`, and refuses every other message with `RESULT`
+  `NOT_AUTHORIZED`. The flow: the host sends `AUTH`; the device answers
+  `AUTH_STATUS` state 1 (not approved); the user presses the button (or power
+  cycles the device) to open the window; the host sends `AUTH` again (for
+  example every 2 s) and gets state 0.
+- Approval lasts for the session. A new `HELLO` needs a new `AUTH`.
+- The token travels unencrypted over the USB cable. Encrypting the TCP
+  transport (the EN 18031-1 level) is planned and costed in #64, not
+  specified here.
+- **Native USB serial functions aren't protocol transports.** The RTS/DTR
+  line state and data of the device's CDC-ACM ports (§14.3) work like any USB
+  serial adapter, with no approval. Whether that is acceptable at the CRA
+  level is reviewed in #64.
+
+| Type | Message | Dir. | Payload |
+|---|---|---|---|
+| `0x70` | `AUTH` | H→D | `host_token b16` (16 bytes). Reply: `AUTH_STATUS`. Over Bluetooth the bond already authorizes the host; `AUTH` then just returns state 0 |
+| `0x71` | `AUTH_STATUS` | D→H | `state u8` (0 approved, 1 not approved: open the pairing window and retry, 2 refused: no free slot), `slot u8` (the host's slot, 0xFF when not approved) |
+
+### 15.3 Managing trusted hosts
+
+An authorized host can list and remove bonds and approved wired hosts:
+
+| Type | Message | Dir. | Payload |
+|---|---|---|---|
+| `0x72` | `TRUST_LIST_GET` | H→D | none. Reply: `TRUST_LIST` |
+| `0x73` | `TRUST_LIST` | D→H | `records`: 8 bytes each: `kind u8` (1 Bluetooth bond, 2 approved wired host), `slot u8`, `ident b6` (the bond's identity address, or the first 6 bytes of SHA-256 of a wired host's token, so a host can recognize itself) |
+| `0x74` | `TRUST_REMOVE` | H→D | `kind u8`, `slot u8` (0xFF = every entry of that kind). Reply: `RESULT`. Removing the host that sent it ends its session |
+| `0x75` | `FACTORY_RESET` | H→D | `confirm u32`, which must be 0x54455352 (the bytes `RSET`), otherwise `BAD_VALUE`. Reply: `RESULT`, then the device erases configuration, bonds, approved hosts and the UTC mapping, and restarts with PTT off |
+
+A factory reset should also be possible by a local action on the device, for
+a user who has lost every trusted host; the exact action belongs to #14 and
+the hardware **(verify)**.
+
+### 15.4 Firmware updates
+
+- The firmware accepts **only signed images** (REQ-FW-006). Secure boot and
+  flash encryption on the ESP32-S3 are planned in #64 **(verify)**.
+- The OTA transport is **not decided here**. It is deferred to
+  [#14](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/14) and #64.
+  Message types 0xE0–0xEF are reserved for a firmware-update extension,
+  added in a minor version and reported by `FEATURES` bit 15; only an
+  authorized host will be able to use it. Wired mode may use USB DFU instead,
+  outside this protocol ([ADR-0008](../docs/decisions/ADR-0008-host-links-esp32-s3.md)).
 
 ## 16. Message index
 
@@ -1006,7 +1080,13 @@ which will choose how signed images (REQ-FW-006) travel. For this protocol:
 | `0x62` | `TONE_START` | H→D | §11 |
 | `0x63` | `TONE_CANCEL` | H→D | §11 |
 | `0x64` | `TONE_STATUS` | D→H | §11 |
-| `0xE0`–`0xEF` | reserved | — | firmware update (§15) |
+| `0x70` | `AUTH` | H→D | §15.2 |
+| `0x71` | `AUTH_STATUS` | D→H | §15.2 |
+| `0x72` | `TRUST_LIST_GET` | H→D | §15.3 |
+| `0x73` | `TRUST_LIST` | D→H | §15.3 |
+| `0x74` | `TRUST_REMOVE` | H→D | §15.3 |
+| `0x75` | `FACTORY_RESET` | H→D | §15.3 |
+| `0xE0`–`0xEF` | reserved | — | firmware update (§15.4) |
 | `0xF0`–`0xFE` | reserved | — | experiments; never in a release |
 | `0xFF` | reserved | — | never used |
 
@@ -1020,7 +1100,8 @@ which will choose how signed images (REQ-FW-006) travel. For this protocol:
 `STATUS.flags`: bit 0 radio USB-serial chip present; bit 1 radio USB sound
 card present; bit 2 a device is attached to the radio USB port but isn't usable (enumeration failed or unsupported class); bit 3
 UTC mapping fresh (§10.3); bit 4 USB-C source advertises 1.5 A or more; bit 5
-audio running; bit 6 pairing window open (§13.5). Other bits reserved.
+audio running; bit 6 pairing window open (§13.5); bit 7 this session's host
+is authorized (§15). Other bits reserved.
 
 ## 17. Golden vectors and the reference codec
 

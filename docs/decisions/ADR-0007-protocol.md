@@ -101,13 +101,34 @@ version 0.1.0) is one framed byte stream:
   mapping for scheduled audio and the optional tone-sequence module.
 - **BLE TX power** can only be lowered through the protocol; the firmware cap
   (at or below the grant's 10.3 dBm) can't be exceeded.
-- **OTA transport:** deferred to #14. Message types 0xE0–0xEF and a feature
-  bit are reserved; wired mode may use USB DFU (ADR-0008).
+- **OTA transport:** deferred to #14 and #64. Message types 0xE0–0xEF and a
+  feature bit are reserved; only signed images are accepted; wired mode may
+  use USB DFU (ADR-0008).
+- **Security to the Cyber Resilience Act level** (maintainer decision,
+  2026-09-25, [#64](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/64);
+  EU compliance research in [PR #62](https://github.com/Reid-n0rc/open-bt-rig-interface/pull/62)),
+  SPEC §15:
+  - Bluetooth: LE Secure Connections bonding is required, and unbonded
+    centrals get only the Info characteristic.
+  - Wired hosts (USB-network TCP and the CDC-ACM control port) must be
+    **approved** by the same local action on the device that opens the BLE
+    pairing window. A host identifies itself with a random 128-bit host
+    token it generates once and sends in `AUTH`. The device remembers
+    approved hosts. There is no default password. Until approval the device
+    answers only `HELLO`, `CAPS_GET`, `PING` and `AUTH`, and refuses the rest
+    with `NOT_AUTHORIZED`.
+  - `TRUST_LIST_GET` / `TRUST_LIST` / `TRUST_REMOVE` list and remove bonds and
+    approved hosts, and `FACTORY_RESET` erases them with all configuration.
+  - Firmware accepts only signed images.
+  - **Not specified here:** the EN 18031-1 level (for example an encrypted
+    TCP transport, and whether the native USB serial ports need access
+    control) is planned and costed in #64.
 - **Pairing window** (maintainer decision, 2026-09-24): new BLE bonds are
   accepted only during a window opened by a local action on the device
   (power-on or a pairing button; the exact trigger is for #14 and the
   hardware **(verify)**). It closes after `PAIRING_WINDOW_S` (default 120 s),
-  after the first new bond, or on entering wired mode. Outside the window
+  after the first new bond or wired-host approval, or on a host-mode
+  change. Outside the window
   only bonded hosts can use the device. Info `flags` bit 1 and `STATUS.flags`
   bit 6 show the window; the `PAIRING` capability reports the triggers, the
   allowed window lengths and the bond capacity. Only a local action opens
@@ -186,8 +207,9 @@ full-speed composite is **(verify, #44)**.
 - To verify on hardware (#18): NCM on iOS, iPadOS, macOS and Android;
   Windows and macOS RTS/DTR behavior at port open; BLE throughput per OS; the
   clock-sync accuracy against ±20 ms.
-- Firmware (#14) needs a pairing-window state machine and a trigger; the
-  hardware (#9) decides whether there is a pairing button.
+- Firmware (#14, #64) needs a pairing-window state machine and a trigger, a
+  trusted-host store and a local factory-reset action; the hardware (#9)
+  decides whether there is a pairing button.
 - Open: EU conformity (RED Delegated Regulation 2022/30, EN 18031-1) may
   add access-control or authentication requirements to the wired control
   port and the USB-network TCP transport; #59 will report back.
