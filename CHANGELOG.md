@@ -10,6 +10,15 @@ and tagged independently (see `AGENTS.md`).
 
 ## Unreleased
 
+- Variant R power (`docs/research/power-radio-usbc.md`, ADR-0005 proposed):
+  input-only power from the radio's accessory DC pin or USB-C (sink only, no
+  VBUS to the radio); a 0.25 A fuse, Schottky and TVS on the DC input; a
+  TPS2121 priority mux feeding one LMR43620MC3RPERQ1 3.3 V buck synchronized
+  to 2.304 MHz, clear of the HF amateur bands (harmonic analysis); a power
+  budget per mode (wired mode about 276 mA on a 500 mA USB-C port); a table of
+  which radios can power variant R; radio-on sense and auto power up/down;
+  dated LCSC prices with RoHS status, a power-section BOM cost, and EU EMC
+  targets (#11).
 - Radio module confirmation (`docs/research/module-selection.md`): the
   ESP32-S3-MINI-1 FCC grant (2AC7Z-ESPS3MINI1: single modular, BLE certified at
   10.3 dBm conducted, 20 cm mobile use), ISED ID, lifecycle and dated LCSC

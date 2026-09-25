@@ -128,6 +128,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `ade234c9def317e4…`
 - Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
 
+### ecfr-47-97-301
+
+**47 CFR 97.301 Authorized frequency bands (eCFR, current as of 2026-09-24)** (U.S. Government Publishing Office (eCFR), web)
+
+- Local copy: [cache/ecfr-47-97-301.html](cache/ecfr-47-97-301.html)
+- Original: <https://www.ecfr.gov/current/title-47/chapter-I/subchapter-D/part-97/subpart-D/section-97.301>
+- Retrieved: 2026-09-24; SHA-256 `f3734ae4d7fa1127…`
+- Cited in: [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md), [`docs/decisions/ADR-0005-power-radio-usbc.md`](../../docs/decisions/ADR-0005-power-radio-usbc.md)
+
 ### esp-idf-hfp-hf-readme
 
 **ESP-IDF hfp_hf example README (HFP data paths, mSBC)** (Espressif Systems (Apache-2.0), sdk)
@@ -189,7 +198,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/esp32s3-mini1-ds.pdf](cache/esp32s3-mini1-ds.pdf)
 - Original: <https://www.espressif.com/sites/default/files/documentation/esp32-s3-mini-1_mini-1u_datasheet_en.pdf>
 - Retrieved: 2026-09-24; SHA-256 `4d4b7f1c17b484c6…`
-- Cited in: [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/module-selection.md`](../../docs/research/module-selection.md), [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+- Cited in: [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/module-selection.md`](../../docs/research/module-selection.md), [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md), [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
 
 ### esp32s3-mini1-fcc-grant
 
@@ -381,6 +390,16 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `c79fd0a7e789106a…`
 - Cited in: [`docs/research/module-selection.md`](../../docs/research/module-selection.md)
 
+### littelfuse-0466-ds
+
+**Littelfuse 466 Series 1206 fast-acting surface-mount fuse datasheet** (Littelfuse, datasheet)
+
+- Local copy: [cache/littelfuse-0466-ds.pdf](cache/littelfuse-0466-ds.pdf)
+- Original: <https://datasheet.lcsc.com/datasheet/pdf/0bcfbc78ab5946639ddffe2b4625af7e.pdf?productCode=C151133>
+- Retrieved: 2026-09-24; SHA-256 `c08f5686d773c27b…`
+- Notes: Manufacturer copy hosted by LCSC.
+- Cited in: [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
+
 ### microchip-bm83-spp-kb
 
 **Microchip KB: BM83 BLE and SPP simultaneous connection** (Microchip, web)
@@ -398,7 +417,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/microchip-usb2422-ds.pdf](cache/microchip-usb2422-ds.pdf)
 - Original: <https://ww1.microchip.com/downloads/en/DeviceDoc/00001726B.pdf>
 - Retrieved: 2026-09-24; SHA-256 `4a9ad71cd6535368…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
 
 ### pico-btstack-license
 
@@ -436,6 +455,16 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `70b71413a61c8777…`
 - Cited in: [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
+### sitime-sit8924b-ds
+
+**SiT8924B automotive AEC-Q100 programmable oscillator datasheet** (SiTime, datasheet)
+
+- Local copy: [cache/sitime-sit8924b-ds.pdf](cache/sitime-sit8924b-ds.pdf)
+- Original: <https://datasheet.lcsc.com/datasheet/pdf/8c96a8aa3d565d5919120c49061d45c5.pdf?productCode=C401144>
+- Retrieved: 2026-09-24; SHA-256 `7b593d10a0902132…`
+- Notes: Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).
+- Cited in: [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md), [`docs/decisions/ADR-0005-power-radio-usbc.md`](../../docs/decisions/ADR-0005-power-radio-usbc.md)
+
 ### ti-iso7721-ds
 
 **ISO772x dual-channel digital isolator datasheet** (Texas Instruments, datasheet)
@@ -463,6 +492,33 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `6c888eeb219d47fb…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
+### ti-lmr436x0-ds
+
+**LMR436x0 36 V 1 A / 2 A buck converter datasheet (SNVSBY5B)** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-lmr436x0-ds.pdf](cache/ti-lmr436x0-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/lmr43620.pdf>
+- Retrieved: 2026-09-24; SHA-256 `18b2cc488ccfa848…`
+- Cited in: [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md), [`docs/decisions/ADR-0005-power-radio-usbc.md`](../../docs/decisions/ADR-0005-power-radio-usbc.md)
+
+### ti-lmr436x0-q1-ds
+
+**LMR43610-Q1 / LMR43620-Q1 36 V 1 A / 2 A automotive buck converter datasheet (SNVSBE0H)** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-lmr436x0-q1-ds.pdf](cache/ti-lmr436x0-q1-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/lmr43620-q1.pdf>
+- Retrieved: 2026-09-24; SHA-256 `db767b9234f756c3…`
+- Cited in: [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
+
+### ti-sn6505-ds
+
+**SN6505x low-noise 1 A transformer drivers for isolated power supplies datasheet** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-sn6505-ds.pdf](cache/ti-sn6505-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/sn6505b.pdf>
+- Retrieved: 2026-09-24; SHA-256 `dfc57cb042218cb6…`
+- Cited in: [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
+
 ### ti-sn74lvc1g07-ds
 
 **SN74LVC1G07 single buffer with open-drain output datasheet** (Texas Instruments, datasheet)
@@ -488,7 +544,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-tlv320aic3104-ds.pdf](cache/ti-tlv320aic3104-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/tlv320aic3104.pdf>
 - Retrieved: 2026-09-24; SHA-256 `17ce38b2b2b35e44…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
 
 ### ti-tlv320aic3104-q1-ds
 
@@ -542,7 +598,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-tps2121-ds.pdf](cache/ti-tps2121-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/tps2121.pdf>
 - Retrieved: 2026-09-24; SHA-256 `b2f5950f596dc2c4…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md), [`docs/decisions/ADR-0005-power-radio-usbc.md`](../../docs/decisions/ADR-0005-power-radio-usbc.md)
 
 ### ti-tps2553-ds
 
@@ -552,6 +608,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://www.ti.com/lit/ds/symlink/tps2553.pdf>
 - Retrieved: 2026-09-24; SHA-256 `88e453700cea2b26…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+
+### ti-tps2660-ds
+
+**TPS2660x 60 V, 2 A industrial eFuse with integrated reverse input polarity protection datasheet (SLVSDG2G)** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-tps2660-ds.pdf](cache/ti-tps2660-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/tps2660.pdf>
+- Retrieved: 2026-09-24; SHA-256 `b781cbce51984715…`
+- Cited in: [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md), [`docs/decisions/ADR-0005-power-radio-usbc.md`](../../docs/decisions/ADR-0005-power-radio-usbc.md)
 
 ### ti-tps3430-ds
 
@@ -569,7 +634,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-tps62933-ds.pdf](cache/ti-tps62933-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/tps62933.pdf>
 - Retrieved: 2026-09-24; SHA-256 `16ec2eac43c7374e…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md), [`docs/decisions/ADR-0005-power-radio-usbc.md`](../../docs/decisions/ADR-0005-power-radio-usbc.md)
 
 ### ti-tps7a20-ds
 
@@ -578,7 +643,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-tps7a20-ds.pdf](cache/ti-tps7a20-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/tps7a20.pdf>
 - Retrieved: 2026-09-24; SHA-256 `663a9ff5bca60864…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
 
 ### ti-trs3221e-ds
 
@@ -597,3 +662,22 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://www.ti.com/lit/ds/symlink/ts3usb221a.pdf>
 - Retrieved: 2026-09-24; SHA-256 `cccebf8c10df6051…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+
+### usb-typec-r20
+
+**USB Type-C Cable and Connector Specification, Release 2.0 (August 2019)** (USB Implementers Forum, standard)
+
+- Local copy: [cache/usb-typec-r20.pdf](cache/usb-typec-r20.pdf)
+- Original: <https://www.usb.org/sites/default/files/USB%20Type-C%20Spec%20R2.0%20-%20August%202019.pdf>
+- Retrieved: 2026-09-24; SHA-256 `87d15160bf8bd251…`
+- Notes: Tables 4-17 (power precedence), 4-24 (Rp), 4-25 (Rd), 4-36 (sink CC voltages); section 4.6.1.1 (suspend). The current release (R2.5) is a manual download (#6).
+- Cited in: [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md), [`docs/decisions/ADR-0005-power-radio-usbc.md`](../../docs/decisions/ADR-0005-power-radio-usbc.md)
+
+### vishay-smbj-ds
+
+**SMBJ5.0A thru SMBJ188A TRANSZORB TVS datasheet (doc 88392, rev. 09-Jan-2024; HE3 = AEC-Q101)** (Vishay, datasheet)
+
+- Local copy: [cache/vishay-smbj-ds.pdf](cache/vishay-smbj-ds.pdf)
+- Original: <https://www.vishay.com/docs/88392/smbj.pdf>
+- Retrieved: 2026-09-24; SHA-256 `1b65b57a43111280…`
+- Cited in: [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md), [`docs/decisions/ADR-0005-power-radio-usbc.md`](../../docs/decisions/ADR-0005-power-radio-usbc.md)
