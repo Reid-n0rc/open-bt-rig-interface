@@ -10,6 +10,15 @@ and tagged independently (see `AGENTS.md`).
 
 ## Unreleased
 
+- Variants and board strategy, ADR-0006 (proposed): revision A is one board,
+  `hardware/boards/interface/revA/`, with KiCad 10 design variants `R` and `M`
+  (they differ in the power input chain and the isolation fitting). Tags
+  `hw-R-revA-v1.0` and `hw-M-revA-v1.0`, outputs exported with `--variant`;
+  the front silkscreen shows `${VARIANT}` next to `${REVISION}`; enclosures
+  `hardware/enclosure/R/` (PETG) and `M/` (ASA). `check_silkscreen.py` now
+  requires declared design variants and `${VARIANT}`, and matches `hw-*` tags
+  to a declared variant instead of the board folder name. AGENTS.md, README,
+  roadmap, developer guide and hardware READMEs updated (#12).
 - EU compliance (`docs/compliance/eu.md`, ADR-0009, proposed): EU conformity is
   now required for every variant. Applicability per variant of the RED
   (safety, EMC, EN 300 328; cybersecurity under Delegated Regulation 2022/30,

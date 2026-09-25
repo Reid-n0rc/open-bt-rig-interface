@@ -20,11 +20,11 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import check_silkscreen as cs  # noqa: E402
 
-BOARD = "hardware/boards/core-R/revA"
-PCB_PATH = f"{BOARD}/core.kicad_pcb"
+BOARD = "hardware/boards/interface/revA"
+PCB_PATH = f"{BOARD}/interface.kicad_pcb"
 
 GOOD_TEXTS = [
-    ('"open-bt-rig-interface R"', "F.SilkS"),
+    ('"open-bt-rig-interface ${VARIANT}"', "F.SilkS"),
     ('"Rev ${REVISION}  ${ISSUE_DATE}"', "F.SilkS"),
     ('"Designed by Reid Crowe, N0RC"', "B.SilkS"),
     ('"CC BY-NC-SA 4.0"', "B.SilkS"),
@@ -36,11 +36,18 @@ def gr_text(text, layer, extra=""):
             f'\t\t(effects (font (size 1 1) (thickness 0.15)))\n\t)\n')
 
 
-def board(texts=GOOD_TEXTS, title='(title_block (date "2026-09-24") (rev "A"))', extra=""):
-    """TEST FIXTURE: a minimal KiCad 10 board with the given silkscreen texts."""
+def variants_block(*names):
+    """TEST FIXTURE: the board-level list of KiCad design variants."""
+    items = "".join(f'\t\t(variant\n\t\t\t(name "{n}")\n\t\t)\n' for n in names)
+    return f"\t(variants\n{items}\t)\n" if names else ""
+
+
+def board(texts=GOOD_TEXTS, title='(title_block (date "2026-09-24") (rev "A"))', extra="",
+          variants=("R", "M")):
+    """TEST FIXTURE: a minimal KiCad 10 board with the given silkscreen texts and design variants."""
     body = "".join(gr_text(t, layer) for t, layer in texts)
     return (f'(kicad_pcb\n\t(version 20260206)\n\t(generator "pcbnew")\n\t(generator_version "10.0")\n'
-            f'\t(paper "A4")\n\t{title}\n{body}{extra})\n')
+            f'\t(paper "A4")\n\t{title}\n{variants_block(*variants)}{body}{extra})\n')
 
 
 class SilkscreenTests(unittest.TestCase):
@@ -112,7 +119,7 @@ class SilkscreenTests(unittest.TestCase):
             self.assertEqual(self.errors(), [], text)
 
     def test_required_marks(self):
-        self.write(PCB_PATH, board(GOOD_TEXTS[1:2]))
+        self.write(PCB_PATH, board(GOOD_TEXTS[1:2] + [('"${VARIANT}"', "F.SilkS")]))
         errors = self.errors()
         self.assertEqual(len(errors), 3, errors)
         self.assertIn("missing the project name 'open-bt-rig-interface'", errors[0])
@@ -123,7 +130,7 @@ class SilkscreenTests(unittest.TestCase):
         texts = self.replace_text(3, '"${LICENSE}"')
         self.write(PCB_PATH, board(texts))
         self.assertOneError("license mark")
-        self.write(f"{BOARD}/core.kicad_pro", json.dumps({"text_variables": {"LICENSE": "CC  BY-NC-SA 4.0"}}))
+        self.write(f"{BOARD}/interface.kicad_pro", json.dumps({"text_variables": {"LICENSE": "CC  BY-NC-SA 4.0"}}))
         self.assertEqual(self.errors(), [])
 
     def test_hidden_and_non_silkscreen_text_is_ignored(self):
@@ -141,8 +148,8 @@ class SilkscreenTests(unittest.TestCase):
         self.assertOneError("F.SilkS text 'rev2' hard-codes a revision")
 
     def test_board_must_sit_in_a_rev_folder(self):
-        for rel in ("hardware/boards/core-R/core.kicad_pcb", "hardware/boards/core-R/A/core.kicad_pcb",
-                    "hardware/boards/core-R/revA/sub/core.kicad_pcb"):
+        for rel in ("hardware/boards/interface/interface.kicad_pcb", "hardware/boards/interface/A/interface.kicad_pcb",
+                    "hardware/boards/interface/revA/sub/interface.kicad_pcb"):
             with self.subTest(rel=rel):
                 shutil.rmtree(self.root / "hardware", ignore_errors=True)
                 self.write(rel, board())
@@ -156,13 +163,46 @@ class SilkscreenTests(unittest.TestCase):
         self.write("hardware/lib/footprints/demo.kicad_pcb", board(texts=[]))
         self.assertEqual(self.errors(), [])
 
+    def test_board_needs_design_variants(self):
+        self.write(PCB_PATH, board(variants=()))
+        self.assertOneError("no KiCad design variant is defined")
+
+    def test_variant_names_must_fit_a_tag(self):
+        for name in ("R M", "R_1", "-R", "R-", "Mobile/12V"):
+            with self.subTest(name=name):
+                self.write(PCB_PATH, board(variants=("R", name)))
+                self.assertOneError(f"design variant {name!r} can't be used in a hw-<variant>")
+        self.write(PCB_PATH, board(variants=("R", "M", "R-ISO", "U2")))
+        self.assertEqual(self.errors(), [])
+        self.assertEqual(self.errors("hw-R-ISO-revA-v1.0"), [])
+
+    def test_front_silkscreen_needs_variant_variable(self):
+        self.write(PCB_PATH, board(self.replace_text(0, '"open-bt-rig-interface R"')))
+        self.assertOneError("no front silkscreen (F.SilkS) text contains ${VARIANT}")
+        self.write(PCB_PATH, board(self.replace_text(0, '"open-bt-rig-interface ${VARIANT}"', "B.SilkS")))
+        self.assertOneError("contains ${VARIANT}")
+
+    def test_design_variants_are_read_from_the_board_only(self):
+        footprint = ('\t(footprint "R_0402" (layer "F.Cu")\n'
+                     '\t\t(variant (name "X") (dnp yes))\n\t)\n')
+        tree = cs.parse_sexpr(board(extra=footprint))
+        self.assertEqual(cs.design_variants(tree), ["R", "M"])
+
     def test_tag_matching(self):
         self.write(PCB_PATH, board())
-        for tag in ("hw-R-revA-v1.0", "hw-core-R-revA-v1.0.0", "hw-R-revA-v1.2.3-rc.1", "fw-v0.1.0", ""):
+        for tag in ("hw-R-revA-v1.0", "hw-M-revA-v1.0", "hw-R-revA-v1.0.1", "hw-R-revA-v1.2.3-rc.1",
+                    "fw-v0.1.0", ""):
             self.assertEqual(self.errors(tag), [], tag)
         self.assertOneError("no board", "revB", tag="hw-R-revB-v1.0")
-        self.assertOneError("no board", tag="hw-M-revA-v1.0")
+        self.assertOneError("declares the design variant 'U'", "interface/revA [R M]", tag="hw-U-revA-v1.0")
+        self.assertOneError("declares the design variant 'r'", tag="hw-r-revA-v1.0")
         self.assertOneError("does not follow hw-<variant>-rev<X>-v<semver>", tag="hw-R-A-1.0")
+
+    def test_tag_matches_the_variant_not_the_folder_name(self):
+        self.write("hardware/boards/interface-U/revA/interface-U.kicad_pcb", board(variants=("R",)))
+        self.assertOneError("declares the design variant 'U'", tag="hw-U-revA-v1.0")
+        self.write("hardware/boards/small/revA/small.kicad_pcb", board(variants=("U",)))
+        self.assertEqual(self.errors("hw-U-revA-v1.0"), [])
 
     def test_hardware_tag_without_boards_fails(self):
         self.assertOneError("boards: none", tag="hw-R-revA-v1.0")

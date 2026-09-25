@@ -1270,6 +1270,42 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `c2fbbbec84c95ede…`
 - Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)
 
+### kicad-10-0-0-release
+
+**Version 10.0.0 Released (release announcement; design variants)** (KiCad, web)
+
+- Local copy: [cache/kicad-10-0-0-release.html](cache/kicad-10-0-0-release.html)
+- Original: <https://www.kicad.org/blog/2026/03/Version-10.0.0-Released/>
+- Retrieved: 2026-09-25; SHA-256 `ba6110d3db8e5dd1…`
+- Cited in: [`docs/decisions/ADR-0006-variants-and-board-strategy.md`](../../docs/decisions/ADR-0006-variants-and-board-strategy.md)
+
+### kicad10-cli-manual
+
+**KiCad 10.0 command-line interface reference (kicad-cli; --variant on schematic and PCB export commands)** (KiCad, web)
+
+- Local copy: [cache/kicad10-cli-manual.html](cache/kicad10-cli-manual.html)
+- Original: <https://docs.kicad.org/10.0/en/cli/cli.html>
+- Retrieved: 2026-09-25; SHA-256 `7bc024f6a5fd9a53…`
+- Cited in: [`docs/decisions/ADR-0006-variants-and-board-strategy.md`](../../docs/decisions/ADR-0006-variants-and-board-strategy.md)
+
+### kicad10-eeschema-manual
+
+**KiCad 10.0 Schematic Editor manual (Design variants: fitted/DNP, field overrides, BOM and position-file exclusion, sheet-level variants, ${VARIANT}; sharing sheet files between projects; design blocks)** (KiCad, web)
+
+- Local copy: [cache/kicad10-eeschema-manual.html](cache/kicad10-eeschema-manual.html)
+- Original: <https://docs.kicad.org/10.0/en/eeschema/eeschema.html>
+- Retrieved: 2026-09-25; SHA-256 `946e6d13b16d5b95…`
+- Cited in: [`docs/decisions/ADR-0006-variants-and-board-strategy.md`](../../docs/decisions/ADR-0006-variants-and-board-strategy.md)
+
+### kicad10-pcbnew-manual
+
+**KiCad 10.0 PCB Editor manual (Design variants: variant selector, DNP on fabrication layers, variant-aware Gerber, position, STEP, ODB++ and IPC-2581 output)** (KiCad, web)
+
+- Local copy: [cache/kicad10-pcbnew-manual.html](cache/kicad10-pcbnew-manual.html)
+- Original: <https://docs.kicad.org/10.0/en/pcbnew/pcbnew.html>
+- Retrieved: 2026-09-25; SHA-256 `f8a930d326061390…`
+- Cited in: [`docs/decisions/ADR-0006-variants-and-board-strategy.md`](../../docs/decisions/ADR-0006-variants-and-board-strategy.md)
+
 ### lcsc-esp32s3-mini1-n4r2
 
 **LCSC C3013941: ESP32-S3-MINI-1-N4R2 (price, stock)** (LCSC Electronics, web)
