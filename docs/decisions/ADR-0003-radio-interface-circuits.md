@@ -30,13 +30,21 @@ Maintainer decisions and directions made while this issue was open
    ADR-0008 consequence "the VBUS switch to the radio (TPS2553-class) stays"
    (ADR-0008 is accepted and isn't edited). The IC-705 can't charge from the
    device and is low priority. The K4 connects through its USB-B port only.
-2. **A hardware PTT timer**: independent of the MCU, default 10 minutes,
-   configurable.
+2. **A hardware PTT timer**: independent of the MCU, about 10 minutes,
+   configurable. Follow-ups (2026-09-25): explain why the ESP32-S3's internal
+   watchdog can't do this job, recommend a nominal that keeps the timer's
+   minimum above the 600 s firmware maximum, and evaluate dropping the
+   external window watchdog.
 3. **No 5 V rail**: one 3.3 V buck synchronized to a 2.304 MHz master clock
    (#10); every switching stage and clock must keep its harmonics out of the
    HF amateur bands, and the audit covers 6 m, 2 m and 70 cm.
 4. **Lowest cost** meeting −40 to +85 °C (AEC-Q not required); RoHS for every
    part and EU EMC (EN 55032 Class B, EN 301 489-1/-17) as targets (#59).
+5. **Radio VBUS test options** (2026-09-25): blocked by default, with DNP
+   footprints for a sense-only feed and a 0 Ω bypass, so a bench test can give
+   the radio VBUS without a respin.
+6. **Auto power-down** 30 s after the radio turns off, configurable (accepted;
+   #10/#11).
 
 Inputs: the per-radio table (#5, PR #56), host compatibility (#6, PR #54),
 [ADR-0002](ADR-0002-audio-codec.md) (#8, PR #55) and the module notes in
@@ -55,14 +63,16 @@ Inputs: the per-radio table (#5, PR #56), host compatibility (#6, PR #54),
 | | C. SN6507 clocked at 2.304 MHz (switches at 1.152 MHz) | Integrated, synchronizable | 28.8 MHz line (10 m); $2.27+, thin stock | [datasheet](../references/index.md#ti-sn6507-ds) |
 | PTT closure | **A. AQY212EH(AX)** PhotoMOS | 60 V AC/DC, 0.55 A, 2.5 Ω max; 5 kV | 5 mA LED drive | [datasheet](../references/index.md#panasonic-aqy21eh-ds) |
 | | B. CPC1017N | 1 mA LED drive | 16 Ω, 100 mA | [datasheet](../references/index.md#littelfuse-cpc1017n-ds) |
-| PTT gating | **A. TPS3839G33 supervisor + TPS3430 window watchdog + 3-input AND** | Both in stock; RESET valid from 0.6 V; $0.26 + $1.16 | Two parts | [TPS3839](../references/index.md#ti-tps3839-ds), [TPS3430](../references/index.md#ti-tps3430-ds) |
+| PTT gating | **A. TPS3839G33 supervisor + ESP32-S3 internal watchdogs + 3-input AND; TPS3430 as a DNP footprint** | RESET valid from 0.6 V; $0.26; internal watchdog reset returns the PTT pin to its pulled-down default | A hung MCU with its internal watchdog disabled holds PTT until the hardware timer | [TPS3839](../references/index.md#ti-tps3839-ds), [ESP-IDF watchdogs](../references/index.md#esp-idf-wdts) |
+| | B. As A with the TPS3430 fitted | Cuts PTT within about a second in that double fault | +$1.16 @100; TI only | [TPS3430](../references/index.md#ti-tps3430-ds) |
 | | B. TPS3850 (supervisor + watchdog in one) | One part | Out of stock at LCSC; $1.42 @250 | [datasheet](../references/index.md#ti-tps3850-ds) |
 | Hardware PTT timer | **A. TPL5111 one-shot, powered from the PTT drive; resistor-set** | Independent of the MCU; fails safe (no supply → off); firmware can shorten (DONE), never extend; ±5.4 % worst case over −40 to +85 °C | 100–120 ms keying latency; TI only | [datasheet](../references/index.md#ti-tpl5111-ds) |
 | | B. 74HC4060 counter with RC or crystal | No latency | A stopped oscillator means no timeout unless more logic is added | [datasheet](../references/index.md#nexperia-74hc4060-ds) |
 | | C. Firmware-set digital potentiometer | Settable in the field | Firmware could lengthen or disable it | — |
+| | D. ESP32-S3 internal watchdog only | No parts | Fed by running-but-buggy firmware; firmware can disable or reconfigure it; no help if the chip itself fails | [ESP-IDF watchdogs](../references/index.md#esp-idf-wdts) |
 | Radio VBUS | **A. Not connected** (ESD diode and test pad only) | No device-to-radio path exists; no back-feed | Radios whose USB chip waits for VBUS won't enumerate | [CP2105](../references/index.md#silabs-cp2105-ds), [CH342](../references/index.md#wch-ch342-ds) |
 | | B. Reverse-blocking FET or ideal diode | — | Still a switchable path with a shorted-FET failure; not needed when nothing is switched | — |
-| | C. Sense-only feed (3.3 V → Schottky → 4.7 kΩ), DNP | May satisfy VBUS-sense inputs (CH342 yes; CP2105 only without the datasheet's divider) | Connects a device rail to radio VBUS; the maintainer decides | same |
+| | C. A, plus DNP test footprints: (a) sense-only feed (3.3 V → Schottky → 4.7 kΩ); (b) 0 Ω bypass from 3.3 V or from USB-C VBUS, each through a PTC | Bench test without a respin; the default build is unchanged | Must never be fitted in production; review rule needed | same |
 | USB hub | **A. USB2422T-I/MJ** | −40 to +85 °C; HS_DISABLE fallback; $1.48 @100 | Microchip only, 403 in stock; 24 MHz crystal's 6th harmonic is 144.000 MHz | [datasheet](../references/index.md#microchip-usb2422-ds) |
 | | B. CH334F | $0.42 @100 | Datasheet not reviewed; RoHS not shown at LCSC | LCSC C5187527 |
 | | C. GL850G | $0.32 | 0 to +85 °C: fails both variants | LCSC C136617 |
@@ -84,15 +94,23 @@ by the maintainer (2026-09-24).
    relays on variant R, TMUX6219 with a ±16 V supply on M.
 2. **PTT:** an **AQY212EHAX** PhotoMOS closes AUDIO ring 2 to sleeve. Its LED
    is driven only when **all** of these are true: PTT_REQ high (pulled down);
-   **TPS3839G33** RESET high (brownout; it also resets the ESP32); **TPS3430**
-   WDO high (window watchdog); and the **hardware PTT timer** permits it.
-   The status LED is in the driven branch.
+   **TPS3839G33** RESET high (brownout; it also resets the ESP32); gate
+   input B high (a pull-up, or the TPS3430's WDO if its DNP footprint is
+   fitted); and the **hardware PTT timer** permits it. The status LED is in
+   the driven branch. Hung firmware is covered by the ESP32-S3's internal
+   watchdogs: a reset returns PTT_REQ to its pulled-down default.
+   **Recommendation: drop the TPS3430** (DNP footprint kept). What it alone
+   covers is a hung MCU with PTT asserted whose internal watchdog is disabled
+   or ineffective: it cuts PTT in about a second, whereas without it the
+   hardware timer cuts it within about 11 minutes. The maintainer decides.
 3. **Hardware PTT timer:** a **TPL5111** in one-shot mode, powered from the
    PTT drive, gates the LED current. Asserting PTT powers and starts it,
    releasing PTT resets it; on expiry DRVn goes low and stays low until PTT is
-   released. **Default 600 s, set by REXT = 107 kΩ ∥ 124 kΩ (1 %)**, changed
-   only by fitting other resistors. Worst-case tolerance −5.1 % / +5.4 %
-   (569–632 s) over −40 to +85 °C. Firmware can end it early (DONE) but can't
+   released. **Recommended nominal 640 s, REXT = 84.5 kΩ ∥ 196 kΩ (1 %,
+   59.04 kΩ)**, changed only by fitting other resistors. Worst-case tolerance
+   −5.1 % / +5.4 % over −40 to +85 °C gives 607–674 s, so the minimum stays
+   above the 600 s firmware maximum (a 600 s nominal would give 569–632 s).
+   Maintainer decision on 640 s pending. Firmware can end it early (DONE) but can't
    lengthen or disable it; its state is read back for a `PTT_STATUS` reason.
    The firmware limit `MAX_TX_S` (10–600 s, protocol PR #58) must stay at or
    below the hardware setting.
@@ -100,8 +118,13 @@ by the maintainer (2026-09-24).
    diode and a test pad**. No device rail, the USB-C VBUS or the hub's port
    power reaches it, in any mode or fitting option; the hub's PRTPWR pins are
    left open (which also keeps battery charging off) and its OCS pins pulled
-   up. The sense-only feed is documented as an option for the maintainer,
-   **not adopted**.
+   up. **As fitted by default** that is all; three DNP test footprints sit
+   on the net: (a) a sense-only feed from 3.3 V, (b1) a 0 Ω bypass from 3.3 V
+   and (b2) a 0 Ω bypass from USB-C VBUS, each bypass through a PTC. For the
+   bench test, **(b2) with the device powered from a USB-C charger** is
+   proposed, since 3.3 V is below the CP2105's detect level when the radio
+   uses the datasheet's VBUS divider (2.5 V threshold; ≈ 2.2 V at the pin).
+   None is fitted in production.
 5. **Isolation** follows the ADR-0002 fitting approach: ISO7721 (data),
    ISO1540 + TCA9534 (control) and the jack supply fitted on M, DNP with 0 Ω
    links on R. The jack supply is the **discrete 2.304 MHz push-pull stage**,
@@ -111,8 +134,12 @@ by the maintainer (2026-09-24).
 6. **USB routing:** USB2422T-I/MJ hub (held in reset in Bluetooth mode),
    two TS3USB221A switches with OE pulled to "disabled" until firmware picks a
    mode, TYPE-C-31-M-12 with 5.1 kΩ Rd (variant R; M needs a −40 °C part),
-   USBLC6-2SC6/TPD2E2U06 ESD. The ADuM4160 remains a variant M option; it needs
-   5 V on both sides, which this board doesn't have.
+   USBLC6-2SC6/TPD2E2U06 ESD. The **ADuM4160** remains a variant M option.
+   Its purpose is to break the ground path through the radio's USB cable
+   (hum, alternator noise, RF common-mode current, and the bypass of the jack
+   isolation). It runs from 3.3 V with VBUSx tied to VDDx: side 1 from the
+   3.3 V rail, side 2 from an isolated 3.3 V made by a second transformer on
+   the 2.304 MHz push-pull stage. About $8–9.50 per board when fitted.
 7. **Clocks:** I2S BCLK at 64 fs (3.072 MHz), not 32 fs (29.184 MHz line in
    10 m). No new clock is added.
 8. **USB host drivers (#43):** esp-usb at commit `bf0f0aa3` supports CP2105
@@ -130,12 +157,17 @@ by the maintainer (2026-09-24).
   so they may lose CAT. A bench test (a `human-task`) must check every radio
   with no VBUS and with the sense-only feed, and the maintainer decides on the
   option.
+- **Why not the ESP32-S3's own watchdog for the PTT timer:** it is kept for
+  hung firmware, where a reset leaves the PTT pin at its pulled-off default.
+  It can't replace the independent timer, because running-but-buggy firmware
+  keeps feeding it, firmware can disable or reconfigure it, and a failed chip
+  isn't caught by an on-chip watchdog.
 - **Keying latency:** the closure turns on 100–120 ms after PTT is requested
   (the TPL5111's REXT reading). Scheduled TX must start the drive early.
-- **Hardware limit vs firmware limit:** at 600 s nominal the hardware can
-  expire at 569 s. Either set the hardware nominal above the firmware maximum
-  (for example 640 s) or accept a hardware expiry at the top firmware setting.
-  Open for the maintainer.
+- **Hardware limit vs firmware limit:** with the recommended 640 s nominal,
+  the firmware limit (≤ 600 s) always acts first and the hardware timer is a
+  backstop. Open for the maintainer, together with keeping or dropping the
+  TPS3430.
 - **Variant R isolation in wired mode** stays open, as in ADR-0002.
   **Ground path through the radio:** with the radio's USB cable also
   connected and no ADuM4160, jack isolation is bypassed through the radio
@@ -148,8 +180,8 @@ by the maintainer (2026-09-24).
   and CH334F (not stated; verify); no REACH SVHC data at LCSC. Immunity levels
   for the jack and USB ports are to be set in #59; TVS and series parts are
   sized for them then.
-- **Single-source parts:** MAX14778, USB2422, TPL5111, TPS3430, each with an
-  alternate topology above.
+- **Single-source parts:** MAX14778, USB2422, TPL5111 (and the TPS3430 if
+  fitted), each with an alternate topology above.
 - **Verify before schematic freeze:** MAX14778 unpowered ±15 V behavior;
   2.304 MHz transformer behavior; CI-V pull-up levels (IC-7300); FT-710 CAT-3
   threshold; PTT voltages and currents per radio (#5); the FTDI request;
@@ -158,5 +190,5 @@ by the maintainer (2026-09-24).
   and collisions, RTS/DTR on change only, ring-2 profile block, DONE use),
   #13 (`PTT_STATUS` reason for a hardware-timer expiry), #10/#11 (3.3 V rail
   above the TPS3839 threshold; the 2.304 MHz clock distribution), #12
-  (fitting), #21 (review rule: the radio VBUS net holds only its ESD diode and
-  test pad).
+  (fitting), #21 (review rule: the radio VBUS net holds only its ESD diode,
+  a test pad and the DNP test footprints, marked TEST ONLY).

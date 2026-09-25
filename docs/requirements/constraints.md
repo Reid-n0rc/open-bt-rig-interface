@@ -71,7 +71,7 @@ Consequences:
 - **The radio's USB port provides no power.** Transceivers such as the FT-891,
   FT-710, FT-991A and IC-7300 have USB *device* ports (their internal
   USB-serial and codec chips). **This device never supplies power to a radio
-  through USB**, in either host mode (maintainer decision, 2026-09-24,
+  through USB**, as fitted by default, in either host mode (maintainer decision, 2026-09-24,
   [ADR-0003](../decisions/ADR-0003-radio-interface-circuits.md)): the radio port's VBUS pin connects to no device rail,
   and hardware blocks current from the device (or, in wired mode, the
   computer) into the radio's VBUS and back. Radios whose USB chip needs VBUS
@@ -160,7 +160,8 @@ The device operates next to HF transmitters of 100 W or more.
 - The firmware enforces a maximum continuous TX time (configurable, cannot be disabled).
 - **Hardware max-TX backstop:** an independent hardware timer in the PTT
   drive path forces the PTT closure off after a continuous assertion of a set
-  time (default 10 minutes, set in hardware), even with the MCU hung or its
+  time (about 10 minutes, set in hardware, with its minimum above the
+  firmware maximum), even with the MCU hung or its
   clocks stopped. It powers up off, fails safe, latches off until PTT is
   released, and reports its state to the MCU. The firmware limit never
   exceeds it ([ADR-0003](../decisions/ADR-0003-radio-interface-circuits.md)).

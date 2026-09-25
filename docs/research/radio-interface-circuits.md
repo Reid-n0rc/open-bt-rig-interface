@@ -47,13 +47,13 @@ capture and layout come later (#21 and the hardware issues).
 | Serial isolation | TI **ISO7721** (data), TI **ISO1540** + **TCA9534** (control) | Skyworks Si8621 | Fitted per the ADR-0002 approach (§6) |
 | Isolated supply (3.3 V in, no 5 V rail) | **Discrete push-pull at 2.304 MHz**: SN74LVC2G02 + 2× AO3400A + 1:1.3 transformer, driven by the board's 2.304 MHz master clock | TI SN6505B clocked at 1.152 MHz (576 kHz switching) | The only option whose comb adds nothing to the HF bands (§6.2, §7.1) |
 | PTT closure | Panasonic **AQY212EH(AX)** PhotoMOS | Littelfuse CPC1017N | 60 V, AC/DC, off unless its LED is driven (§4) |
-| PTT fail-safe | TI **TPS3839G33** supervisor + **TPS3430** window watchdog, SN74LVC1G11 | TI TPS3850 (both in one part; out of stock at LCSC) | Brownout, reset and hung-MCU gating (§4.2) |
-| **Hardware PTT timer** | TI **TPL5111** one-shot, powered from the PTT drive | 74HC4060 counter | Cuts PTT after 600 s (resistor-set), works with the MCU hung (§4.3) |
+| PTT fail-safe | TI **TPS3839G33** supervisor, ESP32-S3 internal watchdogs, SN74LVC1G11; **TPS3430** window watchdog as a DNP footprint (recommended drop, §4.2.1) | TI TPS3850 (supervisor + watchdog; out of stock at LCSC) | Brownout, reset and hung-MCU gating (§4.2) |
+| **Hardware PTT timer** | TI **TPL5111** one-shot, powered from the PTT drive | 74HC4060 counter | Cuts PTT after about 640 s (resistor-set; recommended so its minimum stays above the 600 s firmware maximum), works with the MCU hung (§4.3) |
 | USB hub | Microchip **USB2422** (−I, industrial) | WCH CH334F | GL850G rejected (0 to +85 °C) (§8.2) |
 | USB 2.0 switches | TI **TS3USB221A** (×2) | onsemi FSUSB42 | Disabled (OE high) until firmware picks a mode (§8.1) |
 | USB-C port | HRO TYPE-C-31-M-12, 5.1 kΩ Rd | M-grade connector (verify) | −30 to +80 °C: fine for R, not for M (§8.4) |
-| Radio USB VBUS | **Not connected to any device rail** (maintainer decision) | Sense-only feed (option for the maintainer, not adopted) | Many radio USB chips may not attach without VBUS (§8.5) |
-| Radio USB isolator (option) | ADI ADuM4160 | ADI ADuM3160 | Needs its own isolated supply, since the radio port has no VBUS (§8.6) |
+| Radio USB VBUS | **Not connected to any device rail, as fitted by default** (maintainer decision) | DNP test footprints: sense-only feed; 0 Ω bypass from 3.3 V or USB-C VBUS (§8.5) | Many radio USB chips may not attach without VBUS (§8.5) |
+| Radio USB isolator (variant M option) | ADI ADuM4160 | ADI ADuM3160 | Breaks the ground path through the radio USB cable; runs from 3.3 V on side 1 and an isolated 3.3 V on side 2 (§8.6) |
 
 Main findings:
 
@@ -66,7 +66,7 @@ Main findings:
    other CAT path, so this decision could leave them without CAT (§8.5).
 3. **The PTT fail-safe is enforced in hardware in three layers:** the PhotoMOS
    is off unless driven; a supervisor and window watchdog gate its drive; and a
-   hardware timer, powered only while PTT is driven, cuts it after 600 s (§4).
+   hardware timer, powered only while PTT is driven, cuts it after about 640 s (§4).
 4. **The TMUX6219 isn't power-off protected:** its signals must stay within
    its supply rails, even unpowered. A single-supply ±25 V multiplexer
    (MAX14778) avoids the dual rail (§3.2).
@@ -290,7 +290,7 @@ trivial. SMD order code: `AQY212EHAX` (tape and reel).
           100 kΩ                         10 kΩ
              │                             │
  TPS3839 RESET (push-pull) ──────────┬─── A ┐
- TPS3430 WDO   (open drain) ────────┼──── B ├─ SN74LVC1G11 ─── PTT_DRIVE ──┬──► TPL5111 VDD (via 100 Ω, 100 nF)   §4.3
+ TPS3430 WDO (DNP) / pull-up ───────┼──── B ├─ SN74LVC1G11 ─── PTT_DRIVE ──┬──► TPL5111 VDD (via 100 Ω, 100 nF)   §4.3
  ESP32 PTT_REQ (GPIO) ──────────────┼──── C ┘   3-input AND                │
                                     │                                      R_LED 390 Ω
                                  100 kΩ (pull-down on C)                    │
@@ -318,7 +318,8 @@ The closure is **on only if every one of these holds**:
    VDD above 0.6 V. The same RESET drives the ESP32 EN pin, so brownout resets
    the MCU and blocks PTT in one step. (The 3.3 V rail must stay above
    3.126 V at its low tolerance; confirm with the regulator choice, #10/#11.)
-3. **WDO is high.** The [TPS3430](../references/index.md#ti-tps3430-ds)
+3. **WDO is high** (only if the DNP TPS3430 is fitted; otherwise input B is
+   pulled up, §4.2.1). The [TPS3430](../references/index.md#ti-tps3430-ds)
    window watchdog pulls WDO low when WDI kicks come too early or too late (a
    hung or runaway MCU). The TPS3430 alone doesn't cover start-up: while its
    VDD is below its minimum, "the watchdog is disabled, WDO is logic high"
@@ -329,6 +330,51 @@ The closure is **on only if every one of these holds**:
    R_LED = 390 Ω and VF ≈ 1.14 V at 5 mA, a 3.3 V gate output gives about
    5.5 mA. Below the PhotoMOS turn-off current (0.4 mA minimum) the output is
    guaranteed open.
+
+#### 4.2.1 Internal watchdog, external watchdog and the hardware timer
+
+The maintainer asked whether the ESP32-S3's own watchdog could replace the
+hardware PTT timer, and whether the external TPS3430 is worth its cost.
+
+The ESP32-S3 has the main-system watchdogs (MWDT, used by the interrupt and
+task watchdogs) and an RTC watchdog. On timeout they reset the CPU, the main
+system or the main system and RTC
+([ESP-IDF watchdogs](../references/index.md#esp-idf-wdts)). A reset returns
+PTT_REQ to a high-impedance input, so the pull-down turns PTT off. **The
+firmware uses them for hung firmware.**
+
+They **can't replace the hardware timer** (§4.3):
+
+- **Running but buggy firmware** keeps feeding the watchdog while it holds PTT
+  (for example a stuck state machine, or a host that keeps sending keepalives).
+  The watchdog sees a healthy system.
+- **Firmware controls them:** ESP-IDF lets the application disable, stop
+  feeding or reconfigure them (`esp_task_wdt_deinit()`,
+  `esp_task_wdt_reconfigure()`, `wdt_hal_disable()`). A bug or a bad update can
+  do the same.
+- **A failed chip:** a latched-up GPIO, a damaged output, or a chip that stops
+  without resetting doesn't pass through any on-chip watchdog.
+
+The TPL5111 timer shares none of these failure modes: it has its own
+oscillator and supply (the PTT drive), and the MCU can only shorten it.
+
+**Does the external TPS3430 still earn its place?** With the internal
+watchdogs, the pull-down and the hardware timer, what it **alone** covers is
+this: the MCU hangs or runs away **with PTT asserted**, **and** the internal
+watchdog doesn't reset it (disabled or misconfigured), **or** the pin stays
+high through a fault. In that case the TPS3430 cuts PTT within its window
+timeout (about a second), while without it PTT stays on until the hardware
+timer expires (up to about 670 s worst case). Both paths end with PTT off;
+the difference is up to about 11 minutes of unintended transmission in a
+double-fault case, which the radio's own time-out timer (where it has one)
+also bounds.
+
+**Recommendation: drop the TPS3430** from the default build (it saves about
+$1.16 at 100+; it is also TI-only). Keep a **DNP footprint** and route input B
+of the gate through a 10 kΩ pull-up, so it can be restored without a respin
+if review or testing wants it. The maintainer decides; safety-first
+([`GOVERNANCE.md`](../../GOVERNANCE.md)) would argue for keeping it only if
+the 11-minute double-fault window is judged unacceptable.
 
 Brownout, rail by rail:
 
@@ -355,7 +401,7 @@ filtered (RC) trace on the device side.
 timer permits and the gate drives. That shows the real drive state, not the
 firmware request.
 
-### 4.3 Hardware PTT timer (maintainer requirement, default 600 s)
+### 4.3 Hardware PTT timer (maintainer requirement, about 10 minutes)
 
 Requirement (maintainer, 2026-09-24): an independent timer in the PTT drive
 path that forces the closure off after PTT has been continuously asserted for
@@ -399,8 +445,11 @@ one-shot mode, powered from PTT_DRIVE.**
   to REXT and ground; nothing else routes to it.
 
 **Setting the time.** REXT sets the interval (500 Ω to 170 kΩ). For
-**600 s, REXT = 57.44 kΩ, built as 107 kΩ ∥ 124 kΩ (1 %)** (datasheet §8.2.2.3,
-worked example).
+600 s, REXT = 57.44 kΩ, built as 107 kΩ ∥ 124 kΩ (1 %) (datasheet §8.2.2.3,
+worked example). **Recommended: 640 s, REXT = 59.05 kΩ (datasheet
+Equation 1, coefficient set 4), built as 84.5 kΩ ∥ 196 kΩ (1 %, 59.04 kΩ,
+639.9 s)**, so that the timer's minimum over tolerance stays above the 600 s
+firmware maximum (maintainer decision pending).
 
 | Configuration method | Independence from firmware | Trade-off | Verdict |
 |---|---|---|---|
@@ -409,7 +458,7 @@ worked example).
 | C. Digital potentiometer as REXT, set by firmware | None: firmware could set a longer time | Defeats the purpose | Rejected |
 | D. 74HC4060 counter with its own RC or 32.768 kHz crystal, reset by the drive | Complete | Zero keying latency, but a stopped oscillator means **no** timeout (fails unsafe) unless more logic is added; RC tolerance not specified | Rejected as primary; noted as the alternate |
 
-**Tolerance, 600 s setting, −40 to +85 °C** (datasheet §6.5 and §8.2.2.3):
+**Tolerance, −40 to +85 °C** (datasheet §6.5 and §8.2.2.3):
 
 | Contribution | Value |
 |---|---|
@@ -417,17 +466,16 @@ worked example).
 | Oscillator accuracy at 25 °C | ±0.5 % |
 | Oscillator drift, −40 to +85 °C (max 400 ppm/°C, 65 °C from 25 °C) | ±2.6 % |
 | Supply (±0.4 %/V; PTT_DRIVE ≈ 3.3 V ± 5 %) | ±0.07 % |
-| **Worst-case sum** | **about −5.1 % / +5.4 % (≈ 569 s to 632 s)** |
+| **Worst-case sum** | **about −5.1 % / +5.4 %: 600 s setting ≈ 569–632 s; 640 s setting ≈ 607–674 s** |
 
 The typical drift is 100 ppm/°C, so real parts should land within about ±3 %.
 
 **Relationship to firmware:** the firmware max-TX time (`MAX_TX_S`, range
-10–600 s in the protocol PR #58) must never exceed the hardware setting. With
-the 600 s default and the −5.1 % tolerance, the hardware can expire at 569 s,
-**before** a firmware limit of 600 s. Firmware should therefore treat a
-hardware expiry as normal at its top setting, or the hardware REXT should be
-chosen so its **minimum** (not nominal) exceeds the firmware maximum, for
-example 640 s nominal. That choice is an open question for the maintainer.
+10–600 s in the protocol PR #58) must never exceed the hardware setting. At a
+600 s nominal the hardware can expire at 569 s, before a 600 s firmware
+limit. At the **recommended 640 s nominal** its minimum is about 607 s, so the
+firmware limit always acts first and the hardware timer is purely a
+backstop. The maintainer's decision on 640 s is pending.
 
 **Scope:** the timer covers the AUDIO-jack closure only. PTT sent as a CAT
 command, or as RTS/DTR to a radio's USB-serial chip, isn't a hardware line
@@ -447,8 +495,8 @@ $0.24 (150+), 4,055 in stock.
 | Power-on | PTT_REQ pull-down; TPS3839 RESET low for 200 ms; TPL5111 unpowered | Hardware |
 | Reset (EN low, software reset) | GPIO goes high impedance → pull-down | Hardware |
 | Brownout | TPS3839 RESET (table in §4.2) | Hardware |
-| MCU hung, clocks stopped | Window watchdog WDO; TPL5111 timeout | Hardware |
-| Continuous TX > 600 s | TPL5111 one-shot expiry | Hardware |
+| MCU hung, clocks stopped | ESP32-S3 internal watchdog reset → pull-down; TPL5111 timeout; TPS3430 WDO if fitted | Hardware / on-chip |
+| Continuous TX > ≈ 640 s (hardware setting) | TPL5111 one-shot expiry | Hardware |
 | Continuous TX > MAX_TX_S | Firmware max-TX timer | Firmware (#15) |
 | Host link lost, keepalive missing, mode change | Firmware (REQ-PTT-005, -006, -009) | Firmware |
 | Isolated supply off | Nothing needed: the closure doesn't use it | — |
@@ -572,7 +620,9 @@ Option A details:
   transformer next to the isolation gap.
 - **Off when unused:** firmware stops the stage whenever the SERIAL jack
   isn't in use (for example a radio on USB), so it emits nothing then. PTT
-  doesn't depend on it.
+  doesn't depend on it. It also stops with the rest of the device during
+  **auto power-down** (30 s after the radio turns off, configurable;
+  accepted by the maintainer, #10/#11).
 
 ### 6.3 Ground paths through the radio
 
@@ -744,18 +794,23 @@ charge from the device, and is **low priority** (its own Wi-Fi, Bluetooth and
 USB cover most uses). The K4 connects only through its USB-B port; its USB-A
 host ports aren't used with this adapter.
 
-**Blocking element: no connection.**
+**Blocking element: no connection, as fitted by default.** Two DNP test
+options sit on the net (maintainer follow-up, 2026-09-25); neither is fitted
+in any production build.
 
 ```text
 radio USB-A pin 1 (VBUS) ──┬── ESD diode to GND (unidirectional, VRWM ≥ 5.5 V, e.g. TPD1E10B06 class)
-                           └── test pad
-                           (no other copper: not to 5 V, 3.3 V, USB-C VBUS, hub PRTPWR, ESP32, or any rail)
+                           ├── test pad
+                           ├── [DNP] R_SENSE 4.7 kΩ ── [DNP] BAT54 ── 3.3 V          (option a: sense-only feed)
+                           ├── [DNP] 0 Ω JP_VB3 ── [DNP] PTC 0.5 A ── 3.3 V          (option b1: bypass from 3.3 V)
+                           └── [DNP] 0 Ω JP_VB5 ── [DNP] PTC 0.5 A ── USB-C VBUS (5 V) (option b2: bypass from USB-C)
+                           (as fitted by default: no other copper to 3.3 V, USB-C VBUS, hub PRTPWR, ESP32 or any rail)
 radio USB-A pin 4 (GND)  ── device ground (or the ADuM4160 side-2 ground, §8.6)
 radio USB-A D+/D−        ── TPD2E2U06 ── [ADuM4160] ── S1
 ```
 
-- **Device → radio:** no conductor exists from any device rail to the radio's
-  VBUS pin, in any mode or fitting option, so no current can flow. This is
+- **Device → radio:** as fitted by default, no conductor exists from any
+  device rail to the radio's VBUS pin, in any mode, so no current can flow. This is
   simpler and stronger than a reverse-blocking FET or ideal diode, which
   would still have leakage and a failure mode (a shorted FET).
 - **Radio → device (back-feed):** a radio that outputs voltage on its VBUS pin
@@ -766,7 +821,26 @@ radio USB-A D+/D−        ── TPD2E2U06 ── [ADuM4160] ── S1
   are unconnected (§8.2), so the computer's VBUS can't reach the radio through
   the hub either.
 - **Design-review rule:** the `RADIO_VBUS` net may contain only the connector
-  pin, its ESD diode and a test pad. The KiCad review for #21 should check it.
+  pin, its ESD diode, a test pad and the three **DNP** test footprints above,
+  each marked DNP in the BOM and "TEST ONLY" on the silkscreen. The KiCad
+  review for #21 should check it.
+
+**Test options (DNP, for the bench test only).** They let a bench test give a
+radio a VBUS signal, or real VBUS, without a respin. The default stays "no
+power to the radio" (REQ-RIF-011).
+
+| Option | Source | What reaches the radio's VBUS | CP2105 (VBUS detect ≥ 2.5 V; regulator input 3.0–5.25 V) | CH342 (VBUS high ≥ 1.7 V; sinks up to 200 µA below 1.3 V) | Use |
+|---|---|---|---|---|---|
+| a. Sense-only | 3.3 V → BAT54 → 4.7 kΩ | ≈ 3.0 V at µA; 0.7 mA into a short | Passes if VBUS goes straight to the pin; fails behind the datasheet's 24 kΩ/47 kΩ divider (≈ 1.9 V) | Passes (needs ≤ 8.5 kΩ) | Tests whether a sense level is enough |
+| b1. Bypass from 3.3 V | 3.3 V rail through a 0.5 A PTC | 3.3 V with current | Passes without the divider; behind the divider 3.3 × 47/71 ≈ 2.2 V, **fails**; a bus-powered CP2105 would run (3.0 V minimum regulator input) | Passes | Always available; below the USB VBUS range (4.40–5.25 V is general USB knowledge, not sourced here), so radios checking for 5 V may reject it |
+| b2. Bypass from USB-C VBUS | USB-C VBUS (5 V) through a 0.5 A PTC | 5 V, only while something is plugged into USB-C | Passes, also behind the divider (≈ 3.3 V) | Passes | **Proposed for the bench test**: power the device from a USB-C charger, so the radio sees a real 5 V. It passes the computer's VBUS to the radio in wired mode, so it is test-only |
+
+Thresholds: [CP2105 datasheet](../references/index.md#silabs-cp2105-ds)
+Table 5 (VBUS detection 2.5 V min; regulator input 3.0–5.25 V) and §10;
+[CH342 datasheet](../references/index.md#wch-ch342-ds) (VIHVBS 1.7 V min,
+IPDN 50–200 µA below 1.3 V). **Bench test** (human-task): each USB radio with
+none fitted, with (a), with (b1) and with (b2); record enumeration and the
+current drawn. Never fit two options at once.
 
 #### Consequence: radios may not enumerate without VBUS
 
@@ -815,9 +889,9 @@ connect each radio to a host with VBUS removed, and with VBUS through a
 - **USB2422:** reports its downstream ports as powered (PRTPWR on, OCS
   pulled up) and sees no attach for the same reason.
 
-#### Option for the maintainer (not adopted): sense-only VBUS feed
+#### Option (a) in detail: sense-only VBUS feed (DNP, not adopted)
 
-The board has no 5 V rail, so the only source is 3.3 V:
+The board has no 5 V rail, and the USB-C VBUS must not feed a sense line in normal use, so option (a) takes 3.3 V:
 
 ```text
 3.3 V (device) ── BAT54-class Schottky (reverse block) ── R_sense ──► radio VBUS pin   (DNP fitting option)
@@ -843,29 +917,56 @@ The board has no 5 V rail, so the only source is 3.3 V:
   resistor limits the leakage path.
 - **Conflict with the decision:** it connects a device rail to the radio's
   VBUS, through a resistor. Whether that counts as "supplying power" is for
-  the maintainer. It would be a DNP option, and the §8.5 design-review rule
-  would then allow exactly this network. The USB-C VBUS (5 V, wired mode
+  the maintainer. It is placed as a DNP footprint only. The USB-C VBUS (5 V, wired mode
   only) must not be used for it: that would pass the computer's VBUS to the
   radio.
 
 ### 8.6 Radio USB isolator option (ADuM4160)
 
-- Full/low speed only; 5 kV rms; power on both sides from 4.5–5.5 V.
-  Stock and price: [ADuM4160BRWZ-RL, LCSC C57791](https://www.lcsc.com/product-detail/C57791.html),
-  $7.40 at 100+, 5,267 in stock; the tube part `ADUM4160BRWZ` is $9.08 at
-  100+ with 124 in stock ([C579406](https://www.lcsc.com/product-detail/C579406.html)).
-- **Both sides need 4.5–5.5 V, and the board has no 5 V rail.** Side 1 would
-  need a 3.3 V → 5 V step-up, and side 2 (the radio side, since the radio
-  port has no VBUS) a separate isolated 5 V, for example a second 2.304 MHz
-  push-pull stage with a 1:1.7 transformer. The radio-side supply must
-  **not** connect to the USB-A VBUS pin. This makes the option cost roughly
-  $8 (isolator) plus two small converters; for variant M the maintainer may
-  prefer to accept the §6.3 ground path instead (open question). Pin-level details of VBUS1/VBUS2 **(verify)**: the ADI
-  datasheet blocks scripted download.
+**What it's for.** It breaks the ground path through the radio's USB cable.
+Without it, the radio USB port's ground is the device ground, and in wired
+mode the computer's ground. With the AUDIO or SERIAL cable also connected,
+that path:
+
+- carries **hum and ground-loop currents** between the computer, device and
+  radio (heard as hum or buzz in RX and TX audio);
+- carries **alternator and ignition noise** from a vehicle supply (variant M);
+- carries **RF common-mode current** from the transmitter along the USB cable
+  into the device and the computer;
+- **bypasses the jack isolation** (§6.3): the jacks' transformers, PhotoMOS
+  and digital isolators no longer isolate anything.
+
+**Powering it without a 5 V rail.** Each side has a VBUSx pin (an internal
+regulator for 4.5–5.5 V) and a VDDx pin (3.1–3.6 V). Where a side runs from
+3.3 V, VBUSx connects to VDDx and to the 3.3 V supply, with a bypass
+capacitor ([ADuM4160 datasheet](../references/index.md#adi-adum4160-ds),
+Rev. D, pin descriptions and "Power Supply Options"). So:
+
+- **Side 1** (hub/switch side): the device's 3.3 V rail.
+- **Side 2** (radio side): an **isolated 3.3 V**, referenced to the radio USB
+  ground. It must not connect to the radio's VBUS pin. The cheapest source is
+  a second small transformer driven in parallel by the same 2.304 MHz
+  push-pull switches as the jack supply (§6.2), with its own rectifier and
+  LDO; its output ground is the radio USB ground, not the jack ground.
+- **Current:** ≤ 8 mA per side at 12 Mbit/s (≤ 2.3 mA idle), so the side-2
+  supply is tiny.
+
+**Cost (LCSC, 2026-09-24):** ADuM4160BRWZ-RL $7.40 at 100+
+([C57791](https://www.lcsc.com/product-detail/C57791.html), 5,267 in stock;
+the tube part `ADUM4160BRWZ` is $9.08 at 100+ with 124 in stock,
+[C579406](https://www.lcsc.com/product-detail/C579406.html)), plus the
+side-2 supply: a transformer (**verify**; not found at LCSC), a dual Schottky
+and an LDO (tens of cents). About **$8–9.50 per board** with the isolator
+fitted.
+
 - With the isolator fitted, the radio port runs at full speed only, even
-  through a high-speed hub inside the radio.
-- Fitting: variant M recommended (REQ-ISO-003); it also fixes the §6.3 ground
-  path.
+  through a high-speed hub inside the radio. Speed is set by its pins (SPU,
+  SPD).
+- **Fitting:** a variant M option (REQ-ISO-003); recommended wherever the
+  radio's USB cable and a jack cable are used together.
+- VBUS options (a) and (b) in §8.5 connect to the radio side of the port, so
+  with the isolator fitted they would have to come from the isolated side-2
+  supply, not the device rails **(verify at schematic time)**.
 
 ### 8.7 Signal integrity on a 2-layer board
 
@@ -961,7 +1062,7 @@ and Mouser: **deferred** by the maintainer, left blank.
 | AQY212EH (DIP) | same, through-hole | −40 to +85 °C | C2894775 | 1+ 1.25; 10+ 1.08; 100+ 0.87; 1,000+ 0.79 | 192 | (not checked) | deferred | deferred | [panasonic-aqy21eh-ds](../references/index.md#panasonic-aqy21eh-ds) |
 | CPC1017NTR | PTT alt. / ring-2 switch | −40 to +85 °C | C81521 | 1+ 1.99; 10+ 1.71; 100+ 1.39; 1,000+ 1.12 | 23,818 | RoHS3 | deferred | deferred | [littelfuse-cpc1017n-ds](../references/index.md#littelfuse-cpc1017n-ds) |
 | TPS3839G33DBZR | Supervisor (3.08 V, push-pull) | −40 to +85 °C | C485802 | 1+ 0.44; 10+ 0.35; 30+ 0.31; 100+ 0.26; 500+ 0.24; 1,000+ 0.23 | 3,431 | RoHS3 | deferred | deferred | [ti-tps3839-ds](../references/index.md#ti-tps3839-ds) |
-| TPS3430WDRCR | Window watchdog | −40 to +125 °C | C2870545 | 1+ 1.60; 10+ 1.41; 30+ 1.28; 100+ 1.16; 500+ 1.10; 1,000+ 1.08 | 1,142 | RoHS3 | deferred | deferred | [ti-tps3430-ds](../references/index.md#ti-tps3430-ds) |
+| TPS3430WDRCR (DNP; recommended drop) | Window watchdog | −40 to +125 °C | C2870545 | 1+ 1.60; 10+ 1.41; 30+ 1.28; 100+ 1.16; 500+ 1.10; 1,000+ 1.08 | 1,142 | RoHS3 | deferred | deferred | [ti-tps3430-ds](../references/index.md#ti-tps3430-ds) |
 | TPS3850H01DRCT (alt.) | Supervisor + window watchdog | −40 to +125 °C | C2876576 | 1+ 3.66; 250+ 1.42; 500+ 1.37; 1,000+ 1.34 | 0 (out of stock) | RoHS3 | deferred | deferred | [ti-tps3850-ds](../references/index.md#ti-tps3850-ds) |
 | TPL5111DDCR | Hardware PTT timer | −40 to +105 °C | C2870554 | 1+ 0.83; 10+ 0.69; 1,000+ 0.46 | 2,166 | RoHS3 | deferred | deferred | [ti-tpl5111-ds](../references/index.md#ti-tpl5111-ds) |
 | 74HC4060D (alt.) | Counter timer | −40 to +125 °C | C5649 | 5+ 0.37; 50+ 0.28; 150+ 0.24; 500+ 0.19 | 4,055 | RoHS3 | deferred | deferred | [nexperia-74hc4060-ds](../references/index.md#nexperia-74hc4060-ds) |
@@ -983,15 +1084,16 @@ in stock), TPL5111 (TI only), TPS3430 (TI only). Each has an alternate topology 
 ## 12. Open questions and measurements
 
 1. **VBUS decision vs USB-only radios** (§8.5): without VBUS, the FT-891 and
-   X6100 may have no CAT path. Bench-test enumeration with no VBUS and with a
-   sense-only feed; the maintainer decides on the sense-only option.
-2. **Hardware timer vs firmware limit** (§4.3): nominal 600 s can expire at
-   569 s, below a 600 s firmware setting. Choose a hardware nominal above
-   the firmware maximum (for example 640 s) or accept the overlap.
+   X6100 may have no CAT path. Bench-test enumeration with none fitted and
+   with each DNP option (a, b1, b2); the maintainer decides afterwards.
+2. **Hardware timer nominal** (§4.3): recommended 640 s (minimum ≈ 607 s,
+   above the 600 s firmware maximum); maintainer decision pending. Also keep
+   or drop the TPS3430 (recommended: drop, DNP footprint; §4.2.1).
 3. **Variant R isolation in wired mode** (§6.1): same open question as
    ADR-0002.
-4. **Ground path through the radio USB cable** (§6.3): for the grounding plan
-   and #12.
+4. **Ground path through the radio USB cable** (§6.3): the ADuM4160 option
+   (§8.6) fixes it on boards where it's fitted; the grounding plan and #12
+   decide where.
 5. **MAX14778 unpowered behavior and absolute maximum ratings** (§3.2): read the
    ADI datasheet (manual download) and bench-test ±15 V on each contact,
    powered and unpowered. Fallback: relays (variant R only) or TMUX6219 with a

@@ -16,8 +16,8 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/adi-adum4160-ds.pdf](cache/adi-adum4160-ds.pdf)
 - Original: <https://www.analog.com/media/en/technical-documentation/data-sheets/ADuM4160.pdf>
 - Download: manual (the site blocks scripted downloads)
-- Notes: The site blocks scripted downloads; save the PDF from a browser.
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
+- Notes: The site blocks scripted downloads; save the PDF from a browser. #9 read Rev. D from a mirror (https://download.mikroe.com/documents/datasheets/ADuM4160.pdf); check against the current revision.
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md), [`docs/decisions/ADR-0003-radio-interface-circuits.md`](../../docs/decisions/ADR-0003-radio-interface-circuits.md)
 
 ### adi-ltc4380-ds
 
@@ -146,6 +146,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://raw.githubusercontent.com/espressif/esp-idf/048ec57f228afe2d720542431b849cc10c949a15/examples/bluetooth/bluedroid/classic_bt/hfp_hf/README.md>
 - Retrieved: 2026-09-24; SHA-256 `f33f812e42729ca8…`
 - Cited in: [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+
+### esp-idf-wdts
+
+**ESP-IDF programming guide: watchdogs (ESP32-S3)** (Espressif Systems, web)
+
+- Local copy: [cache/esp-idf-wdts.html](cache/esp-idf-wdts.html)
+- Original: <https://docs.espressif.com/projects/esp-idf/en/stable/esp32s3/api-reference/system/wdts.html>
+- Retrieved: 2026-09-25; SHA-256 `a9d0dd71fa7b0068…`
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md), [`docs/decisions/ADR-0003-radio-interface-circuits.md`](../../docs/decisions/ADR-0003-radio-interface-circuits.md)
 
 ### esp-usb-cdc-acm-host-c
 

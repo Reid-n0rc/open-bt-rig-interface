@@ -526,10 +526,11 @@
       "url": "https://www.analog.com/media/en/technical-documentation/data-sheets/ADuM4160.pdf",
       "file": "adi-adum4160-ds.pdf",
       "fetch": "manual",
-      "notes": "The site blocks scripted downloads; save the PDF from a browser.",
+      "notes": "The site blocks scripted downloads; save the PDF from a browser. #9 read Rev. D from a mirror (https://download.mikroe.com/documents/datasheets/ADuM4160.pdf); check against the current revision.",
       "used_in": [
         "docs/research/core-devices.md",
-        "docs/research/radio-interface-circuits.md"
+        "docs/research/radio-interface-circuits.md",
+        "docs/decisions/ADR-0003-radio-interface-circuits.md"
       ]
     },
     {
@@ -1195,6 +1196,20 @@
         "docs/research/radio-interface-circuits.md"
       ],
       "sha256": "5631c9cae5614f3b00eef2d159b6b9a22075f4ffd3a8d77b2672a5472f6400ac",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "esp-idf-wdts",
+      "title": "ESP-IDF programming guide: watchdogs (ESP32-S3)",
+      "publisher": "Espressif Systems",
+      "kind": "web",
+      "url": "https://docs.espressif.com/projects/esp-idf/en/stable/esp32s3/api-reference/system/wdts.html",
+      "file": "esp-idf-wdts.html",
+      "used_in": [
+        "docs/research/radio-interface-circuits.md",
+        "docs/decisions/ADR-0003-radio-interface-circuits.md"
+      ],
+      "sha256": "a9d0dd71fa7b006850d5881d22370758c4db2e589c12d7e12b9814a5ec5187db",
       "retrieved": "2026-09-25"
     }
   ]
