@@ -92,17 +92,20 @@ Consequences:
 ### 3.2 Automotive 12 V input (variant M)
 
 Must survive a harsh automotive environment. Target the 12 V-system levels of
-ISO 16750-2 and ISO 7637-2 **(verify exact levels and editions)**:
+**ISO 16750-2:2023** and **ISO 7637-2:2011** (level IV), confirmed in
+[`power-automotive.md`](../research/power-automotive.md#1-test-levels) (#10;
+clauses and sources there). The design is in
+[ADR-0004](../decisions/ADR-0004-power-automotive.md):
 
 | Condition | Target |
 |---|---|
 | Normal operating range | 9–16 V |
-| Cold crank | Operate down to about 6 V (4.5 V desirable), **or** brown out safely with PTT off |
-| Load dump | Unsuppressed up to about 101 V, 40–400 ms; suppressed (centrally clamped) about 35 V |
+| Cold crank | Operate down to about 6 V (4.5 V desirable), **or** brown out safely with PTT off ("normal" profile 4.5 V then 6.5 V; "severe" 3 V then 5 V) |
+| Load dump | Test A (unsuppressed): 79–101 V, Ri 0.5–4 Ω, 40–400 ms, 10 pulses; test B (centrally suppressed): up to 35 V |
 | Reverse battery | −14 V for 60 s, no damage |
-| Jump start | 24 V for 60 s |
+| Jump start | 26 V for 60 s (ISO 16750-2:2023; 24 V in the 2012 edition) |
 | ISO 7637-2 transients | Pulse 1 about −150 V; pulse 2a about +112 V; pulses 3a/3b about −220 V / +150 V |
-| ESD | ±15 kV air (ISO 10605) |
+| ESD | ±15 kV air (ISO 10605) **(verify)** |
 | Temperature | −40 °C to +85 °C operating |
 | Off-state drain | < 1 mA; auto power-down when the radio or ignition is off |
 
@@ -130,8 +133,10 @@ Design guidance (confirmed in the power-front-end issue):
 | Radio module (ESP32-S3-MINI-1), BLE active | about 0.1 A typical, 0.34 A peak (BLE TX at +20 dBm, datasheet) @ 3.3 V |
 | USB hub (wired mode) | about 50 mA **(verify with the hub chosen)** |
 | Audio codec | about 50 mA |
-| USB host VBUS to the radio | up to about 0.5 A (current-limited switch) |
 | Target total | about 1.5 W typical, 3 W peak |
+
+The device supplies no power to the radio: the radio port's VBUS is blocked in
+hardware (ADR-0003, [#9](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/9)).
 
 **USB-C budget:** a USB-C host without USB PD may supply only 500 mA at 5 V
 (USB 2.0 default). In wired mode that must cover the device, the hub and the

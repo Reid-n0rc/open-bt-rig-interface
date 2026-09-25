@@ -232,7 +232,7 @@ and editions are confirmed in [#10](https://github.com/Reid-n0rc/open-bt-rig-int
 | REQ-PWR-011 | During cold crank, variant M shall operate down to about 6 V (4.5 V desirable), or brown out safely with PTT off. | constraints §3.2. | T | verify | #10 / bring-up |
 | REQ-PWR-012 | Variant M shall survive an unsuppressed load dump up to about 101 V for 40–400 ms, and a suppressed (centrally clamped) load dump of about 35 V. | constraints §3.2. | T | verify | #10 / bring-up |
 | REQ-PWR-013 | Variant M shall survive −14 V reverse battery for 60 s without damage. | constraints §3.2. | T | verify | #10 / bring-up |
-| REQ-PWR-014 | Variant M shall survive a 24 V jump start for 60 s. | constraints §3.2. | T | verify | #10 / bring-up |
+| REQ-PWR-014 | Variant M shall survive a 26 V jump start for 60 s (ISO 16750-2:2023). | constraints §3.2; [ADR-0004](../decisions/ADR-0004-power-automotive.md). | T | verify | #10 / bring-up |
 | REQ-PWR-015 | Variant M shall survive ISO 7637-2 pulse 1 (about −150 V), pulse 2a (about +112 V) and pulses 3a/3b (about −220 V / +150 V). | constraints §3.2. | T | verify | #10 / bring-up |
 | REQ-PWR-016 | Variant M shall draw less than 1 mA when off, and power down automatically when the radio or ignition is off. | constraints §3.2. | T | verify | #10 / bring-up |
 | REQ-PWR-017 | Variant M's power front end shall use a reverse-polarity protection (ideal-diode or controller), load-dump protection (surge stopper and/or TVS), an AEC-Q100 wide-input buck converter, and an input common-mode choke plus pi filter. | constraints §3.2 design guidance. | I | draft | #10 / #10 |
