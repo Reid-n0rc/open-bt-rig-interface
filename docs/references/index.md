@@ -29,6 +29,239 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Notes: The site blocks scripted downloads; save the PDF from a browser.
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
+### android-bluetoothdevice
+
+**android.bluetooth.BluetoothDevice API reference** (Google, web)
+
+- Local copy: [cache/android-bluetoothdevice.html](cache/android-bluetoothdevice.html)
+- Original: <https://developer.android.com/reference/android/bluetooth/BluetoothDevice>
+- Retrieved: 2026-09-24; SHA-256 `604c67b0ac88c2e9…`
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### android-bluetoothgatt
+
+**android.bluetooth.BluetoothGatt API reference** (Google, web)
+
+- Local copy: [cache/android-bluetoothgatt.html](cache/android-bluetoothgatt.html)
+- Original: <https://developer.android.com/reference/android/bluetooth/BluetoothGatt>
+- Retrieved: 2026-09-24; SHA-256 `0b5bb6393dcca375…`
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### android-cdd-13
+
+**Android 13 Compatibility Definition Document** (Google (Android Open Source Project), standard)
+
+- Local copy: [cache/android-cdd-13.html](cache/android-cdd-13.html)
+- Original: <https://source.android.com/docs/compatibility/13/android-13-cdd>
+- Retrieved: 2026-09-24; SHA-256 `35a15e91b35531c5…`
+- Notes: Same USB host and voice-recognition capture clauses as the Android 16 CDD (checked 2026-09-24).
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### android-cdd-16
+
+**Android 16 Compatibility Definition Document** (Google (Android Open Source Project), standard)
+
+- Local copy: [cache/android-cdd-16.html](cache/android-cdd-16.html)
+- Original: <https://source.android.com/docs/compatibility/16/android-16-cdd>
+- Retrieved: 2026-09-24; SHA-256 `a7f8a1d64cacbc30…`
+- Notes: Sections 5.4.2, 5.11, 7.7.2, 7.8.2.2.
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### android-fgs-types
+
+**Foreground service types (Android developers)** (Google, web)
+
+- Local copy: [cache/android-fgs-types.html](cache/android-fgs-types.html)
+- Original: <https://developer.android.com/develop/background-work/services/fgs/service-types>
+- Retrieved: 2026-09-24; SHA-256 `5bc14643c097959d…`
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### android-kconfig-cdc-ncm
+
+**Android kernel/configs commit: Android U requires CONFIG_USB_NET_CDC_NCM=y** (Android Open Source Project, sdk)
+
+- Local copy: [cache/android-kconfig-cdc-ncm.html](cache/android-kconfig-cdc-ncm.html)
+- Original: <https://android.googlesource.com/kernel/configs/+/659aee1b688f245f4dafe4afe7904ed9cd91fbb0>
+- Retrieved: 2026-09-24; SHA-256 `202235b14af01e47…`
+- Cited in: [`protocol/SPEC.md`](../../protocol/SPEC.md), [`docs/decisions/ADR-0007-protocol.md`](../../docs/decisions/ADR-0007-protocol.md)
+
+### android-le-audio
+
+**Bluetooth Low Energy Audio overview (Android developers)** (Google, web)
+
+- Local copy: [cache/android-le-audio.html](cache/android-le-audio.html)
+- Original: <https://developer.android.com/develop/connectivity/bluetooth/ble-audio/overview>
+- Retrieved: 2026-09-24; SHA-256 `474d4b303d7c3a0e…`
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### android-usb-audio
+
+**USB digital audio (AOSP)** (Google (Android Open Source Project), web)
+
+- Local copy: [cache/android-usb-audio.html](cache/android-usb-audio.html)
+- Original: <https://source.android.com/docs/core/audio/usb>
+- Retrieved: 2026-09-24; SHA-256 `2fc839d19515f25e…`
+- Notes: Last updated 2025-02-27.
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### android-usb-host
+
+**USB host overview (Android developers)** (Google, web)
+
+- Local copy: [cache/android-usb-host.html](cache/android-usb-host.html)
+- Original: <https://developer.android.com/develop/connectivity/usb/host>
+- Retrieved: 2026-09-24; SHA-256 `8dc77191c028ba46…`
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### apple-adg
+
+**Accessory Design Guidelines for Apple Devices, Release R31** (Apple, standard)
+
+- Local copy: [cache/apple-adg.pdf](cache/apple-adg.pdf)
+- Original: <https://developer.apple.com/accessories/Accessory-Design-Guidelines.pdf>
+- Retrieved: 2026-09-24; SHA-256 `b631b8b25d6b4fba…`
+- Notes: Release R31, pages dated 2026-09-21. Section 58 covers Bluetooth LE.
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### apple-avaudiosession-measurement
+
+**AVAudioSession.Mode.measurement** (Apple, web)
+
+- Local copy: [cache/apple-avaudiosession-measurement.json](cache/apple-avaudiosession-measurement.json)
+- Original: <https://developer.apple.com/documentation/avfaudio/avaudiosession/mode-swift.struct/measurement>
+- Download: manual (the site blocks scripted downloads)
+- Notes: Rendered by JavaScript: save https://developer.apple.com/tutorials/data/documentation/avfaudio/avaudiosession/mode-swift.struct/measurement.json
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### apple-cb-background
+
+**Core Bluetooth Programming Guide: Core Bluetooth background processing for iOS apps** (Apple, web)
+
+- Local copy: [cache/apple-cb-background.html](cache/apple-cb-background.html)
+- Original: <https://developer.apple.com/library/archive/documentation/NetworkingInternetWeb/Conceptual/CoreBluetooth_concepts/CoreBluetoothBackgroundProcessingForIOSApps/PerformingTasksWhileYourAppIsInTheBackground.html>
+- Retrieved: 2026-09-24; SHA-256 `7bfe22aaf560e7b2…`
+- Notes: Archive document, revision 2013-09-18.
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### apple-cb-openl2cap
+
+**CBPeripheral.openL2CAPChannel(_:)** (Apple, web)
+
+- Local copy: [cache/apple-cb-openl2cap.json](cache/apple-cb-openl2cap.json)
+- Original: <https://developer.apple.com/documentation/corebluetooth/cbperipheral/openl2capchannel(_:)>
+- Download: manual (the site blocks scripted downloads)
+- Notes: Availability: iOS/iPadOS 11.0, macOS 10.14. Rendered by JavaScript: save https://developer.apple.com/tutorials/data/documentation/corebluetooth/cbperipheral/openl2capchannel(_:).json
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### apple-forum-747847
+
+**Developer forums thread 747847: Working around the lack of USB FTDI (DTS reply, June 2026)** (Apple Developer Forums, web)
+
+- Local copy: [cache/apple-forum-747847.html](cache/apple-forum-747847.html)
+- Original: <https://developer.apple.com/forums/thread/747847>
+- Download: manual (the site blocks scripted downloads)
+- Notes: Reply by Apple DTS engineer Kevin Elliott, June 2026. Rendered by JavaScript; save the page from a browser.
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### apple-forum-770717
+
+**Developer forums thread 770717: Core Bluetooth throughput issues (DTS replies, December 2024)** (Apple Developer Forums, web)
+
+- Local copy: [cache/apple-forum-770717.html](cache/apple-forum-770717.html)
+- Original: <https://developer.apple.com/forums/thread/770717>
+- Download: manual (the site blocks scripted downloads)
+- Notes: Replies by Apple DTS engineer Argun Tekant, December 2024. Rendered by JavaScript; save the page from a browser.
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### apple-forum-772812
+
+**Developer forums thread 772812: ESP32 USB-C to iPhone 16 USB-C communication (DTS replies, January 2025)** (Apple Developer Forums, web)
+
+- Local copy: [cache/apple-forum-772812.html](cache/apple-forum-772812.html)
+- Original: <https://developer.apple.com/forums/thread/772812>
+- Download: manual (the site blocks scripted downloads)
+- Notes: Replies by Apple DTS engineers (Quinn "The Eskimo!", Kevin Elliott), January 2025. Rendered by JavaScript; save the page from a browser.
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### apple-forum-802640
+
+**Apple Developer Forums 802640: Custom USB network device driver on iPhone (Quinn, DTS, Oct 2025)** (Apple, web)
+
+- Local copy: [cache/apple-forum-802640.html](cache/apple-forum-802640.html)
+- Original: <https://developer.apple.com/forums/thread/802640>
+- Retrieved: 2026-09-24; SHA-256 `239efd645fae36e9…`
+- Cited in: [`protocol/SPEC.md`](../../protocol/SPEC.md), [`docs/decisions/ADR-0007-protocol.md`](../../docs/decisions/ADR-0007-protocol.md)
+
+### apple-ipad-usbc
+
+**Charge and connect with the USB-C port on your iPad** (Apple, web)
+
+- Local copy: [cache/apple-ipad-usbc.html](cache/apple-ipad-usbc.html)
+- Original: <https://support.apple.com/en-us/108894>
+- Retrieved: 2026-09-24; SHA-256 `3e5e90d9e44d3271…`
+- Notes: Published 2026-03-10.
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### apple-iphone-usbc
+
+**Charge and connect with the USB-C connector on your iPhone** (Apple, web)
+
+- Local copy: [cache/apple-iphone-usbc.html](cache/apple-iphone-usbc.html)
+- Original: <https://support.apple.com/en-us/105099>
+- Retrieved: 2026-09-24; SHA-256 `0ac71bcc443e5904…`
+- Notes: Published 2026-09-17.
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### apple-tn3190
+
+**TN3190: USB audio device design considerations** (Apple, web)
+
+- Local copy: [cache/apple-tn3190.json](cache/apple-tn3190.json)
+- Original: <https://developer.apple.com/documentation/technotes/tn3190-usb-audio-device-design-considerations>
+- Download: manual (the site blocks scripted downloads)
+- Notes: First published 2025-10-07; obsoletes TN2274. The page is rendered by JavaScript: save the JSON from https://developer.apple.com/tutorials/data/documentation/technotes/tn3190-usb-audio-device-design-considerations.json to the cache path.
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### apple-voice-processing
+
+**AVAudioIONode.setVoiceProcessingEnabled(_:)** (Apple, web)
+
+- Local copy: [cache/apple-voice-processing.json](cache/apple-voice-processing.json)
+- Original: <https://developer.apple.com/documentation/avfaudio/avaudioionode/setvoiceprocessingenabled(_:)>
+- Download: manual (the site blocks scripted downloads)
+- Notes: Availability: iOS 13, macOS 10.15. Rendered by JavaScript: save https://developer.apple.com/tutorials/data/documentation/avfaudio/avaudioionode/setvoiceprocessingenabled(_:).json
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### bluez-gatt-characteristic
+
+**BlueZ 5.87 doc/org.bluez.GattCharacteristic.rst** (BlueZ project, sdk)
+
+- Local copy: [cache/bluez-gatt-characteristic.rst](cache/bluez-gatt-characteristic.rst)
+- Original: <https://raw.githubusercontent.com/bluez/bluez/65d11edee469c24dcc8d075b8be9c040cebaaf98/doc/org.bluez.GattCharacteristic.rst>
+- Retrieved: 2026-09-24; SHA-256 `3fb3cf4b511a9048…`
+- Notes: GPL/LGPL project: facts only.
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### bluez-l2cap
+
+**BlueZ 5.87 doc/l2cap-protocol.rst (L2CAP socket API)** (BlueZ project, sdk)
+
+- Local copy: [cache/bluez-l2cap-protocol.rst](cache/bluez-l2cap-protocol.rst)
+- Original: <https://raw.githubusercontent.com/bluez/bluez/65d11edee469c24dcc8d075b8be9c040cebaaf98/doc/l2cap-protocol.rst>
+- Retrieved: 2026-09-24; SHA-256 `89ebc1d0023938bc…`
+- Notes: GPL/LGPL project: facts only.
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### bluez-main-conf
+
+**BlueZ 5.87 src/main.conf** (BlueZ project, sdk)
+
+- Local copy: [cache/bluez-main.conf](cache/bluez-main.conf)
+- Original: <https://raw.githubusercontent.com/bluez/bluez/65d11edee469c24dcc8d075b8be9c040cebaaf98/src/main.conf>
+- Retrieved: 2026-09-24; SHA-256 `d3762eb247855308…`
+- Notes: GPL/LGPL project: facts only.
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
 ### bourns-lm-np-ds
 
 **Bourns LM-NP/LP 1000 series line matching transformers datasheet** (Bourns, datasheet)
@@ -37,6 +270,34 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://www.bourns.com/pdfs/LMNPLP.pdf>
 - Retrieved: 2026-09-24; SHA-256 `3ad23168c4218a64…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+
+### bt-core-spec
+
+**Bluetooth Core Specification (current version)** (Bluetooth SIG, standard)
+
+- Local copy: [cache/bt-core-spec.pdf](cache/bt-core-spec.pdf)
+- Original: <https://www.bluetooth.com/specifications/specs/core-specification-6-1/>
+- Download: manual (the site blocks scripted downloads)
+- Notes: Vol 6 Part B (Link Layer): PDU format, T_IFS; Vol 3 Part A (L2CAP). Download from the page.
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### cobs-paper
+
+**Consistent Overhead Byte Stuffing (IEEE/ACM Transactions on Networking, 1999)** (Stuart Cheshire, Mary Baker, standard)
+
+- Local copy: [cache/cobs-paper.pdf](cache/cobs-paper.pdf)
+- Original: <http://www.stuartcheshire.org/papers/COBSforToN.pdf>
+- Retrieved: 2026-09-24; SHA-256 `f6500d18b463ac26…`
+- Cited in: [`protocol/SPEC.md`](../../protocol/SPEC.md), [`docs/decisions/ADR-0007-protocol.md`](../../docs/decisions/ADR-0007-protocol.md)
+
+### crc-catalogue-16
+
+**Catalogue of parametrised CRC algorithms: 16-bit CRCs (CRC-16/IBM-3740)** (Greg Cook (RevEng), web)
+
+- Local copy: [cache/crc-catalogue-16.html](cache/crc-catalogue-16.html)
+- Original: <https://reveng.sourceforge.io/crc-catalogue/16.htm>
+- Retrieved: 2026-09-24; SHA-256 `9bcbee0db3969a58…`
+- Cited in: [`protocol/SPEC.md`](../../protocol/SPEC.md)
 
 ### digirig-dr891-manual
 
@@ -203,6 +464,24 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `d99a6ef6033abe74…`
 - Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)
 
+### esp-idf-bluedroid-kconfig
+
+**ESP-IDF v6.1 Bluedroid host Kconfig** (Espressif Systems, sdk)
+
+- Local copy: [cache/esp-idf-bluedroid-kconfig.txt](cache/esp-idf-bluedroid-kconfig.txt)
+- Original: <https://raw.githubusercontent.com/espressif/esp-idf/fff9895c82d744c7237be8847347bdd1b07c6643/components/bt/host/bluedroid/Kconfig.in>
+- Retrieved: 2026-09-24; SHA-256 `cd07e67d496e70f8…`
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### esp-idf-bluedroid-throughput
+
+**ESP-IDF v6.1 Bluedroid BLE throughput server README** (Espressif Systems, sdk)
+
+- Local copy: [cache/esp-idf-bluedroid-throughput.md](cache/esp-idf-bluedroid-throughput.md)
+- Original: <https://raw.githubusercontent.com/espressif/esp-idf/fff9895c82d744c7237be8847347bdd1b07c6643/examples/bluetooth/bluedroid/ble/ble_throughput/throughput_server/README.md>
+- Retrieved: 2026-09-24; SHA-256 `cc573f575e7a6f45…`
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
 ### esp-idf-hfp-hf-readme
 
 **ESP-IDF hfp_hf example README (HFP data paths, mSBC)** (Espressif Systems (Apache-2.0), sdk)
@@ -211,6 +490,42 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://raw.githubusercontent.com/espressif/esp-idf/048ec57f228afe2d720542431b849cc10c949a15/examples/bluetooth/bluedroid/classic_bt/hfp_hf/README.md>
 - Retrieved: 2026-09-24; SHA-256 `f33f812e42729ca8…`
 - Cited in: [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+
+### esp-idf-nimble-coc-readme
+
+**ESP-IDF v6.1 NimBLE L2CAP CoC peripheral example README** (Espressif Systems, sdk)
+
+- Local copy: [cache/esp-idf-nimble-coc-readme.md](cache/esp-idf-nimble-coc-readme.md)
+- Original: <https://raw.githubusercontent.com/espressif/esp-idf/fff9895c82d744c7237be8847347bdd1b07c6643/examples/bluetooth/nimble/ble_l2cap_coc/coc_bleprph/README.md>
+- Retrieved: 2026-09-24; SHA-256 `092a950ecaee1841…`
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### esp-idf-nimble-kconfig
+
+**ESP-IDF v6.1 NimBLE host Kconfig** (Espressif Systems, sdk)
+
+- Local copy: [cache/esp-idf-nimble-kconfig.txt](cache/esp-idf-nimble-kconfig.txt)
+- Original: <https://raw.githubusercontent.com/espressif/esp-idf/fff9895c82d744c7237be8847347bdd1b07c6643/components/bt/host/nimble/Kconfig.in>
+- Retrieved: 2026-09-24; SHA-256 `d7c66583d864a810…`
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### esp-idf-nimble-throughput
+
+**ESP-IDF v6.1 NimBLE GATT throughput example README** (Espressif Systems, sdk)
+
+- Local copy: [cache/esp-idf-nimble-throughput.md](cache/esp-idf-nimble-throughput.md)
+- Original: <https://raw.githubusercontent.com/espressif/esp-idf/fff9895c82d744c7237be8847347bdd1b07c6643/examples/bluetooth/nimble/throughput_app/README.md>
+- Retrieved: 2026-09-24; SHA-256 `9f210d184659938c…`
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### esp-usb-device-s3
+
+**ESP-USB programming guide: USB device stack (ESP32-S3), endpoint limits and supported classes** (Espressif Systems, sdk)
+
+- Local copy: [cache/esp-usb-device-s3.html](cache/esp-usb-device-s3.html)
+- Original: <https://docs.espressif.com/projects/esp-usb/en/latest/esp32s3/usb_device.html>
+- Retrieved: 2026-09-24; SHA-256 `015e2a39dc00600b…`
+- Cited in: [`protocol/SPEC.md`](../../protocol/SPEC.md), [`docs/decisions/ADR-0007-protocol.md`](../../docs/decisions/ADR-0007-protocol.md), [`docs/architecture.md`](../../docs/architecture.md)
 
 ### esp-usb-host-kconfig
 
@@ -246,7 +561,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/esp32s3-ds.pdf](cache/esp32s3-ds.pdf)
 - Original: <https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf>
 - Retrieved: 2026-09-24; SHA-256 `2d5a7cb7fd559d8d…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
 
 ### esp32s3-hw-design
 
@@ -273,7 +588,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/esp32s3-mini1-fcc-grant.pdf](cache/esp32s3-mini1-fcc-grant.pdf)
 - Original: <https://www.espressif.com/sites/default/files/ESP32-S3-MINI-1%20FCC%20Certification.pdf>
 - Retrieved: 2026-09-24; SHA-256 `0344102bc60709ab…`
-- Cited in: [`docs/research/module-selection.md`](../../docs/research/module-selection.md), [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md), [`docs/research/module-selection.md`](../../docs/research/module-selection.md)
 
 ### esp32s3-mini1-fcc-manual
 
@@ -283,7 +598,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://manuals.plus/espressif/esp32-s3-mini-1-development-board-manual>
 - Download: manual (the site blocks scripted downloads)
 - Notes: Secondary copy of the FCC exhibit; the site blocks scripted downloads. Prefer the User Manual exhibit on the FCC filing list when it can be opened.
-- Cited in: [`docs/research/module-selection.md`](../../docs/research/module-selection.md), [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md), [`docs/research/module-selection.md`](../../docs/research/module-selection.md)
 
 ### esp32s3-mini1-ised-cert
 
@@ -292,7 +607,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/esp32s3-mini1-ised-cert.pdf](cache/esp32s3-mini1-ised-cert.pdf)
 - Original: <https://www.espressif.com/sites/default/files/ESP32-S3-MINI-1%20IC%20Certification.pdf>
 - Retrieved: 2026-09-24; SHA-256 `77618c1572f7f4e2…`
-- Cited in: [`docs/research/module-selection.md`](../../docs/research/module-selection.md), [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md), [`docs/research/module-selection.md`](../../docs/research/module-selection.md)
 
 ### espressif-longevity
 
@@ -340,7 +655,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://fcc.report/FCC-ID/2AC7Z-ESPS3MINI1>
 - Download: manual (the site blocks scripted downloads)
 - Notes: The site (and the FCC EAS at apps.fcc.gov/oetcf/eas) blocks scripted access; save the page, and the User Manual exhibit, from a browser.
-- Cited in: [`docs/research/module-selection.md`](../../docs/research/module-selection.md), [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md), [`docs/research/module-selection.md`](../../docs/research/module-selection.md)
 
 ### fcc-2ahmr-bw16
 
@@ -370,7 +685,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://apps.fcc.gov/oetcf/kdb/forms/FTSSearchResultPage.cfm?id=44637&switch=P>
 - Download: manual (the site blocks scripted downloads)
 - Notes: apps.fcc.gov blocks scripted access; open it in a browser and save the page (and the D03 and D04 attachments as PDF).
-- Cited in: [`docs/research/module-selection.md`](../../docs/research/module-selection.md), [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md), [`docs/research/module-selection.md`](../../docs/research/module-selection.md)
 
 ### fcc-qoq-gm220p
 
@@ -457,6 +772,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `7f4c1af2b7bae1d6…`
 - Cited in: [`docs/requirements/pcb-fabrication.md`](../../docs/requirements/pcb-fabrication.md)
 
+### jordemort-android-cdc
+
+**Why Android can't use CDC Ethernet (2023-05-31)** (Jordan Webb, web)
+
+- Local copy: [cache/jordemort-android-cdc.html](cache/jordemort-android-cdc.html)
+- Original: <https://jordemort.dev/blog/why-android-cant-use-cdc-ethernet/>
+- Retrieved: 2026-09-24; SHA-256 `0d4e7dfaa9e8f14c…`
+- Cited in: [`protocol/SPEC.md`](../../protocol/SPEC.md)
+
 ### kenwood-ts590s-im
 
 **TS-590S Instruction Manual (B62-2243-30)** (JVCKENWOOD (copy hosted by RigPix), manual)
@@ -512,6 +836,44 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `c79fd0a7e789106a…`
 - Cited in: [`docs/research/module-selection.md`](../../docs/research/module-selection.md)
 
+### linux-cdc-acm
+
+**Linux v6.16 drivers/usb/class/cdc-acm.c** (Linux kernel, sdk)
+
+- Local copy: [cache/linux-cdc-acm.c](cache/linux-cdc-acm.c)
+- Original: <https://raw.githubusercontent.com/torvalds/linux/038d61fd642278bab63ee8ef722c50d10ab01e8f/drivers/usb/class/cdc-acm.c>
+- Retrieved: 2026-09-24; SHA-256 `06e97f9ec51d41e4…`
+- Notes: GPL-2.0: facts only, never copied (THIRD_PARTY.md).
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### linux-cdc-ncm
+
+**Linux drivers/net/usb/cdc_ncm.c (CDC-NCM host driver; GPL, facts only)** (Linux kernel, sdk)
+
+- Local copy: [cache/linux-cdc-ncm.c](cache/linux-cdc-ncm.c)
+- Original: <https://raw.githubusercontent.com/torvalds/linux/038d61fd642278bab63ee8ef722c50d10ab01e8f/drivers/net/usb/cdc_ncm.c>
+- Retrieved: 2026-09-24; SHA-256 `10a1af035e2d7e61…`
+- Cited in: [`protocol/SPEC.md`](../../protocol/SPEC.md), [`docs/decisions/ADR-0007-protocol.md`](../../docs/decisions/ADR-0007-protocol.md)
+
+### linux-snd-usb-card
+
+**Linux v6.16 sound/usb/card.c (snd-usb-audio)** (Linux kernel, sdk)
+
+- Local copy: [cache/linux-snd-usb-card.c](cache/linux-snd-usb-card.c)
+- Original: <https://raw.githubusercontent.com/torvalds/linux/038d61fd642278bab63ee8ef722c50d10ab01e8f/sound/usb/card.c>
+- Retrieved: 2026-09-24; SHA-256 `3368af08c5f18a10…`
+- Notes: GPL-2.0: facts only, never copied (THIRD_PARTY.md).
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### linux-usbnet
+
+**Linux drivers/net/usb/usbnet.c (interface naming usbN/ethN; GPL, facts only)** (Linux kernel, sdk)
+
+- Local copy: [cache/linux-usbnet.c](cache/linux-usbnet.c)
+- Original: <https://raw.githubusercontent.com/torvalds/linux/038d61fd642278bab63ee8ef722c50d10ab01e8f/drivers/net/usb/usbnet.c>
+- Retrieved: 2026-09-24; SHA-256 `9fc89a999b418872…`
+- Cited in: [`protocol/SPEC.md`](../../protocol/SPEC.md)
+
 ### microchip-bm83-spp-kb
 
 **Microchip KB: BM83 BLE and SPP simultaneous connection** (Microchip, web)
@@ -531,6 +893,122 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `4a9ad71cd6535368…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
+### ms-audio-modes
+
+**Audio signal processing modes** (Microsoft, web)
+
+- Local copy: [cache/ms-audio-modes.html](cache/ms-audio-modes.html)
+- Original: <https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/audio-signal-processing-modes>
+- Retrieved: 2026-09-24; SHA-256 `af4d28f756a43308…`
+- Notes: Page dated 2025-03-26.
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### ms-le-audio
+
+**Bluetooth Low Energy (LE) Audio (Windows drivers)** (Microsoft, web)
+
+- Local copy: [cache/ms-le-audio.html](cache/ms-le-audio.html)
+- Original: <https://learn.microsoft.com/en-us/windows-hardware/drivers/bluetooth/bluetooth-low-energy-audio>
+- Retrieved: 2026-09-24; SHA-256 `2c95878fe24d3d75…`
+- Notes: Page dated 2025-05-05.
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### ms-usb-classes
+
+**USB device class drivers included in Windows** (Microsoft, web)
+
+- Local copy: [cache/ms-usb-classes.html](cache/ms-usb-classes.html)
+- Original: <https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/supported-usb-classes>
+- Retrieved: 2026-09-24; SHA-256 `56057fe32fe8879f…`
+- Notes: Page dated 2025-06-11.
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### ms-usbaudio2
+
+**USB Audio 2.0 drivers (usbaudio2.sys)** (Microsoft, web)
+
+- Local copy: [cache/ms-usbaudio2.html](cache/ms-usbaudio2.html)
+- Original: <https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/usb-2-0-audio-drivers>
+- Retrieved: 2026-09-24; SHA-256 `3fb2b2a7ad3b06b0…`
+- Notes: Page dated 2025-10-27.
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### ms-usbccgp
+
+**USB generic parent driver (Usbccgp.sys)** (Microsoft, web)
+
+- Local copy: [cache/ms-usbccgp.html](cache/ms-usbccgp.html)
+- Original: <https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-common-class-generic-parent-driver>
+- Retrieved: 2026-09-24; SHA-256 `f03bad93d808df76…`
+- Notes: Page dated 2025-10-31.
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### ms-usbser
+
+**USB serial driver (Usbser.sys)** (Microsoft, web)
+
+- Local copy: [cache/ms-usbser.html](cache/ms-usbser.html)
+- Original: <https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-driver-installation-based-on-compatible-ids>
+- Retrieved: 2026-09-24; SHA-256 `9ef39679004812bc…`
+- Notes: Page dated 2025-06-11.
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### ms-voice-clarity
+
+**Announcing Windows 11 Insider Preview Build 26040 (Voice Clarity)** (Microsoft (Windows Insider blog), web)
+
+- Local copy: [cache/ms-voice-clarity.html](cache/ms-voice-clarity.html)
+- Original: <https://blogs.windows.com/windows-insider/2024/01/26/announcing-windows-11-insider-preview-build-26040-canary-channel/>
+- Retrieved: 2026-09-24; SHA-256 `685408de0a1f3389…`
+- Notes: Blog post dated 2024-01-26.
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### ms-winrt-ble-connparams
+
+**BluetoothLEPreferredConnectionParameters class** (Microsoft, web)
+
+- Local copy: [cache/ms-winrt-ble-connparams.html](cache/ms-winrt-ble-connparams.html)
+- Original: <https://learn.microsoft.com/en-us/uwp/api/windows.devices.bluetooth.bluetoothlepreferredconnectionparameters>
+- Retrieved: 2026-09-24; SHA-256 `be106c1f434c0bd9…`
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### ms-winrt-ble-phy
+
+**BluetoothLEConnectionPhy class** (Microsoft, web)
+
+- Local copy: [cache/ms-winrt-ble-phy.html](cache/ms-winrt-ble-phy.html)
+- Original: <https://learn.microsoft.com/en-us/uwp/api/windows.devices.bluetooth.bluetoothleconnectionphy>
+- Retrieved: 2026-09-24; SHA-256 `d20b17e2fc5e2673…`
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### ms-winrt-bluetooth
+
+**Windows.Devices.Bluetooth namespace** (Microsoft, web)
+
+- Local copy: [cache/ms-winrt-bluetooth.html](cache/ms-winrt-bluetooth.html)
+- Original: <https://learn.microsoft.com/en-us/uwp/api/windows.devices.bluetooth>
+- Retrieved: 2026-09-24; SHA-256 `38864ddd17438480…`
+- Notes: Checked 2026-09-24 for LE L2CAP CoC classes: none listed.
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### ms-winrt-gatt-maxpdu
+
+**GattSession.MaxPduSize property** (Microsoft, web)
+
+- Local copy: [cache/ms-winrt-gatt-maxpdu.html](cache/ms-winrt-gatt-maxpdu.html)
+- Original: <https://learn.microsoft.com/en-us/uwp/api/windows.devices.bluetooth.genericattributeprofile.gattsession.maxpdusize>
+- Retrieved: 2026-09-24; SHA-256 `55d26a23a17172ca…`
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### ms-winrt-serialdevice
+
+**Windows.Devices.SerialCommunication.SerialDevice class** (Microsoft, web)
+
+- Local copy: [cache/ms-winrt-serialdevice.html](cache/ms-winrt-serialdevice.html)
+- Original: <https://learn.microsoft.com/en-us/uwp/api/windows.devices.serialcommunication.serialdevice>
+- Retrieved: 2026-09-24; SHA-256 `f44dfc3b63e2a998…`
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
 ### pico-btstack-license
 
 **pico-sdk BTstack licence for Raspberry Pi products (LICENSE.RP)** (Raspberry Pi / BlueKitchen, license)
@@ -548,6 +1026,16 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://github.com/raspberrypi/pico-sdk/issues/1461>
 - Retrieved: 2026-09-24; SHA-256 `9fb76d6853cd5b72…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+
+### pipewire-echo-cancel
+
+**PipeWire module: Echo Cancel** (PipeWire project, web)
+
+- Local copy: [cache/pipewire-echo-cancel.html](cache/pipewire-echo-cancel.html)
+- Original: <https://docs.pipewire.org/page_module_echo_cancel.html>
+- Retrieved: 2026-09-24; SHA-256 `588fde03eb0ac6f5…`
+- Notes: PipeWire 1.6.9 documentation.
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
 
 ### radioddity-x6100-ext
 
@@ -738,6 +1226,54 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://www.ti.com/lit/ds/symlink/ts3usb221a.pdf>
 - Retrieved: 2026-09-24; SHA-256 `cccebf8c10df6051…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+
+### tinyusb-audio-device-h
+
+**TinyUSB 0.21.0 src/class/audio/audio_device.h (feedback notes)** (TinyUSB project, sdk)
+
+- Local copy: [cache/tinyusb-audio-device.h](cache/tinyusb-audio-device.h)
+- Original: <https://raw.githubusercontent.com/hathach/tinyusb/dae3f9a366bfcddbf9dcf1b48d7500286a849539/src/class/audio/audio_device.h>
+- Retrieved: 2026-09-24; SHA-256 `01f350443090d96a…`
+- Notes: MIT.
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### tinyusb-readme
+
+**TinyUSB 0.21.0 README (supported device classes)** (TinyUSB project, sdk)
+
+- Local copy: [cache/tinyusb-readme.rst](cache/tinyusb-readme.rst)
+- Original: <https://raw.githubusercontent.com/hathach/tinyusb/dae3f9a366bfcddbf9dcf1b48d7500286a849539/README.rst>
+- Retrieved: 2026-09-24; SHA-256 `144a766b6be13072…`
+- Notes: MIT.
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### tinyusb-usbd-h
+
+**TinyUSB src/device/usbd.h (CDC, CDC-NCM and UAC1 descriptor templates)** (TinyUSB (hathach), sdk)
+
+- Local copy: [cache/tinyusb-usbd.h](cache/tinyusb-usbd.h)
+- Original: <https://raw.githubusercontent.com/hathach/tinyusb/dae3f9a366bfcddbf9dcf1b48d7500286a849539/src/device/usbd.h>
+- Retrieved: 2026-09-24; SHA-256 `48040a0ea812b5f0…`
+- Cited in: [`protocol/SPEC.md`](../../protocol/SPEC.md), [`docs/decisions/ADR-0007-protocol.md`](../../docs/decisions/ADR-0007-protocol.md)
+
+### usb-typec-r25
+
+**USB Type-C Cable and Connector Specification, Release 2.5 (March 2026)** (USB Implementers Forum, standard)
+
+- Local copy: [cache/usb-typec-r25.zip](cache/usb-typec-r25.zip)
+- Original: <https://www.usb.org/document-library/usb-type-cr-cable-and-connector-specification-release-25>
+- Download: manual (the site blocks scripted downloads)
+- Notes: Download the ZIP from the page; section 2.3.4 covers USB Type-C Current.
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### wireplumber-bluetooth
+
+**WirePlumber Bluetooth configuration** (PipeWire project, web)
+
+- Local copy: [cache/wireplumber-bluetooth.html](cache/wireplumber-bluetooth.html)
+- Original: <https://pipewire.pages.freedesktop.org/wireplumber/daemon/configuration/bluetooth.html>
+- Retrieved: 2026-09-24; SHA-256 `a77b416edfb9d19f…`
+- Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
 
 ### xiegu-x6100-um
 
