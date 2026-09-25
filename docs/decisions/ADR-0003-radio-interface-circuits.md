@@ -125,8 +125,12 @@ by the maintainer (2026-09-24).
    stopped by firmware when the SERIAL jack is unused. The SN6505B at 576 kHz
    is the fallback.
 6. **USB routing:** USB2422T-I/MJ hub (held in reset in Bluetooth mode),
-   two TS3USB221A switches with OE pulled to "disabled" until firmware picks a
-   mode, TYPE-C-31-M-12 with 5.1 kΩ Rd (variant R; M needs a −40 °C part),
+   two TS3USB221A switches under ESP32-S3 GPIO control (OE = H is the
+   datasheet's "Disconnect" state): the radio-port switch powers up
+   **connected to hub port 1**, so plain-port use works out of the box, and
+   firmware drives its OE high for `WIRED_PORT_LOCK` level 3 (protocol
+   PR #58 §6.1); the ESP32-S3 switch powers up disconnected until firmware
+   picks a mode, TYPE-C-31-M-12 with 5.1 kΩ Rd (variant R; M needs a −40 °C part),
    USBLC6-2SC6/TPD2E2U06 ESD. The **ADuM4160** remains a variant M option.
    Its purpose is to break the ground path through the radio's USB cable
    (hum, alternator noise, RF common-mode current, and the bypass of the jack

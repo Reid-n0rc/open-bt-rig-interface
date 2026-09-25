@@ -677,12 +677,25 @@ radio USB-A ── ESD ── [ADuM4160 option] ── S1 common ┘│  S1.2 �
 ESP32-S3 GPIO19/20 ── 22–33 Ω ── S2 common ───────────┘
 ```
 
-- **Power-on:** both TS3USB221A switches have OE pulled **high (disabled)**
-  until firmware selects a mode. OE high puts the switch in its 1 µA low-power
-  state with both paths open
-  ([datasheet](../references/index.md#ti-ts3usb221a-ds)). That hides the
-  ESP32's D+ toggling at power-up ([`fcc.md`](../compliance/fcc.md) §1.5) from
-  the radio and the hub. Power-off leakage: ±2 µA at 0–3.6 V.
+- **Disconnect state:** the TS3USB221A truth table gives OE = H →
+  "Disconnect" (both paths open, 1 µA low-power mode); OE = L with S = L →
+  D = 1D, S = H → D = 2D
+  ([datasheet](../references/index.md#ti-ts3usb221a-ds) Table 7-1, §7.3.1).
+  Power-off leakage: ±2 µA at 0–3.6 V.
+- **Control:** S1's OE and S pins and S2's OE and S pins are ESP32-S3 GPIOs
+  (device domain; not strapping or glitching pins, [`fcc.md`](../compliance/fcc.md)
+  §1.6), each with a pull resistor that sets the power-on default.
+- **Power-on defaults:**
+  - **S1 (radio port): connected to hub port 1** (OE pulled low, S pulled to
+    1D), so plain-port use works out of the box as soon as a host
+    enumerates the hub.
+  - **S2 (ESP32-S3): disconnected** (OE pulled high) until firmware selects
+    a mode. That hides the ESP32's D+ toggling at power-up
+    ([`fcc.md`](../compliance/fcc.md) §1.5) from the hub and the radio.
+- **Radio-port lock:** protocol PR #58 §6.1 adds `WIRED_PORT_LOCK` level 3,
+  which isolates the radio USB port from the hub so the host can't reach the
+  radio's own USB devices. Firmware drives **S1 OE high** (disconnect); the
+  radio port is then open on both sides. Releasing the lock returns OE low.
 - **Wired mode:** S1 → hub port 1, S2 → hub port 2 (ESP32 as device).
 - **Bluetooth mode:** S1.2 ↔ S2.2 direct (ESP32 as host). The hub is idle and
   can be held in reset.
