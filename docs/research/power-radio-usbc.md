@@ -97,8 +97,8 @@ later issue must confirm. `unknown` means no primary source was found.
   the radio. Otherwise, **with no USB host attached**, it powers down **30 s
   after radio-on sense goes off** (configurable, 0 = never). It stays awake
   while a USB host is connected (maintainer decisions, 2026-09-25).
-- **Power-section BOM:** about **$7.9 at LCSC, quantity 100** (§9.2). The buck
-  IC alone is $3.99 of that, and LCSC holds only 10 of them.
+- **Power-section BOM:** about **$6.4 at quantity 100** (§9.2), with the buck
+  at TI.com's $2.494 (LCSC charges $3.99 and holds only 10).
 
 ## 1. Radio DC input
 
@@ -515,7 +515,7 @@ the rest is **(verify)**.
 | D1 | JSCJ B5819W SL (40 V 1 A Schottky; JLCPCB Basic) | [LCSC C8598](https://www.lcsc.com/product-detail/C8598.html) | C8598 | 0.0283 | 222,220 | Yes | deferred |
 | D2 | Brightking SMBJ15A/TR13 | [Vishay SMBJ](../references/index.md#vishay-smbj-ds) (series data) | C78409 | 0.0500 | 41,280 | Yes (RoHS3) | deferred |
 | U1 | TI TPS2121RUXR (power mux) | [TPS2121](../references/index.md#ti-tps2121-ds) | C485916 | 0.7004 | 37,215 | Yes (RoHS3) | deferred |
-| U2 | TI LMR43620MC3RPERQ1 (buck, 3.3 V) | [LMR436x0-Q1](../references/index.md#ti-lmr436x0-q1-ds) | C41658611 | 3.9856 | **10** | Yes | deferred |
+| U2 | TI LMR43620MC3RPERQ1 (buck, 3.3 V, AEC-Q100; ADR-0004) | [LMR436x0-Q1](../references/index.md#ti-lmr436x0-q1-ds) | C41658611 | 3.9856 (TI.com: 2.494 at 100–249, 3,500 in stock, 2026-09-25) | **10** | Yes | deferred |
 | L1 | 4.7 µH shielded, 4 × 4 mm, 2 A (APV, SWPA4030S4R7MT equivalent) | [LCSC C5363793](https://www.lcsc.com/product-detail/C5363793.html) | C5363793 | 0.0373 | 590 | Yes | deferred |
 | Y1 | YXC OT322518.432MJBA4SL (18.432 MHz, ±20 ppm; shared, ADR-0004) | [YSO110TR](../references/index.md#yxc-yso110tr-ds) | C2831385 | 0.2858 | 1,149 | Yes | deferred |
 | U3a–c | TI SN74LVC1G80DCKR × 3 (÷8 → 2.304 MHz; shared, ADR-0004) | [SN74LVC1G80](../references/index.md#ti-sn74lvc1g80-ds) | C473331 | 0.3329 (50+) each | **175** | Yes (RoHS3) | deferred |
@@ -549,17 +549,19 @@ LCSC quantity breaks for the main parts (USD, 2026-09-24):
 | C48260 | 20+ 0.0422; 200+ 0.0338; 600+ 0.0301; 2000+ 0.0273; 10000+ 0.0261 |
 | C123790 | 20+ 0.0372; 200+ 0.0307; 600+ 0.0272; 3000+ 0.0191; 9000+ 0.0172 |
 
-### 9.2 Rough power-section BOM cost (LCSC, quantity 100)
+### 9.2 Rough power-section BOM cost (quantity 100)
+
+LCSC prices, except the buck IC at TI.com's price (see the notes).
 
 | Block | Parts | $ |
 |---|---|---|
 | Radio DC input | F1, D1, D2 | 0.16 |
 | USB-C input | J1, R1, R2, D3, D4, D5 | 0.28 |
 | Mux | U1 | 0.70 |
-| Buck | U2, L1, 2 × 10 µF, 2 × 22 µF, small caps and resistors (≈ 0.10) | 4.98 |
+| Buck | U2 (TI.com 2.494), L1, 2 × 10 µF, 2 × 22 µF, small caps and resistors (≈ 0.10) | 3.49 |
 | 2.304 MHz clock (shared; also feeds the codec PLL) | Y1, 3 × U3 | 1.28 |
 | Codec LDOs | U4, U5 and their caps (≈ 0.02) | 0.46 |
-| **Total** | | **≈ 7.9** |
+| **Total** | | **≈ 6.4** (≈ 7.9 with the buck at LCSC's 3.99) |
 
 Excluded: the isolated jack-side supply (#9), the hub and the ESD on D+/D−
 (#9), and the radio DC connector (#12). JLCPCB extended-part fees (about $3
@@ -569,11 +571,13 @@ top: only D1 and R1/R2 are Basic here.
 
 Cost notes:
 
-- **The buck IC is about half of the total.** It is the maintainer's choice for the
-  shared core. The commercial LMR43620MB5RPER (sync, no spread spectrum, but
-  5 V fixed/adjustable; $1.80, 34 in stock) could be set to 3.3 V with a
-  divider, saving about $2.2; whether that's worth a second part number
-  against variant M is for the maintainer.
+- **The buck IC is the largest line** ($2.494 at TI.com against $3.99 at
+  LCSC, 2026-09-25). **The grade is settled** (PR #57, 2026-09-25): no
+  cheaper automotive-grade drop-in exists, so the AEC-Q100
+  LMR43620MC3RPERQ1 stays for both variants. The commercial LMR43620MB5RPER
+  and LMR43610MB3RPER aren't adopted, because they aren't AEC-Q100. The
+  maintainer's rule is to keep automotive grade unless a cheaper automotive
+  drop-in exists.
 - The shared 18.432 MHz ÷ 8 clock ($1.28 here at LCSC's 50+ tier) is
   cheaper than a programmable oscillator (about $3).
 - The electrolytic damping capacitor in #10 isn't needed here: the TVS clamps
@@ -581,9 +585,9 @@ Cost notes:
 
 Sourcing risks:
 
-- **LMR43620MC3RPERQ1: 10 in stock at LCSC.** It is the core of both
-  variants. Buy ahead for the prototypes and check TI direct and the deferred
-  distributors.
+- **LMR43620MC3RPERQ1:** 10 in stock at LCSC, 3,500 at TI.com (2026-09-25).
+  It is the core of both variants; buy from TI direct and ahead for the
+  prototypes.
 - L1 (590) and Y1 (1,149) have modest stock; L1 has many equivalents. The
   SN74LVC1G80 has only 175 at LCSC; ADR-0004 tracks it for both variants.
 
@@ -655,6 +659,6 @@ no TPS2553-class switch and no 5 V rail. The isolated supply allocation is
   codec output swing at 3.0 V AVDD (#8); the flip-flops' additive jitter
   (ADR-0004); SN74LVC1G80 stock (175 at LCSC); REACH SVHC declarations for every
   part.
-- **Maintainer:** the MC3-Q1 vs commercial MB5 buck trade-off (§9.2), being
-  settled in PR #57. (Closed: the SERIAL ring-2 3.3 V output stays, as a
-  deliberate exception to "input only"; ADR-0003.)
+- **Closed by the maintainer:** the SERIAL ring-2 3.3 V output stays, as a
+  deliberate exception to "input only" (ADR-0003). The buck stays
+  LMR43620MC3RPERQ1, automotive grade (PR #57, §9.2).

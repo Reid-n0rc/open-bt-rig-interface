@@ -54,7 +54,7 @@ Constraints that shape the decision:
 | **Source selection A: TPS2121 priority mux on both raw inputs** | $0.70. One IC: priority to radio DC, OVP on each input, soft start (inrush), reverse blocking into both sources, status pin; 2.8–22 V | 24 V absolute maximum near the TVS clamp | [TPS2121](../references/index.md#ti-tps2121-ds), LCSC C485916 |
 | Source selection B: diode-OR (two Schottkys) | $0.05 | The USB-path drop pushes the buck past its 0.80 maximum duty cycle below about 4.8 V of VBUS, so it folds back in frequency and harmonics move into bands; no USB overvoltage cut-off | — |
 | Source selection C: two ideal-diode controllers + FETs | Low drop | About $0.6 plus FETs, more parts, no OVP | — |
-| Buck cost alternative: commercial LMR43620MB5RPER (sync, no spread spectrum, 5 V fixed/adjustable) set to 3.3 V | $1.80 against $3.99 | A second buck part number against variant M; 34 at LCSC | [LMR436x0](../references/index.md#ti-lmr436x0-ds) |
+| Buck cost alternative (not adopted): commercial LMR43620MB5RPER (sync, no spread spectrum, 5 V fixed/adjustable) set to 3.3 V | $1.80 against $2.494 (TI.com) | Not AEC-Q100. The maintainer keeps automotive grade unless a cheaper automotive drop-in exists; none does (PR #57, 2026-09-25) | [LMR436x0](../references/index.md#ti-lmr436x0-ds) |
 
 The **regulator core and the switching clock are not options here.** They are
 owned by **ADR-0004** (#10, [PR #57](https://github.com/Reid-n0rc/open-bt-rig-interface/pull/57)):
@@ -126,10 +126,9 @@ maintainer. Every chosen part is RoHS-compliant per LCSC; REACH SVHC is
   about 185 mA under the 500 mA Default. Radio DC draws at most 0.16 A at
   11 V (0.19 A at 9 V). REQ-PWR-003 and REQ-PWR-004 are met on paper
   **(verify on the bench)**.
-- **Power-section BOM about $7.9** (LCSC, qty 100, including the shared core
-  and clock), about half of it the buck IC.
-  Using the commercial MB5 buck would save about $2.2 at the cost of a second
-  part number (maintainer).
+- **Power-section BOM about $6.4** (qty 100, including the shared core and
+  clock), with the buck at TI.com's $2.494; about $7.9 at LCSC's $3.99. The
+  buck stays the automotive-grade LMR43620MC3RPERQ1 (PR #57).
 - **Issue item 5 is withdrawn.** Constraints §3.1, §3.4 and §7 and
   REQ-RIF-007 still describe a VBUS supply to the radio; #9 edits them under
   ADR-0003.
@@ -142,7 +141,8 @@ maintainer. Every chosen part is RoHS-compliant per LCSC; REACH SVHC is
 - **EU EMC (#59):** a ferrite-and-MLCC pi filter between the mux and the buck
   keeps ripple off the radio's DC lead. The surge immunity level and whether
   the fuse chain passes it are **(verify)**; the TPS26600 is the fallback.
-- **Sourcing risk:** LMR43620MC3RPERQ1 stock is 10 at LCSC; buy ahead.
+- **Sourcing risk:** LMR43620MC3RPERQ1 stock is 10 at LCSC and 3,500 at
+  TI.com (2026-09-25); buy from TI and ahead.
 - **Risks to verify:** buck efficiency at 2.304 MHz; module current estimates;
   USB 2.0 pre-configuration and suspend limits; frequency foldback from USB
   sources below about 4.2 V; 6 m harmonics (22nd, 23rd); codec output swing
