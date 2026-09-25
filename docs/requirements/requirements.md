@@ -150,6 +150,7 @@ Platform limitations, stated plainly:
 | REQ-PTT-008 | The PTT output shall be off unless actively driven (a pull-down, or an opto/MOSFET that must be driven), so a hung or unpowered MCU cannot key the radio. | Hardware default off (constraints §6). | T, I | draft | #9 / bring-up |
 | REQ-PTT-009 | Changing the SERIAL-jack mode, the audio path or the host mode shall never assert PTT. | [radio-connectors](radio-connectors.md#serial-jack-35-mm-trrs). | T | draft | #15, #44 / #15 |
 | REQ-PTT-010 | Every PTT fail-safe path shall have a host-run firmware test. | [`AGENTS.md`](../../AGENTS.md#firmware). | I | confirmed | #14, #15 / #14 |
+| REQ-PTT-011 | An independent hardware timer in the PTT drive path shall force the PTT closure off after PTT has been continuously asserted for a hardware-set time (default 600 s), independent of the MCU and its clocks. It shall start when the drive asserts, reset when it releases, latch off on expiry until the drive is released, power up off, fail safe (a timer fault or missing supply means PTT off), and report its state to the MCU. Firmware may shorten it but not lengthen or disable it; the firmware maximum TX time (REQ-PTT-007) shall not exceed it. | Hardware max-TX backstop ([constraints §6](constraints.md#6-safety-and-fail-safe), maintainer requirement 2026-09-24, [ADR-0003](../decisions/ADR-0003-radio-interface-circuits.md)). | T, A | draft | #9, #15 / bring-up |
 
 RF pickup and PTT: see REQ-EMC-001.
 
@@ -185,10 +186,11 @@ Connectors and pinouts: [`radio-connectors.md`](radio-connectors.md).
 | REQ-RIF-004 | The SERIAL jack shall default to 3.3 V logic at power-on. | Safe with every cable. | T | draft | #9, #15 / #15 |
 | REQ-RIF-005 | Every SERIAL-jack mode shall survive any cable: RS-232 levels up to ±15 V on any contact, in any selected mode, shall not damage the logic, CI-V or RS-232 paths, and RS-232 drivers shall be high-impedance when disabled. | constraints §7, radio-connectors. | T, A | draft | #9 / bring-up |
 | REQ-RIF-006 | Through the radio USB port, the device shall be USB host (full speed, 12 Mbit/s) to the radio's USB-serial chip (CP210x including dual-port CP2105, FTDI, CH34x, CDC-ACM) and its USB Audio Class 1.0 sound card, including through a hub inside the radio. | constraints §7. Which chips each radio uses, and USB host driver support, are confirmed per radio. | T | verify | #9, #43 / #5, bring-up |
-| REQ-RIF-007 | The device shall supply current-limited 5 V VBUS on the radio USB port, with a limit above the radio's measured draw, and report an overcurrent to the host. | The radio's USB port provides no power ([constraints §3.1](constraints.md#31-sources)). The radio's draw is not yet known. | T | verify | #9, #11 / #5 |
+| REQ-RIF-007 | *Withdrawn (2026-09-24):* the device no longer supplies VBUS to the radio; see REQ-RIF-011. | Maintainer decision, [ADR-0003](../decisions/ADR-0003-radio-interface-circuits.md). | — | withdrawn | #9 |
 | REQ-RIF-008 | In wired mode, the radio USB port shall be routed to the on-board USB hub; in Bluetooth mode, it shall be joined directly to the device's USB host. | ADR-0008 USB topology. | T | draft | #9, #44 / #44 |
 | REQ-RIF-009 | The host-side USB-C port shall be a receptacle with 5.1 kΩ Rd on CC1 and CC2 (no USB PD), connected to the hub's upstream port. | [radio-connectors](radio-connectors.md#usb-c-port-host-link-and-power). | I | draft | #9, #11 / #21 |
 | REQ-RIF-010 | Radios shall be supported through per-radio cables or harnesses (mini-DIN, 3.5 mm, DB9, USB), not per-radio boards. | constraints §7. | I | draft | #5, #9 / #5 |
+| REQ-RIF-011 | The device shall never supply power to a radio through the radio USB port, in either host mode: the port's VBUS pin shall connect to no device rail, to the USB-C VBUS or to hub port power, and no current shall flow from the device into the radio's VBUS or from a radio's VBUS into the device. | Maintainer decision ([constraints §3.1](constraints.md#31-sources), [ADR-0003](../decisions/ADR-0003-radio-interface-circuits.md)). | I, T | draft | #9 / #21, bring-up |
 
 ## 6a. Isolation
 
@@ -207,7 +209,7 @@ Connectors and pinouts: [`radio-connectors.md`](radio-connectors.md).
 | REQ-PWR-001 | Variant R shall run from a radio accessory DC supply (13.8 V nominal, 11–15 V range) with reverse-polarity and TVS protection, drawing no more than each supported radio's accessory-pin current limit. | [constraints §3.1, §3.3](constraints.md#33-radio-sourced--usb-c-input-variant-r). Pin, voltage and limit per radio are not yet known. | T | verify | #11 / #5 |
 | REQ-PWR-002 | Every variant shall run from a USB-C 5 V sink (phone charger, power bank or computer); USB PD is not required. | constraints §3.1, §3.3. | T | draft | #11 / bring-up |
 | REQ-PWR-003 | The device's total draw shall be about 1.5 W typical and 3 W peak or less, confirmed by a power budget per variant. | [constraints §3.4](constraints.md#34-power-budget-verify). Load estimates are not yet confirmed. | A, T | verify | #10, #11 / bring-up |
-| REQ-PWR-004 | In wired mode, the device, hub and radio VBUS draw shall fit within the current the USB-C host offers: 500 mA at 5 V by default, or 1.5 A / 3 A when advertised on CC. On overcurrent the device shall report it to the host rather than brown out. | [constraints §3.4](constraints.md#34-power-budget-verify). | T, A | verify | #11, #44 / #5, bring-up |
+| REQ-PWR-004 | In wired mode, the device and hub draw shall fit within the current the USB-C host offers: 500 mA at 5 V by default, or 1.5 A / 3 A when advertised on CC. On overcurrent the device shall report it to the host rather than brown out. | [constraints §3.4](constraints.md#34-power-budget-verify). | T, A | verify | #11, #44 / #5, bring-up |
 | REQ-PWR-005 | A brownout on any input shall leave PTT off (REQ-PTT-005). | constraints §3.2, §6. | T | draft | #10, #11 / bring-up |
 
 ### 7.2 Variant M automotive 12 V input
@@ -323,17 +325,17 @@ are named by their roadmap item.
 | Issue | Role | Requirements |
 |---|---|---|
 | [#3](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/3) CI gates | Verify | REQ-MECH-007, REQ-MFG-003, REQ-TOOL-001, REQ-TOOL-004 |
-| [#5](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/5) Radio power and interface table | Verify (research) | REQ-GEN-003, REQ-CAT-003, REQ-CAT-007, REQ-PTT-004, REQ-AUD-009, REQ-RIF-006, REQ-RIF-007, REQ-RIF-010, REQ-PWR-001, REQ-PWR-004 |
+| [#5](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/5) Radio power and interface table | Verify (research) | REQ-GEN-003, REQ-CAT-003, REQ-CAT-007, REQ-PTT-004, REQ-AUD-009, REQ-RIF-006, REQ-RIF-010, REQ-PWR-001, REQ-PWR-004 |
 | [#6](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/6) Five-OS host matrix | Verify (research) | REQ-GEN-002, REQ-HOST-001 to -005, REQ-HOST-011, REQ-CAT-006, REQ-AUD-004 to -006 |
 | [#7](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/7) Module (ESP32-S3-MINI-1) | Design, verify | REQ-GEN-002, REQ-HOST-012, REQ-REG-001, REQ-REG-002, REQ-REG-006, REQ-MFG-008 |
 | [#8](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/8) Audio codec and isolation | Design, verify | REQ-AUD-001, REQ-AUD-007, REQ-AUD-009 to -013, REQ-ISO-001, REQ-EMC-003, REQ-MFG-008 |
-| [#9](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/9) CAT/PTT circuits, USB routing | Design | REQ-GEN-003, REQ-GEN-004, REQ-HOST-009, REQ-CAT-002, REQ-CAT-007, REQ-CAT-008, REQ-PTT-004, REQ-PTT-008, REQ-RIF-001 to -010, REQ-ISO-001, REQ-ISO-003, REQ-EMC-001 to -003, REQ-MFG-008 |
+| [#9](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/9) CAT/PTT circuits, USB routing | Design | REQ-GEN-003, REQ-GEN-004, REQ-HOST-009, REQ-CAT-002, REQ-CAT-007, REQ-CAT-008, REQ-PTT-004, REQ-PTT-008, REQ-PTT-011, REQ-RIF-001 to -006, REQ-RIF-008 to -011, REQ-ISO-001, REQ-ISO-003, REQ-EMC-001 to -003, REQ-MFG-008 |
 | [#10](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/10) Variant M power | Design, verify | REQ-PWR-003, REQ-PWR-005, REQ-PWR-010 to -017, REQ-ISO-003, REQ-EMC-004 to -007, REQ-MECH-006, REQ-ENV-002, REQ-MFG-004, REQ-MFG-008 |
-| [#11](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/11) Variant R power | Design, verify | REQ-RIF-007, REQ-RIF-009, REQ-PWR-001 to -005, REQ-EMC-004, REQ-EMC-005, REQ-ENV-001, REQ-MFG-004, REQ-MFG-008 |
+| [#11](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/11) Variant R power | Design, verify | REQ-RIF-009, REQ-RIF-011, REQ-PWR-001 to -005, REQ-EMC-004, REQ-EMC-005, REQ-ENV-001, REQ-MFG-004, REQ-MFG-008 |
 | [#12](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/12) Variants and board strategy | Design, verify | REQ-GEN-006, REQ-ISO-001, REQ-ISO-002, REQ-REG-006, REQ-EMC-003, REQ-ENV-001, REQ-ENV-002 |
 | [#13](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/13) Protocol spec | Design, verify | REQ-GEN-002, REQ-GEN-005, REQ-HOST-004, -005, -011, -012, REQ-CAT-005, REQ-PTT-001, -002, -006, REQ-AUD-004, REQ-TIM-001, REQ-FW-004, REQ-FW-005 |
 | [#14](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/14) Firmware core, HAL, host tests | Design, verify | REQ-CAT-001, REQ-PTT-005, REQ-PTT-010, REQ-TIM-003, REQ-FW-001 to -003, REQ-FW-006 |
-| [#15](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/15) Firmware CAT bridge and PTT | Design, verify | REQ-GEN-001, REQ-HOST-004, REQ-CAT-001 to -003, REQ-CAT-005 to -008, REQ-PTT-001 to -003, REQ-PTT-005 to -007, REQ-PTT-009, REQ-PTT-010, REQ-RIF-003, REQ-RIF-004, REQ-FW-002, REQ-FW-005 |
+| [#15](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/15) Firmware CAT bridge and PTT | Design, verify | REQ-GEN-001, REQ-HOST-004, REQ-CAT-001 to -003, REQ-CAT-005 to -008, REQ-PTT-001 to -003, REQ-PTT-005 to -007, REQ-PTT-009 to -011, REQ-RIF-003, REQ-RIF-004, REQ-FW-002, REQ-FW-005 |
 | [#16](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/16) Firmware audio pipeline | Design, verify | REQ-GEN-001, REQ-HOST-004, REQ-HOST-011, REQ-AUD-001, -002, -004, -005, -007, -008, -013 to -015 |
 | [#17](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/17) Firmware tone TX (optional) | Design, verify | REQ-TIM-001 to -003 |
 | [#18](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/18) 👤 Audio bench test | Verify | REQ-GEN-001, REQ-GEN-002, REQ-HOST-001 to -004, REQ-HOST-009, REQ-HOST-010, REQ-CAT-006, REQ-PTT-001, REQ-AUD-003, -004, -006, -008, -013, -015 |
@@ -378,7 +380,7 @@ one requirement. Update this list when either document changes.
 
 **§3 Power**
 
-- [x] §3.1 Radio USB port provides no power; device supplies VBUS: REQ-RIF-007
+- [x] §3.1 Radio USB port provides no power; device supplies no VBUS to it: REQ-RIF-011
 - [x] §3.1 Radio accessory DC: REQ-PWR-001
 - [x] §3.1 USB-C 5 V sink: REQ-PWR-002
 - [x] §3.1 12 V vehicle or station supply: REQ-PWR-010 to -016
@@ -393,7 +395,7 @@ one requirement. Update this list when either document changes.
 - [x] §3.3 13.8 V accessory input, protection, current limit: REQ-PWR-001
 - [x] §3.3 USB-C 5 V sink, no PD: REQ-PWR-002, REQ-RIF-009
 - [x] §3.4 Power budget: REQ-PWR-003
-- [x] §3.4 USB-C budget and overcurrent reporting: REQ-PWR-004, REQ-RIF-007
+- [x] §3.4 USB-C budget and overcurrent reporting: REQ-PWR-004
 
 **§4 Regulatory**
 
@@ -413,6 +415,7 @@ one requirement. Update this list when either document changes.
 - [x] PTT off at power-on, reset, brownout, disconnect, watchdog: REQ-PTT-005, REQ-PWR-005
 - [x] Hardware default off: REQ-PTT-008
 - [x] Maximum continuous TX time: REQ-PTT-007
+- [x] Hardware max-TX backstop: REQ-PTT-011
 - [x] Isolation of AUDIO and SERIAL jacks (M, and whenever USB-C data is used): REQ-ISO-001, REQ-ISO-002
 - [x] Radio USB port not isolated by default; USB isolator option: REQ-ISO-003
 
@@ -421,7 +424,7 @@ one requirement. Update this list when either document changes.
 - [x] CAT modes (TTL, RS-232, CI-V), 4800–115200 baud, firmware-selected: REQ-RIF-003, REQ-CAT-002, REQ-CAT-008
 - [x] Every mode survives any cable; power-on default 3.3 V logic: REQ-RIF-005, REQ-RIF-004
 - [x] PTT isolated closure; RTS/DTR mapping; no RS-232 RTS/DTR contacts: REQ-PTT-003, REQ-PTT-004
-- [x] USB host to CP210x/CP2105/FTDI/CH34x/CDC-ACM and UAC1, through a radio hub, full speed, VBUS, routed to the hub in wired mode: REQ-RIF-006 to -008
+- [x] USB host to CP210x/CP2105/FTDI/CH34x/CDC-ACM and UAC1, through a radio hub, full speed, no VBUS, routed to the hub in wired mode: REQ-RIF-006, REQ-RIF-008, REQ-RIF-011
 - [x] Radio-type coverage in both host modes: REQ-GEN-003
 - [x] Connectors (two TRRS jacks, USB-A), fixed pinout, per-radio cables: REQ-RIF-001, REQ-RIF-002, REQ-RIF-010
 

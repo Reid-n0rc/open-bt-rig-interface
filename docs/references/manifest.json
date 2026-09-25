@@ -136,7 +136,8 @@
       "file": "esp-usb-uac-readme.md",
       "used_in": [
         "docs/decisions/ADR-0008-host-links-esp32-s3.md",
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/radio-interface-circuits.md"
       ],
       "sha256": "d9cd03095210444e6162dc95d05e40fbd83292b16516a81d85b4e04d9ba7a08c",
       "retrieved": "2026-09-24"
@@ -150,7 +151,8 @@
       "file": "esp-usb-host-kconfig.txt",
       "used_in": [
         "docs/decisions/ADR-0008-host-links-esp32-s3.md",
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/radio-interface-circuits.md"
       ],
       "sha256": "e3ab7801e8e267ce09b6d8a6f52f672a10df902fa6c30e2eb5d3cd1649366af9",
       "retrieved": "2026-09-24"
@@ -320,7 +322,8 @@
       "url": "https://www.ti.com/lit/ds/symlink/iso7721.pdf",
       "file": "ti-iso7721-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/radio-interface-circuits.md"
       ],
       "sha256": "fb039c00ceb601b93618004839b2108d3358777a019f2526bca427b7f6c0649c",
       "retrieved": "2026-09-24"
@@ -346,7 +349,9 @@
       "url": "https://www.ti.com/lit/ds/symlink/tps3430.pdf",
       "file": "ti-tps3430-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/radio-interface-circuits.md",
+        "docs/decisions/ADR-0003-radio-interface-circuits.md"
       ],
       "sha256": "f9887a28788bac6ae6743e211ae50dddd809e3ff7bf0d6a3447c8d71f62c6b4d",
       "retrieved": "2026-09-24"
@@ -450,7 +455,8 @@
       "url": "https://www.ti.com/lit/ds/symlink/trs3221e.pdf",
       "file": "ti-trs3221e-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/radio-interface-circuits.md"
       ],
       "sha256": "3978592d390b01cc806e335d286836e42003fe8b55156cc01fc37c8c51fd1b6b",
       "retrieved": "2026-09-24"
@@ -463,7 +469,8 @@
       "url": "https://www.ti.com/lit/ds/symlink/tmux6219.pdf",
       "file": "ti-tmux6219-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/radio-interface-circuits.md"
       ],
       "sha256": "216e5fe55ce423e3d2e4702dd88ad203e7550e57d3b306ac7d1f31dae06394c0",
       "retrieved": "2026-09-24"
@@ -476,7 +483,8 @@
       "url": "https://www.ti.com/lit/ds/symlink/ts3usb221a.pdf",
       "file": "ti-ts3usb221a-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/radio-interface-circuits.md"
       ],
       "sha256": "cccebf8c10df605133d24bd3ab3abeb97a19dbf539d3465b53562fc19f7a242e",
       "retrieved": "2026-09-24"
@@ -489,7 +497,8 @@
       "url": "https://www.ti.com/lit/ds/symlink/tpd2e2u06.pdf",
       "file": "ti-tpd2e2u06-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/radio-interface-circuits.md"
       ],
       "sha256": "a133b86ea3d3c3d34667339b92d3b5e98d541d10e9775d63e7cdfa153794f4ed",
       "retrieved": "2026-09-24"
@@ -502,7 +511,9 @@
       "url": "https://ww1.microchip.com/downloads/en/DeviceDoc/00001726B.pdf",
       "file": "microchip-usb2422-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/radio-interface-circuits.md",
+        "docs/decisions/ADR-0003-radio-interface-circuits.md"
       ],
       "sha256": "4a9ad71cd6535368f9535d08924dbff9c21c0554d5fbf01cf06ae0d92a44fc0d",
       "retrieved": "2026-09-24"
@@ -517,7 +528,8 @@
       "fetch": "manual",
       "notes": "The site blocks scripted downloads; save the PDF from a browser.",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/radio-interface-circuits.md"
       ]
     },
     {
@@ -851,6 +863,339 @@
       ],
       "sha256": "d67001d0dc491931674b4dcefca686fc87fe31410d93af81045b2a73a24a395a",
       "retrieved": "2026-09-24"
+    },
+    {
+      "id": "adi-max14778-ds",
+      "title": "MAX14778 dual ±25 V above- and below-the-rails 4:1 analog multiplexer datasheet",
+      "publisher": "Analog Devices (Maxim)",
+      "kind": "datasheet",
+      "url": "https://www.analog.com/media/en/technical-documentation/data-sheets/max14778.pdf",
+      "file": "adi-max14778-ds.pdf",
+      "fetch": "manual",
+      "notes": "The site blocks scripted downloads; save the PDF from a browser.",
+      "used_in": [
+        "docs/research/radio-interface-circuits.md",
+        "docs/decisions/ADR-0003-radio-interface-circuits.md"
+      ]
+    },
+    {
+      "id": "omron-g6k-ds",
+      "title": "G6K surface-mounting signal relay datasheet",
+      "publisher": "Omron",
+      "kind": "datasheet",
+      "url": "https://omronfs.omron.com/en_US/ecb/products/pdf/en-g6k.pdf",
+      "file": "omron-g6k-ds.pdf",
+      "used_in": [
+        "docs/research/radio-interface-circuits.md"
+      ],
+      "sha256": "25d2046127b3ffa7e7a2047b7467c67587559e8e05111347260d5a892c0bec57",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "ti-sn74lvc1g11-ds",
+      "title": "SN74LVC1G11 single 3-input AND gate datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1g11.pdf",
+      "file": "ti-sn74lvc1g11-ds.pdf",
+      "used_in": [
+        "docs/research/radio-interface-circuits.md"
+      ],
+      "sha256": "ffd953703273b43844eae23cfbf31cfc801a3b9443f2c863d49dde62f5a9232b",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "ti-sn74lvc2g02-ds",
+      "title": "SN74LVC2G02 dual 2-input NOR gate datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/sn74lvc2g02.pdf",
+      "file": "ti-sn74lvc2g02-ds.pdf",
+      "used_in": [
+        "docs/research/radio-interface-circuits.md",
+        "docs/decisions/ADR-0003-radio-interface-circuits.md"
+      ],
+      "sha256": "ba6416add62208fc2b09122a3cd9978b494b23705acedf5071e6b946beef7278",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "ti-iso1540-ds",
+      "title": "ISO154x low-power bidirectional I2C isolators datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/iso1540.pdf",
+      "file": "ti-iso1540-ds.pdf",
+      "used_in": [
+        "docs/research/radio-interface-circuits.md"
+      ],
+      "sha256": "a073ca9bd456eda119708ed14e1458c286ca65f332bfa8e451b922b9732fed0c",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "ti-tca9534-ds",
+      "title": "TCA9534 8-bit I2C I/O expander datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tca9534.pdf",
+      "file": "ti-tca9534-ds.pdf",
+      "used_in": [
+        "docs/research/radio-interface-circuits.md"
+      ],
+      "sha256": "797c1fc96502df7c60b0e82d3d615593fa722de521e36c78cda40450360f8713",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "ti-sn6505b-ds",
+      "title": "SN6505A/SN6505B low-noise 1 A transformer drivers datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/sn6505b.pdf",
+      "file": "ti-sn6505b-ds.pdf",
+      "used_in": [
+        "docs/research/radio-interface-circuits.md"
+      ],
+      "sha256": "dfc57cb042218cb698436970611710640cde6eebf54ae0dc2e53c74fadb2ef46",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "ti-sn6507-ds",
+      "title": "SN6507 36 V push-pull transformer driver with duty-cycle control datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/sn6507.pdf",
+      "file": "ti-sn6507-ds.pdf",
+      "used_in": [
+        "docs/research/radio-interface-circuits.md"
+      ],
+      "sha256": "f15d229976c019d42561751c0abb7c1e831bda1946500aa1ca1c8e067395b0ca",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "panasonic-aqy21eh-ds",
+      "title": "PhotoMOS GE DIP4 1 Form A (AQY21xEH) datasheet ASCTB126E",
+      "publisher": "Panasonic Industry",
+      "kind": "datasheet",
+      "url": "https://industry.panasonic.com/ac/cdn/e/control/relay/photomos/catalog/semi_eng_ge1a_aqy21_e.pdf",
+      "file": "panasonic-aqy21eh-ds.pdf",
+      "used_in": [
+        "docs/research/radio-interface-circuits.md",
+        "docs/decisions/ADR-0003-radio-interface-circuits.md"
+      ],
+      "sha256": "d329b97293228ccd6b5cce0b5622fbea1e18bda0df64fce606a5bb804f45fbf4",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "littelfuse-cpc1017n-ds",
+      "title": "CPC1017N 60 V normally-open OptoMOS relay datasheet DS-CPC1017N-R08",
+      "publisher": "Littelfuse (IXYS ICD)",
+      "kind": "datasheet",
+      "url": "https://www.tti.com/content/dam/ttiinc/manufacturers/littelfuse/Products/pdf/CPC1017N_series_datasheet.pdf",
+      "file": "littelfuse-cpc1017n-ds.pdf",
+      "fetch": "manual",
+      "notes": "The distributor site blocks scripted downloads (HTTP 403); save the PDF from a browser.",
+      "used_in": [
+        "docs/research/radio-interface-circuits.md"
+      ]
+    },
+    {
+      "id": "ti-tps3839-ds",
+      "title": "TPS3831/TPS3839 150 nA supply voltage monitor datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tps3839.pdf",
+      "file": "ti-tps3839-ds.pdf",
+      "used_in": [
+        "docs/research/radio-interface-circuits.md",
+        "docs/decisions/ADR-0003-radio-interface-circuits.md"
+      ],
+      "sha256": "a18940237afc63cf6d1a0bb5e1c8c0b2c3274e01c47fa5f27e470a005072621b",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "ti-tps3850-ds",
+      "title": "TPS3850 precision voltage supervisor with window watchdog datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tps3850.pdf",
+      "file": "ti-tps3850-ds.pdf",
+      "used_in": [
+        "docs/research/radio-interface-circuits.md"
+      ],
+      "sha256": "7125e0f13b435f9885768fa0f49ec737af0b8ff35ae241d8a8a99e8273585082",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "ti-tpl5111-ds",
+      "title": "TPL5111 nano-power system timer for power gating datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tpl5111.pdf",
+      "file": "ti-tpl5111-ds.pdf",
+      "used_in": [
+        "docs/research/radio-interface-circuits.md",
+        "docs/decisions/ADR-0003-radio-interface-circuits.md"
+      ],
+      "sha256": "8bec8b53d32403e1460a824986ea6ad18ada8dfb09e8299a27e3bd466e0b01fe",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "nexperia-74hc4060-ds",
+      "title": "74HC4060 14-stage binary ripple counter with oscillator datasheet",
+      "publisher": "Nexperia",
+      "kind": "datasheet",
+      "url": "https://assets.nexperia.com/documents/data-sheet/74HC_HCT4060.pdf",
+      "file": "nexperia-74hc4060-ds.pdf",
+      "used_in": [
+        "docs/research/radio-interface-circuits.md"
+      ],
+      "sha256": "9d9d4fbd139e4a1e5c9b2c18b453bfd627891bbd94e5112033696331f1d865d7",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "nexperia-pesd24vl1ba-ds",
+      "title": "PESD24VL1BA low-capacitance bidirectional ESD protection diode datasheet",
+      "publisher": "Nexperia",
+      "kind": "datasheet",
+      "url": "https://assets.nexperia.com/documents/data-sheet/PESD24VL1BA.pdf",
+      "file": "nexperia-pesd24vl1ba-ds.pdf",
+      "used_in": [
+        "docs/research/radio-interface-circuits.md"
+      ],
+      "sha256": "5f5aef09ce340eec74ece57a650a1861c2bc52b36d1e04870188c339815505aa",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "wch-ch342-ds",
+      "title": "CH342 USB to dual serial ports datasheet V1E",
+      "publisher": "WCH (Nanjing Qinheng)",
+      "kind": "datasheet",
+      "url": "https://docs.sparkfun.com/SparkFun_RTK_Postcard/assets/component_documentation/CH342%20Datasheet.pdf",
+      "file": "wch-ch342-ds.pdf",
+      "used_in": [
+        "docs/research/radio-interface-circuits.md",
+        "docs/decisions/ADR-0003-radio-interface-circuits.md"
+      ],
+      "sha256": "f4ce43f3fd3796b417adb13ec13c90eb908fc1f307a58537d65ccf7cf776ce35",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "silabs-cp2105-ds",
+      "title": "CP2105 single-chip USB to dual UART bridge datasheet Rev. 1.4",
+      "publisher": "Silicon Labs",
+      "kind": "datasheet",
+      "url": "https://www.silabs.com/documents/public/data-sheets/CP2105.pdf",
+      "file": "silabs-cp2105-ds.pdf",
+      "used_in": [
+        "docs/research/radio-interface-circuits.md",
+        "docs/decisions/ADR-0003-radio-interface-circuits.md"
+      ],
+      "sha256": "5bb4356c4d088794e45b90bde0183bccff0b9277e43fa3dc85bd0361696fbff2",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "silabs-cp2102n-ds",
+      "title": "CP2102N USBXpress bridge datasheet",
+      "publisher": "Silicon Labs",
+      "kind": "datasheet",
+      "url": "https://www.silabs.com/documents/public/data-sheets/cp2102n-datasheet.pdf",
+      "file": "silabs-cp2102n-ds.pdf",
+      "used_in": [
+        "docs/research/radio-interface-circuits.md"
+      ],
+      "sha256": "32fbab0ba17f394ab76fbbd8129bddad228c1c486a1693d96ea5905936e437fe",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "silabs-an571",
+      "title": "AN571: CP210x virtual COM port interface",
+      "publisher": "Silicon Labs",
+      "kind": "app-note",
+      "url": "https://www.silabs.com/documents/public/application-notes/AN571.pdf",
+      "file": "silabs-an571.pdf",
+      "used_in": [
+        "docs/research/radio-interface-circuits.md"
+      ],
+      "sha256": "f4c27056246bb03d5c807bd242cfd4ffaeb5bf3ad566d8b7d97b387c8df03918",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "esp-usb-cp210x-h",
+      "title": "esp-usb: CP210x VCP driver header (supported PIDs incl. CP2105)",
+      "publisher": "Espressif Systems (Apache-2.0)",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-usb/bf0f0aa36227cc60ea9d241d14ef62944af5fb94/host/class/cdc/usb_host_cp210x_vcp/include/usb/vcp_cp210x.h",
+      "file": "esp-usb-cp210x-h.txt",
+      "used_in": [
+        "docs/research/radio-interface-circuits.md",
+        "docs/decisions/ADR-0003-radio-interface-circuits.md"
+      ],
+      "sha256": "22cdf6fc427826316cdda466b3575ea85622191d1c9b8c6d2be1448f0725b2bd",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "esp-usb-cdc-acm-host-c",
+      "title": "esp-usb: CDC-ACM host driver source (multiple interfaces per device)",
+      "publisher": "Espressif Systems (Apache-2.0)",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-usb/bf0f0aa36227cc60ea9d241d14ef62944af5fb94/host/class/cdc/usb_host_cdc_acm/cdc_acm_host.c",
+      "file": "esp-usb-cdc-acm-host-c.txt",
+      "used_in": [
+        "docs/research/radio-interface-circuits.md"
+      ],
+      "sha256": "a0f3d574751c9dcc650390ae9cc72b8e53206ae24530fa65038d4f03f3362d15",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "esp-usb-ftdi-c",
+      "title": "esp-usb: FTDI VCP driver source",
+      "publisher": "Espressif Systems (Apache-2.0)",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-usb/bf0f0aa36227cc60ea9d241d14ef62944af5fb94/host/class/cdc/usb_host_ftdi_vcp/usb_host_ftdi_vcp.c",
+      "file": "esp-usb-ftdi-c.txt",
+      "used_in": [
+        "docs/research/radio-interface-circuits.md"
+      ],
+      "sha256": "518a68c386281d66fd4d488cd8da4e3499aaf883bad48f011711d82044775c92",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "esp-usb-ch34x-c",
+      "title": "esp-usb: CH34x VCP driver source",
+      "publisher": "Espressif Systems (Apache-2.0)",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-usb/bf0f0aa36227cc60ea9d241d14ef62944af5fb94/host/class/cdc/usb_host_ch34x_vcp/usb_host_ch34x_vcp.c",
+      "file": "esp-usb-ch34x-c.txt",
+      "used_in": [
+        "docs/research/radio-interface-circuits.md"
+      ],
+      "sha256": "dd474652b8584d7ef82aa6354bd10d74860b97079408d33a3df4ffaa65b669d8",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "esp-usb-host-h",
+      "title": "esp-usb: USB Host Library API header (root port power)",
+      "publisher": "Espressif Systems (Apache-2.0)",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-usb/bf0f0aa36227cc60ea9d241d14ef62944af5fb94/host/usb/include/usb/usb_host.h",
+      "file": "esp-usb-host-h.txt",
+      "used_in": [
+        "docs/research/radio-interface-circuits.md"
+      ],
+      "sha256": "0b92de54a06f6e230b35c357e120aedc446ffcbe8f4897dffb89db15335c6450",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "linux-ftdi-sio-h",
+      "title": "Linux kernel drivers/usb/serial/ftdi_sio.h (GPL-2.0, facts only)",
+      "publisher": "Linux kernel",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/f2c53ea949c5048f96b3dbb5a5ee7131ce4ff2de/drivers/usb/serial/ftdi_sio.h",
+      "file": "linux-ftdi-sio-h.txt",
+      "used_in": [
+        "docs/research/radio-interface-circuits.md"
+      ],
+      "sha256": "5631c9cae5614f3b00eef2d159b6b9a22075f4ffd3a8d77b2672a5472f6400ac",
+      "retrieved": "2026-09-25"
     }
   ]
 }

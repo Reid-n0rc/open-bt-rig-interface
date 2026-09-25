@@ -129,6 +129,7 @@ repository. Licenses were verified from each LICENSE file on 2026-09-24.
 | Digirig hardware | https://github.com/softcomplex/digirig | GPL-3.0 | Wired-interface reference; no schematics or layout copied |
 | Mobilinkd TNC3 firmware | https://github.com/mobilinkd/tnc3-firmware | GPL-3.0 | BLE + audio interface reference |
 | arduino-audio-tools | https://github.com/pschatzmann/arduino-audio-tools | GPL-3.0 | Microcontroller audio streaming reference |
+| Linux kernel `drivers/usb/serial/ftdi_sio.h` | https://github.com/torvalds/linux/blob/f2c53ea949c5048f96b3dbb5a5ee7131ce4ff2de/drivers/usb/serial/ftdi_sio.h | GPL-2.0 | FTDI vendor request codes (modem control) checked against esp-usb for #9; nothing copied |
 
 Add more rows as sources are consulted. Record unlicensed sources here too,
 marked "no license".

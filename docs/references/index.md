@@ -17,7 +17,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://www.analog.com/media/en/technical-documentation/data-sheets/ADuM4160.pdf>
 - Download: manual (the site blocks scripted downloads)
 - Notes: The site blocks scripted downloads; save the PDF from a browser.
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
 
 ### adi-ltc4380-ds
 
@@ -28,6 +28,16 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Download: manual (the site blocks scripted downloads)
 - Notes: The site blocks scripted downloads; save the PDF from a browser.
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+
+### adi-max14778-ds
+
+**MAX14778 dual ±25 V above- and below-the-rails 4:1 analog multiplexer datasheet** (Analog Devices (Maxim), datasheet)
+
+- Local copy: [cache/adi-max14778-ds.pdf](cache/adi-max14778-ds.pdf)
+- Original: <https://www.analog.com/media/en/technical-documentation/data-sheets/max14778.pdf>
+- Download: manual (the site blocks scripted downloads)
+- Notes: The site blocks scripted downloads; save the PDF from a browser.
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md), [`docs/decisions/ADR-0003-radio-interface-circuits.md`](../../docs/decisions/ADR-0003-radio-interface-circuits.md)
 
 ### bourns-lm-np-ds
 
@@ -137,6 +147,51 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `f33f812e42729ca8…`
 - Cited in: [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
+### esp-usb-cdc-acm-host-c
+
+**esp-usb: CDC-ACM host driver source (multiple interfaces per device)** (Espressif Systems (Apache-2.0), sdk)
+
+- Local copy: [cache/esp-usb-cdc-acm-host-c.txt](cache/esp-usb-cdc-acm-host-c.txt)
+- Original: <https://raw.githubusercontent.com/espressif/esp-usb/bf0f0aa36227cc60ea9d241d14ef62944af5fb94/host/class/cdc/usb_host_cdc_acm/cdc_acm_host.c>
+- Retrieved: 2026-09-25; SHA-256 `a0f3d574751c9dcc…`
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
+
+### esp-usb-ch34x-c
+
+**esp-usb: CH34x VCP driver source** (Espressif Systems (Apache-2.0), sdk)
+
+- Local copy: [cache/esp-usb-ch34x-c.txt](cache/esp-usb-ch34x-c.txt)
+- Original: <https://raw.githubusercontent.com/espressif/esp-usb/bf0f0aa36227cc60ea9d241d14ef62944af5fb94/host/class/cdc/usb_host_ch34x_vcp/usb_host_ch34x_vcp.c>
+- Retrieved: 2026-09-25; SHA-256 `dd474652b8584d7e…`
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
+
+### esp-usb-cp210x-h
+
+**esp-usb: CP210x VCP driver header (supported PIDs incl. CP2105)** (Espressif Systems (Apache-2.0), sdk)
+
+- Local copy: [cache/esp-usb-cp210x-h.txt](cache/esp-usb-cp210x-h.txt)
+- Original: <https://raw.githubusercontent.com/espressif/esp-usb/bf0f0aa36227cc60ea9d241d14ef62944af5fb94/host/class/cdc/usb_host_cp210x_vcp/include/usb/vcp_cp210x.h>
+- Retrieved: 2026-09-25; SHA-256 `22cdf6fc42782631…`
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md), [`docs/decisions/ADR-0003-radio-interface-circuits.md`](../../docs/decisions/ADR-0003-radio-interface-circuits.md)
+
+### esp-usb-ftdi-c
+
+**esp-usb: FTDI VCP driver source** (Espressif Systems (Apache-2.0), sdk)
+
+- Local copy: [cache/esp-usb-ftdi-c.txt](cache/esp-usb-ftdi-c.txt)
+- Original: <https://raw.githubusercontent.com/espressif/esp-usb/bf0f0aa36227cc60ea9d241d14ef62944af5fb94/host/class/cdc/usb_host_ftdi_vcp/usb_host_ftdi_vcp.c>
+- Retrieved: 2026-09-25; SHA-256 `518a68c386281d66…`
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
+
+### esp-usb-host-h
+
+**esp-usb: USB Host Library API header (root port power)** (Espressif Systems (Apache-2.0), sdk)
+
+- Local copy: [cache/esp-usb-host-h.txt](cache/esp-usb-host-h.txt)
+- Original: <https://raw.githubusercontent.com/espressif/esp-usb/bf0f0aa36227cc60ea9d241d14ef62944af5fb94/host/usb/include/usb/usb_host.h>
+- Retrieved: 2026-09-25; SHA-256 `0b92de54a06f6e23…`
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
+
 ### esp-usb-host-kconfig
 
 **esp-usb: USB Host Library Kconfig (USB_HOST_HUBS_SUPPORTED)** (Espressif Systems (Apache-2.0), sdk)
@@ -144,7 +199,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/esp-usb-host-kconfig.txt](cache/esp-usb-host-kconfig.txt)
 - Original: <https://raw.githubusercontent.com/espressif/esp-usb/bf0f0aa36227cc60ea9d241d14ef62944af5fb94/host/usb/Kconfig>
 - Retrieved: 2026-09-24; SHA-256 `e3ab7801e8e267ce…`
-- Cited in: [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
 
 ### esp-usb-uac-readme
 
@@ -153,7 +208,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/esp-usb-uac-readme.md](cache/esp-usb-uac-readme.md)
 - Original: <https://raw.githubusercontent.com/espressif/esp-usb/bf0f0aa36227cc60ea9d241d14ef62944af5fb94/host/class/uac/usb_host_uac/README.md>
 - Retrieved: 2026-09-24; SHA-256 `d9cd03095210444e…`
-- Cited in: [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
 
 ### esp32-wroom-32e-ds
 
@@ -381,6 +436,25 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `c79fd0a7e789106a…`
 - Cited in: [`docs/research/module-selection.md`](../../docs/research/module-selection.md)
 
+### linux-ftdi-sio-h
+
+**Linux kernel drivers/usb/serial/ftdi_sio.h (GPL-2.0, facts only)** (Linux kernel, sdk)
+
+- Local copy: [cache/linux-ftdi-sio-h.txt](cache/linux-ftdi-sio-h.txt)
+- Original: <https://raw.githubusercontent.com/torvalds/linux/f2c53ea949c5048f96b3dbb5a5ee7131ce4ff2de/drivers/usb/serial/ftdi_sio.h>
+- Retrieved: 2026-09-25; SHA-256 `5631c9cae5614f3b…`
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
+
+### littelfuse-cpc1017n-ds
+
+**CPC1017N 60 V normally-open OptoMOS relay datasheet DS-CPC1017N-R08** (Littelfuse (IXYS ICD), datasheet)
+
+- Local copy: [cache/littelfuse-cpc1017n-ds.pdf](cache/littelfuse-cpc1017n-ds.pdf)
+- Original: <https://www.tti.com/content/dam/ttiinc/manufacturers/littelfuse/Products/pdf/CPC1017N_series_datasheet.pdf>
+- Download: manual (the site blocks scripted downloads)
+- Notes: The distributor site blocks scripted downloads (HTTP 403); save the PDF from a browser.
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
+
 ### microchip-bm83-spp-kb
 
 **Microchip KB: BM83 BLE and SPP simultaneous connection** (Microchip, web)
@@ -398,7 +472,43 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/microchip-usb2422-ds.pdf](cache/microchip-usb2422-ds.pdf)
 - Original: <https://ww1.microchip.com/downloads/en/DeviceDoc/00001726B.pdf>
 - Retrieved: 2026-09-24; SHA-256 `4a9ad71cd6535368…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md), [`docs/decisions/ADR-0003-radio-interface-circuits.md`](../../docs/decisions/ADR-0003-radio-interface-circuits.md)
+
+### nexperia-74hc4060-ds
+
+**74HC4060 14-stage binary ripple counter with oscillator datasheet** (Nexperia, datasheet)
+
+- Local copy: [cache/nexperia-74hc4060-ds.pdf](cache/nexperia-74hc4060-ds.pdf)
+- Original: <https://assets.nexperia.com/documents/data-sheet/74HC_HCT4060.pdf>
+- Retrieved: 2026-09-25; SHA-256 `9d9d4fbd139e4a1e…`
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
+
+### nexperia-pesd24vl1ba-ds
+
+**PESD24VL1BA low-capacitance bidirectional ESD protection diode datasheet** (Nexperia, datasheet)
+
+- Local copy: [cache/nexperia-pesd24vl1ba-ds.pdf](cache/nexperia-pesd24vl1ba-ds.pdf)
+- Original: <https://assets.nexperia.com/documents/data-sheet/PESD24VL1BA.pdf>
+- Retrieved: 2026-09-25; SHA-256 `5f5aef09ce340eec…`
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
+
+### omron-g6k-ds
+
+**G6K surface-mounting signal relay datasheet** (Omron, datasheet)
+
+- Local copy: [cache/omron-g6k-ds.pdf](cache/omron-g6k-ds.pdf)
+- Original: <https://omronfs.omron.com/en_US/ecb/products/pdf/en-g6k.pdf>
+- Retrieved: 2026-09-25; SHA-256 `25d2046127b3ffa7…`
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
+
+### panasonic-aqy21eh-ds
+
+**PhotoMOS GE DIP4 1 Form A (AQY21xEH) datasheet ASCTB126E** (Panasonic Industry, datasheet)
+
+- Local copy: [cache/panasonic-aqy21eh-ds.pdf](cache/panasonic-aqy21eh-ds.pdf)
+- Original: <https://industry.panasonic.com/ac/cdn/e/control/relay/photomos/catalog/semi_eng_ge1a_aqy21_e.pdf>
+- Retrieved: 2026-09-25; SHA-256 `d329b97293228ccd…`
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md), [`docs/decisions/ADR-0003-radio-interface-circuits.md`](../../docs/decisions/ADR-0003-radio-interface-circuits.md)
 
 ### pico-btstack-license
 
@@ -436,6 +546,42 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `70b71413a61c8777…`
 - Cited in: [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
+### silabs-an571
+
+**AN571: CP210x virtual COM port interface** (Silicon Labs, app-note)
+
+- Local copy: [cache/silabs-an571.pdf](cache/silabs-an571.pdf)
+- Original: <https://www.silabs.com/documents/public/application-notes/AN571.pdf>
+- Retrieved: 2026-09-25; SHA-256 `f4c27056246bb03d…`
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
+
+### silabs-cp2102n-ds
+
+**CP2102N USBXpress bridge datasheet** (Silicon Labs, datasheet)
+
+- Local copy: [cache/silabs-cp2102n-ds.pdf](cache/silabs-cp2102n-ds.pdf)
+- Original: <https://www.silabs.com/documents/public/data-sheets/cp2102n-datasheet.pdf>
+- Retrieved: 2026-09-25; SHA-256 `32fbab0ba17f394a…`
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
+
+### silabs-cp2105-ds
+
+**CP2105 single-chip USB to dual UART bridge datasheet Rev. 1.4** (Silicon Labs, datasheet)
+
+- Local copy: [cache/silabs-cp2105-ds.pdf](cache/silabs-cp2105-ds.pdf)
+- Original: <https://www.silabs.com/documents/public/data-sheets/CP2105.pdf>
+- Retrieved: 2026-09-25; SHA-256 `5bb4356c4d088794…`
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md), [`docs/decisions/ADR-0003-radio-interface-circuits.md`](../../docs/decisions/ADR-0003-radio-interface-circuits.md)
+
+### ti-iso1540-ds
+
+**ISO154x low-power bidirectional I2C isolators datasheet** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-iso1540-ds.pdf](cache/ti-iso1540-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/iso1540.pdf>
+- Retrieved: 2026-09-25; SHA-256 `a073ca9bd456eda1…`
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
+
 ### ti-iso7721-ds
 
 **ISO772x dual-channel digital isolator datasheet** (Texas Instruments, datasheet)
@@ -443,7 +589,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-iso7721-ds.pdf](cache/ti-iso7721-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/iso7721.pdf>
 - Retrieved: 2026-09-24; SHA-256 `fb039c00ceb601b9…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
 
 ### ti-lm74700-q1-ds
 
@@ -463,6 +609,24 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `6c888eeb219d47fb…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
+### ti-sn6505b-ds
+
+**SN6505A/SN6505B low-noise 1 A transformer drivers datasheet** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-sn6505b-ds.pdf](cache/ti-sn6505b-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/sn6505b.pdf>
+- Retrieved: 2026-09-25; SHA-256 `dfc57cb042218cb6…`
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
+
+### ti-sn6507-ds
+
+**SN6507 36 V push-pull transformer driver with duty-cycle control datasheet** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-sn6507-ds.pdf](cache/ti-sn6507-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/sn6507.pdf>
+- Retrieved: 2026-09-25; SHA-256 `f15d229976c019d4…`
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
+
 ### ti-sn74lvc1g07-ds
 
 **SN74LVC1G07 single buffer with open-drain output datasheet** (Texas Instruments, datasheet)
@@ -472,6 +636,24 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `5c68b82a5110b337…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
+### ti-sn74lvc1g11-ds
+
+**SN74LVC1G11 single 3-input AND gate datasheet** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-sn74lvc1g11-ds.pdf](cache/ti-sn74lvc1g11-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/sn74lvc1g11.pdf>
+- Retrieved: 2026-09-25; SHA-256 `ffd953703273b438…`
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
+
+### ti-sn74lvc2g02-ds
+
+**SN74LVC2G02 dual 2-input NOR gate datasheet** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-sn74lvc2g02-ds.pdf](cache/ti-sn74lvc2g02-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/sn74lvc2g02.pdf>
+- Retrieved: 2026-09-25; SHA-256 `ba6416add62208fc…`
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md), [`docs/decisions/ADR-0003-radio-interface-circuits.md`](../../docs/decisions/ADR-0003-radio-interface-circuits.md)
+
 ### ti-sn74lxc1t45-ds
 
 **SN74LXC1T45 single-bit dual-supply level translator datasheet** (Texas Instruments, datasheet)
@@ -480,6 +662,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://www.ti.com/lit/ds/symlink/sn74lxc1t45.pdf>
 - Retrieved: 2026-09-24; SHA-256 `4737f9c02d562bd3…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+
+### ti-tca9534-ds
+
+**TCA9534 8-bit I2C I/O expander datasheet** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-tca9534-ds.pdf](cache/ti-tca9534-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/tca9534.pdf>
+- Retrieved: 2026-09-25; SHA-256 `797c1fc96502df7c…`
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
 
 ### ti-tlv320aic3104-ds
 
@@ -515,7 +706,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-tmux6219-ds.pdf](cache/ti-tmux6219-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/tmux6219.pdf>
 - Retrieved: 2026-09-24; SHA-256 `216e5fe55ce423e3…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
 
 ### ti-tpd2e2u06-ds
 
@@ -524,7 +715,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-tpd2e2u06-ds.pdf](cache/ti-tpd2e2u06-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/tpd2e2u06.pdf>
 - Retrieved: 2026-09-24; SHA-256 `a133b86ea3d3c3d3…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
 
 ### ti-tpd4e05u06-ds
 
@@ -534,6 +725,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://www.ti.com/lit/ds/symlink/tpd4e05u06.pdf>
 - Retrieved: 2026-09-24; SHA-256 `c167cf1e72a5473a…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+
+### ti-tpl5111-ds
+
+**TPL5111 nano-power system timer for power gating datasheet** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-tpl5111-ds.pdf](cache/ti-tpl5111-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/tpl5111.pdf>
+- Retrieved: 2026-09-25; SHA-256 `8bec8b53d32403e1…`
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md), [`docs/decisions/ADR-0003-radio-interface-circuits.md`](../../docs/decisions/ADR-0003-radio-interface-circuits.md)
 
 ### ti-tps2121-ds
 
@@ -560,7 +760,25 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-tps3430-ds.pdf](cache/ti-tps3430-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/tps3430.pdf>
 - Retrieved: 2026-09-24; SHA-256 `f9887a28788bac6a…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md), [`docs/decisions/ADR-0003-radio-interface-circuits.md`](../../docs/decisions/ADR-0003-radio-interface-circuits.md)
+
+### ti-tps3839-ds
+
+**TPS3831/TPS3839 150 nA supply voltage monitor datasheet** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-tps3839-ds.pdf](cache/ti-tps3839-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/tps3839.pdf>
+- Retrieved: 2026-09-25; SHA-256 `a18940237afc63cf…`
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md), [`docs/decisions/ADR-0003-radio-interface-circuits.md`](../../docs/decisions/ADR-0003-radio-interface-circuits.md)
+
+### ti-tps3850-ds
+
+**TPS3850 precision voltage supervisor with window watchdog datasheet** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-tps3850-ds.pdf](cache/ti-tps3850-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/tps3850.pdf>
+- Retrieved: 2026-09-25; SHA-256 `7125e0f13b435f98…`
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
 
 ### ti-tps62933-ds
 
@@ -587,7 +805,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-trs3221e-ds.pdf](cache/ti-trs3221e-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/trs3221e.pdf>
 - Retrieved: 2026-09-24; SHA-256 `3978592d390b01cc…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
 
 ### ti-ts3usb221a-ds
 
@@ -596,4 +814,13 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-ts3usb221a-ds.pdf](cache/ti-ts3usb221a-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/ts3usb221a.pdf>
 - Retrieved: 2026-09-24; SHA-256 `cccebf8c10df6051…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
+
+### wch-ch342-ds
+
+**CH342 USB to dual serial ports datasheet V1E** (WCH (Nanjing Qinheng), datasheet)
+
+- Local copy: [cache/wch-ch342-ds.pdf](cache/wch-ch342-ds.pdf)
+- Original: <https://docs.sparkfun.com/SparkFun_RTK_Postcard/assets/component_documentation/CH342%20Datasheet.pdf>
+- Retrieved: 2026-09-25; SHA-256 `f4ce43f3fd3796b4…`
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md), [`docs/decisions/ADR-0003-radio-interface-circuits.md`](../../docs/decisions/ADR-0003-radio-interface-circuits.md)

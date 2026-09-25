@@ -10,6 +10,16 @@ and tagged independently (see `AGENTS.md`).
 
 ## Unreleased
 
+- Radio interface circuits (`docs/research/radio-interface-circuits.md`,
+  ADR-0003 proposed): RS-232-tolerant SERIAL-jack switching (MAX14778,
+  TRS3221E, CI-V open drain), fail-safe PTT (AQY212EH PhotoMOS gated by a
+  supervisor, a window watchdog and a hardware 600 s PTT timer), RTS/DTR
+  mapping, isolation from 3.3 V with a 2.304 MHz band-clean push-pull
+  supply, clock and harmonic audit (HF, 6 m, 2 m, 70 cm), USB routing, esp-usb
+  driver support (CP2105 supported), per-radio cable table and dated LCSC
+  sourcing with RoHS. The device no longer supplies VBUS to the radio
+  (maintainer decision): constraints §3.1/§3.4/§6/§7 and REQ-RIF-007
+  (withdrawn), REQ-RIF-011 and REQ-PTT-011 updated (#9).
 - Radio module confirmation (`docs/research/module-selection.md`): the
   ESP32-S3-MINI-1 FCC grant (2AC7Z-ESPS3MINI1: single modular, BLE certified at
   10.3 dBm conducted, 20 cm mobile use), ISED ID, lifecycle and dated LCSC
