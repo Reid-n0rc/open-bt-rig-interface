@@ -2,6 +2,130 @@
   "_comment": "Source of truth for cited third-party documents. Edit this file, then run: python3 tools/refs/refs.py fetch && python3 tools/refs/refs.py index. Copies live in docs/references/cache/ (gitignored, never committed). See docs/references/README.md.",
   "references": [
     {
+      "id": "crc-catalogue-16",
+      "title": "Catalogue of parametrised CRC algorithms: 16-bit CRCs (CRC-16/IBM-3740)",
+      "publisher": "Greg Cook (RevEng)",
+      "kind": "web",
+      "url": "https://reveng.sourceforge.io/crc-catalogue/16.htm",
+      "file": "crc-catalogue-16.html",
+      "used_in": [
+        "protocol/SPEC.md"
+      ],
+      "sha256": "9bcbee0db3969a581c27e78be00eb75824c9d95d28684e46aaae6ecb6f6e0896",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "cobs-paper",
+      "title": "Consistent Overhead Byte Stuffing (IEEE/ACM Transactions on Networking, 1999)",
+      "publisher": "Stuart Cheshire, Mary Baker",
+      "kind": "standard",
+      "url": "http://www.stuartcheshire.org/papers/COBSforToN.pdf",
+      "file": "cobs-paper.pdf",
+      "used_in": [
+        "protocol/SPEC.md",
+        "docs/decisions/ADR-0007-protocol.md"
+      ],
+      "sha256": "f6500d18b463ac266b2b2146a09a76d3db92f2730f416564b7917af5180fda19",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "esp-usb-device-s3",
+      "title": "ESP-USB programming guide: USB device stack (ESP32-S3), endpoint limits and supported classes",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://docs.espressif.com/projects/esp-usb/en/latest/esp32s3/usb_device.html",
+      "file": "esp-usb-device-s3.html",
+      "used_in": [
+        "protocol/SPEC.md",
+        "docs/decisions/ADR-0007-protocol.md",
+        "docs/architecture.md"
+      ],
+      "sha256": "015e2a39dc00600bc2894e5d25c4163211d7bfb7855fd5a680e4f62a00f2b134",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "tinyusb-usbd-h",
+      "title": "TinyUSB src/device/usbd.h (CDC, CDC-NCM and UAC1 descriptor templates)",
+      "publisher": "TinyUSB (hathach)",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/hathach/tinyusb/dae3f9a366bfcddbf9dcf1b48d7500286a849539/src/device/usbd.h",
+      "file": "tinyusb-usbd.h",
+      "used_in": [
+        "protocol/SPEC.md",
+        "docs/decisions/ADR-0007-protocol.md"
+      ],
+      "sha256": "48040a0ea812b5f099bab557c81aa83fb9386d7eb2dfd814b1eba9aa2468b298",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "linux-cdc-ncm",
+      "title": "Linux drivers/net/usb/cdc_ncm.c (CDC-NCM host driver; GPL, facts only)",
+      "publisher": "Linux kernel",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/038d61fd642278bab63ee8ef722c50d10ab01e8f/drivers/net/usb/cdc_ncm.c",
+      "file": "linux-cdc-ncm.c",
+      "used_in": [
+        "protocol/SPEC.md",
+        "docs/decisions/ADR-0007-protocol.md"
+      ],
+      "sha256": "10a1af035e2d7e6173b491eb47a509268233893800bc6850f5ca5641325b4452",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "linux-usbnet",
+      "title": "Linux drivers/net/usb/usbnet.c (interface naming usbN/ethN; GPL, facts only)",
+      "publisher": "Linux kernel",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/038d61fd642278bab63ee8ef722c50d10ab01e8f/drivers/net/usb/usbnet.c",
+      "file": "linux-usbnet.c",
+      "used_in": [
+        "protocol/SPEC.md"
+      ],
+      "sha256": "9fc89a999b418872fdad8a30346b95bc34fa21fe32d68eea6f3a69785120da1f",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "android-kconfig-cdc-ncm",
+      "title": "Android kernel/configs commit: Android U requires CONFIG_USB_NET_CDC_NCM=y",
+      "publisher": "Android Open Source Project",
+      "kind": "sdk",
+      "url": "https://android.googlesource.com/kernel/configs/+/659aee1b688f245f4dafe4afe7904ed9cd91fbb0",
+      "file": "android-kconfig-cdc-ncm.html",
+      "used_in": [
+        "protocol/SPEC.md",
+        "docs/decisions/ADR-0007-protocol.md"
+      ],
+      "sha256": "202235b14af01e47e8e5a9c8719e5c5f7ecfa77a9aa877fac2c41302ccf76ff1",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "apple-forum-802640",
+      "title": "Apple Developer Forums 802640: Custom USB network device driver on iPhone (Quinn, DTS, Oct 2025)",
+      "publisher": "Apple",
+      "kind": "web",
+      "url": "https://developer.apple.com/forums/thread/802640",
+      "file": "apple-forum-802640.html",
+      "used_in": [
+        "protocol/SPEC.md",
+        "docs/decisions/ADR-0007-protocol.md"
+      ],
+      "sha256": "239efd645fae36e90c1a1bfea925ac6c820b55d6d7e37027d8778ecac7692366",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "jordemort-android-cdc",
+      "title": "Why Android can't use CDC Ethernet (2023-05-31)",
+      "publisher": "Jordan Webb",
+      "kind": "web",
+      "url": "https://jordemort.dev/blog/why-android-cant-use-cdc-ethernet/",
+      "file": "jordemort-android-cdc.html",
+      "used_in": [
+        "protocol/SPEC.md"
+      ],
+      "sha256": "0d4e7dfaa9e8f14ca4ef1eeeb03a13c6a314d9b063bfeb4cafa9d5f92c9f8520",
+      "retrieved": "2026-09-24"
+    },
+    {
       "id": "esp32s3-mini1-ds",
       "title": "ESP32-S3-MINI-1 & ESP32-S3-MINI-1U datasheet",
       "publisher": "Espressif Systems",

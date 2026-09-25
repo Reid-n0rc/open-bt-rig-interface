@@ -10,6 +10,24 @@ and tagged independently (see `AGENTS.md`).
 
 ## Unreleased
 
+- Protocol 0.1.0 draft (`protocol/SPEC.md`), system architecture
+  (`docs/architecture.md`) and ADR-0007 (proposed). One COBS-framed,
+  CRC-checked message stream over BLE GATT, L2CAP CoC, and, in wired mode, TCP
+  over a new USB network interface (CDC-NCM, for iPhone/iPad) and the CDC-ACM
+  control port. Covers capability discovery, CAT with credit flow control,
+  PTT with keepalive, a user-configurable max TX (default 5 min, can be
+  disabled; `AGENTS.md`, `CONTRIBUTING.md`, constraints §6 updated) and RTS/DTR arming, BLE audio framing, clock sync,
+  optional tone-sequence TX, a capped BLE TX power, a BLE pairing window,
+  watchdog-reset reporting (`WATCHDOG`), configurable defaults
+  (serial defaults, USB network subnet, pairing window, power-down delay),
+  security to the Cyber Resilience Act level (LE Secure Connections bonding,
+  wired-host approval with `AUTH`, trusted-host list and removal, factory
+  reset, signed updates, plain USB ports open with a `WIRED_PORT_LOCK`
+  setting; #64), and new GATT UUIDs.
+  Golden vectors in `protocol/vectors/`, a reference codec in
+  `tools/protocol/`, and a `Protocol vectors` CI job. The USB endpoint budget
+  changes the wired USB functions per radio type (`constraints.md` §2,
+  REQ-HOST-003, -010, -013 to -017, REQ-PTT-002, -007, -011, REQ-PWR-018, REQ-FW-005) (#13).
 - Host compatibility research (`docs/research/host-compatibility.md`): wired
   USB-C (CDC-ACM, RTS/DTR, UAC1 vs UAC2, voice processing, port power) and
   Bluetooth LE (2M PHY, DLE, MTU, intervals, L2CAP CoC vs GATT, throughput
