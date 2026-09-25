@@ -103,8 +103,9 @@ tracking issue lists what is planned and in what order.
   gets a test.**
 - The core firmware stays radio-agnostic: CAT bytes pass through unchanged.
 - **The PTT fail-safe is mandatory and must never be weakened:** PTT off at
-  boot, reset, brownout, disconnect and watchdog timeout, plus a maximum-TX
-  timer.
+  boot, reset, brownout, disconnect, keepalive expiry and after a watchdog
+  reset, plus a maximum-TX timer that the user configures (default 5 minutes,
+  no upper limit, can be disabled by the user; ADR-0007).
 - Changes to the host-device protocol in [`protocol/`](protocol/) bump the
   protocol version and update the golden byte vectors in the same PR.
 
@@ -121,8 +122,9 @@ tracking issue lists what is planned and in what order.
   compliant.** Using a pre-certified radio module is not a product
   certification. Only the maintainer states compliance status (see
   [`GOVERNANCE.md`](GOVERNANCE.md)).
-- Don't submit changes that disable or bypass the PTT fail-safe, the maximum-TX
-  timer or input protection, even for testing. Use a local branch for experiments.
+- Don't submit changes that remove or bypass the PTT fail-safe, the maximum-TX
+  timer (only the user may switch it off, through its setting) or input
+  protection, even for testing. Use a local branch for experiments.
 - RF, transmitter and automotive high-voltage testing is `human-task` work, done
   with a dummy load and appropriate precautions.
 
