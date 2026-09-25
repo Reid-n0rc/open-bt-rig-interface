@@ -147,6 +147,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `f33f812e42729ca8…`
 - Cited in: [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
+### esp-idf-s3-brownout-kconfig
+
+**ESP-IDF: ESP32-S3 brownout detector Kconfig (Kconfig.power)** (Espressif Systems (Apache-2.0), sdk)
+
+- Local copy: [cache/esp-idf-s3-brownout-kconfig.txt](cache/esp-idf-s3-brownout-kconfig.txt)
+- Original: <https://raw.githubusercontent.com/espressif/esp-idf/048ec57f228afe2d720542431b849cc10c949a15/components/esp_hw_support/power_supply/port/esp32s3/Kconfig.power>
+- Retrieved: 2026-09-25; SHA-256 `ea107c5dd3f597d7…`
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md), [`docs/decisions/ADR-0003-radio-interface-circuits.md`](../../docs/decisions/ADR-0003-radio-interface-circuits.md)
+
 ### esp-idf-wdts
 
 **ESP-IDF programming guide: watchdogs (ESP32-S3)** (Espressif Systems, web)
@@ -483,15 +492,6 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `4a9ad71cd6535368…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md), [`docs/decisions/ADR-0003-radio-interface-circuits.md`](../../docs/decisions/ADR-0003-radio-interface-circuits.md)
 
-### nexperia-74hc4060-ds
-
-**74HC4060 14-stage binary ripple counter with oscillator datasheet** (Nexperia, datasheet)
-
-- Local copy: [cache/nexperia-74hc4060-ds.pdf](cache/nexperia-74hc4060-ds.pdf)
-- Original: <https://assets.nexperia.com/documents/data-sheet/74HC_HCT4060.pdf>
-- Retrieved: 2026-09-25; SHA-256 `9d9d4fbd139e4a1e…`
-- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
-
 ### nexperia-pesd24vl1ba-ds
 
 **PESD24VL1BA low-capacitance bidirectional ESD protection diode datasheet** (Nexperia, datasheet)
@@ -645,6 +645,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `5c68b82a5110b337…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
+### ti-sn74lvc1g08-ds
+
+**SN74LVC1G08 single 2-input AND gate datasheet** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-sn74lvc1g08-ds.pdf](cache/ti-sn74lvc1g08-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/sn74lvc1g08.pdf>
+- Retrieved: 2026-09-25; SHA-256 `30b963cc44233cf3…`
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
+
 ### ti-sn74lvc1g11-ds
 
 **SN74LVC1G11 single 3-input AND gate datasheet** (Texas Instruments, datasheet)
@@ -742,7 +751,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-tpl5111-ds.pdf](cache/ti-tpl5111-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/tpl5111.pdf>
 - Retrieved: 2026-09-25; SHA-256 `8bec8b53d32403e1…`
-- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md), [`docs/decisions/ADR-0003-radio-interface-circuits.md`](../../docs/decisions/ADR-0003-radio-interface-circuits.md)
+- Cited in: [`docs/decisions/ADR-0003-radio-interface-circuits.md`](../../docs/decisions/ADR-0003-radio-interface-circuits.md)
 
 ### ti-tps2121-ds
 
@@ -769,7 +778,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-tps3430-ds.pdf](cache/ti-tps3430-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/tps3430.pdf>
 - Retrieved: 2026-09-24; SHA-256 `f9887a28788bac6a…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md), [`docs/decisions/ADR-0003-radio-interface-circuits.md`](../../docs/decisions/ADR-0003-radio-interface-circuits.md)
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/decisions/ADR-0003-radio-interface-circuits.md`](../../docs/decisions/ADR-0003-radio-interface-circuits.md)
 
 ### ti-tps3839-ds
 
@@ -779,15 +788,6 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://www.ti.com/lit/ds/symlink/tps3839.pdf>
 - Retrieved: 2026-09-25; SHA-256 `a18940237afc63cf…`
 - Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md), [`docs/decisions/ADR-0003-radio-interface-circuits.md`](../../docs/decisions/ADR-0003-radio-interface-circuits.md)
-
-### ti-tps3850-ds
-
-**TPS3850 precision voltage supervisor with window watchdog datasheet** (Texas Instruments, datasheet)
-
-- Local copy: [cache/ti-tps3850-ds.pdf](cache/ti-tps3850-ds.pdf)
-- Original: <https://www.ti.com/lit/ds/symlink/tps3850.pdf>
-- Retrieved: 2026-09-25; SHA-256 `7125e0f13b435f98…`
-- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
 
 ### ti-tps62933-ds
 

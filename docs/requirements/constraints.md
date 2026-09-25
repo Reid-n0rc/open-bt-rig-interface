@@ -158,13 +158,10 @@ The device operates next to HF transmitters of 100 W or more.
 - **Hardware default off:** a pull-down, or an opto/MOSFET that must be
   actively driven, so a hung MCU cannot key the radio.
 - The firmware enforces a maximum continuous TX time (configurable, cannot be disabled).
-- **Hardware max-TX backstop:** an independent hardware timer in the PTT
-  drive path forces the PTT closure off after a continuous assertion of a set
-  time (about 10 minutes, set in hardware, with its minimum above the
-  firmware maximum), even with the MCU hung or its
-  clocks stopped. It powers up off, fails safe, latches off until PTT is
-  released, and reports its state to the MCU. The firmware limit never
-  exceeds it ([ADR-0003](../decisions/ADR-0003-radio-interface-circuits.md)).
+- **Firmware lock-up:** an ESP32-S3 internal watchdog resets the MCU within a
+  few seconds, and PTT is off during and after the reset (hardware default).
+  There is no hardware max-TX backstop; the maximum TX time is a firmware
+  setting ([ADR-0003](../decisions/ADR-0003-radio-interface-circuits.md)).
 - **Galvanic isolation** of the AUDIO and SERIAL jacks toward the radio:
   transformer-coupled audio, isolated PTT, and digital isolators on the serial
   lines. **Required for variant M, and on every variant whenever the USB-C data

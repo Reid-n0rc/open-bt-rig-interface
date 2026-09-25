@@ -13,7 +13,8 @@ and tagged independently (see `AGENTS.md`).
 - Radio interface circuits (`docs/research/radio-interface-circuits.md`,
   ADR-0003 proposed): RS-232-tolerant SERIAL-jack switching (MAX14778,
   TRS3221E, CI-V open drain), fail-safe PTT (AQY212EH PhotoMOS gated by a
-  supervisor, a window watchdog and a hardware 600 s PTT timer), RTS/DTR
+  brownout supervisor; firmware lock-ups caught by the ESP32-S3's internal
+  watchdogs, no external PTT timer), RTS/DTR
   mapping, isolation from 3.3 V with a 2.304 MHz band-clean push-pull
   supply, clock and harmonic audit (HF, 6 m, 2 m, 70 cm), USB routing, esp-usb
   driver support (CP2105 supported), per-radio cable table and dated LCSC

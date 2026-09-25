@@ -150,7 +150,7 @@ Platform limitations, stated plainly:
 | REQ-PTT-008 | The PTT output shall be off unless actively driven (a pull-down, or an opto/MOSFET that must be driven), so a hung or unpowered MCU cannot key the radio. | Hardware default off (constraints §6). | T, I | draft | #9 / bring-up |
 | REQ-PTT-009 | Changing the SERIAL-jack mode, the audio path or the host mode shall never assert PTT. | [radio-connectors](radio-connectors.md#serial-jack-35-mm-trrs). | T | draft | #15, #44 / #15 |
 | REQ-PTT-010 | Every PTT fail-safe path shall have a host-run firmware test. | [`AGENTS.md`](../../AGENTS.md#firmware). | I | confirmed | #14, #15 / #14 |
-| REQ-PTT-011 | An independent hardware timer in the PTT drive path shall force the PTT closure off after PTT has been continuously asserted for a hardware-set time (about 10 minutes; its minimum over tolerance and temperature shall exceed the firmware maximum, recommended nominal 640 s), independent of the MCU and its clocks. It shall start when the drive asserts, reset when it releases, latch off on expiry until the drive is released, power up off, fail safe (a timer fault or missing supply means PTT off), and report its state to the MCU. Firmware may shorten it but not lengthen or disable it; the firmware maximum TX time (REQ-PTT-007) shall not exceed it. | Hardware max-TX backstop ([constraints §6](constraints.md#6-safety-and-fail-safe), maintainer requirement 2026-09-24, [ADR-0003](../decisions/ADR-0003-radio-interface-circuits.md)). | T, A | draft | #9, #15 / bring-up |
+| REQ-PTT-011 | On a firmware lock-up, an ESP32-S3 internal watchdog shall reset the MCU within a few seconds, and PTT shall be off during and after the reset (hardware default). | Lock-up protection without an external PTT timer (maintainer decision 2026-09-25, [ADR-0003](../decisions/ADR-0003-radio-interface-circuits.md); [constraints §6](constraints.md#6-safety-and-fail-safe)). | T | draft | #9, #15 / bring-up |
 
 RF pickup and PTT: see REQ-EMC-001.
 
@@ -415,7 +415,7 @@ one requirement. Update this list when either document changes.
 - [x] PTT off at power-on, reset, brownout, disconnect, watchdog: REQ-PTT-005, REQ-PWR-005
 - [x] Hardware default off: REQ-PTT-008
 - [x] Maximum continuous TX time: REQ-PTT-007
-- [x] Hardware max-TX backstop: REQ-PTT-011
+- [x] Firmware lock-up → internal watchdog reset, PTT off: REQ-PTT-011
 - [x] Isolation of AUDIO and SERIAL jacks (M, and whenever USB-C data is used): REQ-ISO-001, REQ-ISO-002
 - [x] Radio USB port not isolated by default; USB isolator option: REQ-ISO-003
 
