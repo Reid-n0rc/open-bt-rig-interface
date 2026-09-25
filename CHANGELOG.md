@@ -19,6 +19,77 @@ and tagged independently (see `AGENTS.md`).
   requires declared design variants and `${VARIANT}`, and matches `hw-*` tags
   to a declared variant instead of the board folder name. AGENTS.md, README,
   roadmap, developer guide and hardware READMEs updated (#12).
+- EU compliance (`docs/compliance/eu.md`, ADR-0009, proposed): EU conformity is
+  now required for every variant. Applicability per variant of the RED
+  (safety, EMC, EN 300 328; cybersecurity under Delegated Regulation 2022/30,
+  repealed from 2027-12-11), the Cyber Resilience Act, RoHS, REACH Art. 33,
+  WEEE, GPSR and UN R10, with OJ references for the harmonised standards, the
+  Module A route, declaration and technical file contents, markings, and who
+  holds manufacturer obligations. BLE TX power capped at the module's EU-tested
+  9.96 dBm e.i.r.p.; `constraints.md` §4 changed and REQ-REG-007 to -014 and
+  REQ-EMC-008, -009 added (REQ-REG-006 withdrawn); 32 references added. Maintainer
+  decision: design security to the CRA level now; the EN 18031-1 gap analysis and
+  cost go to #64 (#59).
+- Radio interface circuits (`docs/research/radio-interface-circuits.md`,
+  ADR-0003 proposed): RS-232-tolerant SERIAL-jack switching (MAX14778,
+  TRS3221E, CI-V open drain), fail-safe PTT (AQY212EH PhotoMOS gated by a
+  brownout supervisor; firmware lock-ups caught by the ESP32-S3's internal
+  watchdogs, no external PTT timer), RTS/DTR
+  mapping, isolation from 3.3 V with a 2.304 MHz band-clean push-pull
+  supply, clock and harmonic audit (HF, 6 m, 2 m, 70 cm), USB routing, esp-usb
+  driver support (CP2105 supported), per-radio cable table and dated LCSC
+  sourcing with RoHS. The device no longer supplies VBUS to the radio
+  (maintainer decision): constraints §3.1/§3.4/§6/§7 and REQ-RIF-007
+  (withdrawn), REQ-RIF-011 and REQ-PTT-011 updated (#9).
+- Variant R power (`docs/research/power-radio-usbc.md`, ADR-0005 proposed):
+  input-only power from the radio's accessory DC pin or USB-C (sink only, no
+  VBUS to the radio); a 0.25 A fuse, Schottky and TVS on the DC input; a
+  TPS2121 priority mux feeding the shared ADR-0004 core (one LMR43620MC3RPERQ1
+  3.3 V buck synchronized to 2.304 MHz, clear of the HF amateur bands); a power
+  budget per mode (wired mode about 292 mA on a 500 mA USB-C port); a table of
+  which radios can power variant R; radio-on sense and auto power up/down;
+  dated LCSC prices with RoHS status, a power-section BOM cost, and EU EMC
+  targets (#11).
+- ADR-0002 (proposed): TI TLV320AIC3104 audio codec (alternates TAC5112,
+  TLV320AIC3204) and Bourns SM-LP-5001 isolation transformers, with the
+  codec clocked from the 2.304 MHz buck-sync oscillator, 3.0 V / 1.8 V LDO
+  supplies, level plan, RF hardening and RoHS/REACH status
+  (`docs/research/audio-codec.md`) (#8).
+- Variant M automotive 12 V power front end (`docs/research/power-automotive.md`)
+  and ADR-0004 (proposed): ISO 16750-2:2023 / ISO 7637-2:2011 levels confirmed
+  (jump start now 26 V), LM74800-Q1 load-dump cut-off with a 150 V FET and TVS
+  stack, CMC + pi filter, two LMR43620-Q1 bucks synchronized at 2.304 MHz to keep
+  harmonics out of the HF amateur bands, brownout forcing PTT off, and ≤ 7 µA
+  off-state drain. The device supplies no power to the radio (ADR-0003).
+  `constraints.md` §3.2/§3.4 and `pcb-fabrication.md` §6.3 updated (#10).
+- Per-radio power and interface table (`docs/research/radio-interfaces.md`):
+  DC outputs and limits, USB port, chip and audio, CAT levels, PTT and audio
+  levels for 13 HF/multiband radios plus generic interfaces, cited from the
+  manufacturers' manuals, with cable mappings to the AUDIO and SERIAL jacks and
+  a "needs measurement" list. Adds a `manual` kind to the reference library (#5).
+- Protocol 0.1.0 draft (`protocol/SPEC.md`), system architecture
+  (`docs/architecture.md`) and ADR-0007 (proposed). One COBS-framed,
+  CRC-checked message stream over BLE GATT, L2CAP CoC, and, in wired mode, TCP
+  over a new USB network interface (CDC-NCM, for iPhone/iPad) and the CDC-ACM
+  control port. Covers capability discovery, CAT with credit flow control,
+  PTT with keepalive, a user-configurable max TX (default 5 min, can be
+  disabled; `AGENTS.md`, `CONTRIBUTING.md`, constraints §6 updated) and RTS/DTR arming, BLE audio framing, clock sync,
+  optional tone-sequence TX, a capped BLE TX power, a BLE pairing window,
+  watchdog-reset reporting (`WATCHDOG`), configurable defaults
+  (serial defaults, USB network subnet, pairing window, power-down delay),
+  security to the Cyber Resilience Act level (LE Secure Connections bonding,
+  wired-host approval with `AUTH`, trusted-host list and removal, factory
+  reset, signed updates, plain USB ports open with a `WIRED_PORT_LOCK`
+  setting; #64), and new GATT UUIDs.
+  Golden vectors in `protocol/vectors/`, a reference codec in
+  `tools/protocol/`, and a `Protocol vectors` CI job. The USB endpoint budget
+  changes the wired USB functions per radio type (`constraints.md` §2,
+  REQ-HOST-003, -010, -013 to -017, REQ-PTT-002, -007, -011, REQ-PWR-018, REQ-FW-005) (#13).
+- Host compatibility research (`docs/research/host-compatibility.md`): wired
+  USB-C (CDC-ACM, RTS/DTR, UAC1 vs UAC2, voice processing, port power) and
+  Bluetooth LE (2M PHY, DLE, MTU, intervals, L2CAP CoC vs GATT, throughput
+  budget) on iOS/iPadOS, macOS, Android, Windows and Linux. Recommends UAC1 for
+  #44 and NimBLE with L2CAP CoC plus a GATT fallback (#6).
 - Radio module confirmation (`docs/research/module-selection.md`): the
   ESP32-S3-MINI-1 FCC grant (2AC7Z-ESPS3MINI1: single modular, BLE certified at
   10.3 dBm conducted, 20 cm mobile use), ISED ID, lifecycle and dated LCSC

@@ -32,7 +32,7 @@ save the file under that name.
 ## Adding a reference
 
 1. Add an entry to `manifest.json`: a lowercase `id`, `title`, `publisher`,
-   `kind` (`datasheet`, `app-note`, `fcc`, `sdk`, `license`, `issue`, `web`,
+   `kind` (`datasheet`, `app-note`, `manual`, `fcc`, `sdk`, `license`, `issue`, `web`,
    `standard`), the original `url` (pin GitHub links to a commit), a cache
    `file` name, and the repo files that cite it in `used_in`.
 2. Run `python3 tools/refs/refs.py fetch --id <id>`. It records the SHA-256
