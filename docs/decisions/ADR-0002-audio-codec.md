@@ -24,7 +24,7 @@ added (2026-09-24): optimize for **spurious emissions and cost**, and meet
 jack ESD and immunity levels from EN 301 489-1.
 
 The board has a single 3.3 V rail from a buck synchronized to the shared
-2.304 MHz clock defined in [ADR-0004](https://github.com/Reid-n0rc/open-bt-rig-interface/pull/57) (proposed, PR #57): an 18.432 MHz
+2.304 MHz clock defined in [ADR-0004](ADR-0004-power-automotive.md) (proposed): an 18.432 MHz
 ±20 ppm oscillator (YXC OT322518.432MJBA4SL, 0.7 ps maximum phase jitter)
 ÷ 8 with SN74LVC1G80 flip-flops, star-distributed through 33 Ω series
 resistors to the buck SYNC, the codec MCLK and the isolated supply. There is

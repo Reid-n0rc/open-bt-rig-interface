@@ -67,7 +67,7 @@ From the [ESP32-S3 TRM v1.8](../references/index.md#esp32s3-trm), §28.6, and th
 
 ### 2.2 Can the codec PLL run from the 2.304 MHz buck-sync clock?
 
-The shared board clock is defined in [ADR-0004](https://github.com/Reid-n0rc/open-bt-rig-interface/pull/57) (proposed, PR #57): an
+The shared board clock is defined in [ADR-0004](../decisions/ADR-0004-power-automotive.md) (proposed): an
 **18.432 MHz ±20 ppm oscillator** (YXC OT322518.432MJBA4SL, 0.7 ps maximum
 phase jitter) divided by 8 with SN74LVC1G80 flip-flops to **2.304 MHz**
 (= 48 × 48 kHz), star-distributed through 33 Ω series resistors to the buck
@@ -381,7 +381,7 @@ the output level control (up to +9 dB, limited by the output swing
 ## 7. Supplies
 
 The board has one 3.3 V rail from a buck synchronized at 2.304 MHz
-([ADR-0004](https://github.com/Reid-n0rc/open-bt-rig-interface/pull/57), PR #57); there
+([ADR-0004](../decisions/ADR-0004-power-automotive.md)); there
 is no 5 V rail. TLV320AIC3104 supply limits
 ([SLAS510G](../references/index.md#ti-tlv320aic3104-ds) §8.1, §8.3, Table 10-5
 and §12, pages 7, 35 and 91):

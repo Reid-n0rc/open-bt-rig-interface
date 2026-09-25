@@ -95,7 +95,7 @@ each host gets:
 |---|---|---|---|---|
 | Windows, macOS, Linux | Native serial ports (USB CDC-ACM, plus the radio's own USB-serial chip where present); no drivers | Native sound card (USB Audio Class; the radio's own where present) | Apps or host software that implement the protocol | Wired: standard COM/tty ports and a sound card, usable by any radio software. Bluetooth: only inside protocol-aware software. |
 | Android | Through apps (USB CDC-ACM via the USB host API); no system serial port | Native sound card | Apps that implement the protocol | Wired: a sound card, and serial inside apps. Bluetooth: only inside protocol-aware apps. |
-| iOS / iPadOS | **None: apps have no access to USB serial** | Native sound card (USB-C devices) | Apps that implement the protocol | Wired: a sound card only. Bluetooth: CAT, PTT and audio inside protocol-aware apps. |
+| iOS / iPadOS | **None: apps have no access to USB serial.** Instead, apps use the protocol over the device's USB network interface ([ADR-0007](../decisions/ADR-0007-protocol.md)) | Native sound card (USB-C devices) | Apps that implement the protocol | Wired: a sound card, plus PTT, configuration and (with SERIAL-jack radios) CAT inside protocol-aware apps. Bluetooth: CAT, PTT and audio inside protocol-aware apps. |
 
 Platform limitations, stated plainly:
 
@@ -103,8 +103,12 @@ Platform limitations, stated plainly:
   natively.** Over Bluetooth, every host needs an app or host software that
   implements the protocol. A desktop bridge is a later follow-up
   ([#45](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/45)).
-- **iOS and iPadOS apps can't use USB serial.** In wired mode an iOS/iPadOS
-  host gets audio only; CAT and PTT from iOS/iPadOS apps need Bluetooth mode.
+- **iOS and iPadOS apps can't use USB serial.** In wired mode they reach the
+  device through its USB network interface instead (maintainer decision
+  2026-09-24, [ADR-0007](../decisions/ADR-0007-protocol.md)). With a radio
+  whose serial is USB, the radio's chip sits behind the hub, so an iOS/iPadOS
+  host gets no CAT in wired mode; Bluetooth mode has full CAT. This is a
+  **known limitation**, accepted by the maintainer on 2026-09-24.
 - Per-OS details (UAC version, CDC-ACM support, BLE throughput) are confirmed in
   [#6](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/6).
 
@@ -112,16 +116,21 @@ Platform limitations, stated plainly:
 |---|---|---|---|---|---|
 | REQ-HOST-001 | In wired mode, the device shall enumerate on USB-C as a USB device using only standard classes (USB CDC-ACM serial and USB Audio Class), with no driver installation on Windows, macOS and Linux. | Native serial port and sound card on desktops ([constraints §2](constraints.md#2-host-compatibility)). | T | verify | #44 / #6, #18 |
 | REQ-HOST-002 | In wired mode on Android, the device's sound card shall work natively, and its serial ports shall be usable by apps through USB CDC-ACM. | constraints §2 table. | T | verify | #44 / #6, #18 |
-| REQ-HOST-003 | In wired mode on iOS/iPadOS devices with USB-C, the device's sound card shall work natively. | constraints §2 table. | T | verify | #44 / #6, #18 |
+| REQ-HOST-003 | In wired mode on iOS/iPadOS devices with USB-C, the device's sound card shall work natively, and apps shall reach PTT, configuration and SERIAL-jack CAT through the protocol over the USB network interface (REQ-HOST-013). Known limitation: with radios whose serial is USB, iOS/iPadOS get no CAT in wired mode. | constraints §2 table; [ADR-0007](../decisions/ADR-0007-protocol.md) (limitation accepted by the maintainer, 2026-09-24). NCM on iOS/iPadOS is not yet confirmed. | T | verify | #13, #44 / #6, #18 |
 | REQ-HOST-004 | Over Bluetooth LE, every function (CAT, PTT, RTS/DTR, audio, configuration, status) shall be available through the versioned protocol on iOS/iPadOS, macOS, Android, Windows and Linux. | Bluetooth link for all five OSes (ADR-0008). | T | verify | #13, #15, #16 / #6, #18 |
-| REQ-HOST-005 | User documentation shall state plainly that no OS shows a Bluetooth LE device as a serial port or audio device natively, that iOS/iPadOS apps have no access to USB serial, and what each host sees in each mode (table above). | Users must know which mode fits their host ([constraints §2](constraints.md#2-host-compatibility)). | I | draft | #13, #45 / #6 |
+| REQ-HOST-005 | User documentation shall state plainly that no OS shows a Bluetooth LE device as a serial port or audio device natively, that iOS/iPadOS apps have no access to USB serial (and so use the USB network interface when wired), and what each host sees in each mode (table above). | Users must know which mode fits their host ([constraints §2](constraints.md#2-host-compatibility)). | I | draft | #13, #45 / #6 |
 | REQ-HOST-006 | The device shall select wired mode when a USB host enumerates it on USB-C, and Bluetooth mode otherwise; a USB-C power source with no data connection shall leave it in Bluetooth mode. | Automatic mode selection (constraints §2, ADR-0008). | T | draft | #44 / #44 |
 | REQ-HOST-007 | A stored setting shall force either wired or Bluetooth mode. | constraints §2. | T | draft | #44 / #44 |
 | REQ-HOST-008 | The Bluetooth radio shall be off in wired mode. | constraints §2. | T | draft | #44 / #44 |
 | REQ-HOST-009 | In wired mode, a radio's own USB-serial chip and USB sound card shall appear to the host directly, through an on-board USB hub. | Radio chips usable with their own drivers and software (constraints §2, ADR-0008). | T | draft | #9, #44 / #18, bring-up |
-| REQ-HOST-010 | In wired mode, the device shall add its own USB sound card when the radio's audio is analog, its own USB serial port bridged to the SERIAL jack when the radio's serial isn't USB, and always a USB serial port for configuration and AUDIO-jack PTT. | Every radio type works wired ([constraints §2](constraints.md#2-host-compatibility), [radio-connectors](radio-connectors.md#usb-c-port-host-link-and-power)). | T | draft | #44 / #18 |
+| REQ-HOST-010 | In wired mode, the device shall enumerate the USB function set for the attached radio type given in the protocol spec: its own USB sound card when the radio's audio is analog; a USB network interface (REQ-HOST-013) and a USB serial port for configuration and AUDIO-jack PTT with USB-serial + USB-audio radios; the network interface with USB-serial + analog-audio radios; and, for SERIAL-jack radios, either a USB serial port bridged to the SERIAL jack (the default) or the network interface, chosen by a setting. | Every radio type works wired within the ESP32-S3's endpoint limit (at most 4 IN endpoints besides endpoint 0) ([constraints §2](constraints.md#2-host-compatibility), [ADR-0007](../decisions/ADR-0007-protocol.md), [protocol §14.1](../../protocol/SPEC.md#141-usb-functions-and-the-endpoint-budget)). Changed from "always a USB serial port for configuration", which doesn't fit the endpoint budget. | T | verify | #13, #44 / #18 |
 | REQ-HOST-011 | The Bluetooth LE link shall use the 2M PHY where the host supports it. | Audio throughput ([constraints §2](constraints.md#2-host-compatibility)). | T | verify | #13, #16 / #6 |
 | REQ-HOST-012 | The device shall not use Bluetooth Classic (SPP, HFP, RFCOMM), and shall not need Wi-Fi, LE Audio, or features specific to one host application or library (for example Hamlib or FLrig). | Scope (constraints §2 "Not required", ADR-0008). | I | draft | #7, #13 / #13 |
+| REQ-HOST-013 | In wired mode, the device shall offer a driverless USB network interface (CDC-NCM) carrying the protocol over TCP, with DHCP and DNS-SD discovery as in the protocol spec, whenever its function set includes it (REQ-HOST-010). | Hosts without USB serial (iPhone, iPad) get CAT, PTT and configuration over wired USB-C (maintainer decision 2026-09-24, [ADR-0007](../decisions/ADR-0007-protocol.md), extending ADR-0008). NCM support on iOS/iPadOS, macOS and Android isn't confirmed; Windows 10 has no in-box NCM driver. | T | verify | #13, #44 / #18 |
+| REQ-HOST-014 | The device shall require LE Secure Connections bonding (no LE legacy pairing), give unbonded centrals only the Info characteristic, and accept new Bluetooth LE bonds only during a pairing window opened by a local action on the device (power-on or a pairing button), which closes after a configurable time (default 120 s), after the first new bond, or on entering wired mode; outside the window only bonded hosts shall reach the protocol. No protocol message, wired control port or USB network shall be able to open the window. The window's state shall be readable before bonding and in the device status. | "Just Works" pairing has no protection against an active attacker; limiting it to a local action keeps strangers from keying the transmitter (maintainer decision 2026-09-24, [ADR-0007](../decisions/ADR-0007-protocol.md), [protocol §13.5](../../protocol/SPEC.md#135-security-and-pairing)). The trigger hardware is not yet decided. | T | verify | #9, #13, #14 / #14 |
+| REQ-HOST-015 | A wired host (USB-network TCP or CDC-ACM control port) shall be approved by the same local action on the device that opens the pairing window before it can use the protocol; the host shall identify itself with a random 128-bit token it generates, the device shall remember approved hosts, and there shall be no default password. Until approval the device shall answer only identification messages and refuse the rest as not authorized. | Security to the Cyber Resilience Act level (maintainer decision 2026-09-25, [#64](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/64), [ADR-0007](../decisions/ADR-0007-protocol.md), [protocol §15](../../protocol/SPEC.md#15-security)). Encrypting the TCP transport (EN 18031-1 level) is planned in #64. | T | draft | #13, #44, #64 / #64 |
+| REQ-HOST-016 | An authorized host shall be able to list and remove Bluetooth bonds and approved wired hosts, and to factory-reset the device (erasing configuration, bonds and approved hosts, PTT off); a factory reset shall also be possible by a local action on the device. | CRA-level security (#64); a user must be able to revoke access. The local action is set in #14 and the hardware. | T | draft | #9, #13, #14, #64 / #64 |
+| REQ-HOST-017 | The device's native USB serial ports (data and RTS/DTR) and the radio's own USB devices behind the hub shall work without approval, and an approved host shall be able to restrict them with a setting: native RTS/DTR never key PTT; native serial ports not enumerated; and, where the hardware can, the radio USB port isolated from the host. Changing the setting shall never assert PTT. | A physical cable connection counts as the owner's consent (maintainer decision 2026-09-25, [ADR-0007](../decisions/ADR-0007-protocol.md), [protocol §15.2](../../protocol/SPEC.md#152-wired-hosts-usb-network-and-cdc-acm-control-port)). Whether the radio-port switch can isolate is confirmed in #9. | T | draft | #9, #13, #44, #64 / #64 |
 
 ## 3. Serial / CAT
 
@@ -141,15 +150,16 @@ Platform limitations, stated plainly:
 | ID | Requirement | Rationale | Ver. | Status | Trace |
 |---|---|---|---|---|---|
 | REQ-PTT-001 | The device shall accept PTT from three sources: (a) a CAT command from the host, passed through unchanged (REQ-CAT-001); (b) the host's RTS/DTR; (c) a protocol PTT command. | [constraints §2, §7](constraints.md#7-radio-interfaces). | T | draft | #13, #15 / #15, #18 |
-| REQ-PTT-002 | Host RTS/DTR shall be native CDC-ACM line state in wired mode and protocol messages over Bluetooth LE. | constraints §2. | T | draft | #13, #15, #44 / #15 |
+| REQ-PTT-002 | Host RTS/DTR shall be native CDC-ACM line state on the device's wired serial ports, and protocol messages over Bluetooth LE and the USB network interface. | constraints §2. | T | draft | #13, #15, #44 / #15 |
 | REQ-PTT-003 | The device shall map host RTS/DTR, by configuration, to the AUDIO-jack PTT closure, or to RTS/DTR on the radio's USB-serial chip when the radio has one. | [constraints §7](constraints.md#7-radio-interfaces). The SERIAL jack has no RS-232 RTS/DTR contacts, so RS-232-level RTS/DTR outputs are not provided. | T | draft | #15, #43 / #15 |
 | REQ-PTT-004 | The PTT output shall be an isolated closure to ground (sleeve) on AUDIO-jack ring 2, closed = keyed, rated for every supported radio's PTT pull-up voltage and current. | [radio-connectors](radio-connectors.md#audio-jack-35-mm-trrs). Radio PTT voltages and currents come from #5. | T | verify | #9 / #5, bring-up |
 | REQ-PTT-005 | PTT shall be off at power-on, reset, brownout, watchdog timeout, loss of the host link (Bluetooth disconnect; USB-C disconnect or suspend in wired mode) and host-mode switch. | Fail-safe ([constraints §6](constraints.md#6-safety-and-fail-safe), [`AGENTS.md`](../../AGENTS.md#firmware)). The wired-mode cases extend "disconnect" to the USB-C link. | T | draft | #14, #15, #44 / #15, bring-up |
 | REQ-PTT-006 | PTT keyed through the protocol shall drop when the host's keepalive is missing for longer than a timeout set in the protocol spec. | A host that hangs while connected must not hold PTT ([roadmap](../roadmap.md) Phase 3 exit criteria). | T | draft | #13, #15 / #15 |
-| REQ-PTT-007 | The firmware shall enforce a maximum continuous TX time from any PTT source. It shall be configurable and shall not be possible to disable. On expiry, PTT goes off and the host is notified. | constraints §6. | T | draft | #15 / #15 |
+| REQ-PTT-007 | The firmware shall enforce a maximum continuous TX time from any PTT source, configurable by the user: default 300 s, at least 10 s when enabled, no upper limit, and 0 disables it. On expiry, PTT goes off and the host is notified. | constraints §6; maintainer decision 2026-09-25 ([ADR-0007](../decisions/ADR-0007-protocol.md)). | T | draft | #15 / #15 |
 | REQ-PTT-008 | The PTT output shall be off unless actively driven (a pull-down, or an opto/MOSFET that must be driven), so a hung or unpowered MCU cannot key the radio. | Hardware default off (constraints §6). | T, I | draft | #9 / bring-up |
 | REQ-PTT-009 | Changing the SERIAL-jack mode, the audio path or the host mode shall never assert PTT. | [radio-connectors](radio-connectors.md#serial-jack-35-mm-trrs). | T | draft | #15, #44 / #15 |
 | REQ-PTT-010 | Every PTT fail-safe path shall have a host-run firmware test. | [`AGENTS.md`](../../AGENTS.md#firmware). | I | confirmed | #14, #15 / #14 |
+| REQ-PTT-011 | After a firmware lock-up, the internal watchdog shall reset the device within a few seconds, with PTT off during and after the reset, and the device shall report the watchdog reset to the host afterwards. | No external hardware PTT timer (maintainer decision 2026-09-25); the lock-up path must still end in PTT off ([ADR-0007](../decisions/ADR-0007-protocol.md), [protocol §8.5](../../protocol/SPEC.md#85-maximum-tx-time-and-other-fail-safes)). The exact timeout is set in #14. | T | draft | #13, #14, #15 / bring-up |
 
 RF pickup and PTT: see REQ-EMC-001.
 
@@ -209,6 +219,7 @@ Connectors and pinouts: [`radio-connectors.md`](radio-connectors.md).
 | REQ-PWR-003 | The device's total draw shall be about 1.5 W typical and 3 W peak or less, confirmed by a power budget per variant. | [constraints §3.4](constraints.md#34-power-budget-verify). Load estimates are not yet confirmed. | A, T | verify | #10, #11 / bring-up |
 | REQ-PWR-004 | In wired mode, the device, hub and radio VBUS draw shall fit within the current the USB-C host offers: 500 mA at 5 V by default, or 1.5 A / 3 A when advertised on CC. On overcurrent the device shall report it to the host rather than brown out. | [constraints §3.4](constraints.md#34-power-budget-verify). | T, A | verify | #11, #44 / #5, bring-up |
 | REQ-PWR-005 | A brownout on any input shall leave PTT off (REQ-PTT-005). | constraints §3.2, §6. | T | draft | #10, #11 / bring-up |
+| REQ-PWR-018 | The device shall power itself down a configurable delay after the radio (or, on variant M, the ignition) turns off: default 30 s, range 5–3600 s or 0 = never, set with the protocol's `POWER_DOWN_DELAY_S` key. The delay shall run only while no USB host is connected on USB-C; the device stays awake in wired mode. It shall end any session and turn PTT off before powering down. | Maintainer decisions 2026-09-25; [protocol §6.1](../../protocol/SPEC.md#61-keys). With 0, variant M can exceed REQ-PWR-016's off-state drain target, as the user's choice. How the device detects "radio off" is set in #10/#11. | T | verify | #10, #11, #13 / bring-up |
 
 ### 7.2 Variant M automotive 12 V input
 
@@ -221,7 +232,7 @@ and editions are confirmed in [#10](https://github.com/Reid-n0rc/open-bt-rig-int
 | REQ-PWR-011 | During cold crank, variant M shall operate down to about 6 V (4.5 V desirable), or brown out safely with PTT off. | constraints §3.2. | T | verify | #10 / bring-up |
 | REQ-PWR-012 | Variant M shall survive an unsuppressed load dump up to about 101 V for 40–400 ms, and a suppressed (centrally clamped) load dump of about 35 V. | constraints §3.2. | T | verify | #10 / bring-up |
 | REQ-PWR-013 | Variant M shall survive −14 V reverse battery for 60 s without damage. | constraints §3.2. | T | verify | #10 / bring-up |
-| REQ-PWR-014 | Variant M shall survive a 24 V jump start for 60 s. | constraints §3.2. | T | verify | #10 / bring-up |
+| REQ-PWR-014 | Variant M shall survive a 26 V jump start for 60 s (ISO 16750-2:2023). | constraints §3.2; [ADR-0004](../decisions/ADR-0004-power-automotive.md). | T | verify | #10 / bring-up |
 | REQ-PWR-015 | Variant M shall survive ISO 7637-2 pulse 1 (about −150 V), pulse 2a (about +112 V) and pulses 3a/3b (about −220 V / +150 V). | constraints §3.2. | T | verify | #10 / bring-up |
 | REQ-PWR-016 | Variant M shall draw less than 1 mA when off, and power down automatically when the radio or ignition is off. | constraints §3.2. | T | verify | #10 / bring-up |
 | REQ-PWR-017 | Variant M's power front end shall use a reverse-polarity protection (ideal-diode or controller), load-dump protection (surge stopper and/or TVS), an AEC-Q100 wide-input buck converter, and an input common-mode choke plus pi filter. | constraints §3.2 design guidance. | I | draft | #10 / #10 |
@@ -265,7 +276,7 @@ and editions are confirmed in [#10](https://github.com/Reid-n0rc/open-bt-rig-int
 | REQ-FW-002 | The firmware core shall contain no radio-specific logic. | Transparent CAT (constraints §10). | I | draft | #14, #15 / #14 |
 | REQ-FW-003 | Portable logic shall live in `firmware/app/` and be host-tested in `firmware/test/`; SDK glue shall live in `firmware/platform/<sdk>/` behind a small hardware-abstraction interface. | [`AGENTS.md`](../../AGENTS.md#firmware). | I | confirmed | #14 / #14 |
 | REQ-FW-004 | The host protocol shall be versioned, with capability discovery; a change shall bump the protocol version and update the golden byte vectors. | constraints §10, [`AGENTS.md`](../../AGENTS.md#protocol). | I, T | draft | #13 / #13 |
-| REQ-FW-005 | Configuration shall be possible over Bluetooth LE (protocol) and, in wired mode, over the device's control serial port. | constraints §10, radio-connectors. | T | draft | #13, #44 / #15 |
+| REQ-FW-005 | Configuration shall be possible over Bluetooth LE (protocol) and, in wired mode, over the protocol on the USB network interface or the device's control serial port, whichever the function set includes. | constraints §10, radio-connectors. | T | draft | #13, #44 / #15 |
 | REQ-FW-006 | Over-the-air firmware updates are optional; if implemented, the firmware shall accept only signed images. Wired mode may also offer USB DFU. | constraints §10, ADR-0008. | T | draft | #14, #44 / — |
 | REQ-FW-007 | Switching between Bluetooth mode (USB host stack) and wired mode (USB device stack) shall restart the USB stack cleanly, with PTT off throughout. | Two USB stacks share one OTG controller (ADR-0008). | T | draft | #43, #44 / #44 |
 | REQ-FW-008 | Programming and logs shall be available through a UART0 header, since the USB pins are used for the host links. | ADR-0008 (USB OTG and USB-Serial-JTAG share one PHY). | I | draft | #21 / #21 |
@@ -327,12 +338,12 @@ are named by their roadmap item.
 | [#6](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/6) Five-OS host matrix | Verify (research) | REQ-GEN-002, REQ-HOST-001 to -005, REQ-HOST-011, REQ-CAT-006, REQ-AUD-004 to -006 |
 | [#7](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/7) Module (ESP32-S3-MINI-1) | Design, verify | REQ-GEN-002, REQ-HOST-012, REQ-REG-001, REQ-REG-002, REQ-REG-006, REQ-MFG-008 |
 | [#8](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/8) Audio codec and isolation | Design, verify | REQ-AUD-001, REQ-AUD-007, REQ-AUD-009 to -013, REQ-ISO-001, REQ-EMC-003, REQ-MFG-008 |
-| [#9](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/9) CAT/PTT circuits, USB routing | Design | REQ-GEN-003, REQ-GEN-004, REQ-HOST-009, REQ-CAT-002, REQ-CAT-007, REQ-CAT-008, REQ-PTT-004, REQ-PTT-008, REQ-RIF-001 to -010, REQ-ISO-001, REQ-ISO-003, REQ-EMC-001 to -003, REQ-MFG-008 |
-| [#10](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/10) Variant M power | Design, verify | REQ-PWR-003, REQ-PWR-005, REQ-PWR-010 to -017, REQ-ISO-003, REQ-EMC-004 to -007, REQ-MECH-006, REQ-ENV-002, REQ-MFG-004, REQ-MFG-008 |
-| [#11](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/11) Variant R power | Design, verify | REQ-RIF-007, REQ-RIF-009, REQ-PWR-001 to -005, REQ-EMC-004, REQ-EMC-005, REQ-ENV-001, REQ-MFG-004, REQ-MFG-008 |
+| [#9](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/9) CAT/PTT circuits, USB routing | Design | REQ-GEN-003, REQ-GEN-004, REQ-HOST-009, REQ-CAT-002, REQ-CAT-007, REQ-CAT-008, REQ-PTT-004, REQ-PTT-008, REQ-HOST-014, REQ-RIF-001 to -010, REQ-ISO-001, REQ-ISO-003, REQ-EMC-001 to -003, REQ-MFG-008 |
+| [#10](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/10) Variant M power | Design, verify | REQ-PWR-003, REQ-PWR-005, REQ-PWR-010 to -018, REQ-ISO-003, REQ-EMC-004 to -007, REQ-MECH-006, REQ-ENV-002, REQ-MFG-004, REQ-MFG-008 |
+| [#11](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/11) Variant R power | Design, verify | REQ-RIF-007, REQ-RIF-009, REQ-PWR-001 to -005, REQ-PWR-018, REQ-EMC-004, REQ-EMC-005, REQ-ENV-001, REQ-MFG-004, REQ-MFG-008 |
 | [#12](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/12) Variants and board strategy | Design, verify | REQ-GEN-006, REQ-ISO-001, REQ-ISO-002, REQ-REG-006, REQ-EMC-003, REQ-ENV-001, REQ-ENV-002 |
-| [#13](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/13) Protocol spec | Design, verify | REQ-GEN-002, REQ-GEN-005, REQ-HOST-004, -005, -011, -012, REQ-CAT-005, REQ-PTT-001, -002, -006, REQ-AUD-004, REQ-TIM-001, REQ-FW-004, REQ-FW-005 |
-| [#14](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/14) Firmware core, HAL, host tests | Design, verify | REQ-CAT-001, REQ-PTT-005, REQ-PTT-010, REQ-TIM-003, REQ-FW-001 to -003, REQ-FW-006 |
+| [#13](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/13) Protocol spec | Design, verify | REQ-GEN-002, REQ-GEN-005, REQ-HOST-003 to -005, -010 to -017, REQ-CAT-005, REQ-PTT-001, -002, -006, REQ-AUD-004, REQ-TIM-001, REQ-FW-004, REQ-FW-005, REQ-PWR-018 |
+| [#14](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/14) Firmware core, HAL, host tests | Design, verify | REQ-CAT-001, REQ-HOST-014, REQ-PTT-005, REQ-PTT-010, REQ-PTT-011, REQ-TIM-003, REQ-FW-001 to -003, REQ-FW-006 |
 | [#15](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/15) Firmware CAT bridge and PTT | Design, verify | REQ-GEN-001, REQ-HOST-004, REQ-CAT-001 to -003, REQ-CAT-005 to -008, REQ-PTT-001 to -003, REQ-PTT-005 to -007, REQ-PTT-009, REQ-PTT-010, REQ-RIF-003, REQ-RIF-004, REQ-FW-002, REQ-FW-005 |
 | [#16](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/16) Firmware audio pipeline | Design, verify | REQ-GEN-001, REQ-HOST-004, REQ-HOST-011, REQ-AUD-001, -002, -004, -005, -007, -008, -013 to -015 |
 | [#17](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/17) Firmware tone TX (optional) | Design, verify | REQ-TIM-001 to -003 |
@@ -342,8 +353,9 @@ are named by their roadmap item.
 | [#21](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/21) KiCad setup | Design | REQ-RIF-001, REQ-RIF-009, REQ-ISO-003, REQ-REG-002, REQ-REG-003, REQ-REG-005, REQ-FW-008, REQ-MECH-007, REQ-MFG-001 to -003, REQ-MFG-009, REQ-TOOL-001, REQ-TOOL-002 |
 | [#26](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/26) ERC/DRC merge gate | Design, verify | REQ-TOOL-003 |
 | [#43](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/43) Firmware USB host (Bluetooth mode) | Design, verify | REQ-GEN-003, REQ-GEN-004, REQ-CAT-004, REQ-PTT-003, REQ-AUD-001, REQ-AUD-002, REQ-AUD-008, REQ-RIF-006, REQ-FW-007 |
-| [#44](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/44) Firmware wired USB-C mode | Design, verify | REQ-GEN-002 to -004, REQ-HOST-001 to -003, REQ-HOST-006 to -010, REQ-PTT-002, REQ-PTT-005, REQ-PTT-009, REQ-AUD-003, REQ-AUD-006, REQ-AUD-008, REQ-RIF-008, REQ-PWR-004, REQ-FW-005 to -007 |
+| [#44](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/44) Firmware wired USB-C mode | Design, verify | REQ-GEN-002 to -004, REQ-HOST-001 to -003, REQ-HOST-006 to -010, REQ-HOST-013, REQ-PTT-002, REQ-PTT-005, REQ-PTT-009, REQ-AUD-003, REQ-AUD-006, REQ-AUD-008, REQ-RIF-008, REQ-PWR-004, REQ-FW-005 to -007 |
 | [#45](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/45) Host Bluetooth bridge (later) | Design | REQ-HOST-005 |
+| [#64](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/64) Product security (CRA level) | Design, verify | REQ-HOST-015 to -017, REQ-FW-006 |
 | Parts list (to be created) | Verify | REQ-MFG-007, REQ-MFG-008, REQ-MFG-010 |
 | Design review (to be created) | Verify | REQ-REG-002, REQ-EMC-002, REQ-MFG-001, -002, -004 to -007 |
 | Release workflow (to be created) | Verify | REQ-MFG-009 |
@@ -369,7 +381,7 @@ one requirement. Update this list when either document changes.
 - [x] Host table (Windows/macOS/Linux, Android, iOS/iPadOS): REQ-HOST-001 to -004
 - [x] No Bluetooth Classic: REQ-HOST-012
 - [x] Wired mode selected automatically, setting to force, radio off in wired mode: REQ-HOST-006 to -008
-- [x] Radio USB chips appear directly in wired mode; device adds its own sound card and serial ports: REQ-HOST-009, REQ-HOST-010
+- [x] Radio USB chips appear directly in wired mode; device adds its own sound card, serial ports and USB network interface per radio type: REQ-HOST-009, REQ-HOST-010, REQ-HOST-013
 - [x] No OS shows a BLE device as serial/audio natively; documentation: REQ-HOST-005
 - [x] BLE audio ≥ 12 kHz / 16-bit, L2CAP CoC or GATT, 2M PHY, LC3 fallback: REQ-AUD-004, REQ-AUD-005, REQ-HOST-011
 - [x] USB audio 48 kHz / 16-bit, UAC1 or UAC2: REQ-AUD-006
@@ -385,7 +397,7 @@ one requirement. Update this list when either document changes.
 - [x] §3.2 Normal range, cold crank, load dump, reverse battery, jump start, ISO 7637-2 pulses: REQ-PWR-010 to -015
 - [x] §3.2 ESD ±15 kV: REQ-EMC-007
 - [x] §3.2 Temperature −40 to +85 °C: REQ-ENV-002
-- [x] §3.2 Off-state drain and auto power-down: REQ-PWR-016
+- [x] §3.2 Off-state drain and auto power-down: REQ-PWR-016, REQ-PWR-018
 - [x] §3.2 Design guidance (ideal diode, surge stopper/TVS, AEC-Q100 buck, CM choke + pi filter): REQ-PWR-017
 - [x] §3.2 Low-EMI conversion, switching frequency off the HF bands: REQ-EMC-005
 - [x] §3.2 CISPR 25 Class 3: REQ-EMC-006
@@ -471,15 +483,13 @@ one requirement. Update this list when either document changes.
 
 - [`radio-connectors.md`](radio-connectors.md): REQ-AUD-009, REQ-AUD-010, REQ-CAT-005, REQ-CAT-007, REQ-PTT-009
 - [ADR-0008](../decisions/ADR-0008-host-links-esp32-s3.md): REQ-CAT-004, REQ-FW-007, REQ-FW-008
+- [ADR-0007](../decisions/ADR-0007-protocol.md): REQ-HOST-013 to -017, REQ-PTT-011
 - [`AGENTS.md`](../../AGENTS.md) and [`GOVERNANCE.md`](../../GOVERNANCE.md): REQ-GEN-005, REQ-PTT-010, REQ-FW-003, REQ-MFG-009, REQ-TOOL-003, REQ-TOOL-004
 - Per-radio needs (#5): REQ-CAT-003
 
 ## Open questions
 
-- **CAT and PTT from iOS/iPadOS in wired mode.** iOS apps can't reach USB
-  serial, and the Bluetooth radio is off in wired mode, so a wired iOS host
-  gets audio only. Is that acceptable, or should Bluetooth LE stay on for
-  control while audio runs over USB-C? (#6, #44)
 - **CAT latency target** (REQ-CAT-006) and **keepalive and maximum-TX
-  defaults** (REQ-PTT-006, REQ-PTT-007): values to be set in #13 and #15.
+  defaults** (REQ-PTT-006, REQ-PTT-007): settled at 3000 ms and 300 s,
+  both configurable ([protocol §6.1](../../protocol/SPEC.md#61-keys)).
 - **BOM cost and enclosure size targets** (REQ-MFG-010, REQ-MECH-008): maintainer.
