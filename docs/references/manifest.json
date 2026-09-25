@@ -2,6 +2,130 @@
   "_comment": "Source of truth for cited third-party documents. Edit this file, then run: python3 tools/refs/refs.py fetch && python3 tools/refs/refs.py index. Copies live in docs/references/cache/ (gitignored, never committed). See docs/references/README.md.",
   "references": [
     {
+      "id": "crc-catalogue-16",
+      "title": "Catalogue of parametrised CRC algorithms: 16-bit CRCs (CRC-16/IBM-3740)",
+      "publisher": "Greg Cook (RevEng)",
+      "kind": "web",
+      "url": "https://reveng.sourceforge.io/crc-catalogue/16.htm",
+      "file": "crc-catalogue-16.html",
+      "used_in": [
+        "protocol/SPEC.md"
+      ],
+      "sha256": "9bcbee0db3969a581c27e78be00eb75824c9d95d28684e46aaae6ecb6f6e0896",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "cobs-paper",
+      "title": "Consistent Overhead Byte Stuffing (IEEE/ACM Transactions on Networking, 1999)",
+      "publisher": "Stuart Cheshire, Mary Baker",
+      "kind": "standard",
+      "url": "http://www.stuartcheshire.org/papers/COBSforToN.pdf",
+      "file": "cobs-paper.pdf",
+      "used_in": [
+        "protocol/SPEC.md",
+        "docs/decisions/ADR-0007-protocol.md"
+      ],
+      "sha256": "f6500d18b463ac266b2b2146a09a76d3db92f2730f416564b7917af5180fda19",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "esp-usb-device-s3",
+      "title": "ESP-USB programming guide: USB device stack (ESP32-S3), endpoint limits and supported classes",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://docs.espressif.com/projects/esp-usb/en/latest/esp32s3/usb_device.html",
+      "file": "esp-usb-device-s3.html",
+      "used_in": [
+        "protocol/SPEC.md",
+        "docs/decisions/ADR-0007-protocol.md",
+        "docs/architecture.md"
+      ],
+      "sha256": "015e2a39dc00600bc2894e5d25c4163211d7bfb7855fd5a680e4f62a00f2b134",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "tinyusb-usbd-h",
+      "title": "TinyUSB src/device/usbd.h (CDC, CDC-NCM and UAC1 descriptor templates)",
+      "publisher": "TinyUSB (hathach)",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/hathach/tinyusb/dae3f9a366bfcddbf9dcf1b48d7500286a849539/src/device/usbd.h",
+      "file": "tinyusb-usbd.h",
+      "used_in": [
+        "protocol/SPEC.md",
+        "docs/decisions/ADR-0007-protocol.md"
+      ],
+      "sha256": "48040a0ea812b5f099bab557c81aa83fb9386d7eb2dfd814b1eba9aa2468b298",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "linux-cdc-ncm",
+      "title": "Linux drivers/net/usb/cdc_ncm.c (CDC-NCM host driver; GPL, facts only)",
+      "publisher": "Linux kernel",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/038d61fd642278bab63ee8ef722c50d10ab01e8f/drivers/net/usb/cdc_ncm.c",
+      "file": "linux-cdc-ncm.c",
+      "used_in": [
+        "protocol/SPEC.md",
+        "docs/decisions/ADR-0007-protocol.md"
+      ],
+      "sha256": "10a1af035e2d7e6173b491eb47a509268233893800bc6850f5ca5641325b4452",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "linux-usbnet",
+      "title": "Linux drivers/net/usb/usbnet.c (interface naming usbN/ethN; GPL, facts only)",
+      "publisher": "Linux kernel",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/038d61fd642278bab63ee8ef722c50d10ab01e8f/drivers/net/usb/usbnet.c",
+      "file": "linux-usbnet.c",
+      "used_in": [
+        "protocol/SPEC.md"
+      ],
+      "sha256": "9fc89a999b418872fdad8a30346b95bc34fa21fe32d68eea6f3a69785120da1f",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "android-kconfig-cdc-ncm",
+      "title": "Android kernel/configs commit: Android U requires CONFIG_USB_NET_CDC_NCM=y",
+      "publisher": "Android Open Source Project",
+      "kind": "sdk",
+      "url": "https://android.googlesource.com/kernel/configs/+/659aee1b688f245f4dafe4afe7904ed9cd91fbb0",
+      "file": "android-kconfig-cdc-ncm.html",
+      "used_in": [
+        "protocol/SPEC.md",
+        "docs/decisions/ADR-0007-protocol.md"
+      ],
+      "sha256": "202235b14af01e47e8e5a9c8719e5c5f7ecfa77a9aa877fac2c41302ccf76ff1",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "apple-forum-802640",
+      "title": "Apple Developer Forums 802640: Custom USB network device driver on iPhone (Quinn, DTS, Oct 2025)",
+      "publisher": "Apple",
+      "kind": "web",
+      "url": "https://developer.apple.com/forums/thread/802640",
+      "file": "apple-forum-802640.html",
+      "used_in": [
+        "protocol/SPEC.md",
+        "docs/decisions/ADR-0007-protocol.md"
+      ],
+      "sha256": "239efd645fae36e90c1a1bfea925ac6c820b55d6d7e37027d8778ecac7692366",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "jordemort-android-cdc",
+      "title": "Why Android can't use CDC Ethernet (2023-05-31)",
+      "publisher": "Jordan Webb",
+      "kind": "web",
+      "url": "https://jordemort.dev/blog/why-android-cant-use-cdc-ethernet/",
+      "file": "jordemort-android-cdc.html",
+      "used_in": [
+        "protocol/SPEC.md"
+      ],
+      "sha256": "0d4e7dfaa9e8f14ca4ef1eeeb03a13c6a314d9b063bfeb4cafa9d5f92c9f8520",
+      "retrieved": "2026-09-24"
+    },
+    {
       "id": "esp32s3-mini1-ds",
       "title": "ESP32-S3-MINI-1 & ESP32-S3-MINI-1U datasheet",
       "publisher": "Espressif Systems",
@@ -9,10 +133,10 @@
       "url": "https://www.espressif.com/sites/default/files/documentation/esp32-s3-mini-1_mini-1u_datasheet_en.pdf",
       "file": "esp32s3-mini1-ds.pdf",
       "used_in": [
+        "docs/compliance/fcc.md",
         "docs/decisions/ADR-0008-host-links-esp32-s3.md",
         "docs/research/core-devices.md",
         "docs/research/module-selection.md",
-        "docs/compliance/fcc.md",
         "docs/research/power-automotive.md"
       ],
       "sha256": "4d4b7f1c17b484c627aaa0f806566c48a6124a8e466c6d21d99210e6eacdef04",
@@ -26,7 +150,8 @@
       "url": "https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf",
       "file": "esp32s3-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/host-compatibility.md"
       ],
       "sha256": "2d5a7cb7fd559d8d972bd88db32669c0196d23f22d7afaafb0f63d099b589a3f",
       "retrieved": "2026-09-24"
@@ -39,9 +164,9 @@
       "url": "https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32s3/esp-hardware-design-guidelines-en-master-esp32s3.pdf",
       "file": "esp32s3-hw-design.pdf",
       "used_in": [
+        "docs/compliance/fcc.md",
         "docs/research/core-devices.md",
-        "docs/research/module-selection.md",
-        "docs/compliance/fcc.md"
+        "docs/research/module-selection.md"
       ],
       "sha256": "2ee5e2e340c2b95c13bd37b611596e1c24023b179bd21930e6f6aa7e2a8a542b",
       "retrieved": "2026-09-24"
@@ -588,8 +713,8 @@
       "url": "https://www.espressif.com/sites/default/files/ESP32-S3-MINI-1%20FCC%20Certification.pdf",
       "file": "esp32s3-mini1-fcc-grant.pdf",
       "used_in": [
-        "docs/research/module-selection.md",
-        "docs/compliance/fcc.md"
+        "docs/compliance/fcc.md",
+        "docs/research/module-selection.md"
       ],
       "sha256": "0344102bc60709abc518d532b2cadafa5d3fef3f7f8981cf33a7c5ac10a5d768",
       "retrieved": "2026-09-24"
@@ -602,8 +727,8 @@
       "url": "https://www.espressif.com/sites/default/files/ESP32-S3-MINI-1%20IC%20Certification.pdf",
       "file": "esp32s3-mini1-ised-cert.pdf",
       "used_in": [
-        "docs/research/module-selection.md",
-        "docs/compliance/fcc.md"
+        "docs/compliance/fcc.md",
+        "docs/research/module-selection.md"
       ],
       "sha256": "77618c1572f7f4e2a819fb7d022bfd081d755140c37117c50a437ef3c11a437a",
       "retrieved": "2026-09-24"
@@ -618,8 +743,8 @@
       "fetch": "manual",
       "notes": "The site (and the FCC EAS at apps.fcc.gov/oetcf/eas) blocks scripted access; save the page, and the User Manual exhibit, from a browser.",
       "used_in": [
-        "docs/research/module-selection.md",
-        "docs/compliance/fcc.md"
+        "docs/compliance/fcc.md",
+        "docs/research/module-selection.md"
       ]
     },
     {
@@ -632,8 +757,8 @@
       "fetch": "manual",
       "notes": "Secondary copy of the FCC exhibit; the site blocks scripted downloads. Prefer the User Manual exhibit on the FCC filing list when it can be opened.",
       "used_in": [
-        "docs/research/module-selection.md",
-        "docs/compliance/fcc.md"
+        "docs/compliance/fcc.md",
+        "docs/research/module-selection.md"
       ]
     },
     {
@@ -815,8 +940,8 @@
       "fetch": "manual",
       "notes": "apps.fcc.gov blocks scripted access; open it in a browser and save the page (and the D03 and D04 attachments as PDF).",
       "used_in": [
-        "docs/research/module-selection.md",
-        "docs/compliance/fcc.md"
+        "docs/compliance/fcc.md",
+        "docs/research/module-selection.md"
       ]
     },
     {
@@ -856,6 +981,984 @@
         "docs/compliance/fcc.md"
       ],
       "sha256": "d67001d0dc491931674b4dcefca686fc87fe31410d93af81045b2a73a24a395a",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ms-usbser",
+      "title": "USB serial driver (Usbser.sys)",
+      "publisher": "Microsoft",
+      "kind": "web",
+      "url": "https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-driver-installation-based-on-compatible-ids",
+      "file": "ms-usbser.html",
+      "notes": "Page dated 2025-06-11.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "9ef39679004812bc0c5c862a70e8ae6b7000767d2865373cdd01baad4a15f6bc",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ms-usb-classes",
+      "title": "USB device class drivers included in Windows",
+      "publisher": "Microsoft",
+      "kind": "web",
+      "url": "https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/supported-usb-classes",
+      "file": "ms-usb-classes.html",
+      "notes": "Page dated 2025-06-11.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "56057fe32fe8879f4cfe4f58b9f99767cda9a5b5e88697946db9e37dbbd47c60",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ms-usbaudio2",
+      "title": "USB Audio 2.0 drivers (usbaudio2.sys)",
+      "publisher": "Microsoft",
+      "kind": "web",
+      "url": "https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/usb-2-0-audio-drivers",
+      "file": "ms-usbaudio2.html",
+      "notes": "Page dated 2025-10-27.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "3fb2b2a7ad3b06b00dc9919130213428fdd0ddfeccd41006ebed9e60a79919d0",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ms-usbccgp",
+      "title": "USB generic parent driver (Usbccgp.sys)",
+      "publisher": "Microsoft",
+      "kind": "web",
+      "url": "https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-common-class-generic-parent-driver",
+      "file": "ms-usbccgp.html",
+      "notes": "Page dated 2025-10-31.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "f03bad93d808df7612c069e6fe3e2e575a64260375d348dc153bb448dd64dcbe",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ms-audio-modes",
+      "title": "Audio signal processing modes",
+      "publisher": "Microsoft",
+      "kind": "web",
+      "url": "https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/audio-signal-processing-modes",
+      "file": "ms-audio-modes.html",
+      "notes": "Page dated 2025-03-26.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "af4d28f756a43308b6fdae928e1a5293476f4b22df5027c7e9a5df12e42ea964",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ms-voice-clarity",
+      "title": "Announcing Windows 11 Insider Preview Build 26040 (Voice Clarity)",
+      "publisher": "Microsoft (Windows Insider blog)",
+      "kind": "web",
+      "url": "https://blogs.windows.com/windows-insider/2024/01/26/announcing-windows-11-insider-preview-build-26040-canary-channel/",
+      "file": "ms-voice-clarity.html",
+      "notes": "Blog post dated 2024-01-26.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "685408de0a1f3389d040f2b04ac03d2e59df86b7600c7083ca29471e9eabe82f",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ms-winrt-serialdevice",
+      "title": "Windows.Devices.SerialCommunication.SerialDevice class",
+      "publisher": "Microsoft",
+      "kind": "web",
+      "url": "https://learn.microsoft.com/en-us/uwp/api/windows.devices.serialcommunication.serialdevice",
+      "file": "ms-winrt-serialdevice.html",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "f44dfc3b63e2a998c887927910cdf0ccc799cbb98a9ca571508ce1957a583857",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ms-winrt-bluetooth",
+      "title": "Windows.Devices.Bluetooth namespace",
+      "publisher": "Microsoft",
+      "kind": "web",
+      "url": "https://learn.microsoft.com/en-us/uwp/api/windows.devices.bluetooth",
+      "file": "ms-winrt-bluetooth.html",
+      "notes": "Checked 2026-09-24 for LE L2CAP CoC classes: none listed.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "38864ddd174384803479c3ef07a063e76879cebf0217b0b0b871fb071b413563",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ms-winrt-ble-connparams",
+      "title": "BluetoothLEPreferredConnectionParameters class",
+      "publisher": "Microsoft",
+      "kind": "web",
+      "url": "https://learn.microsoft.com/en-us/uwp/api/windows.devices.bluetooth.bluetoothlepreferredconnectionparameters",
+      "file": "ms-winrt-ble-connparams.html",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "be106c1f434c0bd99ca2bfa365763de01166de783dd22eb3fec735e607e6ce94",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ms-winrt-ble-phy",
+      "title": "BluetoothLEConnectionPhy class",
+      "publisher": "Microsoft",
+      "kind": "web",
+      "url": "https://learn.microsoft.com/en-us/uwp/api/windows.devices.bluetooth.bluetoothleconnectionphy",
+      "file": "ms-winrt-ble-phy.html",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "d20b17e2fc5e2673ffcc3329562bdc6c0caa294c4bf929379871091bed77942b",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ms-winrt-gatt-maxpdu",
+      "title": "GattSession.MaxPduSize property",
+      "publisher": "Microsoft",
+      "kind": "web",
+      "url": "https://learn.microsoft.com/en-us/uwp/api/windows.devices.bluetooth.genericattributeprofile.gattsession.maxpdusize",
+      "file": "ms-winrt-gatt-maxpdu.html",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "55d26a23a17172ca8382d2e89001dcaf37bc94f4b6d5d87cafe736554611baa8",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "ms-le-audio",
+      "title": "Bluetooth Low Energy (LE) Audio (Windows drivers)",
+      "publisher": "Microsoft",
+      "kind": "web",
+      "url": "https://learn.microsoft.com/en-us/windows-hardware/drivers/bluetooth/bluetooth-low-energy-audio",
+      "file": "ms-le-audio.html",
+      "notes": "Page dated 2025-05-05.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "2c95878fe24d3d753c9ee576403c2c42576f2299f706605dcb06b625a8718895",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "apple-tn3190",
+      "title": "TN3190: USB audio device design considerations",
+      "publisher": "Apple",
+      "kind": "web",
+      "url": "https://developer.apple.com/documentation/technotes/tn3190-usb-audio-device-design-considerations",
+      "file": "apple-tn3190.json",
+      "fetch": "manual",
+      "notes": "First published 2025-10-07; obsoletes TN2274. The page is rendered by JavaScript: save the JSON from https://developer.apple.com/tutorials/data/documentation/technotes/tn3190-usb-audio-device-design-considerations.json to the cache path.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ]
+    },
+    {
+      "id": "apple-adg",
+      "title": "Accessory Design Guidelines for Apple Devices, Release R31",
+      "publisher": "Apple",
+      "kind": "standard",
+      "url": "https://developer.apple.com/accessories/Accessory-Design-Guidelines.pdf",
+      "file": "apple-adg.pdf",
+      "notes": "Release R31, pages dated 2026-09-21. Section 58 covers Bluetooth LE.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "b631b8b25d6b4fba85f90dff494a7a7edc9996e357cbc97093aedc9d9bd6f2c9",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "apple-forum-772812",
+      "title": "Developer forums thread 772812: ESP32 USB-C to iPhone 16 USB-C communication (DTS replies, January 2025)",
+      "publisher": "Apple Developer Forums",
+      "kind": "web",
+      "url": "https://developer.apple.com/forums/thread/772812",
+      "file": "apple-forum-772812.html",
+      "fetch": "manual",
+      "notes": "Replies by Apple DTS engineers (Quinn \"The Eskimo!\", Kevin Elliott), January 2025. Rendered by JavaScript; save the page from a browser.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ]
+    },
+    {
+      "id": "apple-forum-747847",
+      "title": "Developer forums thread 747847: Working around the lack of USB FTDI (DTS reply, June 2026)",
+      "publisher": "Apple Developer Forums",
+      "kind": "web",
+      "url": "https://developer.apple.com/forums/thread/747847",
+      "file": "apple-forum-747847.html",
+      "fetch": "manual",
+      "notes": "Reply by Apple DTS engineer Kevin Elliott, June 2026. Rendered by JavaScript; save the page from a browser.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ]
+    },
+    {
+      "id": "apple-forum-770717",
+      "title": "Developer forums thread 770717: Core Bluetooth throughput issues (DTS replies, December 2024)",
+      "publisher": "Apple Developer Forums",
+      "kind": "web",
+      "url": "https://developer.apple.com/forums/thread/770717",
+      "file": "apple-forum-770717.html",
+      "fetch": "manual",
+      "notes": "Replies by Apple DTS engineer Argun Tekant, December 2024. Rendered by JavaScript; save the page from a browser.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ]
+    },
+    {
+      "id": "apple-cb-openl2cap",
+      "title": "CBPeripheral.openL2CAPChannel(_:)",
+      "publisher": "Apple",
+      "kind": "web",
+      "url": "https://developer.apple.com/documentation/corebluetooth/cbperipheral/openl2capchannel(_:)",
+      "file": "apple-cb-openl2cap.json",
+      "fetch": "manual",
+      "notes": "Availability: iOS/iPadOS 11.0, macOS 10.14. Rendered by JavaScript: save https://developer.apple.com/tutorials/data/documentation/corebluetooth/cbperipheral/openl2capchannel(_:).json",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ]
+    },
+    {
+      "id": "apple-cb-background",
+      "title": "Core Bluetooth Programming Guide: Core Bluetooth background processing for iOS apps",
+      "publisher": "Apple",
+      "kind": "web",
+      "url": "https://developer.apple.com/library/archive/documentation/NetworkingInternetWeb/Conceptual/CoreBluetooth_concepts/CoreBluetoothBackgroundProcessingForIOSApps/PerformingTasksWhileYourAppIsInTheBackground.html",
+      "file": "apple-cb-background.html",
+      "notes": "Archive document, revision 2013-09-18.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "7bfe22aaf560e7b247ab21da931ad39db8dd20272fd79b4885d7b640ee01dc6a",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "apple-avaudiosession-measurement",
+      "title": "AVAudioSession.Mode.measurement",
+      "publisher": "Apple",
+      "kind": "web",
+      "url": "https://developer.apple.com/documentation/avfaudio/avaudiosession/mode-swift.struct/measurement",
+      "file": "apple-avaudiosession-measurement.json",
+      "fetch": "manual",
+      "notes": "Rendered by JavaScript: save https://developer.apple.com/tutorials/data/documentation/avfaudio/avaudiosession/mode-swift.struct/measurement.json",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ]
+    },
+    {
+      "id": "apple-voice-processing",
+      "title": "AVAudioIONode.setVoiceProcessingEnabled(_:)",
+      "publisher": "Apple",
+      "kind": "web",
+      "url": "https://developer.apple.com/documentation/avfaudio/avaudioionode/setvoiceprocessingenabled(_:)",
+      "file": "apple-voice-processing.json",
+      "fetch": "manual",
+      "notes": "Availability: iOS 13, macOS 10.15. Rendered by JavaScript: save https://developer.apple.com/tutorials/data/documentation/avfaudio/avaudioionode/setvoiceprocessingenabled(_:).json",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ]
+    },
+    {
+      "id": "apple-iphone-usbc",
+      "title": "Charge and connect with the USB-C connector on your iPhone",
+      "publisher": "Apple",
+      "kind": "web",
+      "url": "https://support.apple.com/en-us/105099",
+      "file": "apple-iphone-usbc.html",
+      "notes": "Published 2026-09-17.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "0ac71bcc443e590449a89e167e70a947de787ff4a5b0412d4e61b497d841f460",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "apple-ipad-usbc",
+      "title": "Charge and connect with the USB-C port on your iPad",
+      "publisher": "Apple",
+      "kind": "web",
+      "url": "https://support.apple.com/en-us/108894",
+      "file": "apple-ipad-usbc.html",
+      "notes": "Published 2026-03-10.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "3e5e90d9e44d32715daadd6de1f823d64c11f7cc464e4f4795fc50b25152506f",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "android-usb-audio",
+      "title": "USB digital audio (AOSP)",
+      "publisher": "Google (Android Open Source Project)",
+      "kind": "web",
+      "url": "https://source.android.com/docs/core/audio/usb",
+      "file": "android-usb-audio.html",
+      "notes": "Last updated 2025-02-27.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "2fc839d19515f25e8848381c0dc3975431cd9ba160e5aee8e845695d2a8d1515",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "android-cdd-16",
+      "title": "Android 16 Compatibility Definition Document",
+      "publisher": "Google (Android Open Source Project)",
+      "kind": "standard",
+      "url": "https://source.android.com/docs/compatibility/16/android-16-cdd",
+      "file": "android-cdd-16.html",
+      "notes": "Sections 5.4.2, 5.11, 7.7.2, 7.8.2.2.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "a7f8a1d64cacbc30fb76e107fc9b380247f99d49469c48ee980d739f94f98b28",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "android-cdd-13",
+      "title": "Android 13 Compatibility Definition Document",
+      "publisher": "Google (Android Open Source Project)",
+      "kind": "standard",
+      "url": "https://source.android.com/docs/compatibility/13/android-13-cdd",
+      "file": "android-cdd-13.html",
+      "notes": "Same USB host and voice-recognition capture clauses as the Android 16 CDD (checked 2026-09-24).",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "35a15e91b35531c5a53715f2afb8c754bd16d6d537b740a1213ec3952a3a20d0",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "android-usb-host",
+      "title": "USB host overview (Android developers)",
+      "publisher": "Google",
+      "kind": "web",
+      "url": "https://developer.android.com/develop/connectivity/usb/host",
+      "file": "android-usb-host.html",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "8dc77191c028ba46d643484d3d3c530301da652d8fca108dd7f08f2d0523ddcd",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "android-bluetoothdevice",
+      "title": "android.bluetooth.BluetoothDevice API reference",
+      "publisher": "Google",
+      "kind": "web",
+      "url": "https://developer.android.com/reference/android/bluetooth/BluetoothDevice",
+      "file": "android-bluetoothdevice.html",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "604c67b0ac88c2e95ffbad189d5dadf66863b48383b7222a16fb8e76a4c8a4d5",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "android-bluetoothgatt",
+      "title": "android.bluetooth.BluetoothGatt API reference",
+      "publisher": "Google",
+      "kind": "web",
+      "url": "https://developer.android.com/reference/android/bluetooth/BluetoothGatt",
+      "file": "android-bluetoothgatt.html",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "0b5bb6393dcca37507f728fd2c25c549e19f9fca3448eb550d4fba50460094da",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "android-fgs-types",
+      "title": "Foreground service types (Android developers)",
+      "publisher": "Google",
+      "kind": "web",
+      "url": "https://developer.android.com/develop/background-work/services/fgs/service-types",
+      "file": "android-fgs-types.html",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "5bc14643c097959d92211c40466c7f1ef6c091c86b0bc62b7ca1ae0e8900c876",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "android-le-audio",
+      "title": "Bluetooth Low Energy Audio overview (Android developers)",
+      "publisher": "Google",
+      "kind": "web",
+      "url": "https://developer.android.com/develop/connectivity/bluetooth/ble-audio/overview",
+      "file": "android-le-audio.html",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "474d4b303d7c3a0e4167f917ac70088f4bb9ba373090750ae86d1060218994a7",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "linux-cdc-acm",
+      "title": "Linux v6.16 drivers/usb/class/cdc-acm.c",
+      "publisher": "Linux kernel",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/038d61fd642278bab63ee8ef722c50d10ab01e8f/drivers/usb/class/cdc-acm.c",
+      "file": "linux-cdc-acm.c",
+      "notes": "GPL-2.0: facts only, never copied (THIRD_PARTY.md).",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "06e97f9ec51d41e4552a4943113e52fd99f94053358c606e10911b68419c1cf6",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "linux-snd-usb-card",
+      "title": "Linux v6.16 sound/usb/card.c (snd-usb-audio)",
+      "publisher": "Linux kernel",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/038d61fd642278bab63ee8ef722c50d10ab01e8f/sound/usb/card.c",
+      "file": "linux-snd-usb-card.c",
+      "notes": "GPL-2.0: facts only, never copied (THIRD_PARTY.md).",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "3368af08c5f18a109d88d1e25ff334e72ab9f6c9f4dbc5cac94a1a64b27c49c7",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "bluez-l2cap",
+      "title": "BlueZ 5.87 doc/l2cap-protocol.rst (L2CAP socket API)",
+      "publisher": "BlueZ project",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/bluez/bluez/65d11edee469c24dcc8d075b8be9c040cebaaf98/doc/l2cap-protocol.rst",
+      "file": "bluez-l2cap-protocol.rst",
+      "notes": "GPL/LGPL project: facts only.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "89ebc1d0023938bccfc46909c6ab0632d57cee35e384c6a774b8c3d0851be0c0",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "bluez-main-conf",
+      "title": "BlueZ 5.87 src/main.conf",
+      "publisher": "BlueZ project",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/bluez/bluez/65d11edee469c24dcc8d075b8be9c040cebaaf98/src/main.conf",
+      "file": "bluez-main.conf",
+      "notes": "GPL/LGPL project: facts only.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "d3762eb24785530885ffa51fffc81b078f5bb362d83cf2462989dbb6b2081912",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "bluez-gatt-characteristic",
+      "title": "BlueZ 5.87 doc/org.bluez.GattCharacteristic.rst",
+      "publisher": "BlueZ project",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/bluez/bluez/65d11edee469c24dcc8d075b8be9c040cebaaf98/doc/org.bluez.GattCharacteristic.rst",
+      "file": "bluez-gatt-characteristic.rst",
+      "notes": "GPL/LGPL project: facts only.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "3fb3cf4b511a9048751b2c296a188457f7a03c10d6bad845f8ce63e8a69bf39c",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "pipewire-echo-cancel",
+      "title": "PipeWire module: Echo Cancel",
+      "publisher": "PipeWire project",
+      "kind": "web",
+      "url": "https://docs.pipewire.org/page_module_echo_cancel.html",
+      "file": "pipewire-echo-cancel.html",
+      "notes": "PipeWire 1.6.9 documentation.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "588fde03eb0ac6f59497bc66ac998d3200f840561e12a0e01fcd168b79a0066f",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "wireplumber-bluetooth",
+      "title": "WirePlumber Bluetooth configuration",
+      "publisher": "PipeWire project",
+      "kind": "web",
+      "url": "https://pipewire.pages.freedesktop.org/wireplumber/daemon/configuration/bluetooth.html",
+      "file": "wireplumber-bluetooth.html",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "a77b416edfb9d19f09a3766aa44345e6e266e59103a844a59132a9b1e59677d5",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "esp-idf-nimble-coc-readme",
+      "title": "ESP-IDF v6.1 NimBLE L2CAP CoC peripheral example README",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/fff9895c82d744c7237be8847347bdd1b07c6643/examples/bluetooth/nimble/ble_l2cap_coc/coc_bleprph/README.md",
+      "file": "esp-idf-nimble-coc-readme.md",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "092a950ecaee1841fe13c8d87d0734f0b512204cbf691068a63d654840123b54",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "esp-idf-nimble-kconfig",
+      "title": "ESP-IDF v6.1 NimBLE host Kconfig",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/fff9895c82d744c7237be8847347bdd1b07c6643/components/bt/host/nimble/Kconfig.in",
+      "file": "esp-idf-nimble-kconfig.txt",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "d7c66583d864a8105d30049607e8490788335964eade5bf2e9afe929278a9044",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "esp-idf-bluedroid-kconfig",
+      "title": "ESP-IDF v6.1 Bluedroid host Kconfig",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/fff9895c82d744c7237be8847347bdd1b07c6643/components/bt/host/bluedroid/Kconfig.in",
+      "file": "esp-idf-bluedroid-kconfig.txt",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "cd07e67d496e70f87e47b9386fe0366d15fc6d02e1da5d877d9efa43361f4f1f",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "esp-idf-nimble-throughput",
+      "title": "ESP-IDF v6.1 NimBLE GATT throughput example README",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/fff9895c82d744c7237be8847347bdd1b07c6643/examples/bluetooth/nimble/throughput_app/README.md",
+      "file": "esp-idf-nimble-throughput.md",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "9f210d184659938ce2c375899370576d6ee8b05b682f69a87aab6dedf75ed6d9",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "esp-idf-bluedroid-throughput",
+      "title": "ESP-IDF v6.1 Bluedroid BLE throughput server README",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/fff9895c82d744c7237be8847347bdd1b07c6643/examples/bluetooth/bluedroid/ble/ble_throughput/throughput_server/README.md",
+      "file": "esp-idf-bluedroid-throughput.md",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "cc573f575e7a6f45334aa274038c0b58c506a8c905e8f8f8d8c6d751bc623c45",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "tinyusb-readme",
+      "title": "TinyUSB 0.21.0 README (supported device classes)",
+      "publisher": "TinyUSB project",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/hathach/tinyusb/dae3f9a366bfcddbf9dcf1b48d7500286a849539/README.rst",
+      "file": "tinyusb-readme.rst",
+      "notes": "MIT.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "144a766b6be13072339ba16683c21f53ed2ffc26b74d0a90299b7aeb5dbdb0b0",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "tinyusb-audio-device-h",
+      "title": "TinyUSB 0.21.0 src/class/audio/audio_device.h (feedback notes)",
+      "publisher": "TinyUSB project",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/hathach/tinyusb/dae3f9a366bfcddbf9dcf1b48d7500286a849539/src/class/audio/audio_device.h",
+      "file": "tinyusb-audio-device.h",
+      "notes": "MIT.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ],
+      "sha256": "01f350443090d96a4503bc01f217758a0a8b396ed0564b5770ff27ac495b53ff",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "usb-typec-r25",
+      "title": "USB Type-C Cable and Connector Specification, Release 2.5 (March 2026)",
+      "publisher": "USB Implementers Forum",
+      "kind": "standard",
+      "url": "https://www.usb.org/document-library/usb-type-cr-cable-and-connector-specification-release-25",
+      "file": "usb-typec-r25.zip",
+      "fetch": "manual",
+      "notes": "Download the ZIP from the page; section 2.3.4 covers USB Type-C Current.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ]
+    },
+    {
+      "id": "bt-core-spec",
+      "title": "Bluetooth Core Specification (current version)",
+      "publisher": "Bluetooth SIG",
+      "kind": "standard",
+      "url": "https://www.bluetooth.com/specifications/specs/core-specification-6-1/",
+      "file": "bt-core-spec.pdf",
+      "fetch": "manual",
+      "notes": "Vol 6 Part B (Link Layer): PDU format, T_IFS; Vol 3 Part A (L2CAP). Download from the page.",
+      "used_in": [
+        "docs/research/host-compatibility.md"
+      ]
+    },
+    {
+      "id": "yaesu-ft891-om",
+      "title": "FT-891 Operating Manual (EH065H201, 1611A-BO-2)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-891_OM_ENG_EH065H201_1611A-BO-2.pdf",
+      "file": "yaesu-ft891-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "17154a29374ffc2637e274ed8294d8dd8acad8cc191c8a2aefa35e2d7fd3ef4b",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yaesu-ft891-adv",
+      "title": "FT-891 Advance Manual (1806-F)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-891_Advance_Manual_ENG_1806-F.pdf",
+      "file": "yaesu-ft891-adv.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "7fc016e7ee72c3f6f2e6ccb9cd1ad0ecba2483e806fde65ec4757b7fee5373fa",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yaesu-ft891-cat",
+      "title": "FT-891 CAT Operation Reference Book (1909-C)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-891_CAT_OM_ENG_1909-C.pdf",
+      "file": "yaesu-ft891-cat.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "59e2295177633b970408bec10aae62f697c3bde5fe48a3be25282d992bc3bbb0",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yaesu-ft710-om",
+      "title": "FT-710 Operation Manual (EH080H201, 2307N-GS)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-710_OM_ENG_EH080H201_2307N-GS.pdf",
+      "file": "yaesu-ft710-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "e1afabe5f292c945d39e9e752b91dab1db2dccbb256c8f8a752c2fe5db4c61af",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yaesu-ft710-cat",
+      "title": "FT-710 CAT Operation Reference Manual (2306-C)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-710_CAT_OM_ENG_2306-C.pdf",
+      "file": "yaesu-ft710-cat.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "fdf62b8a5c89e321381d69c53292a6ded045f1ceeeaf04ae21ce856e8e2ff8c2",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yaesu-ft991a-om",
+      "title": "FT-991A Operating Manual (EH067M205, 2111A-KS-1)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-991A_OM_ENG_EH067M205_2111A-KS-1.pdf",
+      "file": "yaesu-ft991a-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "bb1ce04b24ab94eb2258809023fcf76f5121671d0535064575922e815bd1eee6",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yaesu-ft991a-cat",
+      "title": "FT-991A CAT Operation Reference Manual (1711-D)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-991A_CAT_OM_ENG_1711-D.pdf",
+      "file": "yaesu-ft991a-cat.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "52164f737e37a3ffc8276eccedf8ecb524607198c38d386ae4ff7b2fc1d60c95",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yaesu-ft818-om",
+      "title": "FT-818ND Operating Manual (E13772004, 2003u-ES-1)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-818ND_OM_ENG_E13772004_2003u-ES-1.pdf",
+      "file": "yaesu-ft818-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "e723eab91774d62bfcc525681a60f66a4a801d014d368d64c88a534a8d9df802",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yaesu-ft817nd-om",
+      "title": "FT-817ND Operating Manual (E13771011)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-817ND_OM_ENG_E13771011.pdf",
+      "file": "yaesu-ft817nd-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "d43dff0803f0544f39a1d502f986093a1606552d5de1827f9fc24e01e13595c0",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yaesu-vcp-driver",
+      "title": "Virtual COM Port Driver Installation Manual (2205-E)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/BB2B47AE-1018-01AF-FAE48FDCB1919193/USB_Driver_Installation_Manual_ENG_2205-E.pdf",
+      "file": "yaesu-vcp-driver.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "ce826e20bf5ea92b5e30286d2033dc1ae4a771a3e5e94db72504ddc0b388939f",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "icom-ic7300-full",
+      "title": "IC-7300 Full Manual (English, v6)",
+      "publisher": "Icom (hosted by Icom UK)",
+      "kind": "manual",
+      "url": "https://icomuk.co.uk/files/icom/PDF/advancedManuals/IC-7300_Full_English%20v6.pdf",
+      "file": "icom-ic7300-full.pdf",
+      "notes": "Also on icomjapan.com/support/manual/2271/ behind a click-through agreement.",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "9beb3c4969ade0cd9a74eae680e0daaf424a29fda4cbfc40efe4ede963323d38",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "icom-ic705-basic",
+      "title": "IC-705 Basic Manual (English)",
+      "publisher": "Icom (hosted by Icom UK)",
+      "kind": "manual",
+      "url": "https://icomuk.co.uk/files/icom/PDF/productManual/IC-705_ENG_Basic_1.pdf",
+      "file": "icom-ic705-basic.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "062b9e38d3afff649b27b9dd413d57bdbf561722de1318bd2f84496cfb579b9e",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "icom-ic705-adv",
+      "title": "IC-705 Advanced Manual (English)",
+      "publisher": "Icom (hosted by Icom UK)",
+      "kind": "manual",
+      "url": "https://icomuk.co.uk/files/icom/PDF/advancedManuals/IC-705_ENG_Advanced_1a.pdf",
+      "file": "icom-ic705-adv.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "fcd505049f8168979566fe0fc997a06c16359998215ad973b6c17925aff73411",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "kenwood-ts590sg-im",
+      "title": "TS-590SG Instruction Manual (B5A-0180-20)",
+      "publisher": "JVCKENWOOD",
+      "kind": "manual",
+      "url": "https://manuals.jvckenwood.com/download/files/B5A-0180-20.pdf",
+      "file": "kenwood-ts590sg-im.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "849df372130dce74ce95fcfa61787ea8ff930256d47f422cf3ce8f315f96f291",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "kenwood-ts590sg-usb-audio",
+      "title": "TS-590SG USB Audio Setting Manual (rev. 1, 2018-08-30)",
+      "publisher": "JVCKENWOOD",
+      "kind": "manual",
+      "url": "https://www.kenwood.com/i/products/info/amateur/ts_590g/pdf/ts590g_usb_audio_manual_e_rev1.pdf",
+      "file": "kenwood-ts590sg-usb-audio.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "c2fbbbec84c95edeb71cc95753fb5e06852cb9b5fb52e82a69e55abd53e4cd25",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "kenwood-ts590s-im",
+      "title": "TS-590S Instruction Manual (B62-2243-30)",
+      "publisher": "JVCKENWOOD (copy hosted by RigPix)",
+      "kind": "manual",
+      "url": "https://www.rigpix.com/kenwood/ts590s_manual.pdf",
+      "file": "kenwood-ts590s-im.pdf",
+      "notes": "No manufacturer-hosted copy found on 2026-09-24; this is a third-party mirror of the manufacturer's manual.",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "f7c244849ea7d88c65237a998e53141d173cc36d51cfe276eac983f2b820ed18",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "elecraft-k3-om",
+      "title": "K3 Owner's Manual, rev. D10",
+      "publisher": "Elecraft",
+      "kind": "manual",
+      "url": "https://ftp.elecraft.com/K3/Manuals%20Downloads/E740107%20K3%20Owner's%20man%20D10.pdf",
+      "file": "elecraft-k3-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "b7c3c70b78694d23045edd671b26cee7a80ab8468a13ee006085aff8aff19f74",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "elecraft-k3s-om",
+      "title": "K3S Owner's Manual, rev. A1",
+      "publisher": "Elecraft",
+      "kind": "manual",
+      "url": "https://ftp.elecraft.com/K3S/Manuals%20Downloads/K3S%20Owner's%20man%20A1.pdf",
+      "file": "elecraft-k3s-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "7eb4c4bb7aab862cb8ff09ab0110226ee99538eda42f50cc9495fef7942523c7",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "elecraft-kx3-om",
+      "title": "KX3 Owner's Manual, rev. C5",
+      "publisher": "Elecraft",
+      "kind": "manual",
+      "url": "https://ftp.elecraft.com/KX3/Manuals%20Downloads/E740163%20KX3%20Owner's%20man%20Rev%20C5.pdf",
+      "file": "elecraft-kx3-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "d99a6ef6033abe7498cb996021f67578e91956139e1d820839db1e21a7b83ff0",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "elecraft-kx2-om",
+      "title": "KX2 Owner's Manual, rev. B2",
+      "publisher": "Elecraft",
+      "kind": "manual",
+      "url": "https://ftp.elecraft.com/KX2/Manuals%20Downloads/KX2%20owner's%20man%20B2.pdf",
+      "file": "elecraft-kx2-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "e02760b05a2c7e1e35ec175f07b435198868aebd0e2221573aff02eaece113f3",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "elecraft-k4-om",
+      "title": "K4 Operating Manual, rev. C17",
+      "publisher": "Elecraft",
+      "kind": "manual",
+      "url": "https://ftp.elecraft.com/K4/Manuals%20Downloads/Operating%20Manual%20%20Rev%20C17.pdf",
+      "file": "elecraft-k4-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "f4ef6975e969967f0d86f609143ee14317efc2feaba937fe029e7f596bb66ca5",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "xiegu-x6100-um",
+      "title": "X6100 User Manual (2021-11-23)",
+      "publisher": "Chongqing Xiegu Technology (hosted by Radioddity)",
+      "kind": "manual",
+      "url": "https://radioddity.s3.amazonaws.com/Xiegu_X6100_User_Manual_20211123.pdf",
+      "file": "xiegu-x6100-um.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "4c526436f59729ac7a25ced725839171c49c16d2db4629e72b87fa724e59a623",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "radioddity-x6100-ext",
+      "title": "Extended manual for Xiegu X6100, v1.0 (2024-01-19)",
+      "publisher": "Radioddity (distributor)",
+      "kind": "manual",
+      "url": "https://radioddity.s3.amazonaws.com/2024-01-19_Extended_manual_for_Xiegu_X6100_v1.0.pdf",
+      "file": "radioddity-x6100-ext.pdf",
+      "notes": "Secondary source (distributor, not the manufacturer).",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "ed66c73012980fc86d597dbfdc0609c05107b405751e3685ad48afb9fba372d6",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "digirig-ft8xx-cables",
+      "title": "Yaesu FT-8xx cables build (DATA and ACC pinouts)",
+      "publisher": "Digirig",
+      "kind": "web",
+      "url": "https://digirig.net/yaesu-ft-8xx-cables-build/",
+      "file": "digirig-ft8xx-cables.html",
+      "notes": "Secondary source (interface maker). Pinout images: connector-ft817-audio.png, connector-ft817-cat.png. Facts only; Digirig hardware is GPL-3.0 (THIRD_PARTY.md).",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "c6751abb6548e665b99a42eb78fbc6276661b8b6d6a3349945b274cbdc46cba4",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "digirig-dr891-manual",
+      "title": "Digirig DR-891 setup manual",
+      "publisher": "Digirig",
+      "kind": "web",
+      "url": "https://digirig.net/digirig-dr-891-setup-manual/",
+      "file": "digirig-dr891-manual.html",
+      "notes": "Secondary source (interface maker). Facts only.",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "6ee8ebd0d7b75176627b844e135ed279b13cabdae17034adcf1558fa074559cf",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "digirig-kx-cables",
+      "title": "Elecraft KX Digirig cables set",
+      "publisher": "Digirig",
+      "kind": "web",
+      "url": "https://digirig.net/product/elecraft-kx-cables/",
+      "file": "digirig-kx-cables.html",
+      "notes": "Secondary source (interface maker). Facts only.",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "64aac219975a802f5097694405d4809ecec0de5a74abb29729bb6ad04067c670",
       "retrieved": "2026-09-24"
     },
     {
