@@ -190,11 +190,12 @@ python3 tools/kicad_ci/check_silkscreen.py --tag hw-R-revA-v1.0  # as on a relea
 ```
 For each PCB in `hardware/boards/<board>/rev<X>/`: the title-block revision is
 `<X>` and the date is set; front silkscreen text uses `${REVISION}` and
-`${ISSUE_DATE}`; no silkscreen text hard-codes a revision; and the silkscreen
-shows the project name, "Designed by Reid Crowe, N0RC" and "CC BY-NC-SA 4.0"
-(project text variables are resolved). On an `hw-<variant>-rev<X>-v<semver>`
-tag, a board folder named `<variant>` (or ending in `-<variant>`) must have that
-`rev<X>`. The variant marking itself is still checked by review.
+`${ISSUE_DATE}` and `${VARIANT}`; no silkscreen text hard-codes a revision; the
+silkscreen shows the project name, "Designed by Reid Crowe, N0RC" and "CC
+BY-NC-SA 4.0" (project text variables are resolved); and the board declares at
+least one KiCad design variant with a tag-safe name. On an
+`hw-<variant>-rev<X>-v<semver>` tag, a board in a `rev<X>` folder must declare
+the design variant `<variant>` ([ADR-0006](decisions/ADR-0006-variants-and-board-strategy.md)).
 
 **Firmware and protocol:** host tests and golden-vector tests. Commands are
 added with #14 (firmware) and #13 (protocol).
@@ -227,12 +228,16 @@ added with #14 (firmware) and #13 (protocol).
 2. Put new symbols, footprints and 3D models in `hardware/lib/…`, referenced
    through the project library tables with `${KIPRJMOD}`-relative paths. Never
    point at personal global libraries.
-3. Keep the silkscreen template intact: project name, variant, `${REVISION}`,
+3. Keep the silkscreen template intact: project name, variant (`${VARIANT}`), `${REVISION}`,
    `${ISSUE_DATE}`, "Designed by Reid Crowe, N0RC", and the license mark
    required by [AGENTS.md](../AGENTS.md#hardware-kicad).
-4. **New board revision:** copy `rev<X>` to `rev<X+1>`, update the title-block
+4. **Variants:** R and M are KiCad design variants of one board
+   ([ADR-0006](decisions/ADR-0006-variants-and-board-strategy.md)). Change
+   fitting or per-variant values in the schematic with that variant selected,
+   then update the PCB from the schematic. Never copy the board to make a variant.
+5. **New board revision:** copy `rev<X>` to `rev<X+1>`, update the title-block
    revision and date, and note it in [`CHANGELOG.md`](../CHANGELOG.md).
-5. Run ERC and DRC ([section 4](#4-local-checks)). Don't commit fab outputs; CI
+6. Run ERC and DRC ([section 4](#4-local-checks)). Don't commit fab outputs; CI
    builds them for releases.
 
 ### Firmware change
@@ -249,7 +254,7 @@ regenerate or extend the golden byte vectors in the same PR. Host apps pin a
 arrive with #13.
 
 ### Enclosure change
-Edit the parametric CAD source in `hardware/enclosure/<variant>/`. STL/3MF files
+Edit the parametric CAD source in `hardware/enclosure/<variant>/` (`R/` or `M/`; both fit the one board). STL/3MF files
 are exported for releases, not committed (#19). Keep the antenna keep-out
 area free of metal, and use ASA for the automotive variant.
 
@@ -270,7 +275,10 @@ done by a person. Record the results in the issue and, where relevant, under
 | Firmware | `fw-v<semver>` | `fw-v0.1.0` |
 | Protocol | `proto-v<semver>` | `proto-v1.0.0` |
 
-A hardware tag must match the board's title-block revision and folder. Release
+A hardware tag must match the board's title-block revision and folder, and
+name a design variant the board declares; each variant is tagged and released
+separately (`hw-R-revA-v1.0`, `hw-M-revA-v1.0`), with outputs exported for that
+variant only. Release
 assets (Gerbers, drill, BOM, pick-and-place, PDFs, STL/3MF, firmware images)
 are produced by CI and attached to the GitHub release.
 

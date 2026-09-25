@@ -851,6 +851,58 @@
       ],
       "sha256": "d67001d0dc491931674b4dcefca686fc87fe31410d93af81045b2a73a24a395a",
       "retrieved": "2026-09-24"
+    },
+    {
+      "id": "kicad10-eeschema-manual",
+      "title": "KiCad 10.0 Schematic Editor manual (Design variants: fitted/DNP, field overrides, BOM and position-file exclusion, sheet-level variants, ${VARIANT}; sharing sheet files between projects; design blocks)",
+      "publisher": "KiCad",
+      "kind": "web",
+      "url": "https://docs.kicad.org/10.0/en/eeschema/eeschema.html",
+      "file": "kicad10-eeschema-manual.html",
+      "used_in": [
+        "docs/decisions/ADR-0006-variants-and-board-strategy.md"
+      ],
+      "sha256": "946e6d13b16d5b9579670d9ddc081d3f1c736fa3f6d41b59a0999179fa07dfc8",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "kicad10-pcbnew-manual",
+      "title": "KiCad 10.0 PCB Editor manual (Design variants: variant selector, DNP on fabrication layers, variant-aware Gerber, position, STEP, ODB++ and IPC-2581 output)",
+      "publisher": "KiCad",
+      "kind": "web",
+      "url": "https://docs.kicad.org/10.0/en/pcbnew/pcbnew.html",
+      "file": "kicad10-pcbnew-manual.html",
+      "used_in": [
+        "docs/decisions/ADR-0006-variants-and-board-strategy.md"
+      ],
+      "sha256": "f8a930d326061390ea586c4021c63c5edac2eda80dabab2e9646bd47b3558ee9",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "kicad10-cli-manual",
+      "title": "KiCad 10.0 command-line interface reference (kicad-cli; --variant on schematic and PCB export commands)",
+      "publisher": "KiCad",
+      "kind": "web",
+      "url": "https://docs.kicad.org/10.0/en/cli/cli.html",
+      "file": "kicad10-cli-manual.html",
+      "used_in": [
+        "docs/decisions/ADR-0006-variants-and-board-strategy.md"
+      ],
+      "sha256": "7bc024f6a5fd9a53d920e7d39b2b741c0c485caa969be49e2ec813ed0da0cab5",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "kicad-10-0-0-release",
+      "title": "Version 10.0.0 Released (release announcement; design variants)",
+      "publisher": "KiCad",
+      "kind": "web",
+      "url": "https://www.kicad.org/blog/2026/03/Version-10.0.0-Released/",
+      "file": "kicad-10-0-0-release.html",
+      "used_in": [
+        "docs/decisions/ADR-0006-variants-and-board-strategy.md"
+      ],
+      "sha256": "ba6110d3db8e5dd17573e692665faf9569141e2b6bd8c62553da53d336cd9e04",
+      "retrieved": "2026-09-25"
     }
   ]
 }

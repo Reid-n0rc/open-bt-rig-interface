@@ -259,5 +259,6 @@ The device operates next to HF transmitters of 100 W or more.
   "Designed by Reid Crowe, N0RC", and the license mark. The revision is never
   hard-coded.
 - Board variants (R = radio/USB-powered, M = mobile/automotive; others possible)
-  share one core design. Whether they are separate boards or one board with
-  fitting options is a recorded decision.
+  share one core design. [ADR-0006](../decisions/ADR-0006-variants-and-board-strategy.md)
+  (proposed): one board with KiCad 10 design variants `R` and `M`, differing in
+  the power input chain and the isolation fitting.

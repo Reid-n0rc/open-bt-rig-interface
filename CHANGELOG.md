@@ -10,6 +10,15 @@ and tagged independently (see `AGENTS.md`).
 
 ## Unreleased
 
+- Variants and board strategy, ADR-0006 (proposed): revision A is one board,
+  `hardware/boards/interface/revA/`, with KiCad 10 design variants `R` and `M`
+  (they differ in the power input chain and the isolation fitting). Tags
+  `hw-R-revA-v1.0` and `hw-M-revA-v1.0`, outputs exported with `--variant`;
+  the front silkscreen shows `${VARIANT}` next to `${REVISION}`; enclosures
+  `hardware/enclosure/R/` (PETG) and `M/` (ASA). `check_silkscreen.py` now
+  requires declared design variants and `${VARIANT}`, and matches `hw-*` tags
+  to a declared variant instead of the board folder name. AGENTS.md, README,
+  roadmap, developer guide and hardware READMEs updated (#12).
 - Radio module confirmation (`docs/research/module-selection.md`): the
   ESP32-S3-MINI-1 FCC grant (2AC7Z-ESPS3MINI1: single modular, BLE certified at
   10.3 dBm conducted, 20 cm mobile use), ISED ID, lifecycle and dated LCSC
