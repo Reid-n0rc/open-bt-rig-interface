@@ -134,8 +134,8 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 
 - Local copy: [cache/ecfr-47-97-301.html](cache/ecfr-47-97-301.html)
 - Original: <https://www.ecfr.gov/current/title-47/chapter-I/subchapter-D/part-97/subpart-D/section-97.301>
-- Retrieved: 2026-09-24; SHA-256 `f3734ae4d7fa1127…`
-- Cited in: [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md), [`docs/decisions/ADR-0005-power-radio-usbc.md`](../../docs/decisions/ADR-0005-power-radio-usbc.md)
+- Retrieved: 2026-09-24; SHA-256 `e0ad6b5728c57d16…`
+- Cited in: [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
 
 ### esp-idf-hfp-hf-readme
 
@@ -398,7 +398,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://datasheet.lcsc.com/datasheet/pdf/0bcfbc78ab5946639ddffe2b4625af7e.pdf?productCode=C151133>
 - Retrieved: 2026-09-24; SHA-256 `c08f5686d773c27b…`
 - Notes: Manufacturer copy hosted by LCSC.
-- Cited in: [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
+- Cited in: [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md), [`docs/decisions/ADR-0005-power-radio-usbc.md`](../../docs/decisions/ADR-0005-power-radio-usbc.md)
 
 ### microchip-bm83-spp-kb
 
@@ -463,7 +463,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://datasheet.lcsc.com/datasheet/pdf/8c96a8aa3d565d5919120c49061d45c5.pdf?productCode=C401144>
 - Retrieved: 2026-09-24; SHA-256 `7b593d10a0902132…`
 - Notes: Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).
-- Cited in: [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md), [`docs/decisions/ADR-0005-power-radio-usbc.md`](../../docs/decisions/ADR-0005-power-radio-usbc.md)
+- Cited in: [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
 
 ### ti-iso7721-ds
 
@@ -527,6 +527,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://www.ti.com/lit/ds/symlink/sn74lvc1g07.pdf>
 - Retrieved: 2026-09-24; SHA-256 `5c68b82a5110b337…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+
+### ti-sn74lvc1g80-ds
+
+**SN74LVC1G80 single positive-edge-triggered D-type flip-flop datasheet** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-sn74lvc1g80-ds.pdf](cache/ti-sn74lvc1g80-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/sn74lvc1g80.pdf>
+- Retrieved: 2026-09-25; SHA-256 `73b5b60e38105033…`
+- Cited in: [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
 
 ### ti-sn74lxc1t45-ds
 
@@ -634,7 +643,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-tps62933-ds.pdf](cache/ti-tps62933-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/tps62933.pdf>
 - Retrieved: 2026-09-24; SHA-256 `16ec2eac43c7374e…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md), [`docs/decisions/ADR-0005-power-radio-usbc.md`](../../docs/decisions/ADR-0005-power-radio-usbc.md)
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
 
 ### ti-tps7a20-ds
 
@@ -681,3 +690,13 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://www.vishay.com/docs/88392/smbj.pdf>
 - Retrieved: 2026-09-24; SHA-256 `1b65b57a43111280…`
 - Cited in: [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md), [`docs/decisions/ADR-0005-power-radio-usbc.md`](../../docs/decisions/ADR-0005-power-radio-usbc.md)
+
+### yxc-yso110tr-ds
+
+**YSO110TR wide-voltage crystal oscillator datasheet (OT322518.432MJBA4SL)** (YXC, datasheet)
+
+- Local copy: [cache/yxc-yso110tr-ds.pdf](cache/yxc-yso110tr-ds.pdf)
+- Original: <https://datasheet.lcsc.com/datasheet/pdf/b336a5b52993e15e0134a8f3d7decec7.pdf?productCode=C2831385>
+- Retrieved: 2026-09-25; SHA-256 `d155dd2bc59fe81f…`
+- Notes: Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).
+- Cited in: [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)

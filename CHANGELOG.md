@@ -13,8 +13,8 @@ and tagged independently (see `AGENTS.md`).
 - Variant R power (`docs/research/power-radio-usbc.md`, ADR-0005 proposed):
   input-only power from the radio's accessory DC pin or USB-C (sink only, no
   VBUS to the radio); a 0.25 A fuse, Schottky and TVS on the DC input; a
-  TPS2121 priority mux feeding one LMR43620MC3RPERQ1 3.3 V buck synchronized
-  to 2.304 MHz, clear of the HF amateur bands (harmonic analysis); a power
+  TPS2121 priority mux feeding the shared ADR-0004 core (one LMR43620MC3RPERQ1
+  3.3 V buck synchronized to 2.304 MHz, clear of the HF amateur bands); a power
   budget per mode (wired mode about 276 mA on a 500 mA USB-C port); a table of
   which radios can power variant R; radio-on sense and auto power up/down;
   dated LCSC prices with RoHS status, a power-section BOM cost, and EU EMC

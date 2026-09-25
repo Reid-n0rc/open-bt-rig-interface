@@ -34,7 +34,8 @@ Inputs:
   doc applies it: wired USB-C mode with the on-board hub, and isolation of the
   AUDIO and SERIAL jacks whenever the USB-C data link is used.
 - **Variant M:** #10 ([PR #57](https://github.com/Reid-n0rc/open-bt-rig-interface/pull/57),
-  ADR-0004) chose the 2.304 MHz switching clock.
+  ADR-0004) owns the **shared regulator core and the 2.304 MHz clock**. This
+  doc uses them and specifies only what is particular to variant R.
 
 Conventions: **(verify)** marks a fact or estimate that a bench test or a
 later issue must confirm. `unknown` means no primary source was found.
@@ -74,11 +75,11 @@ later issue must confirm. `unknown` means no primary source was found.
   It controls inrush (soft start), cuts off each input on overvoltage
   (17.5 V and 5.8 V) and blocks back-feed into both sources.
 - **Regulation:** the mux feeds one **LMR43620MC3RPERQ1** (3.3 V, 2 A),
-  synchronized to a **2.304 MHz** clock (an 18.432 MHz oscillator divided by
-  8, or the part variant M uses). No harmonic from 160 m to 10 m lands in an
+  synchronized to the shared **2.304 MHz** clock (ADR-0004: an 18.432 MHz
+  oscillator divided by 8 in three flip-flops). No harmonic from 160 m to 10 m lands in an
   amateur band (worst margin 85 kHz). The duty cycle stays inside the part's
-  limits from 4.4 V to 17.5 V in. The same clock is the codec's MCLK
-  (ADR-0002, PR #55), so it must be ±50 ppm or better with low jitter. The
+  limits from 4.4 V to 17.5 V in. The same 2.304 MHz clock feeds the codec,
+  whose PLL makes 48 kHz from it (ADR-0002, PR #55). The
   codec gets an **LP5907-3.0** LDO (analog) and a **TPS7A2018** (core, fed
   from the 3.0 V output), as ADR-0002 specifies.
 - **Power budget:** 0.5–1.3 W average, 1.5 W peak. **Wired mode draws about
@@ -91,7 +92,7 @@ later issue must confirm. `unknown` means no primary source was found.
 - **Radio-on sense:** the switched DC pin; otherwise the radio's USB attach,
   the SERIAL-jack idle level, or a CAT reply. Radio-powered: the device follows
   the radio. USB-powered: it sleeps after a timeout with no radio and no host.
-- **Power-section BOM:** about **$7.2 at LCSC, quantity 100** (§9.2). The buck
+- **Power-section BOM:** about **$7.9 at LCSC, quantity 100** (§9.2). The buck
   IC alone is $3.99 of that, and LCSC holds only 10 of them.
 
 ## 1. Radio DC input
@@ -336,19 +337,24 @@ variant M's choice:
 - **Before sync starts,** the buck free-runs at 2.2 MHz without spread
   spectrum until the clock is running from the 3.3 V rail. That lasts
   milliseconds at power-up, before any receive or transmit.
-- **Clock source, cheapest adequate:** an **18.432 MHz 3.3 V oscillator
-  (YXC, ±10 ppm, $0.29) divided by 8** in a synchronous counter (SN74HC161,
-  $0.38) gives 2.304 MHz exactly. The same clock is the **codec's MCLK**
-  (ADR-0002, PR #55), which needs ±50 ppm or better and low jitter: ±10 ppm
-  meets the accuracy. A synchronous counter adds little jitter, but the
-  jitter at the codec pin and the drive into three loads (buck SYNC, codec
-  MCLK, isolated-supply clock) are **(verify)**. A series resistor per load
-  and short routing keep the edges clean. The alternative is variant M's programmable 2.304 MHz
-  oscillator ([SiT8924B](../references/index.md#sitime-sit8924b-ds), about
-  $3, not stocked at that frequency). The ESP32-S3 can't make 2.304 MHz by
-  integer division of its 40 MHz or 80 MHz clocks. The HC161's maximum clock
-  at 3.3 V and the YXC part's temperature range are **(verify)**. One clock
-  design for both variants is a coordination item with #10.
+- **Clock source: shared, owned by ADR-0004 (#10).** A YXC
+  OT322518.432MJBA4SL 18.432 MHz oscillator (±20 ppm over −40 to +85 °C,
+  0.7 ps phase jitter max, [datasheet](../references/index.md#yxc-yso110tr-ds))
+  is divided by 8 in three SN74LVC1G80 flip-flops
+  ([datasheet](../references/index.md#ti-sn74lvc1g80-ds)), giving exactly
+  2.304 MHz. One 2.304 MHz net runs in a star, with a 33 Ω series resistor
+  per load, to:
+  - the buck's MODE/SYNC;
+  - the codec's MCLK input. The codec's PLL makes exactly 48 kHz from
+    2.304 MHz (P = 3, R = 8, J = 16, D = 0; ADR-0002). The codec does not take
+    18.432 MHz directly;
+  - the #9 isolated-supply clock.
+
+  The 18.432 MHz net stays **under 5 mm**, because its 8th harmonic
+  (147.456 MHz) falls in the 2 m band. The ESP32-S3 can't make 2.304 MHz by
+  integer division of its 40 MHz or 80 MHz clocks. The programmable
+  [SiT8924B](../references/index.md#sitime-sit8924b-ds) (about $3, not
+  stocked at 2.304 MHz) was the alternative ADR-0004 rejected.
 
 ### 5.4 The isolated jack-side supply follows the same rule
 
@@ -501,8 +507,8 @@ the rest is **(verify)**.
 | U1 | TI TPS2121RUXR (power mux) | [TPS2121](../references/index.md#ti-tps2121-ds) | C485916 | 0.7004 | 37,215 | Yes (RoHS3) | deferred |
 | U2 | TI LMR43620MC3RPERQ1 (buck, 3.3 V) | [LMR436x0-Q1](../references/index.md#ti-lmr436x0-q1-ds) | C41658611 | 3.9856 | **10** | Yes | deferred |
 | L1 | 4.7 µH shielded, 4 × 4 mm, 2 A (APV, SWPA4030S4R7MT equivalent) | [LCSC C5363793](https://www.lcsc.com/product-detail/C5363793.html) | C5363793 | 0.0373 | 590 | Yes | deferred |
-| Y1 | YXC OT322518.432MJBA4SL (18.432 MHz, ±10 ppm, 1.8–3.3 V) | [LCSC C2831385](https://www.lcsc.com/product-detail/C2831385.html) | C2831385 | 0.2858 | 1,149 | Yes | deferred |
-| U3 | TI SN74HC161DR (÷8 → 2.304 MHz) | [LCSC C6824](https://www.lcsc.com/product-detail/C6824.html) | C6824 | 0.3794 | 10,677 | Yes (RoHS3) | deferred |
+| Y1 | YXC OT322518.432MJBA4SL (18.432 MHz, ±20 ppm; shared, ADR-0004) | [YSO110TR](../references/index.md#yxc-yso110tr-ds) | C2831385 | 0.2858 | 1,149 | Yes | deferred |
+| U3a–c | TI SN74LVC1G80DCKR × 3 (÷8 → 2.304 MHz; shared, ADR-0004) | [SN74LVC1G80](../references/index.md#ti-sn74lvc1g80-ds) | C473331 | 0.3329 (50+) each | **175** | Yes (RoHS3) | deferred |
 | U4 | TI LP5907MFX-3.0/NOPB (codec 3.0 V; ADR-0002) | [LCSC C475492](https://www.lcsc.com/product-detail/C475492.html) | C475492 | 0.2313 (50+) | 28,785 | Yes (RoHS3) | deferred |
 | U4 alt | TI TPS7A2030PDBVR | [TPS7A20](../references/index.md#ti-tps7a20-ds) | C963429 | 0.1831 (50+) | 6,980 | Yes (RoHS3) | deferred |
 | U5 | TI TPS7A2018PDBVR (codec 1.8 V) | [TPS7A20](../references/index.md#ti-tps7a20-ds) | C963430 | 0.2071 (50+) | 19,785 | Yes (RoHS3) | deferred |
@@ -525,7 +531,7 @@ LCSC quantity breaks for the main parts (USD, 2026-09-24):
 | C41658611 | 1+ 4.2036; 10+ 4.1102; 30+ 4.0479; 100+ 3.9856 |
 | C5363793 | 10+ 0.0476; 100+ 0.0373; 300+ 0.0322; 2000+ 0.0284; 4000+ 0.0253 |
 | C2831385 | 1+ 0.5026; 10+ 0.3925; 30+ 0.3449; 100+ 0.2858; 500+ 0.2595; 1000+ 0.2431 |
-| C6824 | 1+ 0.6618; 10+ 0.5173; 30+ 0.4566; 100+ 0.3794; 500+ 0.3449; 1000+ 0.2956 |
+| C473331 | 5+ 0.3851; 50+ 0.3329; 150+ 0.3106; 500+ 0.2826; 3000+ 0.2702; 6000+ 0.2627 (checked 2026-09-25) |
 | C475492 | 5+ 0.2998; 50+ 0.2313; 150+ 0.2019; 500+ 0.1652; 3000+ 0.1489; 6000+ 0.1391 |
 | C963429 | 5+ 0.2332; 50+ 0.1831; 150+ 0.1586; 500+ 0.1368; 3000+ 0.1308 |
 | C963430 | 5+ 0.2593; 50+ 0.2071; 150+ 0.1847; 500+ 0.1567; 3000+ 0.1443 |
@@ -541,9 +547,9 @@ LCSC quantity breaks for the main parts (USD, 2026-09-24):
 | USB-C input | J1, R1, R2, D3, D4, D5 | 0.28 |
 | Mux | U1 | 0.70 |
 | Buck | U2, L1, 2 × 10 µF, 2 × 22 µF, small caps and resistors (≈ 0.10) | 4.98 |
-| 2.304 MHz clock (also codec MCLK) | Y1, U3 | 0.67 |
+| 2.304 MHz clock (shared; also feeds the codec PLL) | Y1, 3 × U3 | 1.28 |
 | Codec LDOs | U4, U5 and their caps (≈ 0.02) | 0.46 |
-| **Total** | | **≈ 7.2** |
+| **Total** | | **≈ 7.9** |
 
 Excluded: the isolated jack-side supply (#9), the hub and the ESD on D+/D−
 (#9), and the radio DC connector (#12). JLCPCB extended-part fees (about $3
@@ -553,13 +559,13 @@ top: only D1 and R1/R2 are Basic here.
 
 Cost notes:
 
-- **The buck IC is 55 % of the total.** It is the maintainer's choice for the
+- **The buck IC is about half of the total.** It is the maintainer's choice for the
   shared core. The commercial LMR43620MB5RPER (sync, no spread spectrum, but
   5 V fixed/adjustable; $1.80, 34 in stock) could be set to 3.3 V with a
   divider, saving about $2.2; whether that's worth a second part number
   against variant M is for the maintainer.
-- The 18.432 MHz ÷ 8 clock ($0.67) is cheaper than the programmable
-  oscillator (about $3).
+- The shared 18.432 MHz ÷ 8 clock ($1.28 here at LCSC's 50+ tier) is
+  cheaper than a programmable oscillator (about $3).
 - The electrolytic damping capacitor in #10 isn't needed here: the TVS clamps
   hot-plug ringing (§1.2).
 
@@ -568,7 +574,8 @@ Sourcing risks:
 - **LMR43620MC3RPERQ1: 10 in stock at LCSC.** It is the core of both
   variants. Buy ahead for the prototypes and check TI direct and the deferred
   distributors.
-- L1 (590) and Y1 (1,149) have modest stock; both have many equivalents.
+- L1 (590) and Y1 (1,149) have modest stock; L1 has many equivalents. The
+  SN74LVC1G80 has only 175 at LCSC; ADR-0004 tracks it for both variants.
 
 ## 10. EU EMC targets (#59)
 
@@ -612,8 +619,8 @@ power bank covers portable use.
 
 | Item | Variant M (#10) | Variant R (this doc) | Shared? |
 |---|---|---|---|
-| Buck | LMR43620MC3RPERQ1, single stage to 3.3 V (being reworked in PR #57) | Same part | **Yes** |
-| Switching clock | 2.304 MHz, FPWM, spread spectrum off | Same; 18.432 MHz ÷ 8 proposed as the cheaper source | Frequency yes; source to agree |
+| Buck | LMR43620MC3RPERQ1, single stage to 3.3 V | Same part | **Yes (ADR-0004 owns it)** |
+| Switching clock | 2.304 MHz from 18.432 MHz ÷ 8 (YXC + 3 × SN74LVC1G80), star-distributed | Same | **Yes (ADR-0004 owns it)** |
 | Codec supplies | Per ADR-0002 | LP5907-3.0 and TPS7A2018 from 3.3 V (ADR-0002) | Yes; #10 faces the same headroom question |
 | Input protection | Fuse, TVS stack, LM74800-Q1 ideal diode, OV cut-off | Fuse, Schottky, TVS | No: different environments |
 | Source mux | None (USB-C isn't a power input on M) | TPS2121 | R only |
@@ -635,8 +642,8 @@ no TPS2553-class switch and no 5 V rail. The isolated supply allocation is
 - **(verify):** module current estimates; USB 2.0 pre-configuration and
   suspend limits; buck behavior below 4.2 V from USB; power-bank auto-off;
   whether each radio's USB side attaches without VBUS from the device (#9);
-  codec output swing at 3.0 V AVDD (#8); SN74HC161 at 18.432 MHz and 3.3 V;
-  the YXC oscillator's temperature range; REACH SVHC declarations for every
+  codec output swing at 3.0 V AVDD (#8); the flip-flops' additive jitter
+  (ADR-0004); SN74LVC1G80 stock (175 at LCSC); REACH SVHC declarations for every
   part.
 - **Maintainer:** the auto power-down timeout; whether the SERIAL jack's
   optional "3.3 V out" on ring 2 (about 20 mA to a cable's own circuit,

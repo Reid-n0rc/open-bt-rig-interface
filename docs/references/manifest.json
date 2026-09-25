@@ -377,8 +377,7 @@
       "file": "ti-tps62933-ds.pdf",
       "used_in": [
         "docs/research/core-devices.md",
-        "docs/research/power-radio-usbc.md",
-        "docs/decisions/ADR-0005-power-radio-usbc.md"
+        "docs/research/power-radio-usbc.md"
       ],
       "sha256": "16ec2eac43c7374eb9e7edd7df7bdb24de6862f695e1582c68716ced4820e5f6",
       "retrieved": "2026-09-24"
@@ -883,10 +882,9 @@
       "url": "https://www.ecfr.gov/current/title-47/chapter-I/subchapter-D/part-97/subpart-D/section-97.301",
       "file": "ecfr-47-97-301.html",
       "used_in": [
-        "docs/research/power-radio-usbc.md",
-        "docs/decisions/ADR-0005-power-radio-usbc.md"
+        "docs/research/power-radio-usbc.md"
       ],
-      "sha256": "f3734ae4d7fa11279c5617a7ca25794e32b08cf00126869e0bd323d17c95d0f2",
+      "sha256": "e0ad6b5728c57d16c58da11ec7ef161b387e49e8a73ced3ff03ddd1d43249138",
       "retrieved": "2026-09-24"
     },
     {
@@ -953,8 +951,7 @@
       "file": "sitime-sit8924b-ds.pdf",
       "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
       "used_in": [
-        "docs/research/power-radio-usbc.md",
-        "docs/decisions/ADR-0005-power-radio-usbc.md"
+        "docs/research/power-radio-usbc.md"
       ],
       "sha256": "7b593d10a0902132c2696ad46d70a1df07b0255b13b5bd45c0f47b5c2d5d4629",
       "retrieved": "2026-09-24"
@@ -968,7 +965,8 @@
       "file": "littelfuse-0466-ds.pdf",
       "notes": "Manufacturer copy hosted by LCSC.",
       "used_in": [
-        "docs/research/power-radio-usbc.md"
+        "docs/research/power-radio-usbc.md",
+        "docs/decisions/ADR-0005-power-radio-usbc.md"
       ],
       "sha256": "c08f5686d773c27b9e2bdb432263b02dcbf3b910c988eb5c39aa60229c258a5f",
       "retrieved": "2026-09-24"
@@ -985,6 +983,33 @@
       ],
       "sha256": "db767b9234f756c358c8254e682b917f16381eb0db649a2936833e15eb8037fd",
       "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yxc-yso110tr-ds",
+      "title": "YSO110TR wide-voltage crystal oscillator datasheet (OT322518.432MJBA4SL)",
+      "publisher": "YXC",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/b336a5b52993e15e0134a8f3d7decec7.pdf?productCode=C2831385",
+      "file": "yxc-yso110tr-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-radio-usbc.md"
+      ],
+      "sha256": "d155dd2bc59fe81f90c6c434328061beb8159ce3c6d0538de4ce96c34d44b8e5",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "ti-sn74lvc1g80-ds",
+      "title": "SN74LVC1G80 single positive-edge-triggered D-type flip-flop datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1g80.pdf",
+      "file": "ti-sn74lvc1g80-ds.pdf",
+      "used_in": [
+        "docs/research/power-radio-usbc.md"
+      ],
+      "sha256": "73b5b60e38105033bdbd978cdc17961e6487dbc848e32b26f53fac3a22fd34e6",
+      "retrieved": "2026-09-25"
     }
   ]
 }

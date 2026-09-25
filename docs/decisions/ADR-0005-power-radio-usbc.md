@@ -36,9 +36,9 @@ Constraints that shape the decision:
     port, and hardware blocks current into it (#9, ADR-0003). Issue item 5
     (the VBUS supply to the radio) and the IC-705 charging case no longer
     apply. The K4 connects only through its USB-B port.
-  - **Optimize for spurious emissions and cost; share the regulator core with
-    variant M:** one LMR43620MC3RPERQ1 synchronized to 2.304 MHz, fed
-    directly from the OR of the two inputs, no 5 V rail. Station-grade input
+  - **Optimize for spurious emissions and cost; share the regulator core and
+    clock with variant M** (ADR-0004), fed directly from the OR of the two
+    inputs, with no 5 V rail. Station-grade input
     protection. The cheapest parts that meet −20 to +60 °C; AEC-Q not
     required.
   - **EU requirements (#59):** RoHS-compliant parts; EN 55032 Class B and
@@ -54,11 +54,16 @@ Constraints that shape the decision:
 | **Source selection A: TPS2121 priority mux on both raw inputs** | $0.70. One IC: priority to radio DC, OVP on each input, soft start (inrush), reverse blocking into both sources, status pin; 2.8–22 V | 24 V absolute maximum near the TVS clamp | [TPS2121](../references/index.md#ti-tps2121-ds), LCSC C485916 |
 | Source selection B: diode-OR (two Schottkys) | $0.05 | The USB-path drop pushes the buck past its 0.80 maximum duty cycle below about 4.8 V of VBUS, so it folds back in frequency and harmonics move into bands; no USB overvoltage cut-off | — |
 | Source selection C: two ideal-diode controllers + FETs | Low drop | About $0.6 plus FETs, more parts, no OVP | — |
-| **Regulation A: one LMR43620MC3RPERQ1 synchronized to 2.304 MHz, FPWM, no spread spectrum** | No harmonic from 160 m to 10 m in a band (worst margin 85 kHz at ±500 ppm); duty cycle within limits from 4.4 to 17.5 V in; shared with variant M | $3.99 and only 10 at LCSC | [LMR436x0-Q1](../references/index.md#ti-lmr436x0-q1-ds), [eCFR 97.301](../references/index.md#ecfr-47-97-301) |
-| Regulation B: commercial LMR43620MB5RPER (sync, no spread spectrum, 5 V fixed/adjustable) set to 3.3 V | $1.80 | A second buck part number against variant M; 34 at LCSC | [LMR436x0](../references/index.md#ti-lmr436x0-ds) |
-| Regulation C: TPS62933F with RT-set frequency (shortlist) | Cheap, stocked | No sync; oscillator specified only at two points (±10 %, −17/+12 %). At ±10 % the best frequency (1.52 MHz) already puts its 5th harmonic in 40 m | [TPS62933](../references/index.md#ti-tps62933-ds) |
-| **Clock A: 18.432 MHz oscillator ÷ 8 (SN74HC161)** | $0.67, exact 2.304 MHz, ±10 ppm (also meets the codec MCLK's ±50 ppm) | Two parts; jitter and three-load drive **(verify)** | LCSC C2831385, C6824 |
-| Clock B: programmable 2.304 MHz oscillator (variant M) | One part | About $3; not stocked at that frequency | [SiT8924B](../references/index.md#sitime-sit8924b-ds) |
+| Buck cost alternative: commercial LMR43620MB5RPER (sync, no spread spectrum, 5 V fixed/adjustable) set to 3.3 V | $1.80 against $3.99 | A second buck part number against variant M; 34 at LCSC | [LMR436x0](../references/index.md#ti-lmr436x0-ds) |
+
+The **regulator core and the switching clock are not options here.** They are
+owned by **ADR-0004** (#10, [PR #57](https://github.com/Reid-n0rc/open-bt-rig-interface/pull/57)):
+one LMR43620MC3RPERQ1 at 3.3 V in FPWM, synchronized to 2.304 MHz from an
+18.432 MHz oscillator divided by 8 in three SN74LVC1G80 flip-flops. That
+clock is star-distributed with 33 Ω series resistors to the buck, the codec
+and the isolated supply. This ADR checks that the core works with variant R's
+two inputs: the duty cycle is within limits from 4.4 V to 17.5 V in, and no
+harmonic from 160 m to 10 m lands in a band (research doc §4, §5).
 
 Prices: LCSC, quantity 100, 2026-09-24. Digi-Key and Mouser: deferred by the
 maintainer. Every chosen part is RoHS-compliant per LCSC; REACH SVHC is
@@ -91,10 +96,9 @@ maintainer. Every chosen part is RoHS-compliant per LCSC; REACH SVHC is
    the mux.
 4. **Source selection:** **TPS2121**: IN1 radio DC (priority), IN2 USB-C VBUS.
    No back-feed into either source.
-5. **Regulation:** one **LMR43620MC3RPERQ1** (3.3 V), synchronized in FPWM to
-   **2.304 MHz** from an 18.432 MHz oscillator divided by 8, spread spectrum
-   off. No 5 V rail. The same clock is the codec's MCLK (ADR-0002, PR #55):
-   ±10 ppm, inside the codec's ±50 ppm, with jitter to verify. Codec supplies
+5. **Regulation:** the **ADR-0004 core** (the LMR43620MC3RPERQ1 at 3.3 V and
+   its 2.304 MHz clock), fed from the TPS2121 output. There's no 5 V rail. The
+   codec takes the 2.304 MHz clock into its PLL (ADR-0002). Codec supplies
    as ADR-0002 specifies: **LP5907-3.0** (AVDD/DRVDD) from 3.3 V, and
    **TPS7A2018** (DVDD) from the 3.0 V output. The 3.3 V rail stays above
    the LP5907's 3.1 V need on every USB-C input in the USB 2.0 range. Brownout: the ESP32-S3
@@ -119,15 +123,16 @@ maintainer. Every chosen part is RoHS-compliant per LCSC; REACH SVHC is
   about 200 mA under the 500 mA Default. Radio DC draws at most 0.15 A at
   11 V (0.18 A at 9 V). REQ-PWR-003 and REQ-PWR-004 are met on paper
   **(verify on the bench)**.
-- **Power-section BOM about $7.2** (LCSC, qty 100), 55 % of it the buck IC.
+- **Power-section BOM about $7.9** (LCSC, qty 100, including the shared core
+  and clock), about half of it the buck IC.
   Using the commercial MB5 buck would save about $2.2 at the cost of a second
   part number (maintainer).
 - **Issue item 5 is withdrawn.** Constraints §3.1, §3.4 and §7 and
   REQ-RIF-007 still describe a VBUS supply to the radio; #9 edits them under
   ADR-0003.
-- **Shared with variant M:** the buck part and the 2.304 MHz frequency. Which
-  clock source both use, and whether variant M's codec supply also moves to
-  3.3 V-fed LDOs, are coordination items with #10.
+- **Shared with variant M (ADR-0004 owns them):** the buck, the 2.304 MHz
+  clock and its distribution. Variant R adds only the input protection, the
+  USB-C sink and the TPS2121 mux.
 - **Supersedes the power lines of the shortlist**
   ([`core-devices.md`](../research/core-devices.md#5-power-10-11) §5:
   TPS2121 → TPS62933 → TPS7A20). The TPS2121 and TPS7A20 stay.
