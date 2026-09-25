@@ -10,6 +10,17 @@ and tagged independently (see `AGENTS.md`).
 
 ## Unreleased
 
+- EU compliance (`docs/compliance/eu.md`, ADR-0009, proposed): EU conformity is
+  now required for every variant. Applicability per variant of the RED
+  (safety, EMC, EN 300 328; cybersecurity under Delegated Regulation 2022/30,
+  repealed from 2027-12-11), the Cyber Resilience Act, RoHS, REACH Art. 33,
+  WEEE, GPSR and UN R10, with OJ references for the harmonised standards, the
+  Module A route, declaration and technical file contents, markings, and who
+  holds manufacturer obligations. BLE TX power capped at the module's EU-tested
+  9.96 dBm e.i.r.p.; `constraints.md` §4 changed and REQ-REG-007 to -014 and
+  REQ-EMC-008, -009 added (REQ-REG-006 withdrawn); 32 references added. Maintainer
+  decision: design security to the CRA level now; the EN 18031-1 gap analysis and
+  cost go to #64 (#59).
 - Radio interface circuits (`docs/research/radio-interface-circuits.md`,
   ADR-0003 proposed): RS-232-tolerant SERIAL-jack switching (MAX14778,
   TRS3221E, CI-V open drain), fail-safe PTT (AQY212EH PhotoMOS gated by a
