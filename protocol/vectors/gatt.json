@@ -1,0 +1,39 @@
+{
+  "protocol_version": "0.1.0",
+  "spec": "protocol/SPEC.md",
+  "generated_by": "tools/protocol/make_vectors.py",
+  "info": {
+    "fields": {
+      "proto_major": 0,
+      "proto_minor": 1,
+      "proto_patch": 0,
+      "flags": 1,
+      "psm": 128
+    },
+    "value_hex": "000100018000",
+    "note": "Info characteristic value; psm 0x0080 is an example, read it from the device."
+  },
+  "info_pairing_open": {
+    "fields": {
+      "proto_major": 0,
+      "proto_minor": 1,
+      "proto_patch": 0,
+      "flags": 3,
+      "psm": 128
+    },
+    "value_hex": "000100038000",
+    "note": "Info with flags bit 1 set: the pairing window is open."
+  },
+  "chunking": {
+    "att_mtu": 23,
+    "wire_hex": "0804020104ff7f0303020c040fc012010103c201010a0203090101c41070ea010b0203090201c41070ea011402040803010303e0016009050907f40110270a010103060c06010f03e803010480841e090702e8090807031e0758020804187f00",
+    "chunks_hex": [
+      "0804020104ff7f0303020c040fc012010103c201",
+      "010a0203090101c41070ea010b0203090201c410",
+      "70ea011402040803010303e0016009050907f401",
+      "10270a010103060c06010f03e803010480841e09",
+      "0702e8090807031e0758020804187f00"
+    ],
+    "note": "The CAPS reply split into 20-byte notifications (ATT_MTU 23, the minimum)."
+  }
+}

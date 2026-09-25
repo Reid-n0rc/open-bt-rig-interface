@@ -71,7 +71,7 @@ High-current and high-voltage nets (DC input, VBUS, the automotive front end)
 get widths and clearances from their current and voltage, not from the
 defaults above: size traces with an IPC-2221 calculator for ≤ 10 °C rise, and
 keep ≥ 0.5 mm clearance on nets that can see more than 50 V (variant M input
-before the surge stopper).
+before the protection MOSFET, and its VS clamp).
 
 ## 4. Assembly
 
@@ -150,8 +150,8 @@ DC-bias curve (for example Samsung's or Murata's characterization data). The
 | RS-232 charge pump (about ±5.5 V) | Datasheet recommendation | 16 V, or the datasheet's value if higher | 100 nF 50 V X7R 0402 (C307331) |
 | Analog-switch supplies (up to ±15 V) | Supply tolerance | **35 V** (use 50 V) | 100 nF 50 V X7R 0402 (C307331); 1 µF 50 V X7R 0805 (C28323) |
 | Radio accessory DC (13.8 V, 11–15 V) | TVS clamp voltage | **50 V** (2 × 13.8 = 27.6 V, plus clamp) | 100 nF 50 V X7R 0402/0603; 1 µF 50 V X7R 0805 (C28323); 10 µF 50 V X5R 1206 (C13585) |
-| Automotive 12 V, after the surge stopper (variant M) | Stopper's clamped output | **50 V** or 2× the clamped output, whichever is higher **(verify in #10)** | As above |
-| Automotive 12 V, before the surge stopper | Suppressed load dump ≈ 35 V, jump start 24 V, pulses per [constraints §3.2](constraints.md#32-automotive-12-v-input-variant-m) | **100 V** | 100 nF 100 V X7R 0805 (C28233); soft-termination parts where the board can flex **(verify availability)** |
+| Automotive 12 V, after the protection (variant M) | Overvoltage cut-off at 37–40 V ([ADR-0004](../decisions/ADR-0004-power-automotive.md)) | **100 V** (2 × 40 V = 80 V) | 2.2 µF 100 V X7R 1210 (automotive, e.g. TDK CGA6N3X7R2A225K); 100 nF 100 V X7R 0805 (C28233) |
+| Automotive 12 V, before the protection (connector side) | Unsuppressed load dump 101 V, TVS clamp up to ≈ 127 V on fast pulses, per [constraints §3.2](constraints.md#32-automotive-12-v-input-variant-m) | **250 V** (2 × 101 V = 202 V) | 100 nF 250 V X7R 1206 soft termination (YAGEO AS1206KKX7RYBB104, C3881218) |
 
 Notes:
 

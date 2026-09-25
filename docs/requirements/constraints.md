@@ -31,9 +31,9 @@ classes. The radio side works the same in both (§7).
 
 | Host | Wired USB-C | Bluetooth LE |
 |---|---|---|
-| Windows, macOS, Linux | Native serial port (USB CDC-ACM) and sound card (USB Audio Class); no drivers | Apps or host software that implement the protocol |
-| Android | Sound card natively; serial through apps (USB CDC-ACM) | Apps that implement the protocol |
-| iOS / iPadOS | Sound card natively (USB-C devices); no app access to USB serial | Apps that implement the protocol |
+| Windows, macOS, Linux | Native serial port (USB CDC-ACM) and sound card (USB Audio Class); no drivers. The protocol also runs over a USB network interface (CDC-NCM; not in-box on Windows 10) | Apps or host software that implement the protocol |
+| Android | Sound card natively; serial through apps (USB CDC-ACM); the protocol over the USB network interface **(verify)** | Apps that implement the protocol |
+| iOS / iPadOS | Sound card natively (USB-C devices); no app access to USB serial, so CAT, PTT and configuration go through apps that use the protocol over the USB network interface **(verify NCM on iOS)**; no CAT with radios whose serial is USB | Apps that implement the protocol |
 
 Consequences:
 
@@ -45,9 +45,16 @@ Consequences:
 - **In wired mode, radios with their own USB port appear to the computer
   directly** (through an on-board USB hub): their USB-serial chip, and their
   sound card if they have one. The device adds its own USB sound card when the
-  radio's audio is analog, its own USB serial port bridged to the SERIAL jack
-  when the radio's serial isn't USB, and always a USB serial port for
-  configuration and AUDIO-jack PTT.
+  radio's audio is analog, and a **USB network interface** (CDC-NCM) that
+  carries the protocol over TCP, so hosts without USB serial (iPhone, iPad)
+  get CAT, PTT and configuration
+  ([ADR-0007](../decisions/ADR-0007-protocol.md), maintainer decision
+  2026-09-24, extending ADR-0008). The ESP32-S3's USB endpoints don't fit
+  every function at once, so the device picks a function set per radio type:
+  a USB serial port for configuration and AUDIO-jack PTT only with
+  USB-serial + USB-audio radios, and, for SERIAL-jack radios, either the
+  network interface or a USB serial port bridged to the SERIAL jack
+  (a setting; the serial port by default) ([protocol §14.1](../../protocol/SPEC.md#141-usb-functions-and-the-endpoint-budget)).
 - **No OS shows a Bluetooth LE device as a serial port or audio device
   natively.** Over Bluetooth, hosts need apps or host software that implement
   the protocol. User documentation must state this plainly.
@@ -59,7 +66,7 @@ Consequences:
 - **Audio over USB:** 48 kHz / 16-bit, USB Audio Class (UAC1 or UAC2, whichever
   every target OS supports without drivers **(verify)**).
 - **RTS/DTR:** native in wired mode (USB CDC-ACM line state); protocol messages
-  over Bluetooth. PTT through the protocol's control channel, or through the
+  over Bluetooth and the USB network interface. PTT through the protocol's control channel, or through the
   radio's CAT command, must work regardless.
 - Not required: Hamlib/FLrig-specific features, Wi-Fi, LE Audio (LC3 as a
   Bluetooth profile).
@@ -70,29 +77,37 @@ Consequences:
 
 - **The radio's USB port provides no power.** Transceivers such as the FT-891,
   FT-710, FT-991A and IC-7300 have USB *device* ports (their internal
-  USB-serial and codec chips). When this device is the **USB host** to such a port,
-  it must *supply* VBUS to the radio, current-limited. The radio's draw is **(verify)**.
+  USB-serial and codec chips). **This device never supplies power to a radio
+  through USB**, as fitted by default, in either host mode (maintainer decision, 2026-09-24,
+  [ADR-0003](../decisions/ADR-0003-radio-interface-circuits.md)): the radio port's VBUS pin connects to no device rail,
+  and hardware blocks current from the device (or, in wired mode, the
+  computer) into the radio's VBUS and back. Radios whose USB chip needs VBUS
+  to attach may not enumerate **(verify per radio)**.
 - **Radio accessory DC (preferred where available).** Some radios provide DC on
-  an accessory jack (for example the IC-7300 ACC socket, or the FT-891
-  tuner/linear jack). The pin, voltage and current limit per radio are **(verify)**,
-  tracked in a per-radio table.
+  an accessory jack. Documented limits: IC-7300 ACC 1 A, TS-590SG EXT.AT 4 A,
+  K3 0.5 A, K3S 1 A, K4 1.5 A, all switched with the radio. The Yaesu "+13V"
+  pins have no documented limit **(verify)**. Per-radio table:
+  [`radio-interfaces.md`](../research/radio-interfaces.md#can-the-radio-power-the-interface).
 - **USB-C 5 V sink:** phone charger, power bank or computer.
 - **12 V vehicle or station supply:** the automotive variant (3.2).
 
 ### 3.2 Automotive 12 V input (variant M)
 
 Must survive a harsh automotive environment. Target the 12 V-system levels of
-ISO 16750-2 and ISO 7637-2 **(verify exact levels and editions)**:
+**ISO 16750-2:2023** and **ISO 7637-2:2011** (level IV), confirmed in
+[`power-automotive.md`](../research/power-automotive.md#1-test-levels) (#10;
+clauses and sources there). The design is in
+[ADR-0004](../decisions/ADR-0004-power-automotive.md):
 
 | Condition | Target |
 |---|---|
 | Normal operating range | 9–16 V |
-| Cold crank | Operate down to about 6 V (4.5 V desirable), **or** brown out safely with PTT off |
-| Load dump | Unsuppressed up to about 101 V, 40–400 ms; suppressed (centrally clamped) about 35 V |
+| Cold crank | Operate down to about 6 V (4.5 V desirable), **or** brown out safely with PTT off ("normal" profile 4.5 V then 6.5 V; "severe" 3 V then 5 V) |
+| Load dump | Test A (unsuppressed): 79–101 V, Ri 0.5–4 Ω, 40–400 ms, 10 pulses; test B (centrally suppressed): up to 35 V |
 | Reverse battery | −14 V for 60 s, no damage |
-| Jump start | 24 V for 60 s |
+| Jump start | 26 V for 60 s (ISO 16750-2:2023; 24 V in the 2012 edition) |
 | ISO 7637-2 transients | Pulse 1 about −150 V; pulse 2a about +112 V; pulses 3a/3b about −220 V / +150 V |
-| ESD | ±15 kV air (ISO 10605) |
+| ESD | ±15 kV air (ISO 10605) **(verify)** |
 | Temperature | −40 °C to +85 °C operating |
 | Off-state drain | < 1 mA; auto power-down when the radio or ignition is off |
 
@@ -120,12 +135,14 @@ Design guidance (confirmed in the power-front-end issue):
 | Radio module (ESP32-S3-MINI-1), BLE active | about 0.1 A typical, 0.34 A peak (BLE TX at +20 dBm, datasheet) @ 3.3 V |
 | USB hub (wired mode) | about 50 mA **(verify with the hub chosen)** |
 | Audio codec | about 50 mA |
-| USB host VBUS to the radio | up to about 0.5 A (current-limited switch) |
 | Target total | about 1.5 W typical, 3 W peak |
 
+The device supplies no power to the radio: the radio port's VBUS is blocked in
+hardware (ADR-0003, [#9](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/9)).
+
 **USB-C budget:** a USB-C host without USB PD may supply only 500 mA at 5 V
-(USB 2.0 default). In wired mode that must cover the device, the hub and the
-radio's USB VBUS draw. Use the higher USB-C current advertised on CC (1.5 A or
+(USB 2.0 default). In wired mode that must cover the device and the hub (the
+radio's USB port gets no power, §3.1). Use the higher USB-C current advertised on CC (1.5 A or
 3 A) when present, and report an overcurrent to the host rather than browning out.
 
 ## 4. Regulatory
@@ -165,7 +182,13 @@ The device operates next to HF transmitters of 100 W or more.
 - PTT is **off** at power-on, reset, brownout, Bluetooth disconnect and watchdog timeout.
 - **Hardware default off:** a pull-down, or an opto/MOSFET that must be
   actively driven, so a hung MCU cannot key the radio.
-- The firmware enforces a maximum continuous TX time (configurable, cannot be disabled).
+- The firmware enforces a maximum continuous TX time: user-configurable,
+  default 5 minutes, no upper limit, and the user can disable it
+  ([ADR-0007](../decisions/ADR-0007-protocol.md), maintainer decision 2026-09-25).
+- **Firmware lock-up:** an ESP32-S3 internal watchdog resets the MCU within a
+  few seconds, and PTT is off during and after the reset (hardware default).
+  There is no hardware max-TX backstop
+  ([ADR-0003](../decisions/ADR-0003-radio-interface-circuits.md)).
 - **Galvanic isolation** of the AUDIO and SERIAL jacks toward the radio:
   transformer-coupled audio, isolated PTT, and digital isolators on the serial
   lines. **Required for variant M, and on every variant whenever the USB-C data
@@ -190,8 +213,8 @@ The device operates next to HF transmitters of 100 W or more.
 - **USB host:** for radios with their own USB port. The device is the USB host to
   the radio's USB-serial chip (CP210x including dual-port CP2105, FTDI, CH34x,
   CDC-ACM) **and** its built-in USB sound card (USB Audio Class 1.0), including
-  through a USB hub inside the radio. Full speed (12 Mbit/s) is enough. Supplies
-  current-limited VBUS (3.1). In wired mode the same port is routed to the
+  through a USB hub inside the radio. Full speed (12 Mbit/s) is enough. It
+  supplies **no VBUS** to the radio (§3.1). In wired mode the same port is routed to the
   on-board hub so the computer reaches the radio's chips directly (§2).
 - **Radio-type coverage, in both host modes:** radios with USB serial + USB
   audio; USB serial + analog audio; RS-232, 3.3 V logic or CI-V serial + analog
