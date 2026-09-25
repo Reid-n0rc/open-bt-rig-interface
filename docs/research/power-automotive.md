@@ -614,9 +614,11 @@ dropout).
   rail (after Q2) through **330 kΩ / 20 kΩ → 7.00 V falling**. That draws
   40 µA at 14 V, only while powered. SENSE sees 2.29 V at 40 V, under its 7 V
   absolute maximum. It runs from the 3.3 V rail and works down to 1.8 V.
-- Its output pulls the **PTT enable** low. PTT enable is ANDed with the
-  watchdog gate from #9, so the PhotoMOS LED drive stops even if the MCU
-  hasn't reacted. The same signal interrupts the MCU, which also drops PTT in
+- Its output pulls the **PTT enable** low in hardware (a gate on the
+  PhotoMOS LED drive, #9), so the drive stops even if the MCU hasn't reacted.
+  There is no external hardware PTT timer; lock-up protection is the
+  ESP32-S3's internal watchdog. The TPS3710 is an input-voltage monitor, not
+  a timer. The same signal interrupts the MCU, which also drops PTT in
   firmware and logs the event. Firmware can also inhibit PTT at a higher,
   configurable threshold (for example below 9 V, via ADC).
 - Because the PhotoMOS is off unless driven (constraints §6), losing 3.3 V
@@ -653,11 +655,16 @@ dropout).
   - Optional push-button. For installs without an ignition wire, tie SENSE
     to the battery lead (then the device stays on).
 - **Power-down:** SENSE falls → firmware drops PTT, finishes, waits the
-  power-down delay (**30 s after the radio or ignition turns off, default;
-  configurable**, maintainer decision 2026-09-25), releases HOLD → EN low →
-  Q1/Q2 off → all rails
-  collapse. A hung MCU is reset by the watchdog, and its HOLD pin defaults low,
-  so it can't keep the device on. Firmware may also power down on low battery
+  power-down delay, releases HOLD → EN low → Q1/Q2 off → all rails collapse.
+  Maintainer decisions (2026-09-25):
+  - **Delay: 30 s by default, configurable.** **0 = never power down.** That
+    is the user's choice, and with it variant M no longer meets the < 1 mA
+    off-state drain target (the device stays fully on, ≈ 1 W).
+  - **The device stays awake while a USB host is connected** on USB-C
+    (wired mode), whatever SENSE says; the delay starts when both are gone.
+  - A hung MCU is reset by the ESP32-S3's internal watchdog (there is no
+    external watchdog or PTT timer), and its HOLD pin defaults low at reset,
+    so a lock-up can't keep the device on. Firmware may also power down on low battery
   (for example < 11.5 V for 60 s with SENSE off; threshold TBD).
 - **Off-state drain** at 12.6 V, EN low:
 

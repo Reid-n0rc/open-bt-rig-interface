@@ -135,10 +135,16 @@ Full analysis, calculations, prices and stock:
    - That gives ≥ 747 µs before logic dropout at worst-case load.
    - Supply interruptions up to 3 ms (at 2.1 W) are ridden through.
 7. **Power-down:** ignition or radio-on SENSE, USB-C host VBUS and a firmware
-   HOLD line are diode-ORed into the LM74800-Q1 enable. **Auto power-down
-   30 s after the radio or ignition turns off** (default, configurable;
-   maintainer decision 2026-09-25). Off-state drain is **≤ 7 µA** at 25 °C
-   (limit 1 mA).
+   HOLD line are diode-ORed into the LM74800-Q1 enable. Maintainer decisions
+   (2026-09-25):
+   - **Auto power-down 30 s after the radio or ignition turns off**
+     (default, configurable).
+   - **0 = never**, at the user's choice. Variant M then exceeds the < 1 mA
+     off-state target.
+   - The device **stays awake while a USB host is connected** on USB-C.
+   - Off-state drain when powered down is **≤ 7 µA** at 25 °C (limit 1 mA).
+   - There is no external hardware PTT timer; lock-up protection is the
+     ESP32-S3's internal watchdog.
 8. **24 V trucks:** not in revision A; the same topology scales (research §14).
 
 Why:
@@ -169,8 +175,9 @@ Why:
 - **#9:** the isolated jack-side supply runs from 3.3 V and must keep its
   harmonics out of the bands. An SN6505B-Q1 (external clock ≤ 1.6 MHz,
   divided by 2) can't share the 2.304 MHz comb, so it needs filtering and
-  shielding, or another topology. The PTT enable from the brownout detector
-  is ANDed with the watchdog gate.
+  shielding, or another topology. The brownout detector's PTT enable gates
+  the PhotoMOS LED drive in hardware. There is no external watchdog or PTT
+  timer; the ESP32-S3's internal watchdog handles lock-ups.
 - **#59 (EU):**
   - Every chosen part is RoHS-compliant per its distributor listing; REACH
     SVHC is still open.
