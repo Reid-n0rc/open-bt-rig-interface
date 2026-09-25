@@ -707,8 +707,8 @@
       "url": "https://www.espressif.com/sites/default/files/ESP32-S3-MINI-1%20FCC%20Certification.pdf",
       "file": "esp32s3-mini1-fcc-grant.pdf",
       "used_in": [
-        "docs/research/module-selection.md",
-        "docs/compliance/fcc.md"
+        "docs/compliance/fcc.md",
+        "docs/research/module-selection.md"
       ],
       "sha256": "0344102bc60709abc518d532b2cadafa5d3fef3f7f8981cf33a7c5ac10a5d768",
       "retrieved": "2026-09-24"
@@ -721,8 +721,8 @@
       "url": "https://www.espressif.com/sites/default/files/ESP32-S3-MINI-1%20IC%20Certification.pdf",
       "file": "esp32s3-mini1-ised-cert.pdf",
       "used_in": [
-        "docs/research/module-selection.md",
-        "docs/compliance/fcc.md"
+        "docs/compliance/fcc.md",
+        "docs/research/module-selection.md"
       ],
       "sha256": "77618c1572f7f4e2a819fb7d022bfd081d755140c37117c50a437ef3c11a437a",
       "retrieved": "2026-09-24"
@@ -737,8 +737,8 @@
       "fetch": "manual",
       "notes": "The site (and the FCC EAS at apps.fcc.gov/oetcf/eas) blocks scripted access; save the page, and the User Manual exhibit, from a browser.",
       "used_in": [
-        "docs/research/module-selection.md",
-        "docs/compliance/fcc.md"
+        "docs/compliance/fcc.md",
+        "docs/research/module-selection.md"
       ]
     },
     {
@@ -751,8 +751,8 @@
       "fetch": "manual",
       "notes": "Secondary copy of the FCC exhibit; the site blocks scripted downloads. Prefer the User Manual exhibit on the FCC filing list when it can be opened.",
       "used_in": [
-        "docs/research/module-selection.md",
-        "docs/compliance/fcc.md"
+        "docs/compliance/fcc.md",
+        "docs/research/module-selection.md"
       ]
     },
     {
@@ -934,8 +934,8 @@
       "fetch": "manual",
       "notes": "apps.fcc.gov blocks scripted access; open it in a browser and save the page (and the D03 and D04 attachments as PDF).",
       "used_in": [
-        "docs/research/module-selection.md",
-        "docs/compliance/fcc.md"
+        "docs/compliance/fcc.md",
+        "docs/research/module-selection.md"
       ]
     },
     {
@@ -1610,6 +1610,350 @@
       "used_in": [
         "docs/research/host-compatibility.md"
       ]
+    },
+    {
+      "id": "yaesu-ft891-om",
+      "title": "FT-891 Operating Manual (EH065H201, 1611A-BO-2)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-891_OM_ENG_EH065H201_1611A-BO-2.pdf",
+      "file": "yaesu-ft891-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "17154a29374ffc2637e274ed8294d8dd8acad8cc191c8a2aefa35e2d7fd3ef4b",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yaesu-ft891-adv",
+      "title": "FT-891 Advance Manual (1806-F)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-891_Advance_Manual_ENG_1806-F.pdf",
+      "file": "yaesu-ft891-adv.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "7fc016e7ee72c3f6f2e6ccb9cd1ad0ecba2483e806fde65ec4757b7fee5373fa",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yaesu-ft891-cat",
+      "title": "FT-891 CAT Operation Reference Book (1909-C)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-891_CAT_OM_ENG_1909-C.pdf",
+      "file": "yaesu-ft891-cat.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "59e2295177633b970408bec10aae62f697c3bde5fe48a3be25282d992bc3bbb0",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yaesu-ft710-om",
+      "title": "FT-710 Operation Manual (EH080H201, 2307N-GS)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-710_OM_ENG_EH080H201_2307N-GS.pdf",
+      "file": "yaesu-ft710-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "e1afabe5f292c945d39e9e752b91dab1db2dccbb256c8f8a752c2fe5db4c61af",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yaesu-ft710-cat",
+      "title": "FT-710 CAT Operation Reference Manual (2306-C)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-710_CAT_OM_ENG_2306-C.pdf",
+      "file": "yaesu-ft710-cat.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "fdf62b8a5c89e321381d69c53292a6ded045f1ceeeaf04ae21ce856e8e2ff8c2",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yaesu-ft991a-om",
+      "title": "FT-991A Operating Manual (EH067M205, 2111A-KS-1)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-991A_OM_ENG_EH067M205_2111A-KS-1.pdf",
+      "file": "yaesu-ft991a-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "bb1ce04b24ab94eb2258809023fcf76f5121671d0535064575922e815bd1eee6",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yaesu-ft991a-cat",
+      "title": "FT-991A CAT Operation Reference Manual (1711-D)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-991A_CAT_OM_ENG_1711-D.pdf",
+      "file": "yaesu-ft991a-cat.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "52164f737e37a3ffc8276eccedf8ecb524607198c38d386ae4ff7b2fc1d60c95",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yaesu-ft818-om",
+      "title": "FT-818ND Operating Manual (E13772004, 2003u-ES-1)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-818ND_OM_ENG_E13772004_2003u-ES-1.pdf",
+      "file": "yaesu-ft818-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "e723eab91774d62bfcc525681a60f66a4a801d014d368d64c88a534a8d9df802",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yaesu-ft817nd-om",
+      "title": "FT-817ND Operating Manual (E13771011)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-817ND_OM_ENG_E13771011.pdf",
+      "file": "yaesu-ft817nd-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "d43dff0803f0544f39a1d502f986093a1606552d5de1827f9fc24e01e13595c0",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "yaesu-vcp-driver",
+      "title": "Virtual COM Port Driver Installation Manual (2205-E)",
+      "publisher": "Yaesu Musen",
+      "kind": "manual",
+      "url": "https://www.yaesu.com/Files/BB2B47AE-1018-01AF-FAE48FDCB1919193/USB_Driver_Installation_Manual_ENG_2205-E.pdf",
+      "file": "yaesu-vcp-driver.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "ce826e20bf5ea92b5e30286d2033dc1ae4a771a3e5e94db72504ddc0b388939f",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "icom-ic7300-full",
+      "title": "IC-7300 Full Manual (English, v6)",
+      "publisher": "Icom (hosted by Icom UK)",
+      "kind": "manual",
+      "url": "https://icomuk.co.uk/files/icom/PDF/advancedManuals/IC-7300_Full_English%20v6.pdf",
+      "file": "icom-ic7300-full.pdf",
+      "notes": "Also on icomjapan.com/support/manual/2271/ behind a click-through agreement.",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "9beb3c4969ade0cd9a74eae680e0daaf424a29fda4cbfc40efe4ede963323d38",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "icom-ic705-basic",
+      "title": "IC-705 Basic Manual (English)",
+      "publisher": "Icom (hosted by Icom UK)",
+      "kind": "manual",
+      "url": "https://icomuk.co.uk/files/icom/PDF/productManual/IC-705_ENG_Basic_1.pdf",
+      "file": "icom-ic705-basic.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "062b9e38d3afff649b27b9dd413d57bdbf561722de1318bd2f84496cfb579b9e",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "icom-ic705-adv",
+      "title": "IC-705 Advanced Manual (English)",
+      "publisher": "Icom (hosted by Icom UK)",
+      "kind": "manual",
+      "url": "https://icomuk.co.uk/files/icom/PDF/advancedManuals/IC-705_ENG_Advanced_1a.pdf",
+      "file": "icom-ic705-adv.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "fcd505049f8168979566fe0fc997a06c16359998215ad973b6c17925aff73411",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "kenwood-ts590sg-im",
+      "title": "TS-590SG Instruction Manual (B5A-0180-20)",
+      "publisher": "JVCKENWOOD",
+      "kind": "manual",
+      "url": "https://manuals.jvckenwood.com/download/files/B5A-0180-20.pdf",
+      "file": "kenwood-ts590sg-im.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "849df372130dce74ce95fcfa61787ea8ff930256d47f422cf3ce8f315f96f291",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "kenwood-ts590sg-usb-audio",
+      "title": "TS-590SG USB Audio Setting Manual (rev. 1, 2018-08-30)",
+      "publisher": "JVCKENWOOD",
+      "kind": "manual",
+      "url": "https://www.kenwood.com/i/products/info/amateur/ts_590g/pdf/ts590g_usb_audio_manual_e_rev1.pdf",
+      "file": "kenwood-ts590sg-usb-audio.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "c2fbbbec84c95edeb71cc95753fb5e06852cb9b5fb52e82a69e55abd53e4cd25",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "kenwood-ts590s-im",
+      "title": "TS-590S Instruction Manual (B62-2243-30)",
+      "publisher": "JVCKENWOOD (copy hosted by RigPix)",
+      "kind": "manual",
+      "url": "https://www.rigpix.com/kenwood/ts590s_manual.pdf",
+      "file": "kenwood-ts590s-im.pdf",
+      "notes": "No manufacturer-hosted copy found on 2026-09-24; this is a third-party mirror of the manufacturer's manual.",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "f7c244849ea7d88c65237a998e53141d173cc36d51cfe276eac983f2b820ed18",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "elecraft-k3-om",
+      "title": "K3 Owner's Manual, rev. D10",
+      "publisher": "Elecraft",
+      "kind": "manual",
+      "url": "https://ftp.elecraft.com/K3/Manuals%20Downloads/E740107%20K3%20Owner's%20man%20D10.pdf",
+      "file": "elecraft-k3-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "b7c3c70b78694d23045edd671b26cee7a80ab8468a13ee006085aff8aff19f74",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "elecraft-k3s-om",
+      "title": "K3S Owner's Manual, rev. A1",
+      "publisher": "Elecraft",
+      "kind": "manual",
+      "url": "https://ftp.elecraft.com/K3S/Manuals%20Downloads/K3S%20Owner's%20man%20A1.pdf",
+      "file": "elecraft-k3s-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "7eb4c4bb7aab862cb8ff09ab0110226ee99538eda42f50cc9495fef7942523c7",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "elecraft-kx3-om",
+      "title": "KX3 Owner's Manual, rev. C5",
+      "publisher": "Elecraft",
+      "kind": "manual",
+      "url": "https://ftp.elecraft.com/KX3/Manuals%20Downloads/E740163%20KX3%20Owner's%20man%20Rev%20C5.pdf",
+      "file": "elecraft-kx3-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "d99a6ef6033abe7498cb996021f67578e91956139e1d820839db1e21a7b83ff0",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "elecraft-kx2-om",
+      "title": "KX2 Owner's Manual, rev. B2",
+      "publisher": "Elecraft",
+      "kind": "manual",
+      "url": "https://ftp.elecraft.com/KX2/Manuals%20Downloads/KX2%20owner's%20man%20B2.pdf",
+      "file": "elecraft-kx2-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "e02760b05a2c7e1e35ec175f07b435198868aebd0e2221573aff02eaece113f3",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "elecraft-k4-om",
+      "title": "K4 Operating Manual, rev. C17",
+      "publisher": "Elecraft",
+      "kind": "manual",
+      "url": "https://ftp.elecraft.com/K4/Manuals%20Downloads/Operating%20Manual%20%20Rev%20C17.pdf",
+      "file": "elecraft-k4-om.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "f4ef6975e969967f0d86f609143ee14317efc2feaba937fe029e7f596bb66ca5",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "xiegu-x6100-um",
+      "title": "X6100 User Manual (2021-11-23)",
+      "publisher": "Chongqing Xiegu Technology (hosted by Radioddity)",
+      "kind": "manual",
+      "url": "https://radioddity.s3.amazonaws.com/Xiegu_X6100_User_Manual_20211123.pdf",
+      "file": "xiegu-x6100-um.pdf",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "4c526436f59729ac7a25ced725839171c49c16d2db4629e72b87fa724e59a623",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "radioddity-x6100-ext",
+      "title": "Extended manual for Xiegu X6100, v1.0 (2024-01-19)",
+      "publisher": "Radioddity (distributor)",
+      "kind": "manual",
+      "url": "https://radioddity.s3.amazonaws.com/2024-01-19_Extended_manual_for_Xiegu_X6100_v1.0.pdf",
+      "file": "radioddity-x6100-ext.pdf",
+      "notes": "Secondary source (distributor, not the manufacturer).",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "ed66c73012980fc86d597dbfdc0609c05107b405751e3685ad48afb9fba372d6",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "digirig-ft8xx-cables",
+      "title": "Yaesu FT-8xx cables build (DATA and ACC pinouts)",
+      "publisher": "Digirig",
+      "kind": "web",
+      "url": "https://digirig.net/yaesu-ft-8xx-cables-build/",
+      "file": "digirig-ft8xx-cables.html",
+      "notes": "Secondary source (interface maker). Pinout images: connector-ft817-audio.png, connector-ft817-cat.png. Facts only; Digirig hardware is GPL-3.0 (THIRD_PARTY.md).",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "c6751abb6548e665b99a42eb78fbc6276661b8b6d6a3349945b274cbdc46cba4",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "digirig-dr891-manual",
+      "title": "Digirig DR-891 setup manual",
+      "publisher": "Digirig",
+      "kind": "web",
+      "url": "https://digirig.net/digirig-dr-891-setup-manual/",
+      "file": "digirig-dr891-manual.html",
+      "notes": "Secondary source (interface maker). Facts only.",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "6ee8ebd0d7b75176627b844e135ed279b13cabdae17034adcf1558fa074559cf",
+      "retrieved": "2026-09-24"
+    },
+    {
+      "id": "digirig-kx-cables",
+      "title": "Elecraft KX Digirig cables set",
+      "publisher": "Digirig",
+      "kind": "web",
+      "url": "https://digirig.net/product/elecraft-kx-cables/",
+      "file": "digirig-kx-cables.html",
+      "notes": "Secondary source (interface maker). Facts only.",
+      "used_in": [
+        "docs/research/radio-interfaces.md"
+      ],
+      "sha256": "64aac219975a802f5097694405d4809ecec0de5a74abb29729bb6ad04067c670",
+      "retrieved": "2026-09-24"
     }
   ]
 }

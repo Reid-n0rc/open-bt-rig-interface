@@ -299,6 +299,36 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `9bcbee0db3969a58…`
 - Cited in: [`protocol/SPEC.md`](../../protocol/SPEC.md)
 
+### digirig-dr891-manual
+
+**Digirig DR-891 setup manual** (Digirig, web)
+
+- Local copy: [cache/digirig-dr891-manual.html](cache/digirig-dr891-manual.html)
+- Original: <https://digirig.net/digirig-dr-891-setup-manual/>
+- Retrieved: 2026-09-24; SHA-256 `6ee8ebd0d7b75176…`
+- Notes: Secondary source (interface maker). Facts only.
+- Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)
+
+### digirig-ft8xx-cables
+
+**Yaesu FT-8xx cables build (DATA and ACC pinouts)** (Digirig, web)
+
+- Local copy: [cache/digirig-ft8xx-cables.html](cache/digirig-ft8xx-cables.html)
+- Original: <https://digirig.net/yaesu-ft-8xx-cables-build/>
+- Retrieved: 2026-09-24; SHA-256 `c6751abb6548e665…`
+- Notes: Secondary source (interface maker). Pinout images: connector-ft817-audio.png, connector-ft817-cat.png. Facts only; Digirig hardware is GPL-3.0 (THIRD_PARTY.md).
+- Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)
+
+### digirig-kx-cables
+
+**Elecraft KX Digirig cables set** (Digirig, web)
+
+- Local copy: [cache/digirig-kx-cables.html](cache/digirig-kx-cables.html)
+- Original: <https://digirig.net/product/elecraft-kx-cables/>
+- Retrieved: 2026-09-24; SHA-256 `64aac219975a802f…`
+- Notes: Secondary source (interface maker). Facts only.
+- Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)
+
 ### ecfr-47-15-101
 
 **47 CFR 15.101 Equipment authorization of unintentional radiators** (eCFR (U.S. Government Publishing Office), standard)
@@ -388,6 +418,51 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://www.ecfr.gov/current/title-47/section-2.938>
 - Retrieved: 2026-09-24; SHA-256 `ade234c9def317e4…`
 - Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+
+### elecraft-k3-om
+
+**K3 Owner's Manual, rev. D10** (Elecraft, manual)
+
+- Local copy: [cache/elecraft-k3-om.pdf](cache/elecraft-k3-om.pdf)
+- Original: <https://ftp.elecraft.com/K3/Manuals%20Downloads/E740107%20K3%20Owner's%20man%20D10.pdf>
+- Retrieved: 2026-09-24; SHA-256 `b7c3c70b78694d23…`
+- Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)
+
+### elecraft-k3s-om
+
+**K3S Owner's Manual, rev. A1** (Elecraft, manual)
+
+- Local copy: [cache/elecraft-k3s-om.pdf](cache/elecraft-k3s-om.pdf)
+- Original: <https://ftp.elecraft.com/K3S/Manuals%20Downloads/K3S%20Owner's%20man%20A1.pdf>
+- Retrieved: 2026-09-24; SHA-256 `7eb4c4bb7aab862c…`
+- Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)
+
+### elecraft-k4-om
+
+**K4 Operating Manual, rev. C17** (Elecraft, manual)
+
+- Local copy: [cache/elecraft-k4-om.pdf](cache/elecraft-k4-om.pdf)
+- Original: <https://ftp.elecraft.com/K4/Manuals%20Downloads/Operating%20Manual%20%20Rev%20C17.pdf>
+- Retrieved: 2026-09-24; SHA-256 `f4ef6975e969967f…`
+- Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)
+
+### elecraft-kx2-om
+
+**KX2 Owner's Manual, rev. B2** (Elecraft, manual)
+
+- Local copy: [cache/elecraft-kx2-om.pdf](cache/elecraft-kx2-om.pdf)
+- Original: <https://ftp.elecraft.com/KX2/Manuals%20Downloads/KX2%20owner's%20man%20B2.pdf>
+- Retrieved: 2026-09-24; SHA-256 `e02760b05a2c7e1e…`
+- Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)
+
+### elecraft-kx3-om
+
+**KX3 Owner's Manual, rev. C5** (Elecraft, manual)
+
+- Local copy: [cache/elecraft-kx3-om.pdf](cache/elecraft-kx3-om.pdf)
+- Original: <https://ftp.elecraft.com/KX3/Manuals%20Downloads/E740163%20KX3%20Owner's%20man%20Rev%20C5.pdf>
+- Retrieved: 2026-09-24; SHA-256 `d99a6ef6033abe74…`
+- Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)
 
 ### esp-idf-bluedroid-kconfig
 
@@ -513,7 +588,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/esp32s3-mini1-fcc-grant.pdf](cache/esp32s3-mini1-fcc-grant.pdf)
 - Original: <https://www.espressif.com/sites/default/files/ESP32-S3-MINI-1%20FCC%20Certification.pdf>
 - Retrieved: 2026-09-24; SHA-256 `0344102bc60709ab…`
-- Cited in: [`docs/research/module-selection.md`](../../docs/research/module-selection.md), [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md), [`docs/research/module-selection.md`](../../docs/research/module-selection.md)
 
 ### esp32s3-mini1-fcc-manual
 
@@ -523,7 +598,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://manuals.plus/espressif/esp32-s3-mini-1-development-board-manual>
 - Download: manual (the site blocks scripted downloads)
 - Notes: Secondary copy of the FCC exhibit; the site blocks scripted downloads. Prefer the User Manual exhibit on the FCC filing list when it can be opened.
-- Cited in: [`docs/research/module-selection.md`](../../docs/research/module-selection.md), [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md), [`docs/research/module-selection.md`](../../docs/research/module-selection.md)
 
 ### esp32s3-mini1-ised-cert
 
@@ -532,7 +607,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/esp32s3-mini1-ised-cert.pdf](cache/esp32s3-mini1-ised-cert.pdf)
 - Original: <https://www.espressif.com/sites/default/files/ESP32-S3-MINI-1%20IC%20Certification.pdf>
 - Retrieved: 2026-09-24; SHA-256 `77618c1572f7f4e2…`
-- Cited in: [`docs/research/module-selection.md`](../../docs/research/module-selection.md), [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md), [`docs/research/module-selection.md`](../../docs/research/module-selection.md)
 
 ### espressif-longevity
 
@@ -580,7 +655,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://fcc.report/FCC-ID/2AC7Z-ESPS3MINI1>
 - Download: manual (the site blocks scripted downloads)
 - Notes: The site (and the FCC EAS at apps.fcc.gov/oetcf/eas) blocks scripted access; save the page, and the User Manual exhibit, from a browser.
-- Cited in: [`docs/research/module-selection.md`](../../docs/research/module-selection.md), [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md), [`docs/research/module-selection.md`](../../docs/research/module-selection.md)
 
 ### fcc-2ahmr-bw16
 
@@ -610,7 +685,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://apps.fcc.gov/oetcf/kdb/forms/FTSSearchResultPage.cfm?id=44637&switch=P>
 - Download: manual (the site blocks scripted downloads)
 - Notes: apps.fcc.gov blocks scripted access; open it in a browser and save the page (and the D03 and D04 attachments as PDF).
-- Cited in: [`docs/research/module-selection.md`](../../docs/research/module-selection.md), [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md)
+- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md), [`docs/research/module-selection.md`](../../docs/research/module-selection.md)
 
 ### fcc-qoq-gm220p
 
@@ -621,6 +696,34 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Download: manual (the site blocks scripted downloads)
 - Notes: The site blocks scripted downloads; save the page from a browser.
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+
+### icom-ic705-adv
+
+**IC-705 Advanced Manual (English)** (Icom (hosted by Icom UK), manual)
+
+- Local copy: [cache/icom-ic705-adv.pdf](cache/icom-ic705-adv.pdf)
+- Original: <https://icomuk.co.uk/files/icom/PDF/advancedManuals/IC-705_ENG_Advanced_1a.pdf>
+- Retrieved: 2026-09-24; SHA-256 `fcd505049f816897…`
+- Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)
+
+### icom-ic705-basic
+
+**IC-705 Basic Manual (English)** (Icom (hosted by Icom UK), manual)
+
+- Local copy: [cache/icom-ic705-basic.pdf](cache/icom-ic705-basic.pdf)
+- Original: <https://icomuk.co.uk/files/icom/PDF/productManual/IC-705_ENG_Basic_1.pdf>
+- Retrieved: 2026-09-24; SHA-256 `062b9e38d3afff64…`
+- Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)
+
+### icom-ic7300-full
+
+**IC-7300 Full Manual (English, v6)** (Icom (hosted by Icom UK), manual)
+
+- Local copy: [cache/icom-ic7300-full.pdf](cache/icom-ic7300-full.pdf)
+- Original: <https://icomuk.co.uk/files/icom/PDF/advancedManuals/IC-7300_Full_English%20v6.pdf>
+- Retrieved: 2026-09-24; SHA-256 `9beb3c4969ade0cd…`
+- Notes: Also on icomjapan.com/support/manual/2271/ behind a click-through agreement.
+- Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)
 
 ### infineon-btsdk-license
 
@@ -677,6 +780,34 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://jordemort.dev/blog/why-android-cant-use-cdc-ethernet/>
 - Retrieved: 2026-09-24; SHA-256 `0d4e7dfaa9e8f14c…`
 - Cited in: [`protocol/SPEC.md`](../../protocol/SPEC.md)
+
+### kenwood-ts590s-im
+
+**TS-590S Instruction Manual (B62-2243-30)** (JVCKENWOOD (copy hosted by RigPix), manual)
+
+- Local copy: [cache/kenwood-ts590s-im.pdf](cache/kenwood-ts590s-im.pdf)
+- Original: <https://www.rigpix.com/kenwood/ts590s_manual.pdf>
+- Retrieved: 2026-09-24; SHA-256 `f7c244849ea7d88c…`
+- Notes: No manufacturer-hosted copy found on 2026-09-24; this is a third-party mirror of the manufacturer's manual.
+- Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)
+
+### kenwood-ts590sg-im
+
+**TS-590SG Instruction Manual (B5A-0180-20)** (JVCKENWOOD, manual)
+
+- Local copy: [cache/kenwood-ts590sg-im.pdf](cache/kenwood-ts590sg-im.pdf)
+- Original: <https://manuals.jvckenwood.com/download/files/B5A-0180-20.pdf>
+- Retrieved: 2026-09-24; SHA-256 `849df372130dce74…`
+- Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)
+
+### kenwood-ts590sg-usb-audio
+
+**TS-590SG USB Audio Setting Manual (rev. 1, 2018-08-30)** (JVCKENWOOD, manual)
+
+- Local copy: [cache/kenwood-ts590sg-usb-audio.pdf](cache/kenwood-ts590sg-usb-audio.pdf)
+- Original: <https://www.kenwood.com/i/products/info/amateur/ts_590g/pdf/ts590g_usb_audio_manual_e_rev1.pdf>
+- Retrieved: 2026-09-24; SHA-256 `c2fbbbec84c95ede…`
+- Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)
 
 ### lcsc-esp32s3-mini1-n4r2
 
@@ -906,6 +1037,16 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Notes: PipeWire 1.6.9 documentation.
 - Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
 
+### radioddity-x6100-ext
+
+**Extended manual for Xiegu X6100, v1.0 (2024-01-19)** (Radioddity (distributor), manual)
+
+- Local copy: [cache/radioddity-x6100-ext.pdf](cache/radioddity-x6100-ext.pdf)
+- Original: <https://radioddity.s3.amazonaws.com/2024-01-19_Extended_manual_for_Xiegu_X6100_v1.0.pdf>
+- Retrieved: 2026-09-24; SHA-256 `ed66c73012980fc8…`
+- Notes: Secondary source (distributor, not the manufacturer).
+- Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)
+
 ### raytac-mdbt50q-ds
 
 **Raytac MDBT50Q-1MV2 / MDBT50Q-P1MV2 approval sheet (datasheet)** (Raytac, datasheet)
@@ -1133,3 +1274,102 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://pipewire.pages.freedesktop.org/wireplumber/daemon/configuration/bluetooth.html>
 - Retrieved: 2026-09-24; SHA-256 `a77b416edfb9d19f…`
 - Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### xiegu-x6100-um
+
+**X6100 User Manual (2021-11-23)** (Chongqing Xiegu Technology (hosted by Radioddity), manual)
+
+- Local copy: [cache/xiegu-x6100-um.pdf](cache/xiegu-x6100-um.pdf)
+- Original: <https://radioddity.s3.amazonaws.com/Xiegu_X6100_User_Manual_20211123.pdf>
+- Retrieved: 2026-09-24; SHA-256 `4c526436f59729ac…`
+- Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)
+
+### yaesu-ft710-cat
+
+**FT-710 CAT Operation Reference Manual (2306-C)** (Yaesu Musen, manual)
+
+- Local copy: [cache/yaesu-ft710-cat.pdf](cache/yaesu-ft710-cat.pdf)
+- Original: <https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-710_CAT_OM_ENG_2306-C.pdf>
+- Retrieved: 2026-09-24; SHA-256 `fdf62b8a5c89e321…`
+- Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)
+
+### yaesu-ft710-om
+
+**FT-710 Operation Manual (EH080H201, 2307N-GS)** (Yaesu Musen, manual)
+
+- Local copy: [cache/yaesu-ft710-om.pdf](cache/yaesu-ft710-om.pdf)
+- Original: <https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-710_OM_ENG_EH080H201_2307N-GS.pdf>
+- Retrieved: 2026-09-24; SHA-256 `e1afabe5f292c945…`
+- Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)
+
+### yaesu-ft817nd-om
+
+**FT-817ND Operating Manual (E13771011)** (Yaesu Musen, manual)
+
+- Local copy: [cache/yaesu-ft817nd-om.pdf](cache/yaesu-ft817nd-om.pdf)
+- Original: <https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-817ND_OM_ENG_E13771011.pdf>
+- Retrieved: 2026-09-24; SHA-256 `d43dff0803f0544f…`
+- Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)
+
+### yaesu-ft818-om
+
+**FT-818ND Operating Manual (E13772004, 2003u-ES-1)** (Yaesu Musen, manual)
+
+- Local copy: [cache/yaesu-ft818-om.pdf](cache/yaesu-ft818-om.pdf)
+- Original: <https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-818ND_OM_ENG_E13772004_2003u-ES-1.pdf>
+- Retrieved: 2026-09-24; SHA-256 `e723eab91774d62b…`
+- Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)
+
+### yaesu-ft891-adv
+
+**FT-891 Advance Manual (1806-F)** (Yaesu Musen, manual)
+
+- Local copy: [cache/yaesu-ft891-adv.pdf](cache/yaesu-ft891-adv.pdf)
+- Original: <https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-891_Advance_Manual_ENG_1806-F.pdf>
+- Retrieved: 2026-09-24; SHA-256 `7fc016e7ee72c3f6…`
+- Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)
+
+### yaesu-ft891-cat
+
+**FT-891 CAT Operation Reference Book (1909-C)** (Yaesu Musen, manual)
+
+- Local copy: [cache/yaesu-ft891-cat.pdf](cache/yaesu-ft891-cat.pdf)
+- Original: <https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-891_CAT_OM_ENG_1909-C.pdf>
+- Retrieved: 2026-09-24; SHA-256 `59e2295177633b97…`
+- Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)
+
+### yaesu-ft891-om
+
+**FT-891 Operating Manual (EH065H201, 1611A-BO-2)** (Yaesu Musen, manual)
+
+- Local copy: [cache/yaesu-ft891-om.pdf](cache/yaesu-ft891-om.pdf)
+- Original: <https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-891_OM_ENG_EH065H201_1611A-BO-2.pdf>
+- Retrieved: 2026-09-24; SHA-256 `17154a29374ffc26…`
+- Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)
+
+### yaesu-ft991a-cat
+
+**FT-991A CAT Operation Reference Manual (1711-D)** (Yaesu Musen, manual)
+
+- Local copy: [cache/yaesu-ft991a-cat.pdf](cache/yaesu-ft991a-cat.pdf)
+- Original: <https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-991A_CAT_OM_ENG_1711-D.pdf>
+- Retrieved: 2026-09-24; SHA-256 `52164f737e37a3ff…`
+- Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)
+
+### yaesu-ft991a-om
+
+**FT-991A Operating Manual (EH067M205, 2111A-KS-1)** (Yaesu Musen, manual)
+
+- Local copy: [cache/yaesu-ft991a-om.pdf](cache/yaesu-ft991a-om.pdf)
+- Original: <https://www.yaesu.com/Files/4CB893D7-1018-01AF-FA97E9E9AD48B50C/FT-991A_OM_ENG_EH067M205_2111A-KS-1.pdf>
+- Retrieved: 2026-09-24; SHA-256 `bb1ce04b24ab94eb…`
+- Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)
+
+### yaesu-vcp-driver
+
+**Virtual COM Port Driver Installation Manual (2205-E)** (Yaesu Musen, manual)
+
+- Local copy: [cache/yaesu-vcp-driver.pdf](cache/yaesu-vcp-driver.pdf)
+- Original: <https://www.yaesu.com/Files/BB2B47AE-1018-01AF-FAE48FDCB1919193/USB_Driver_Installation_Manual_ENG_2205-E.pdf>
+- Retrieved: 2026-09-24; SHA-256 `ce826e20bf5ea92b…`
+- Cited in: [`docs/research/radio-interfaces.md`](../../docs/research/radio-interfaces.md)

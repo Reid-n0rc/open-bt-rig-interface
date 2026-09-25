@@ -78,11 +78,14 @@ Consequences:
 - **The radio's USB port provides no power.** Transceivers such as the FT-891,
   FT-710, FT-991A and IC-7300 have USB *device* ports (their internal
   USB-serial and codec chips). When this device is the **USB host** to such a port,
-  it must *supply* VBUS to the radio, current-limited. The radio's draw is **(verify)**.
+  it must *supply* VBUS to the radio, current-limited. The radio's draw is **(verify)**:
+  no manual states it, and the IC-705 charges its battery from VBUS by default
+  ([`radio-interfaces.md`](../research/radio-interfaces.md#icom-ic-705)).
 - **Radio accessory DC (preferred where available).** Some radios provide DC on
-  an accessory jack (for example the IC-7300 ACC socket, or the FT-891
-  tuner/linear jack). The pin, voltage and current limit per radio are **(verify)**,
-  tracked in a per-radio table.
+  an accessory jack. Documented limits: IC-7300 ACC 1 A, TS-590SG EXT.AT 4 A,
+  K3 0.5 A, K3S 1 A, K4 1.5 A, all switched with the radio. The Yaesu "+13V"
+  pins have no documented limit **(verify)**. Per-radio table:
+  [`radio-interfaces.md`](../research/radio-interfaces.md#can-the-radio-power-the-interface).
 - **USB-C 5 V sink:** phone charger, power bank or computer.
 - **12 V vehicle or station supply:** the automotive variant (3.2).
 

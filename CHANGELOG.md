@@ -10,6 +10,11 @@ and tagged independently (see `AGENTS.md`).
 
 ## Unreleased
 
+- Per-radio power and interface table (`docs/research/radio-interfaces.md`):
+  DC outputs and limits, USB port, chip and audio, CAT levels, PTT and audio
+  levels for 13 HF/multiband radios plus generic interfaces, cited from the
+  manufacturers' manuals, with cable mappings to the AUDIO and SERIAL jacks and
+  a "needs measurement" list. Adds a `manual` kind to the reference library (#5).
 - Protocol 0.1.0 draft (`protocol/SPEC.md`), system architecture
   (`docs/architecture.md`) and ADR-0007 (proposed). One COBS-framed,
   CRC-checked message stream over BLE GATT, L2CAP CoC, and, in wired mode, TCP

@@ -33,7 +33,7 @@ CACHE = REF_DIR / "cache"
 INDEX = REF_DIR / "index.md"
 
 REQUIRED = ("id", "title", "publisher", "kind", "url", "file", "used_in")
-KINDS = {"datasheet", "app-note", "fcc", "sdk", "license", "issue", "web", "standard"}
+KINDS = {"datasheet", "app-note", "manual", "fcc", "sdk", "license", "issue", "web", "standard"}
 USER_AGENT = "Mozilla/5.0 (open-bt-rig-interface reference fetcher)"
 
 
