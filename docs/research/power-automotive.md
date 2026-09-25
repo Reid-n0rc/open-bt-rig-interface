@@ -33,26 +33,34 @@ bench test. Calculations are reproducible from the numbers given here.
   ISO 7637-2:2011, plus the official ISO previews for editions and clause
   numbers (§1). One target changes: the **jump start is 26 V for 60 s** in
   ISO 16750-2:2023 (24 V in the 2012 edition).
-- **Protection:** 2 A AEC-Q200 fuse → anti-series TVS stack (TPSMB82A +
+- **Protection:** 2 A 63 V fuse → anti-series TVS stack (TPSMB82A +
   SMBJ33CA-HE3, breakdown ≥ 107 V at −40 °C) → **LM74800-Q1** ideal-diode
   controller with back-to-back N-MOSFETs in **common-source** topology (150 V
   blocking FET), with overvoltage **cut-off at about 38.5 V**. The TVS absorbs
   no load-dump energy; unsuppressed load dump (101 V) is blocked by the FET (§4).
-- **Filter:** TDK ACM70V common-mode choke + 2.2 µH / 2.2 µF pi filter,
+- **Filter:** Murata DLW5BTM common-mode choke + 2.2 µH / 2.2 µF pi filter,
   corner about 78 kHz, about 59 dB ideal attenuation at the switching
   frequency (§5).
-- **Regulation:** two **LMR43620-Q1** bucks (12 V → 5 V, then 5 V → 3.3 V),
-  **synchronized to a 2.304 MHz crystal-grade clock** so that no harmonic from
-  160 m to 10 m lands inside a US amateur band (worst margin 88 kHz; §6).
-  The usual 2.1 MHz and 2.2 MHz defaults put a harmonic inside 10 m.
-- **Cold crank:** no buck-boost. Logic keeps running to about 3.8 V input; a
-  hardware brownout detector forces PTT off at 7.0 V; hold-up is ≥ 618 µs from
-  7.0 V at worst-case load (§7, §8).
+- **Regulation (single stage):** one **LMR43620MC3RPERQ1** converts the
+  protected input straight to 3.3 V, in FPWM, **synchronized to 2.304 MHz**
+  (an 18.432 MHz oscillator divided by 8) so that no harmonic from 160 m to
+  10 m lands inside a US amateur band (worst margin 88 kHz; §6). There is no
+  5 V rail. Sync holds up to 19.1 V input (tON-MIN 75 ns max) and down to
+  about 4.2 V (tOFF-MIN), so it covers the 4.5 V cold crank.
+- **Cold crank:** no buck-boost. The 3.3 V rail stays regulated down to about
+  3.5 V input; a hardware brownout detector forces PTT off at 7.0 V; hold-up
+  is ≥ 747 µs from 7.0 V at worst-case load (§7, §8).
 - **Power-down:** ignition / radio-on sense, USB-C host and a firmware hold
   line drive the LM74800-Q1 enable. **Off-state drain ≤ 7 µA** at 25 °C
   (limit 1 mA; §9).
-- **Power budget:** about 1.2 W typical and **2.4 W worst case** input, inside
+- **Power budget:** about 1.1 W typical and **2.1 W worst case** input, inside
   the 1.5 W typical / 3 W peak target of constraints §3.4 (REQ-PWR-003) (§2).
+- **Cost:** power-section main parts about **$10.95** at LCSC (qty 100), down
+  from about $23.56 for the two-buck version (§10). AEC-Q parts are kept only
+  in the input protection chain and where they cost about the same.
+- **EU:** all chosen parts are RoHS per the distributor listings. The
+  protection and filter also cover EN 301 489-1's vehicle clauses (§11a,
+  [#59](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/59)).
 
 ## 1. Test levels
 
@@ -135,54 +143,57 @@ worst corners are therefore 101 V / 4 Ω and 79 V / 0.5 Ω.
 
 ## 2. Loads and power budget
 
-Placeholders are marked with the issue that settles them.
+Placeholders are marked with the issue that settles them. Every load runs
+from 3.3 V; variant M has no 5 V rail.
 
-| Rail | Load | Typical | Worst case | Basis |
-|---|---|---|---|---|
-| 3.3 V | ESP32-S3-MINI-1 | 0.10 A | **0.34 A** (BLE TX +20 dBm) | [datasheet](../references/index.md#esp32s3-mini1-ds); typical per constraints §3.4 (#7) |
-| 3.3 V | USB hub (USB2422), wired mode | 0 (Bluetooth mode) | 0.05 A | Placeholder (#9) |
-| 3.3 V | Audio codec incl. its 1.8 V core LDO | 0.05 A | 0.05 A | Placeholder (#8) |
-| 3.3 V | Oscillator, supervisor, USB switches, LEDs, PTT PhotoMOS LED, isolator side 1 | 0.02 A | 0.02 A | Allowance; SiT8924B ≤ 4.8 mA ([datasheet](../references/index.md#sitime-sit8924b-ds)) |
-| **3.3 V total** | | **0.17 A (0.56 W)** | **0.46 A (1.52 W)** | |
-| 5 V | Isolated jack-side supply (RS-232, analog switches, isolator side 2) | 0.07 A | 0.07 A | Placeholder: 0.25 W out at 70 % (#9) |
-| 5 V | Buck B input (3.3 V rail at 88 %) | 0.13 A | 0.35 A | Efficiency **(verify)** |
-| **5 V total** | | **0.20 A (1.0 W)** | **0.42 A (2.1 W)** | |
-| 12 V in | Buck A at 88 %, protection and filter losses | **≈ 1.2 W** | **≈ 2.4 W** | Efficiency **(verify)** |
+| Load (3.3 V) | Typical | Worst case | Basis |
+|---|---|---|---|
+| ESP32-S3-MINI-1 | 0.10 A | **0.34 A** (BLE TX +20 dBm, 100 % duty) | [datasheet](../references/index.md#esp32s3-mini1-ds) Table 6-5; typical per constraints §3.4 (#7) |
+| USB hub (USB2422), wired mode | 0 (Bluetooth mode) | 0.05 A | Placeholder (#9) |
+| Audio codec incl. its core/analog regulators | 0.05 A | 0.05 A | Placeholder (#8) |
+| Oscillator and dividers, supervisor, USB switches, LEDs, PTT PhotoMOS LED, isolator side 1 | 0.02 A | 0.02 A | Allowance; oscillator ≤ 5 mA ([YXC](../references/index.md#yxc-yso110tr-ds)) |
+| Isolated jack-side supply (RS-232, analog switches, isolator side 2), from 3.3 V | 0.11 A | 0.11 A | Placeholder: 0.25 W out at 70 % (#9) |
+| **3.3 V total** | **0.28 A (0.92 W)** | **0.57 A (1.88 W)** | |
+| **12 V input** (buck at 89.5 % typ / 92 % worst, plus 30 mW protection and filter) | **≈ 1.1 W** | **≈ 2.1 W** | Efficiency from the datasheet curve (§6.4) **(verify)** |
 
 - **No radio load.** The radio port's VBUS is blocked (ADR-0003, #9), so no
   VBUS switch or radio current appears here. The radio USB isolator
   (ADuM4160 fitting option, constraints §6) needs only a small radio-side
   supply, which belongs to the isolated supply (#9).
-- Input current at 2.4 W: 0.18 A at 13.5 V, 0.27 A at 9 V, 0.40 A at 6 V.
+- **The isolated supply runs from 3.3 V.** An SN6505B-class driver accepts
+  2.25–5.5 V ([datasheet](../references/index.md#ti-sn6505-q1-ds)); #9 owns
+  the details.
+- Input current at 2.1 W: 0.15 A at 13.5 V, 0.23 A at 9 V, 0.46 A at 4.5 V.
 - Inside constraints §3.4 / REQ-PWR-003 (about 1.5 W typical, 3 W peak).
 - **USB-C in variant M** is a sink-only data link (wired mode). The device
   never sources power on it. In variant M its VBUS is used to detect a host and
   as a wake source (§9). Whether variant M can also run from USB-C VBUS alone
-  (for bench use) belongs to #11's source-mux design. The 5 V budget (0.42 A
-  worst case) would fit a 500 mA USB-C default, but that isn't designed here.
+  (for bench use) belongs to #11's source-mux design.
 
 ## 3. Architecture
 
 ```text
-12 V lead ─ F1 ─┬─ D3+D4 TVS stack ─┬─ Q1 (150 V) ═╤═ Q2 (80 V) ─ CMC ─ C1 ─ L1 ─┬─ C2 + C_bulk ─┬─ Buck A 5 V ─┬─ codec LDO (LP5907-Q1)
-  (2 A)         │  C_in 100 nF 250 V│  HGATE        │  DGATE (ideal diode)          │  (hold-up)    │  LMR43620-Q1 ├─ isolated supply (jack side, #9)
-                │                   └── LM74800-Q1 (common source, OV cut-off 38.5 V)│              │              └─ Buck B 3.3 V ─ ESP32-S3, hub, codec (LDO)
-IGN / radio-on ─┴─ sense network ────── EN/UVLO ◄── USB-C VBUS, firmware HOLD     │              │                 LMR43620-Q1
-                                                                                  TPS3710-Q1 brownout (7.0 V) ─► PTT enable gate
-                                                  2.304 MHz AEC-Q100 oscillator ─► SYNC of Buck A and Buck B
+12 V lead ─ F1 ─┬─ D3+D4 TVS stack ─┬─ Q1 (150 V) ═╤═ Q2 (100 V) ─ CMC ─ C1 ─ L1 ─┬─ C2 + C_bulk ─┬─ U2 LMR43620MC3 ─ 3.3 V ─┬─ ESP32-S3, hub, codec (#8)
+  (2 A)         │  C_in 100 nF 250 V│  HGATE        │  DGATE (ideal diode)           │  (hold-up)    │  (single stage, FPWM)     └─ isolated supply (jack side, #9)
+                │                   └── LM74800-Q1 (common source, OV cut-off 38.5 V) │              │
+IGN / radio-on ─┴─ sense network ────── EN/UVLO ◄── USB-C VBUS, firmware HOLD       │              │
+                                                                                    TPS3710 brownout (7.0 V) ─► PTT enable gate
+                              18.432 MHz oscillator ─► ÷8 (3 × SN74LVC1G80) ─► 2.304 MHz ─► MODE/SYNC of U2
 ```
 
 ## 4. Protection chain
 
 ### 4.1 Fuse
 
-- **Littelfuse 0437002.WRA** (437A series, 1206, 2 A fast-acting, **63 V**,
-  AEC-Q200; [datasheet](../references/index.md#littelfuse-437-ds)); interrupting
-  rating 50 A at 63 V per the LCSC listing **(verify** the table grouping for 2 A).
+- **Littelfuse 0466002.NRHF** (466 series, 1206, 2 A fast-acting, **63 V**
+  rating, 50 A interrupting at 63 V per its table;
+  [datasheet](../references/index.md#littelfuse-0466-ds)). Not automotive
+  qualified; at $0.055 it is a third of the AEC-Q200 437A
+  ([0437002.WRA](../references/index.md#littelfuse-437-ds), $0.16), and a
+  fuse's job here (clearing a board fault) doesn't depend on AEC-Q.
   63 V covers the jump start (26 V) with more than 2× margin.
-- 2 A against a worst-case input of 0.40 A at 6 V: the datasheet recommends
-  continuous operation at ≤ 80 % of rating; temperature derating at 85 °C
-  **(verify** against the 437A derating curve).
+- 2 A against a worst-case input of 0.46 A at 4.5 V; temperature rerating at
+  85 °C per the 466 curve **(verify)**.
 - The harness also carries an in-line blade fuse at the battery or fuse-box
   tap (user documentation). It protects the wire; F1 protects the board.
 - PTC fuses were not chosen: automotive PTCs are rated well below the 101 V
@@ -231,17 +242,22 @@ Test B (US* ≤ 35 V) gives **0 J** in the chosen stack as well.
   above the 65 V operating limit, hence 56 V **(verify part)**.
 - **OV cut-off at 38.5 V nominal:** threshold 1.195–1.267 V ±1 % resistors gives
   about 37.0–40.0 V. That passes test B (35 V) and the jump start (26 V) and
-  stays under the bucks' 42 V absolute maximum. Turn-off deglitch is 3.98–5.4 µs.
-- **Q1: Diodes DMTH15H017SPSWQ**, 150 V, AEC-Q101, TJ −55 to +175 °C, IDSS
-  ≤ 1 µA at 120 V ([datasheet](../references/index.md#diodes-dmth15h017spswq-ds)).
-  Worst VDS: pulse 2a/3b input, clamped by the TVS stack at ≤ about 127 V
-  (sum of VBR max) plus dynamic rise; ≥ 15 % margin. Q1 only switches, so
-  RDS(on) and SOA are not critical.
-- **Q2: Vishay SQSA80ENW**, 80 V, AEC-Q101, TJ −55 to +175 °C, 21 mΩ
-  ([datasheet](../references/index.md#vishay-sqsa80enw-ds)). During pulse 1
-  it blocks the hold-up voltage plus the negative clamp: 16 V + 44 V + TVS
-  forward drop ≈ 64 V, under 80 V. (TI's 12 V example uses 60 V with a 44 V
-  clamp, which leaves no margin for a 16 V output.)
+  stays under the buck's 42 V absolute maximum. Turn-off deglitch is 3.98–5.4 µs.
+- **Q1: onsemi FDN86246**, 150 V BVDSS, 261 mΩ max at 10 V, ±20 V VGS,
+  IDSS ≤ 1 µA at 120 V, TJ −55 to +150 °C, SOT-23
+  ([datasheet](../references/index.md#onsemi-fdn86246-ds)). Worst VDS: pulse
+  2a/3b input, clamped by the TVS stack at ≤ about 127 V (sum of VBR max) plus
+  dynamic rise; ≥ 15 % margin. In this topology Q1 only switches and never
+  absorbs load-dump energy, so SOA isn't involved and a commercial part is
+  enough; it replaces a $5.91 AEC-Q101 PowerDI part
+  ([DMTH15H017SPSWQ](../references/index.md#diodes-dmth15h017spswq-ds)).
+- **Q2: Infineon IRLML0100**, 100 V, 220 mΩ at 10 V, ±16 V VGS, TJ −55 to
+  +150 °C, SOT-23 ([datasheet](../references/index.md#infineon-irlml0100-ds)).
+  During pulse 1 it blocks the hold-up voltage plus the negative clamp:
+  16 V + 44 V + TVS forward drop ≈ 64 V, under 100 V. The LM74800-Q1 charge
+  pump turns off at 14.1 V max (VCAP − VS), inside ±16 V VGS.
+- **FET dissipation:** (0.26 + 0.22) Ω × 0.46 A² ≈ 0.10 W at 4.5 V input
+  (cold crank, short), 11 mW at 13.5 V.
 - **TVS stack** (anti-series, battery to ground):
   - **D3: Littelfuse TPSMB82A**, unidirectional, VRWM 70.1 V, VBR 77.9 V min,
     Vc 113 V at 5.4 A, αT 0.105 %/°C, AEC-Q101, TJ −65 to +175 °C
@@ -258,7 +274,15 @@ Test B (US* ≤ 35 V) gives **0 J** in the chosen stack as well.
     within the LM74800-Q1's −65 V.
 - **C_in: 100 nF 250 V X7R 1206, soft termination** (YAGEO AS1206KKX7RYBB104,
   AEC-Q200; [datasheet](../references/index.md#yageo-as-ds)) at the
-  connector, before Q1.
+  connector, before Q1. The soft termination is kept: a flex crack in this
+  capacitor would short the battery lead at the connector, and it costs
+  $0.075 more than a plain 1206.
+- **Where AEC-Q is kept in the chain:** the TVS pair (D3, D4), which takes
+  every transient (the HE3 D4 costs the same as the commercial SMBJ33CA:
+  $0.137 vs $0.131; D3 TPSMB82A is $0.075 more than the electrically
+  equivalent commercial SMBJ70A), C_in (above), and U1 (the LM74800-Q1 is the
+  only stocked version). Everything else in the chain is commercial, rated
+  −40 °C or lower to at least +85 °C.
 
 ### 4.5 Pulse by pulse
 
@@ -267,9 +291,10 @@ Test B (US* ≤ 35 V) gives **0 J** in the chosen stack as well.
 | Pulse 1, −150 V, 10 Ω, 2 ms | D4 clamps at ≈ −44 V; Q2 blocks within 0.5 µs; hold-up keeps the rails | Ipk 10.6 A, **0.20 J per pulse** vs ≈ 0.87 J for a 600 W 10/1000 µs rating; 500 pulses at 0.5 s = 0.40 W average vs 5 W PD (SMBJ) | A |
 | Pulse 2a, +112 V, 2 Ω, 50 µs | Stack barely conducts (2.6 A, 0.2 mJ at −40 °C); OV cut-off opens Q1 within ≈ 5 µs | Output rise during the deglitch ≈ 2.6 V into the hold-up capacitance | A |
 | Pulse 3a / 3b, −220 / +150 V, 50 Ω, 150 ns | C_in absorbs: +150 V into 100 nF raises the node by 4.4 V; D4 takes 3a (3.6 A, 6 µJ) | Negligible | A |
-| Jump start 26 V, 60 s; transient 18 V | Below OV cut-off; Buck A on-time still above its minimum at 26 V | — | A |
-| Test B, 35 V, ≤ 400 ms | Below OV cut-off; the stack doesn't conduct | 0 J; Buck A briefly below minimum on-time (frequency foldback, §6.3) | A |
-| Test A, ≤ 101 V, ≤ 400 ms, 10 × | Q1 opens at 37–40 V; hold-up carries ≈ 2.6 ms, then brownout forces PTT off and the device resets | 0 J in TVS and FETs; VS clamp 0.45 W total for ≤ 400 ms | C |
+| Transient 18 V, 400 ms; long-term 18 V | Below OV cut-off; U2 on-time 79.6 ns ≥ 75 ns, so it stays synchronized | — | A |
+| Jump start 26 V, 60 s | Below OV cut-off; U2 on-time would be 55 ns, so it folds back to about 1.7–1.95 MHz for the event (§6.3) | Harmonics move for up to 60 s | A |
+| Test B, 35 V, ≤ 400 ms | Below OV cut-off; the stack doesn't conduct; U2 folds back to about 1.3–1.45 MHz | 0 J | A |
+| Test A, ≤ 101 V, ≤ 400 ms, 10 × | Q1 opens at 37–40 V; hold-up carries ≈ 3 ms, then brownout forces PTT off and the device resets | 0 J in TVS and FETs; VS clamp 0.45 W total for ≤ 400 ms | C |
 | Reverse −14 V, 60 s | Q1 body diode conducts, Q2 blocks 14 V | LM74800-Q1 reverse leakage 19 µA typ | A (off) |
 | ESD ±15 kV air (330 pF) | 4.95 µC into C_in raises it ≈ 50 V; the stack clamps | **(verify)** with ISO 10605 network | A |
 
@@ -286,31 +311,33 @@ Figure 1, from CISPR 25:2016).
 component, and the vehicle's 12 V wiring also feeds the radio. It is
 therefore filtered as if the MW limit applied.
 
-**Differential-mode estimate** (Buck A at 0.42 A, 14 V → 5 V, D = 0.357):
+**Differential-mode estimate** (re-checked for the single stage: U2 at
+0.57 A, 14 V → 3.3 V, D = 0.236):
 
 - Fundamental of the input current pulse train:
-  I1 = (2/π)·Iout·sin(πD) = **0.24 A peak**.
+  I1 = (2/π)·Iout·sin(πD) = **0.24 A peak** (the same as the two-stage
+  design, because the lower duty cycle offsets the higher output current).
 - Buck-side input capacitance 2 × 2.2 µF 100 V (≈ 1.9 µF each at 14 V bias),
-  ESR ≈ 5 mΩ: |Z| = 18.9 mΩ → V1 = 4.5 mV peak = **70.1 dBµV rms**.
-- Target 28 dBµV (Class 5 MW average 34 dBµV − 6 dB margin): **≥ 42.1 dB**
+  ESR ≈ 5 mΩ: |Z| = 18.9 mΩ → V1 = 4.6 mV peak = **70.2 dBµV rms**.
+- Target 28 dBµV (Class 5 MW average 34 dBµV − 6 dB margin): **≥ 42.2 dB**
   of attenuation needed.
-- **L1 = 2.2 µH** (TDK TFM252012ALMA2R2MTAA, AEC-Q200, 2.6 A, 75 mΩ,
-  −55 to +150 °C; [datasheet](../references/index.md#tdk-tfm252012alma-ds)):
-  XL = 31.8 Ω at 2.304 MHz. **C1 = 2.2 µF 100 V X7R 1210** (TDK
-  CGA6N3X7R2A225K, AEC-Q200; [catalog](../references/index.md#tdk-cga-ds)), XC = 36 mΩ:
-  **≈ 59 dB** ideal, about 17 dB over the need before parasitics.
+- **L1 = 2.2 µH** (TDK TFM252012ALMA2R2MTAA, 2.6 A, 75 mΩ, −55 to +150 °C;
+  [datasheet](../references/index.md#tdk-tfm252012alma-ds)); the same part is
+  the buck inductor (§6.3). XL = 31.8 Ω at 2.304 MHz. **C1 = 2.2 µF 100 V X7R
+  1210** (PSA FS32X225K101EGG; [datasheet](../references/index.md#psa-fs32-ds)),
+  XC = 36 mΩ: **≈ 59 dB** ideal, about 17 dB over the need before parasitics.
 - **Corner frequency:** f0 = 1 / (2π√(L1·C1)) = **78 kHz** (L1 with C1), or
   55 kHz with the buck-side 3.8 µF; both are ≥ 30× below fsw.
 - **Damping and stability:** filter Z0 = √(L1 / C_buck) = 0.76 Ω. The
-  **100 µF 50 V electrolytic** (Panasonic EEE-FK1H101P, AEC-Q200,
-  −55 to +105 °C; [datasheet](../references/index.md#panasonic-fk-ds)) at the
+  **100 µF 50 V electrolytic** (Huawei VD1H101MF105000CE0, −55 to +105 °C,
+  5000 h at 105 °C; [datasheet](../references/index.md#huawei-vd-ds)) at the
   buck side damps the resonance with its ESR and doubles as hold-up (§8).
-  The buck's negative input resistance, Vin² / Pin, is 33.8 Ω at 9 V and
-  15.0 Ω at 6 V, well above Z0 (Middlebrook criterion met).
-- **Common mode:** **TDK ACM70V-701-2PL-TL00**, 700 Ω at 100 MHz, 4 A at
-  125 °C, 80 V rated, AEC-Q200, −40 to +125 °C
-  ([datasheet](../references/index.md#tdk-acm70v-ds)), placed after Q2 where
-  the voltage is ≤ 40 V. It targets the 26–108 MHz bands, where the
+  The buck's negative input resistance, Vin² / Pin, is 39.2 Ω at 9 V and
+  9.8 Ω at 4.5 V, well above Z0 (Middlebrook criterion met).
+- **Common mode:** **Murata DLW5BTM142TQ2L**, 1400 Ω at 100 MHz, 2 A, 56 mΩ,
+  100 V rated, −40 to +105 °C
+  ([datasheet](../references/index.md#murata-dlw5btm-ds)), placed after Q2
+  where the voltage is ≤ 40 V. It targets the 26–108 MHz bands, where the
   switch-node edges and harmonics 12 and up (27.6 MHz and above) couple as
   common mode. Its attenuation depends on layout and the ground reference; it
   must be verified with a pre-compliance scan **(verify)**.
@@ -328,8 +355,15 @@ therefore filtered as if the MW limit applied.
 | TI LMR33630-Q1 | 3.8–36 V | Fixed 400 kHz / 1.4 / 2.1 MHz, **no sync** | 68 ns | Grade 1 | 2.1 MHz × 14 = 29.4 MHz, inside 10 m: **rejected** | [datasheet](../references/index.md#ti-lmr33630-q1-ds) |
 | ADI LT8609S, MAX20404 (Silent Switcher / spread spectrum) | — | — | — | — | **Not evaluated**: analog.com blocked scripted access on 2026-09-24. Worth a look in #11 | — |
 
-**Choice: LMR43620-Q1 for both bucks.** It is the only candidate whose sync
-range reaches the band-clean 2.304 MHz (§6.2). The LM6x440 family is the
+**Choice: one LMR43620MC3RPERQ1** (maintainer decision 2026-09-24): the
+LMR436x0 family is the only candidate whose sync range reaches the band-clean
+2.304 MHz (§6.2), and the MC3 variant is 3.3 V fixed, MODE/SYNC, without
+spread spectrum. **Cheaper option for the maintainer:** the commercial
+**LMR43610MB3RPER** (1 A, 3.3 V fixed, MODE/SYNC, no spread spectrum, same
+0.2–2.5 MHz sync range and the same 75 ns / 85 ns timing, −40 to +150 °C TJ;
+[datasheet](../references/index.md#ti-lmr436x0-ds)) costs $1.40 at LCSC
+against $3.99. Its free-running frequency is 1 MHz (0.9–1.1 MHz), whose
+harmonics sit on band edges until sync starts. The LM6x440 family is the
 fallback at 2.150 MHz with a smaller margin.
 
 ### 6.2 Switching frequency against the HF amateur bands
@@ -381,22 +415,51 @@ clock tolerance, against every band. Findings (1 kHz scan, 0.3–3.0 MHz):
   it smears energy over n × the spread, straight into the bands. The
   LMR436x0-Q1 disables it while synchronized. **FPWM always:** PFM light-load
   mode wanders in frequency; the MODE/SYNC variants run FPWM when synchronized.
-- **Clock source:** **SiTime SiT8924B**, AEC-Q100 (grade 1 −40 to +125 °C
-  option), any frequency 1–110 MHz, ±20 ppm option, ≤ 4.8 mA
-  ([datasheet](../references/index.md#sitime-sit8924b-ds)), ordered at
-  2.304000 MHz. Alternate: a standard 18.432 MHz oscillator divided by 8.
-  The ESP32-S3 can't make 2.304 MHz by integer division of its 80 MHz or
-  40 MHz clocks; a fractional LEDC divider would add jitter spurs.
+- **Clock source (cheapest that meets ±50 ppm at −40 to +85 °C):** a stock
+  **18.432 MHz** CMOS oscillator, **YXC OT322518.432MJBA4SL** (YSO110TR
+  series: ±10 ppm at 25 °C, ±20 ppm over −40 to +85 °C, ±3 ppm/year, ≤ 5 mA,
+  3 ms start-up; [datasheet](../references/index.md#yxc-yso110tr-ds)), divided
+  by 8 with three **SN74LVC1G80** flip-flops (Q̅ to D, ÷2 each; −40 to
+  +125 °C; [datasheet](../references/index.md#ti-sn74lvc1g80-ds)). Total
+  about **$0.86** at LCSC, against about $3 for a programmed SiT8924B
+  ([datasheet](../references/index.md#sitime-sit8924b-ds)). No 2.304 MHz
+  (or 4.608/9.216 MHz, ÷2/÷4) oscillator was stocked at LCSC on 2026-09-24.
+  The divider's intermediate clocks (18.432, 9.216 and 4.608 MHz) are
+  multiples of 2.304 MHz, so they add no new spectral lines.
+- **Shared with the audio codec (ADR-0002, PR #55).** The same 2.304 MHz
+  clock is the TLV320AIC3104's MCLK: codec PLL P = 3, R = 8, J = 16, D = 0
+  gives exactly 48 kHz, with the codec as I2S master. The clock therefore
+  has up to three loads: U2 MODE/SYNC, codec MCLK, and the #9
+  isolated-supply clock if used.
+  - **Accuracy:** ±20 ppm over −40 to +85 °C (plus ±3 ppm/year), meeting
+    ADR-0002's ±20 ppm assumption and constraints §8's ±50 ppm.
+  - **Jitter:** oscillator phase jitter 0.7 ps max (12 kHz–20 MHz,
+    [YXC](../references/index.md#yxc-yso110tr-ds)). The three LVC flip-flops
+    add a little; their additive jitter isn't specified **(verify on the
+    bench)**. It is far below what a PLL-fed audio MCLK tolerates.
+  - **Levels:** SN74LVC1G80 at 3.3 V drives rail to rail (±32 mA). The codec
+    MCLK input needs VIH ≥ 0.7 × IOVDD and VIL ≤ 0.3 × IOVDD at IOVDD = 3.3 V
+    ([TLV320AIC3104](../references/index.md#ti-tlv320aic3104-ds)), and the
+    MODE/SYNC pin needs ≥ 1.6 V high and ≤ 1 V low.
+  - **Fanout:** the last flip-flop drives the three loads as a star, with a
+    33 Ω series resistor at the driver for each trace (source termination;
+    each trace a few cm, over ground). At 2.304 MHz three CMOS inputs
+    (≈ 5–10 pF each) draw well under 1 mA. A 74LVC1G34 buffer per branch
+    ($0.05–0.10) is the option if the codec branch needs isolation from the
+    buck's SYNC trace **(decide at layout)**.
+- The ESP32-S3 can't make 2.304 MHz by integer division of its 80 MHz or
+  40 MHz clocks. Its nearest, 80 MHz / 35 = 2.2857 MHz, puts harmonic 13
+  only 14 kHz above 10 m, and a fractional LEDC divider would add jitter spurs.
 - **Before sync is present** (the first milliseconds, before the 3.3 V rail
-  powers the oscillator), the MC variants (no spread spectrum) free-run at a
-  **fixed 2.2 MHz**, specified as 2.1–2.3 MHz
+  powers the oscillator, which then needs up to 3 ms to start), the MC3
+  (no spread spectrum) free-runs at a **fixed 2.2 MHz**, specified as 2.1–2.3 MHz
   ([datasheet](../references/index.md#ti-lmr436x0-q1-ds), FSW(2p2MHz)).
   Against the harmonic table, a nominal 2.2 MHz puts only harmonic 13
   (28.6 MHz) inside a band (10 m). Across the full 2.1–2.3 MHz tolerance,
   harmonics 8 (17 m), 10 (15 m), 11 (12 m) and 13 (10 m) can fall in bands.
   This lasts only until the oscillator starts, before any receive or
   transmit. Behavior if the clock is lost later **(verify)**; presumably the same fallback.
-- The **isolated jack-side supply (#9) must follow the same rule.** The
+- The **isolated jack-side supply (#9, from 3.3 V) must follow the same rule.** The
   SN6505B-Q1 accepts an external clock of 100–1600 kHz and divides it by 2
   ([datasheet](../references/index.md#ti-sn6505-q1-ds)). Its comb would then
   be 2.304 / k MHz, and the extra harmonics land in bands. Options for #9:
@@ -404,74 +467,106 @@ clock tolerance, against every band. Findings (1 kHz scan, 0.3–3.0 MHz):
   topology switching at 2.304 MHz itself (for example a synchronized
   Fly-Buck; suitability of the LMR436x0-Q1 **(verify)**).
 
-### 6.3 Rails
+### 6.3 The 3.3 V stage
 
-- **Buck A: 12 V → 5.0 V, LMR43620MC5RPERQ1** (MODE/SYNC, 5 V fixed, no
-  spread spectrum; alternate LMR43620MSC5RPERQ1). At 2.304 MHz the on-time is
-  136 ns at 16 V, 121 ns at 18 V and 83 ns at 26 V, all above the 75 ns
-  maximum tON-MIN. At 35 V (test B) it is 62 ns: the part folds back in
-  frequency for the duration, so harmonics move for ≤ 400 ms. The maximum duty
-  cycle from tOFF-MIN (85 ns) is 0.80, so 5 V regulates down to about 6.2 V in;
-  below that the part runs in dropout (tON-MAX 6–13 µs, output ≈ Vin − 0.2 V).
-- **Buck B: 5 V → 3.3 V, LMR43620MC3RPERQ1** (MODE/SYNC, 3.3 V fixed, no
-  spread spectrum; alternate LMR43620MSC3RPERQ1), on the same clock. Its input
-  never sees automotive transients, so no foldback (D = 0.66). It keeps
-  3.3 V until the 5 V rail falls to about 3.5 V (input ≈ 3.7–3.8 V).
-- **No VBUS switch to the radio.** The radio port's VBUS is blocked in
-  hardware; see ADR-0003 (#9).
-- **Buck A sizing:** 0.42 A worst case uses about a fifth of the
-  LMR43620-Q1's 2 A. The pin-compatible **LMR43610MSC5RPERQ1** (1 A;
-  TI.com 2.850 USD at 100–249, 3,843 in stock, 2026-09-24) would do. The 2 A
-  part is kept so that both bucks share one part family, and for headroom
-  if #9's isolated supply grows.
-- **Codec analog rail: LP5907-Q1** 3.3 V LDO from the 5 V rail (AEC-Q100
-  grade 1, 2.2–5.5 V input, 250 mA, < 6.5 µV rms, 82 dB PSRR at 1 kHz, 120 mV
-  typical dropout; [datasheet](../references/index.md#ti-lp5907-q1-ds)). #8
-  decides. The shortlist's [TPS7A20](../references/index.md#ti-tps7a20-ds) has no -Q1 version at TI.
-- The **ESP32-S3 3.3 V** comes straight from Buck B with the decoupling and
+**U2: LMR43620MC3RPERQ1**, protected input → 3.3 V, FPWM, synchronized at
+2.304 MHz ([datasheet](../references/index.md#ti-lmr436x0-q1-ds): tON-MIN
+65 ns typ / 75 ns max, tOFF-MIN 60 ns typ / 85 ns max, tON-MAX 6–13 µs in
+dropout).
+
+- **Upper limit of synchronized operation:** tON = D / fsw ≥ tON-MIN gives
+  Vin ≤ 3.3 V / (75 ns × 2.304 MHz) = **19.1 V** with the maximum tON-MIN
+  (22.0 V with the typical 65 ns). That covers the 9–16 V range and the 18 V
+  long-term and transient overvoltage tests (tON = 79.6 ns at 18 V).
+- **Above that, the part lowers its frequency** to hold regulation (datasheet
+  §7.1: "the switching frequency is reduced automatically"): about
+  1.69–1.95 MHz during the **26 V jump start** (up to 60 s) and 1.26–1.45 MHz
+  during the **35 V test B** clamp (≤ 400 ms). The harmonics move for the
+  duration, and a few may cross a band. That is accepted: both are rare
+  events while the engine is being started or the alternator misbehaves.
+  Whether the part stays phase-related to SYNC while folded back **(verify)**.
+- **Lower limit of synchronized operation:** maximum duty
+  1 − tOFF-MIN × fsw = 1 − 85 ns × 2.304 MHz = **0.804**, so Vin ≥ 3.3 / 0.804
+  = **4.10 V** plus IR drops (≈ 0.1 V at 0.57 A through the FETs, fuse, CMC
+  and L1), **≈ 4.2 V at the connector**. The normal cold crank (4.5 V) stays
+  synchronized.
+- **Below that, dropout:** VDROP1 = 0.2 V typ (3.3 V, 1 A, output ≥ 95 %,
+  with frequency foldback) keeps the rail at ≥ 3.14 V down to about **3.5 V
+  input**. VDROP = 0.7 V typ keeps FSW ≥ 1.85 MHz down to about 4.0 V.
+- **Inductor:** 2.2 µH per the datasheet's Table 8-2 (3.3 V, 2.2 MHz), the same
+  TDK TFM252012ALMA2R2MTAA as L1 (2.6 A, 75 mΩ). Ripple at 2.304 MHz:
+  0.41 A pp at 9 V, 0.52 A pp at 16 V; peak 0.83 A at 0.57 A load, well under
+  its current rating. A cheaper Sunlord SWPA4030S2R2NT (2.95 A, 30 mΩ,
+  $0.048) is a candidate once its temperature range is confirmed **(verify)**.
+- **Output capacitors:** 2 × 22 µF (datasheet Table 8-2), **Samwha
+  CS3216X7R226K160NRI**, 16 V X7R 1206 ([datasheet](../references/index.md#samwha-cs-ds)),
+  rated ≥ 2 × 3.3 V per pcb-fabrication §6.3 (10 V minimum) with DC-bias
+  headroom. Ripple ≈ 1.4 mV pp with 20 µF effective **(verify DC bias)**.
+- **Input capacitors:** C2 (2 × 2.2 µF 100 V, ≈ 3.8 µF effective) plus
+  100 nF 100 V at the VIN pin (datasheet: 4.7 µF + 100 nF).
+- **No 5 V rail, no second buck.** No VBUS switch to the radio either; the
+  radio port's VBUS is blocked in hardware (ADR-0003, #9).
+- **Codec analog rail (ADR-0002 / #8):** an **LP5907-3.0** LDO from the 3.3 V
+  rail ([LP5907](../references/index.md#ti-lp5907-q1-ds): 250 mV max dropout
+  at 250 mA, 120 mV typical). It needs the 3.3 V rail at **≥ about 3.1 V**.
+  Check against the figures above:
+  - Synchronized (input ≥ ≈ 4.2 V, including the whole normal cold crank):
+    the rail is regulated at 3.27–3.33 V (±1 %, datasheet), giving the LDO
+    ≥ 270 mV of headroom against its 250 mV worst-case dropout. At the
+    codec's ≈ 50 mA the real dropout is a fraction of that.
+  - In dropout (input ≈ 4.2 V down to ≈ 3.5 V), the rail stays ≥ 3.135 V
+    (VDROP1 spec, ≥ 95 % at 1 A; the load here is 0.57 A), so ≥ 3.1 V holds.
+  - Below about 3.5 V input (severe crank only) the codec rail drops. PTT was
+    forced off at 7.0 V long before (§8).
+- The **ESP32-S3 3.3 V** comes straight from U2 with the decoupling and
   ferrite in Espressif's hardware design guidelines.
 
-### 6.4 Thermal
+### 6.4 Efficiency and thermal
 
 - **Limit:** LMR436x0-Q1 operating junction temperature −40 to **+150 °C**
   ([datasheet](../references/index.md#ti-lmr436x0-q1-ds), Recommended
   Operating Conditions). Heat is acceptable as long as TJ stays below that.
-- Buck A at worst case (P_out 2.1 W, the §2 method): loss ≈ 0.28 W at 88 %.
-  ΔT = 14 °C (50 °C/W EVM) to 24 °C (84.4 °C/W JEDEC), so **TJ ≤ about
-  109 °C at 85 °C ambient**, 41 °C under the limit.
-- **Typical load** (the §2 typical case, ≈ 1.2 W input, 5 V out ≈ 1.0 W):
-  Buck A loss ≈ 0.14 W → ΔT 7–11 °C → **TJ ≤ about 96 °C** at 85 °C ambient.
-- **Typical with BLE TX capped at the FCC-grant power** (10.3 dBm, #7). The
-  datasheet gives 204 mA at +9 dBm and 340 mA at +20 dBm (100 % duty,
-  [datasheet](../references/index.md#esp32s3-mini1-ds) Table 6-5), so about
-  0.2 A. The 3.3 V rail is then ≈ 0.27 A (0.9 W), 5 V out ≈ 1.4 W, input
-  ≈ 1.6 W. Buck A loss ≈ 0.19 W → ΔT 9–16 °C → **TJ ≤ about 101 °C**; Buck B
-  loss ≈ 0.12 W → ΔT 6–10 °C.
-- Buck B at worst case: ≈ 0.21 W → ≤ 18 °C rise.
-- Q1/Q2 conduction: (22 + 21) mΩ × 0.27 A² ≈ 3 mW. L1, CMC and F1 together
-  < 20 mW.
-- The electrolytic's life at 105 °C is 2000–5000 h depending on size; at
-  85 °C ambient expect roughly 4× that **(verify** against the series table;
-  a hybrid polymer EEH-ZA gives 10,000 h at 105 °C).
+- **Efficiency** read from the datasheet's Figure 8-4 (LMR43620MSC3, 3.3 V
+  fixed, 2.2 MHz FPWM, VIN = 12 V, 25 °C): about 79 % at 0.1 A, 87 % at
+  0.2 A, 90 % at 0.3 A, 92 % at 0.5–1 A. At 2.304 MHz and 85 °C it will be a
+  little lower **(verify)**. FPWM costs about 0.1 W at no load (30 % at
+  10 mA), the price of a fixed frequency.
+- Thermal resistance 50 °C/W (EVM) to 84.4 °C/W (JEDEC):
+
+| Case | 3.3 V load | η (curve) | Input | U2 loss | TJ at 85 °C ambient |
+|---|---|---|---|---|---|
+| Worst case (§2 method) | 0.57 A, 1.88 W | 92 % | 2.07 W | 0.16 W | **≤ about 99 °C** |
+| Typical (§2) | 0.28 A, 0.92 W | 89.5 % | 1.06 W | 0.11 W | ≤ about 94 °C |
+| Typical, BLE TX capped at the FCC-grant 10.3 dBm (#7): ESP32-S3 ≈ 0.2 A (204 mA at +9 dBm, [datasheet](../references/index.md#esp32s3-mini1-ds) Table 6-5) | 0.38 A, 1.26 W | 91 % | 1.42 W | 0.13 W | ≤ about 96 °C |
+
+- Every case is at least 51 °C under the 150 °C limit on 2 layers.
+- Q1/Q2 conduction: 0.10 W at 4.5 V input (short cold-crank dip), 11 mW at
+  13.5 V. L1, CMC and F1 together < 20 mW.
+- The electrolytic's 5000 h at 105 °C becomes roughly 20,000 h at 85 °C
+  (doubling per 10 °C rule of thumb) **(verify** against the series data).
 
 ## 7. Cold-crank decision
 
 **Decision: no buck-boost. Accept brownout with PTT forced off.**
 
-- Normal cold crank (4.5 V for 15 ms, then 6.5 V) keeps the 3.3 V logic
-  alive: Buck A drops out to Vin − 0.2 V and Buck B needs about 3.5 V. PTT is
-  off below 7.0 V anyway (§8). Severe crank (3 V) resets the device; PTT is off
-  by the hardware default.
-- A buck-boost would only add logic uptime between about 3.8 V and 3 V. It
+- Normal cold crank (4.5 V for 15 ms, then 6.5 V) keeps the 3.3 V rail
+  regulated and synchronized (≈ 4.2 V needed, §6.3), meeting the "4.5 V
+  desirable" target of constraints §3.2 (REQ-PWR-011). PTT is off below 7.0 V
+  anyway (§8). Severe crank (3 V) resets the device; PTT is off by the
+  hardware default.
+- A buck-boost would only add logic uptime between about 3.5 V and 3 V. It
   would cost a second converter, a second frequency to place, and money. The
   radio itself generally isn't specified to operate that low; most mobile HF
   rigs are specified around 13.8 V ± 15 % **(verify per radio, #5)**.
 
 ## 8. Brownout detector, PTT fail-safe and hold-up
 
-- **TPS3710-Q1** (AEC-Q100 grade 1, 1.8–18 V supply, 400 mV reference ±1 %
-  over temperature, 5.5 µA, open-drain; tpd(HL) 18 µs;
-  [datasheet](../references/index.md#ti-tps3710-q1-ds)) senses the protected
+- **TPS3710** (commercial TPS3710DSER, −40 to +125 °C; the -Q1 version
+  has the same electrical specification: 1.8–18 V supply, 400 mV reference
+  ±1 % over temperature, 5.5 µA, open-drain, tpd(HL) 18 µs;
+  [TPS3710](../references/index.md#ti-tps3710-ds),
+  [TPS3710-Q1](../references/index.md#ti-tps3710-q1-ds); buy whichever is
+  cheaper at order time) senses the protected
   rail (after Q2) through **330 kΩ / 20 kΩ → 7.00 V falling**. That draws
   40 µA at 14 V, only while powered. SENSE sees 2.29 V at 40 V, under its 7 V
   absolute maximum. It runs from the 3.3 V rail and works down to 1.8 V.
@@ -483,12 +578,19 @@ clock tolerance, against every band. Findings (1 kHz scan, 0.3–3.0 MHz):
 - Because the PhotoMOS is off unless driven (constraints §6), losing 3.3 V
   also opens PTT. The detector's job is to open it **cleanly before** the
   logic enters an undefined state.
-- **Hold-up** (100 µF − 20 % + 3 × 1.9 µF ≈ 85.7 µF; t = C·(V1² − V2²) / 2P):
+- **Threshold revisited for the single stage:** the logic now runs down to
+  about 3.5 V input, so a lower threshold would be possible (6.0 V gives
+  477 µs of hold-up). **7.0 V is kept.** It sits above the 6.5 V plateau of
+  the normal cold crank, so PTT stays off through the whole crank. The radio
+  itself isn't specified that low (#5). And it gives the longest margin
+  before logic dropout.
+- **Hold-up** (100 µF − 20 % + 3 × 1.9 µF ≈ 85.7 µF; t = C·(V1² − V2²) / 2P;
+  dropout at 3.6 V input):
 
-| From → to | 2.4 W (worst) | 1.2 W (typical) | Meaning |
+| From → to | 2.1 W (worst) | 1.1 W (typical) | Meaning |
 |---|---|---|---|
-| 7.0 V → 3.8 V | **618 µs** | 1.28 ms | Time from PTT-off to logic dropout; detector path ≈ 20 µs |
-| 14 V → 7.0 V | 2.6 ms | 5.4 ms | Supply interruptions shorter than this don't disturb PTT |
+| 7.0 V → 3.6 V | **747 µs** | 1.46 ms | Time from PTT-off to logic dropout; detector path ≈ 20 µs |
+| 14 V → 7.0 V | 3.0 ms | 6.0 ms | Supply interruptions shorter than this don't disturb PTT |
 
 - Q2 blocks reverse current within 0.5 µs, so a dipping or shorted input
   doesn't drain the hold-up capacitance.
@@ -518,7 +620,7 @@ clock tolerance, against every band. Findings (1 kHz scan, 0.3–3.0 MHz):
 | LM74800-Q1 shutdown, I(GND) incl. VS | 2.87 µA typ, **5 µA max** (TJ −40 to +125 °C) |
 | TVS stack leakage (IR ≤ 1 µA at VRWM; here at 12.6 V against 103 V VRWM) | ≤ 1 µA |
 | Q1 leakage (IDSS ≤ 1 µA at 120 V, 25 °C) | ≤ 1 µA |
-| SENSE, VBUS, HOLD networks, OV divider (disconnected by the SW pin), TPS3710-Q1, buck dividers | 0 (unpowered) |
+| SENSE, VBUS, HOLD networks, OV divider (disconnected by the SW pin), TPS3710, oscillator | 0 (unpowered) |
 | **Total** | **≤ 7 µA at 25 °C**, over 140× below the 1 mA limit. FET and TVS leakage at 85 °C **(verify)** |
 
 ## 10. Parts, qualification, price and stock
@@ -527,36 +629,52 @@ Prices in USD, checked 2026-09-24. LCSC: price at the tier containing
 quantity 100. TI.com: 100–249 tier. Digi-Key and Mouser **blocked automated
 lookups** on 2026-09-24, so those cells are blank; they must be filled before
 ordering. The TI parts are listed as **Active** on ti.com; lifecycle for other
-parts is **(verify)**.
+parts is **(verify)**. Stock figures are data only; the maintainer does not
+treat low stock as a concern (2026-09-24). **RoHS:** every part below is
+listed as RoHS-compliant by LCSC. **REACH SVHC:** only the YXC datasheet shows
+a REACH mark; the rest **(verify)** against the manufacturers' declarations
+(#59).
 
-| Ref | Part | Grade / temp (datasheet) | LCSC (# / price / stock) | TI.com (price / stock) | Digi-Key / Mouser |
-|---|---|---|---|---|---|
-| F1 | Littelfuse 0437002.WRA | AEC-Q200; 63 V | C720199 / 0.1622 / 5,130 | — | blank |
-| D3 | Littelfuse TPSMB82A | AEC-Q101; TJ −65 to +175 °C | C3704846 / 0.1833 / 2,980 | — | blank |
-| D4 | Vishay SMBJ33CAHE3_B/H | AEC-Q101 (HE3); TJ −55 to +150 °C | C20037758 / 0.1367 / 9,185 | — | blank |
-| C_in | YAGEO AS1206KKX7RYBB104 (100 nF 250 V) | AEC-Q200 | C3881218 / 0.1200 / 5,000 | — | blank |
-| U1 | TI LM74800QDRRRQ1 | AEC-Q100 grade 1 | C3215600 / 1.8652 / 2,276 | 2.074 / 28,516 | blank |
-| Q1 | Diodes DMTH15H017SPSWQ-13 | AEC-Q101; TJ −55 to +175 °C | C19950019 / 5.9072 / 10 | — | blank |
-| Q2 | Vishay SQSA80ENW-T1_GE3 | AEC-Q101; TJ −55 to +175 °C | C511563 / 0.6198 / 1,476 | — | blank |
-| FL1 | TDK ACM70V-701-2PL-TL00 | AEC-Q200; −40 to +125 °C | C76582 / 0.5310 / 6,692 | — | blank |
-| L1 | TDK TFM252012ALMA2R2MTAA | AEC-Q200; −55 to +150 °C | C404804 / 0.2020 / 4,300 | — | blank |
-| C1, C2 | TDK CGA6N3X7R2A225KT0Y0U (2.2 µF 100 V) | AEC-Q200; X7R −55 to +125 °C | C342652 / 0.1978 / 15,660 | — | blank |
-| C_bulk | Panasonic EEE-FK1H101P (100 µF 50 V) | AEC-Q200; −55 to +105 °C | C178548 / 0.3593 / 8,402 | — | blank |
-| U2, U3 | TI LMR43620MC5RPERQ1 / MC3RPERQ1 (MODE/SYNC, no spread spectrum) | AEC-Q100 grade 1 | C32594901 / 3.7734 / 5; C41658611 / — / 10 | 2.944 / 3,103; 2.494 / 3,500 | blank |
-| U2, U3 alt | TI LMR43620MSC5RPERQ1 / MSC3RPERQ1 (adds spread spectrum) | AEC-Q100 grade 1 | C6979910 / 4.457 / 2; C3190193 / 4.8281 / 36 | 2.944 / 1,686; 2.944 / 3,000 | blank |
-| Y1 | SiTime SiT8924B at 2.304 MHz (programmed) | AEC-Q100 grade 1 option | Not stocked at 2.304 MHz (8 MHz version C401144: 2.9584 / 24) | — | blank (programmable at distributors) |
-| U5 | TI TPS3710QDSERQ1 | AEC-Q100 grade 1 | C2863756 / 1.0411 / 0 | 1.563 / 73 | blank |
-| U6 | TI LP5907QMFX-3.3Q1 | AEC-Q100 | C130005 / 0.4393 / 7,268 | 0.460 / 16,881 | blank |
-| (U7) | TI SN6505BQDBVRQ1 (isolated supply, #9) | AEC-Q100 grade 1 | C1849490 / 0.7522 / 4,745 | 1.820 / 18,670 | blank |
+| Ref | Part | Qualification / temp (datasheet) | RoHS | LCSC (# / price / stock) | TI.com (price / stock) | Digi-Key / Mouser |
+|---|---|---|---|---|---|---|
+| F1 | Littelfuse 0466002.NRHF (2 A 63 V) | Commercial | Yes | C3105 / 0.0552 / 42,640 | — | blank |
+| D3 | Littelfuse TPSMB82A | AEC-Q101; TJ −65 to +175 °C | Yes | C3704846 / 0.1833 / 2,980 | — | blank |
+| D4 | Vishay SMBJ33CAHE3_B/H | AEC-Q101 (HE3); TJ −55 to +150 °C | Yes | C20037758 / 0.1367 / 9,185 | — | blank |
+| C_in | YAGEO AS1206KKX7RYBB104 (100 nF 250 V, soft termination) | AEC-Q200 | Yes | C3881218 / 0.1200 / 5,000 | — | blank |
+| U1 | TI LM74800QDRRRQ1 | AEC-Q100 grade 1 | Yes | C3215600 / 1.8652 / 2,276 | 2.074 / 28,516 | blank |
+| Q1 | onsemi FDN86246 (150 V) | Commercial; TJ −55 to +150 °C | Yes | C891118 / 0.4917 / 1,941 | — | blank |
+| Q2 | Infineon IRLML0100TRPBF (100 V) | Commercial; TJ −55 to +150 °C | Yes | C53658 / 0.3923 / 7,680 | — | blank |
+| FL1 | Murata DLW5BTM142TQ2L | Commercial; −40 to +105 °C | Yes | C341531 / 0.4549 / 746 | — | blank |
+| L1, L2 | TDK TFM252012ALMA2R2MTAA (2.2 µH) | AEC-Q200; −55 to +150 °C | Yes | C404804 / 0.2020 / 4,300 | — | blank |
+| C1, C2 (×2) | PSA FS32X225K101EGG (2.2 µF 100 V X7R 1210) | Commercial; X7R | Yes | C153036 / 0.0720 / 346,540 | — | blank |
+| C_bulk | Huawei VD1H101MF105000CE0 (100 µF 50 V) | Commercial; −55 to +105 °C | Yes | C189260 / 0.1846 / 8,840 | — | blank |
+| U2 | TI LMR43620MC3RPERQ1 | AEC-Q100 grade 1 | Yes | C41658611 / 3.9856 / 10 | 2.494 / 3,500 | blank |
+| U2 alt | TI LMR43610MB3RPER (1 A, commercial, 1 MHz free-run) | Commercial; TJ −40 to +150 °C | Yes | C5899189 / 1.4045 / 665 | 1.655 / 18,000 | blank |
+| C_out (×2) | Samwha CS3216X7R226K160NRI (22 µF 16 V X7R 1206) | Commercial; X7R | Yes | C5252682 / 0.1186 / 18,980 | — | blank |
+| Y1 | YXC OT322518.432MJBA4SL (18.432 MHz, ±20 ppm) | Commercial; −40 to +85 °C | Yes (REACH mark) | C2831385 / 0.2858 / 1,149 | — | blank |
+| U7–U9 | TI SN74LVC1G80DBVR (÷8) | Commercial; −40 to +125 °C | Yes | C42879 / 0.1899 / 5,415 | 0.129 / 285,101 | blank |
+| U5 | TI TPS3710DSER | Commercial; −40 to +125 °C | Yes | C702154 / 1.4398 / 2,989 | 1.325 / 192,360 | blank |
+| U5 alt | TI TPS3710QDSERQ1 | AEC-Q100 grade 1 | Yes | C2863756 / 1.0411 / 0 | 1.563 / 73 | blank |
+| (U6) | TI SN6505BQDBVRQ1 (isolated supply, #9) | AEC-Q100 grade 1 | Yes | C1849490 / 0.7522 / 4,745 | 1.820 / 18,670 | blank |
 
-Stock figures are recorded as data only; the maintainer does not treat low
-stock as a concern (2026-09-24). None of the parts above is
-a JLCPCB Basic part, so each adds an extended-part fee
-([JLCPCB FAQ](../references/index.md#jlcpcb-pcba-faqs)). Alternates to check
-in schematic work: Yageo AC1210KKX7R0BB225 (C1/C2), Murata PLT5BPH5013R1SNL
-(FL1), TDK CLF5030NIT-2R2N-D (L1), Diodes DMN15H310SK3Q (Q1, **(verify)**
-grade). Minor parts (VS clamp zener, SENSE network resistors and zener,
-Schottky OR diodes, dividers) get AEC-Q parts at schematic capture.
+**Power-section cost (main parts above, LCSC, qty 100; minor resistors,
+zeners, diodes and small capacitors excluded in both):**
+
+| Version | Main parts | Total |
+|---|---|---|
+| Before (two AEC-Q bucks, 5 V + 3.3 V, SiT8924B, AEC-Q parts throughout, LP5907-Q1) | 18 lines | **≈ $23.56** |
+| After (single stage, commercial where allowed, 18.432 MHz ÷ 8) | 17 lines | **≈ $10.95** |
+| After, with the LMR43610MB3RPER option | | ≈ $8.37 |
+
+The biggest savings: Q1 ($5.91 → $0.49), the second buck and its passives
+(≈ $4.5), the oscillator (≈ $2.96 → $0.86) and the 5 V-rail LDO. None of the
+parts above is a JLCPCB Basic part, so each adds an extended-part fee
+([JLCPCB FAQ](../references/index.md#jlcpcb-pcba-faqs)). Earlier AEC-Q
+choices kept as alternates: 0437002.WRA (F1), DMTH15H017SPSWQ (Q1),
+[SQSA80ENW](../references/index.md#vishay-sqsa80enw-ds) (Q2),
+[ACM70V](../references/index.md#tdk-acm70v-ds) (FL1),
+[CGA6N3X7R2A225K](../references/index.md#tdk-cga-ds) (C1/C2) and
+[EEE-FK1H101P](../references/index.md#panasonic-fk-ds) (C_bulk).
 
 ## 11. Capacitor voltage ratings
 
@@ -566,12 +684,47 @@ Per [pcb-fabrication.md §6.3](../requirements/pcb-fabrication.md#63-voltage-rat
 | Node | Worst case | Rating used |
 |---|---|---|
 | Connector to Q1 (before protection) | Test A 101 V; stack clamp up to ≈ 127 V on fast pulses | **250 V** (C_in); 2 × 101 V = 202 V |
-| After Q2 (filter, hold-up, Buck A input) | OV cut-off 37–40 V | **100 V** MLCC (2 × 40 V = 80 V → next standard 100 V); 50 V electrolytic (the 2× rule is for MLCC) |
-| 5 V rail | Regulator overshoot | 16 V (2 × 5 V = 10 V → next standard rating 16 V) |
-| 3.3 V rail | Regulator overshoot | 10 V |
+| After Q2 (filter, hold-up, U2 input) | OV cut-off 37–40 V | **100 V** MLCC (2 × 40 V = 80 V → next standard 100 V); 50 V electrolytic (the 2× rule is for MLCC) |
+| 3.3 V rail | Regulator overshoot | 10 V minimum; 16 V used on the 22 µF output capacitors for DC-bias headroom |
 
 The DC-bias loss of the 100 V 1210 X7R at 14 V is small; 1.9 µF effective was
 assumed in §5 **(verify** against the TDK DC-bias curve).
+
+## 11a. EU requirements (#59)
+
+The product must meet EU requirements (maintainer, 2026-09-24,
+[#59](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/59)).
+
+- **RoHS:** every chosen part is RoHS-compliant per its distributor listing
+  (§10). **REACH SVHC:** **(verify)** per part against the manufacturers'
+  declarations (#59).
+- **EMC for radio equipment used in vehicles:** ETSI **EN 301 489-1
+  V2.2.3** ([ETSI](../references/index.md#etsi-en-301-489-1)); the
+  radio-specific part for 2.4 GHz Bluetooth LE is EN 301 489-17 **(verify
+  version, #59)**. For vehicle-use equipment on the 12 V DC input:
+  - **Clause 9.6, transients and surges in the vehicular environment:** test
+    method per ISO 7637-2 (**2004** edition, reference [8], not updated on
+    purpose), pulses 1, 2a, 2b, 3a, 3b and 4 at **immunity test level III**.
+    Pulses 1/2a/2b/4 are applied 10 times each, 3a/3b for 20 minutes each.
+    The design targets the 2011 edition's level IV (−150 / +112 / −220 /
+    +150 V, §1.2). That is at least as severe as the 2004 level III values
+    TI lists for 12 V (−100 / +50 / −150 / +100 V;
+    [TI TIDUB49](../references/index.md#ti-tidub49); level mapping
+    **(verify)**). Pulse 2b (+10 V) is covered by the 26 V jump-start
+    rating. Pulse 4 (starting profile) is covered by operation down to about
+    3.5 V (§6.3); its 2004 level III amplitude **(verify)**. Performance
+    criteria: continuous phenomena for 3a/3b, transient phenomena for
+    1/2a/2b/4; the link may drop and re-establish.
+  - **Clause 8.3, conducted emissions on the DC power port:** for vehicle
+    equipment measured with the CISPR 25 artificial network, 150 kHz–30 MHz.
+    The limits are 79/66 dBµV (QP/AV, 0.15–0.5 MHz) and **73/60 dBµV
+    (0.5–30 MHz)**. The filter's 28 dBµV design target (§5) is more than
+    30 dB under that.
+  - Fast transients (EN 61000-4-4, 0.5 kV on DC ports) and whether they apply
+    to vehicle-use equipment **(verify, #59)**. C_in, the TVS stack and the
+    CMC are the first line.
+- **Automotive EMC approval:** whether UN ECE Regulation No. 10 (E-marking)
+  applies is #59's question.
 
 ## 12. Layout guidance (for later KiCad work)
 
@@ -579,40 +732,42 @@ assumed in §5 **(verify** against the TDK DC-bias curve).
   CMC → pi filter → bucks. Keep the unfiltered input copper short and away
   from everything else. Nothing noisy may route under or beside the input
   zone, or it couples straight past the filter.
-- **Hot loops:** each buck's input capacitors (100 nF 0402 plus 2.2 µF)
+- **Hot loop:** the buck's input capacitors (100 nF plus 2.2 µF)
   directly at VIN/PGND on the same layer, as in the LMR436x0-Q1 layout
   example; switch node as small as possible; inductor next to the SW pin;
   no vias in the hot loop.
 - **Ground:** a solid bottom-layer ground under the whole power section;
-  stitch the top pours around the bucks with vias. Don't split ground. Return
+  stitch the top pours around the buck with vias. Don't split ground. Return
   the TVS stack directly to the connector ground with a short, wide path.
 - **High voltage:** ≥ 0.5 mm clearance on nets that can exceed 50 V
   (connector to Q1, the VS clamp); trace widths per IPC-2221 for 1 A at
   ≤ 10 °C rise (pcb-fabrication §3).
-- **Sync clock:** short trace from the oscillator to both MODE/SYNC pins,
-  over ground, away from the audio and RF sections. A series resistor
-  (22–47 Ω) slows edges.
+- **Sync clock:** oscillator and ÷8 flip-flops next to U2, short trace to
+  MODE/SYNC over ground, away from the audio and RF sections. A series
+  resistor (22–47 Ω) slows edges.
 - **Separation from the radio side:** the power section sits away from the
   AUDIO/SERIAL jacks and the antenna keep-out of the ESP32-S3-MINI-1. The
   isolated supply's transformer straddles the isolation gap; keep the
   isolation barrier clear.
-- **Thermal:** a large copper area and thermal vias under Buck A (§6.4).
+- **Thermal:** normal ground pour and thermal vias under U2 (§6.4).
 - **Shielding:** reserve footprint space for a board-level shield can over
-  the two bucks and the oscillator, fitted only if the 6 m / VHF scan needs it.
-- **Test points:** protected rail, 5 V, 3.3 V, SYNC, PTT enable, brownout
+  the buck and the oscillator, fitted only if the 6 m / VHF scan needs it.
+- **Test points:** protected rail, 3.3 V, SYNC, PTT enable, brownout
   output, for the pulse and EMC tests.
 
 ## 13. Parts common with variant R (#11)
 
-- **Same buck family, same clock:** LMR43620-Q1 for 5 V and 3.3 V, locked to
-  the same 2.304 MHz oscillator. The harmonic analysis (§6.2) then covers
-  both variants. The radio accessory input of variant R (11–15 V) is well
-  inside the LMR43620-Q1 range.
+- **Shared 3.3 V regulator core:** variant R reuses this exact core: the
+  LMR43620MC3RPERQ1 (or the LMR43610MB3RPER option) with its 2.2 µH
+  inductor and output capacitors, locked to the same 18.432 MHz ÷ 8 =
+  2.304 MHz clock. The harmonic analysis (§6.2) then covers both variants.
+  The radio accessory input of variant R (11–15 V) is inside the synchronized
+  range (≤ 19.1 V); a USB-C 5 V input is too (≥ 4.2 V).
 - **Same TVS and ideal diode:** SMBJ33CA-HE3 and LM74700-Q1 or LM74800-Q1
   (common drain, 60–80 V FETs, no 150 V FET needed without unsuppressed load
   dump) for the accessory input's reverse-polarity and TVS protection.
-- **Same TPS3710-Q1** brownout detector and **LP5907-Q1** codec LDO. Neither
-  variant has a VBUS switch to the radio (ADR-0003, #9).
+- **Same TPS3710** brownout detector. The codec rail is #8's decision for
+  both. Neither variant has a VBUS switch to the radio (ADR-0003, #9).
 - **Variant M only:** the 150 V Q1, TPSMB82A, OV cut-off, CMC and the
   ignition/auto power-down network.
 
@@ -623,7 +778,7 @@ at 151–202 V with Ri 1–8 Ω, 100–350 ms
 ([Microchip](../references/index.md#mchp-ds00006186) Table 2-4), a 58 V
 suppressed load dump, and a −26 V reverse battery. The LM74800-Q1
 common-source design scales to it (TI's §10.3 example is exactly 200 V / 24 V,
-with a 200 V Q1), but the bucks would need a 60–65 V input part and new TVS
+with a 200 V Q1), but the buck would need a 60–65 V input part and new TVS
 values. Record it as a separate variant if there is demand.
 
 ## 15. Open items
@@ -635,11 +790,15 @@ values. Record it as a separate variant if there is demand.
   check on every band 160 m–6 m with the radio next to the device.
 - **(verify):** ISO 10605 levels; 2023 reversed-voltage test cases;
   long-term and transient overvoltage values (from one secondary source);
-  buck efficiencies and TJ on 2 layers; MLCC DC bias; TVS and FET leakage at
-  85 °C; 56 V zener part; electrolytic life at 85 °C;
+  U2 efficiency at 2.304 MHz and 85 °C; fold-back behaviour while
+  synchronized; MLCC DC bias; TVS and FET leakage at 85 °C; 56 V zener part;
+  electrolytic life at 85 °C; Sunlord inductor temperature range; REACH SVHC
+  per part; EN 301 489 pulse 4 level and EFT applicability (#59);
   PhotoMOS turn-off time (#9).
 - **REQ-PWR-014** says 24 V; ISO 16750-2:2023 says 26 V. #4's owner should
   update it to 26 V.
-- **Decisions for other issues:** isolated jack-side supply frequency (#9);
-  the hub and codec currents (#8, #9); whether variant R adopts the
-  2.304 MHz clock (#11).
+- **Decisions for other issues:** isolated jack-side supply (from 3.3 V) and
+  its frequency (#9); the codec analog rail and the hub and codec currents
+  (#8, #9); UN ECE R10 and REACH (#59).
+- **For the maintainer:** LMR43610MB3RPER instead of LMR43620MC3RPERQ1 saves
+  about $2.58 per board (§6.1).

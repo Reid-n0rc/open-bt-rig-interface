@@ -45,7 +45,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/diodes-dmth15h017spswq-ds.pdf](cache/diodes-dmth15h017spswq-ds.pdf)
 - Original: <https://www.diodes.com/assets/Datasheets/DMTH15H017SPSWQ.pdf>
 - Retrieved: 2026-09-24; SHA-256 `0da72717b3c4d049…`
-- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/decisions/ADR-0004-power-automotive.md`](../../docs/decisions/ADR-0004-power-automotive.md)
+- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
 
 ### ecfr-47-15-101
 
@@ -264,6 +264,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `acb02bf0379ebe1d…`
 - Cited in: [`docs/research/module-selection.md`](../../docs/research/module-selection.md)
 
+### etsi-en-301-489-1
+
+**ETSI EN 301 489-1 V2.2.3 (2019-11) EMC standard for radio equipment; Part 1: common technical requirements** (ETSI, standard)
+
+- Local copy: [cache/etsi-en-301-489-1.pdf](cache/etsi-en-301-489-1.pdf)
+- Original: <https://www.etsi.org/deliver/etsi_en/301400_301499/30148901/02.02.03_60/en_30148901v020203p.pdf>
+- Retrieved: 2026-09-25; SHA-256 `b616362dbee141e4…`
+- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
+
 ### fcc-2ac7z-espc3mini1
 
 **FCC ID 2AC7Z-ESPC3MINI1 (ESP32-C3-MINI-1) filing list** (FCC filing (Espressif Systems), fcc)
@@ -334,6 +343,16 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Notes: The site blocks scripted downloads; save the page from a browser.
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
+### huawei-vd-ds
+
+**VD series SMD aluminum electrolytic capacitors datasheet (VD1H101MF105000CE0)** (Changzhou Huawei Electronic, datasheet)
+
+- Local copy: [cache/huawei-vd-ds.pdf](cache/huawei-vd-ds.pdf)
+- Original: <https://datasheet.lcsc.com/datasheet/pdf/978998647283dc41171a70946be24af9.pdf?productCode=C189260>
+- Retrieved: 2026-09-25; SHA-256 `1f503fd3eef96380…`
+- Notes: Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).
+- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
+
 ### infineon-btsdk-license
 
 **Infineon wiced_btsdk LICENSE.txt (Cypress End User License Agreement)** (Infineon / Cypress, license)
@@ -342,6 +361,16 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://raw.githubusercontent.com/Infineon/wiced_btsdk/b2fe90bdcafb6e9cb65c6be73efdcd59a2bdbfaa/LICENSE.txt>
 - Retrieved: 2026-09-24; SHA-256 `80b2cd0b70a20968…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+
+### infineon-irlml0100-ds
+
+**IRLML0100 100 V N-channel MOSFET datasheet** (Infineon, datasheet)
+
+- Local copy: [cache/infineon-irlml0100-ds.pdf](cache/infineon-irlml0100-ds.pdf)
+- Original: <https://datasheet.lcsc.com/datasheet/pdf/749828b75c4e4bb491f31b3834aa41e4.pdf?productCode=C53658>
+- Retrieved: 2026-09-25; SHA-256 `6425a1834096e6c0…`
+- Notes: Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).
+- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/decisions/ADR-0004-power-automotive.md`](../../docs/decisions/ADR-0004-power-automotive.md)
 
 ### iso-16750-2-2023-preview
 
@@ -426,6 +455,16 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `c79fd0a7e789106a…`
 - Cited in: [`docs/research/module-selection.md`](../../docs/research/module-selection.md)
 
+### littelfuse-0466-ds
+
+**466 series very fast-acting 1206 fuse datasheet (0466002.NRHF)** (Littelfuse, datasheet)
+
+- Local copy: [cache/littelfuse-0466-ds.pdf](cache/littelfuse-0466-ds.pdf)
+- Original: <https://datasheet.lcsc.com/datasheet/pdf/6219a627c4d940b38430cad44a96cd77.pdf?productCode=C3105>
+- Retrieved: 2026-09-25; SHA-256 `33f71340c39d8991…`
+- Notes: Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).
+- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
+
 ### littelfuse-437-ds
 
 **437A series AEC-Q200 1206 fast-acting fuse datasheet** (Littelfuse, datasheet)
@@ -483,6 +522,16 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `4a9ad71cd6535368…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
+### murata-dlw5btm-ds
+
+**DLW5BTM series common-mode choke coils for power lines datasheet** (Murata, datasheet)
+
+- Local copy: [cache/murata-dlw5btm-ds.pdf](cache/murata-dlw5btm-ds.pdf)
+- Original: <https://datasheet.lcsc.com/datasheet/pdf/30a0ce533b0a729b4ac313a89031b565.pdf?productCode=C341531>
+- Retrieved: 2026-09-25; SHA-256 `74d4e96b61d81462…`
+- Notes: Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).
+- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
+
 ### nexperia-an50007
 
 **AN50007 Applying ISO standard conducted transients to MOSFETs in reverse battery protection circuits (Rev. 1.0, April 2021)** (Nexperia, app-note)
@@ -491,6 +540,16 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://assets.nexperia.com/documents/application-note/AN50007.pdf>
 - Retrieved: 2026-09-24; SHA-256 `7aea28305e9a12a5…`
 - Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
+
+### onsemi-fdn86246-ds
+
+**FDN86246 150 V N-channel MOSFET datasheet** (onsemi, datasheet)
+
+- Local copy: [cache/onsemi-fdn86246-ds.pdf](cache/onsemi-fdn86246-ds.pdf)
+- Original: <https://datasheet.lcsc.com/datasheet/pdf/63662462dad465bccb2e0b205f368922.pdf?productCode=C891118>
+- Retrieved: 2026-09-25; SHA-256 `accf947409c85e78…`
+- Notes: Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).
+- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/decisions/ADR-0004-power-automotive.md`](../../docs/decisions/ADR-0004-power-automotive.md)
 
 ### onsemi-tnd6424
 
@@ -530,6 +589,16 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `9fb76d6853cd5b72…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
+### psa-fs32-ds
+
+**FS series MLCC datasheet (FS32X225K101EGG, 2.2 µF 100 V X7R 1210)** (Prosperity Dielectrics (PSA), datasheet)
+
+- Local copy: [cache/psa-fs32-ds.pdf](cache/psa-fs32-ds.pdf)
+- Original: <https://datasheet.lcsc.com/datasheet/pdf/a99e0252a05e00d2f66d6d299a8ef975.pdf?productCode=C153036>
+- Retrieved: 2026-09-25; SHA-256 `6fa8e355c7556df7…`
+- Notes: Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).
+- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
+
 ### raytac-mdbt50q-ds
 
 **Raytac MDBT50Q-1MV2 / MDBT50Q-P1MV2 approval sheet (datasheet)** (Raytac, datasheet)
@@ -548,6 +617,16 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `70b71413a61c8777…`
 - Cited in: [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
+### samwha-cs-ds
+
+**CS series MLCC datasheet (CS3216X7R226K160NRI, 22 µF 16 V X7R 1206)** (Samwha Capacitor, datasheet)
+
+- Local copy: [cache/samwha-cs-ds.pdf](cache/samwha-cs-ds.pdf)
+- Original: <https://datasheet.lcsc.com/datasheet/pdf/ca4d6c85966a5af7ff669d92a1dcc834.pdf?productCode=C5252682>
+- Retrieved: 2026-09-25; SHA-256 `da5381c67232a407…`
+- Notes: Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).
+- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
+
 ### sitime-sit8924b-ds
 
 **SiT8924B automotive AEC-Q100 programmable oscillator datasheet** (SiTime, datasheet)
@@ -556,7 +635,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://datasheet.lcsc.com/datasheet/pdf/8c96a8aa3d565d5919120c49061d45c5.pdf?productCode=C401144>
 - Retrieved: 2026-09-24; SHA-256 `7b593d10a0902132…`
 - Notes: Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).
-- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/decisions/ADR-0004-power-automotive.md`](../../docs/decisions/ADR-0004-power-automotive.md)
+- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
 
 ### tdk-acm70v-ds
 
@@ -669,6 +748,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `39b2a588749eef7e…`
 - Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
 
+### ti-lmr436x0-ds
+
+**LMR43610 / LMR43620 36 V 1 A / 2 A buck converter datasheet (commercial, SNVSBY5B)** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-lmr436x0-ds.pdf](cache/ti-lmr436x0-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/lmr43620.pdf>
+- Retrieved: 2026-09-25; SHA-256 `18b2cc488ccfa848…`
+- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
+
 ### ti-lmr436x0-q1-ds
 
 **LMR43610-Q1 / LMR43620-Q1 36 V 1 A / 2 A automotive buck converter datasheet (SNVSBE0H)** (Texas Instruments, datasheet)
@@ -714,6 +802,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `5c68b82a5110b337…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
+### ti-sn74lvc1g80-ds
+
+**SN74LVC1G80 single positive-edge-triggered D-type flip-flop datasheet** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-sn74lvc1g80-ds.pdf](cache/ti-sn74lvc1g80-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/sn74lvc1g80.pdf>
+- Retrieved: 2026-09-25; SHA-256 `73b5b60e38105033…`
+- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/decisions/ADR-0004-power-automotive.md`](../../docs/decisions/ADR-0004-power-automotive.md)
+
 ### ti-sn74lxc1t45-ds
 
 **SN74LXC1T45 single-bit dual-supply level translator datasheet** (Texas Instruments, datasheet)
@@ -741,6 +838,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `d2a977a4cdca7bae…`
 - Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
 
+### ti-tidub49
+
+**TIDUB49 automotive wide-VIN power front-end reference design (ISO 7637-2:2004 pulse table)** (Texas Instruments, app-note)
+
+- Local copy: [cache/ti-tidub49.pdf](cache/ti-tidub49.pdf)
+- Original: <https://www.ti.com/lit/ug/tidub49/tidub49.pdf>
+- Retrieved: 2026-09-25; SHA-256 `370754a5744f29ed…`
+- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
+
 ### ti-tlv320aic3104-ds
 
 **TLV320AIC3104 low-power stereo audio codec datasheet** (Texas Instruments, datasheet)
@@ -748,7 +854,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-tlv320aic3104-ds.pdf](cache/ti-tlv320aic3104-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/tlv320aic3104.pdf>
 - Retrieved: 2026-09-24; SHA-256 `17ce38b2b2b35e44…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
 
 ### ti-tlv320aic3104-q1-ds
 
@@ -822,6 +928,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `f9887a28788bac6a…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
+### ti-tps3710-ds
+
+**TPS3710 wide-VIN voltage detector datasheet** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-tps3710-ds.pdf](cache/ti-tps3710-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/tps3710.pdf>
+- Retrieved: 2026-09-25; SHA-256 `b47e24e09ad64ac7…`
+- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/decisions/ADR-0004-power-automotive.md`](../../docs/decisions/ADR-0004-power-automotive.md)
+
 ### ti-tps3710-q1-ds
 
 **TPS3710-Q1 wide-VIN voltage detector datasheet** (Texas Instruments, datasheet)
@@ -829,7 +944,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-tps3710-q1-ds.pdf](cache/ti-tps3710-q1-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/tps3710-q1.pdf>
 - Retrieved: 2026-09-24; SHA-256 `0e01a5ecd0f4f057…`
-- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/decisions/ADR-0004-power-automotive.md`](../../docs/decisions/ADR-0004-power-automotive.md)
+- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
 
 ### ti-tps62933-ds
 
@@ -847,7 +962,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-tps7a20-ds.pdf](cache/ti-tps7a20-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/tps7a20.pdf>
 - Retrieved: 2026-09-24; SHA-256 `663a9ff5bca60864…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
 ### ti-trs3221e-ds
 
@@ -884,7 +999,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://datasheet.lcsc.com/datasheet/pdf/820ce060fdeca9ab36378d630e7a1a1c.pdf?productCode=C511563>
 - Retrieved: 2026-09-24; SHA-256 `2ac817cfd59a4bc9…`
 - Notes: Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).
-- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/decisions/ADR-0004-power-automotive.md`](../../docs/decisions/ADR-0004-power-automotive.md)
+- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
 
 ### volta-iso-16750-2-seminar
 
@@ -904,3 +1019,13 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `3b197a86eb57888f…`
 - Notes: Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).
 - Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
+
+### yxc-yso110tr-ds
+
+**YSO110TR wide-voltage crystal oscillator datasheet (OT322518.432MJBA4SL)** (YXC, datasheet)
+
+- Local copy: [cache/yxc-yso110tr-ds.pdf](cache/yxc-yso110tr-ds.pdf)
+- Original: <https://datasheet.lcsc.com/datasheet/pdf/b336a5b52993e15e0134a8f3d7decec7.pdf?productCode=C2831385>
+- Retrieved: 2026-09-25; SHA-256 `d155dd2bc59fe81f…`
+- Notes: Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).
+- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/decisions/ADR-0004-power-automotive.md`](../../docs/decisions/ADR-0004-power-automotive.md)

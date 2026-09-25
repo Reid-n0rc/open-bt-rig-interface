@@ -243,7 +243,8 @@
       "url": "https://www.ti.com/lit/ds/symlink/tlv320aic3104.pdf",
       "file": "ti-tlv320aic3104-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "docs/research/power-automotive.md"
       ],
       "sha256": "17ce38b2b2b35e44fedaad6c44fcb9c2133722dccfd5ef80e9ec2e3b8f281e9a",
       "retrieved": "2026-09-24"
@@ -428,8 +429,7 @@
       "url": "https://www.ti.com/lit/ds/symlink/tps7a20.pdf",
       "file": "ti-tps7a20-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md",
-        "docs/research/power-automotive.md"
+        "docs/research/core-devices.md"
       ],
       "sha256": "663a9ff5bca608643e711652cba00e7b8bf955c0993a9b86fa108d24d58b8ddc",
       "retrieved": "2026-09-24"
@@ -1108,8 +1108,7 @@
       "url": "https://www.ti.com/lit/ds/symlink/tps3710-q1.pdf",
       "file": "ti-tps3710-q1-ds.pdf",
       "used_in": [
-        "docs/research/power-automotive.md",
-        "docs/decisions/ADR-0004-power-automotive.md"
+        "docs/research/power-automotive.md"
       ],
       "sha256": "0e01a5ecd0f4f057341504199f974d43cec180cc0353a0dc5e0d13cd0b4b7491",
       "retrieved": "2026-09-24"
@@ -1164,8 +1163,7 @@
       "url": "https://www.diodes.com/assets/Datasheets/DMTH15H017SPSWQ.pdf",
       "file": "diodes-dmth15h017spswq-ds.pdf",
       "used_in": [
-        "docs/research/power-automotive.md",
-        "docs/decisions/ADR-0004-power-automotive.md"
+        "docs/research/power-automotive.md"
       ],
       "sha256": "0da72717b3c4d049be89d0cb92f305a866ead202d978b19338fef95022c84f03",
       "retrieved": "2026-09-24"
@@ -1179,8 +1177,7 @@
       "file": "vishay-sqsa80enw-ds.pdf",
       "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
       "used_in": [
-        "docs/research/power-automotive.md",
-        "docs/decisions/ADR-0004-power-automotive.md"
+        "docs/research/power-automotive.md"
       ],
       "sha256": "2ac817cfd59a4bc9fddec7a182dff20d91f63f97939bb892420dde4bc7cdc985",
       "retrieved": "2026-09-24"
@@ -1278,8 +1275,7 @@
       "file": "sitime-sit8924b-ds.pdf",
       "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
       "used_in": [
-        "docs/research/power-automotive.md",
-        "docs/decisions/ADR-0004-power-automotive.md"
+        "docs/research/power-automotive.md"
       ],
       "sha256": "7b593d10a0902132c2696ad46d70a1df07b0255b13b5bd45c0f47b5c2d5d4629",
       "retrieved": "2026-09-24"
@@ -1309,6 +1305,188 @@
       ],
       "sha256": "9de43625b4950da2f4decb73fe49660e4a2bd06857efcde203e9d1c9f8293556",
       "retrieved": "2026-09-24"
+    },
+    {
+      "id": "littelfuse-0466-ds",
+      "title": "466 series very fast-acting 1206 fuse datasheet (0466002.NRHF)",
+      "publisher": "Littelfuse",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/6219a627c4d940b38430cad44a96cd77.pdf?productCode=C3105",
+      "file": "littelfuse-0466-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "33f71340c39d8991607a0be589732a29bb11fbfcae8565bc52f849703dfb0276",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "onsemi-fdn86246-ds",
+      "title": "FDN86246 150 V N-channel MOSFET datasheet",
+      "publisher": "onsemi",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/63662462dad465bccb2e0b205f368922.pdf?productCode=C891118",
+      "file": "onsemi-fdn86246-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "accf947409c85e7849b7361cfd6adc8e87cd016da0e73364b37cd223aaa2d4b4",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "infineon-irlml0100-ds",
+      "title": "IRLML0100 100 V N-channel MOSFET datasheet",
+      "publisher": "Infineon",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/749828b75c4e4bb491f31b3834aa41e4.pdf?productCode=C53658",
+      "file": "infineon-irlml0100-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "6425a1834096e6c06c266e89b6ec6fd62fc6f01191c244a21fa7effa03edff35",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "murata-dlw5btm-ds",
+      "title": "DLW5BTM series common-mode choke coils for power lines datasheet",
+      "publisher": "Murata",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/30a0ce533b0a729b4ac313a89031b565.pdf?productCode=C341531",
+      "file": "murata-dlw5btm-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "74d4e96b61d81462ebef2db59a058aa477bd2c66c51198a0d6b490b0281bf2e7",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "psa-fs32-ds",
+      "title": "FS series MLCC datasheet (FS32X225K101EGG, 2.2 µF 100 V X7R 1210)",
+      "publisher": "Prosperity Dielectrics (PSA)",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/a99e0252a05e00d2f66d6d299a8ef975.pdf?productCode=C153036",
+      "file": "psa-fs32-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "6fa8e355c7556df7ba03e938dd328b2799af97a28a11ee3c2684028b95531672",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "huawei-vd-ds",
+      "title": "VD series SMD aluminum electrolytic capacitors datasheet (VD1H101MF105000CE0)",
+      "publisher": "Changzhou Huawei Electronic",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/978998647283dc41171a70946be24af9.pdf?productCode=C189260",
+      "file": "huawei-vd-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "1f503fd3eef963802f341b7079c25c30a9fb8af6cde052778ebd6d06cfa6fbbc",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "samwha-cs-ds",
+      "title": "CS series MLCC datasheet (CS3216X7R226K160NRI, 22 µF 16 V X7R 1206)",
+      "publisher": "Samwha Capacitor",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/ca4d6c85966a5af7ff669d92a1dcc834.pdf?productCode=C5252682",
+      "file": "samwha-cs-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "da5381c67232a407747e0dfc4234ad177c365aaed2680332b2381db489c30d30",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "yxc-yso110tr-ds",
+      "title": "YSO110TR wide-voltage crystal oscillator datasheet (OT322518.432MJBA4SL)",
+      "publisher": "YXC",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/b336a5b52993e15e0134a8f3d7decec7.pdf?productCode=C2831385",
+      "file": "yxc-yso110tr-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "d155dd2bc59fe81f90c6c434328061beb8159ce3c6d0538de4ce96c34d44b8e5",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "ti-sn74lvc1g80-ds",
+      "title": "SN74LVC1G80 single positive-edge-triggered D-type flip-flop datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1g80.pdf",
+      "file": "ti-sn74lvc1g80-ds.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "73b5b60e38105033bdbd978cdc17961e6487dbc848e32b26f53fac3a22fd34e6",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "ti-tps3710-ds",
+      "title": "TPS3710 wide-VIN voltage detector datasheet",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/tps3710.pdf",
+      "file": "ti-tps3710-ds.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md",
+        "docs/decisions/ADR-0004-power-automotive.md"
+      ],
+      "sha256": "b47e24e09ad64ac7d930bb8b41ede63d833d66191ddca5694efda1da526293b2",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "ti-lmr436x0-ds",
+      "title": "LMR43610 / LMR43620 36 V 1 A / 2 A buck converter datasheet (commercial, SNVSBY5B)",
+      "publisher": "Texas Instruments",
+      "kind": "datasheet",
+      "url": "https://www.ti.com/lit/ds/symlink/lmr43620.pdf",
+      "file": "ti-lmr436x0-ds.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "18b2cc488ccfa848f103ba5bd6303dfc1ac74e80832510f2a8a59feb39a59711",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "etsi-en-301-489-1",
+      "title": "ETSI EN 301 489-1 V2.2.3 (2019-11) EMC standard for radio equipment; Part 1: common technical requirements",
+      "publisher": "ETSI",
+      "kind": "standard",
+      "url": "https://www.etsi.org/deliver/etsi_en/301400_301499/30148901/02.02.03_60/en_30148901v020203p.pdf",
+      "file": "etsi-en-301-489-1.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "b616362dbee141e4670dd664f141e8e51323ea19dd41652d43d399c8db849d24",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "ti-tidub49",
+      "title": "TIDUB49 automotive wide-VIN power front-end reference design (ISO 7637-2:2004 pulse table)",
+      "publisher": "Texas Instruments",
+      "kind": "app-note",
+      "url": "https://www.ti.com/lit/ug/tidub49/tidub49.pdf",
+      "file": "ti-tidub49.pdf",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "370754a5744f29edfa8ba2dbeaf4e7c22c3306c45b918b625e38b76df73763e8",
+      "retrieved": "2026-09-25"
     }
   ]
 }
