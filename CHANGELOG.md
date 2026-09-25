@@ -10,6 +10,11 @@ and tagged independently (see `AGENTS.md`).
 
 ## Unreleased
 
+- Host compatibility research (`docs/research/host-compatibility.md`): wired
+  USB-C (CDC-ACM, RTS/DTR, UAC1 vs UAC2, voice processing, port power) and
+  Bluetooth LE (2M PHY, DLE, MTU, intervals, L2CAP CoC vs GATT, throughput
+  budget) on iOS/iPadOS, macOS, Android, Windows and Linux. Recommends UAC1 for
+  #44 and NimBLE with L2CAP CoC plus a GATT fallback (#6).
 - Radio module confirmation (`docs/research/module-selection.md`): the
   ESP32-S3-MINI-1 FCC grant (2AC7Z-ESPS3MINI1: single modular, BLE certified at
   10.3 dBm conducted, 20 cm mobile use), ISED ID, lifecycle and dated LCSC
