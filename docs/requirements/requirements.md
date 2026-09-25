@@ -235,7 +235,15 @@ and editions are confirmed in [#10](https://github.com/Reid-n0rc/open-bt-rig-int
 | REQ-REG-003 | The end product shall meet FCC Part 15 Subpart B, Class B (unintentional radiator), documented by a Supplier's Declaration of Conformity. | constraints §4. | T | draft | #21 / Compliance |
 | REQ-REG-004 | The product shall carry a "Contains FCC ID: …" label. | constraints §4. | I | draft | #19 / #20 |
 | REQ-REG-005 | No metal shall cover the module antenna, unless the module is certified with an external antenna. | constraints §4. | I | draft | #19, #21 / #20 |
-| REQ-REG-006 | ISED and CE compliance are not required for revision A; any decision that would block them later shall be noted in the relevant ADR. | ISED and CE optional, later (constraints §4). | I | draft | #7, #12 / — |
+| REQ-REG-006 | *Withdrawn* (2026-09-25): was "ISED and CE compliance are not required for revision A". EU conformity is now required (REQ-REG-007 to -013); ISED moved to REQ-REG-014. | [ADR-0009](../decisions/ADR-0009-eu-compliance.md). | — | withdrawn | — |
+| REQ-REG-007 | Every variant shall meet the essential requirements of the Radio Equipment Directive 2014/53/EU Art. 3.1(a) (safety and RF exposure, no voltage limit), 3.1(b) (EMC) and 3.2 (spectrum, EN 300 328 V2.2.2), documented by an EU declaration of conformity and CE marking, by Module A where the cited harmonised standards allow. | [constraints §4](constraints.md#4-regulatory), [ADR-0009](../decisions/ADR-0009-eu-compliance.md), [eu.md §3](../compliance/eu.md#3-radio-equipment-directive), [RED](../references/index.md#eu-red-2014-53). | T, A | draft | #59, #21 / Compliance |
+| REQ-REG-008 | The firmware shall cap BLE TX power at one setting for all markets, no higher than the module's EU-tested 9.96 dBm e.i.r.p. and the FCC grant's 10.3 dBm conducted, keeping the product below 10 dBm e.i.r.p.; a firmware test shall check the cap. | EN 300 328 V2.2.2 §4.3.2 (adaptivity and PSD at ≥ 10 dBm e.i.r.p.), [module EU certificate](../references/index.md#espressif-s3-mini1-ce-cert), [eu.md §3.1](../compliance/eu.md#31-spectrum-art-32-en-300-328). | T | verify | #14, #13 / #14 |
+| REQ-REG-009 | Every part shall comply with RoHS 2011/65/EU Annex II, with its RoHS evidence and REACH SVHC (Art. 33) status recorded in the BOM notes; the RoHS technical documentation shall follow EN IEC 63000:2018. | constraints §4, [eu.md §6](../compliance/eu.md#6-substances-and-waste). | I | draft | #8, #9, #10, #11 / parts list |
+| REQ-REG-010 | The product shall carry the CE marking (product and packaging), the WEEE crossed-out bin with date bar (EN 50419:2022), a type, batch or serial number, the manufacturer's name and postal address, and the EU economic operator's contact; the enclosure shall keep space for them next to the FCC label. | RED Art. 10(6)–(7), 19–20; WEEE Art. 14(4), 15(2); Regulation (EU) 2019/1020 Art. 4(4) ([eu.md §12](../compliance/eu.md#12-marking-and-user-information)). | I | draft | #19 / #20 |
+| REQ-REG-011 | The user information shall include instructions and safety information in the language(s) each Member State of sale requires, the frequency band and maximum RF power (e.i.r.p.), the full or simplified EU declaration of conformity, WEEE information, and, for units placed from 2027-12-11, the CRA Annex II information including the support-period end date. | RED Art. 10(8)–(9); WEEE Art. 14(2); CRA Art. 13(18)–(19) ([eu.md §12](../compliance/eu.md#12-marking-and-user-information)). | I | draft | user documentation / Compliance |
+| REQ-REG-012 | The firmware and protocol shall meet the Cyber Resilience Act Annex I Part I for units placed on the market from 2027-12-11 (secure by default, access control on every host transport, protection of stored and transmitted data, signed updates the user can install, factory reset, minimal attack surface), and, if the maintainer reads the device as internet-connected, RED Art. 3.3(d)(e) with EN 18031-1/-2 for units placed before then. No default or shared passwords. | [CRA](../references/index.md#eu-cra-2024-2847), [Delegated Regulation 2022/30](../references/index.md#eu-red-da-2022-30), [eu.md §4–§5](../compliance/eu.md#4-red-cybersecurity-art-33def-and-en-18031). | T, A | draft | #13, #14 / Compliance |
+| REQ-REG-013 | Before any unit is placed on the market, the project shall have: a software bill of materials, a coordinated vulnerability disclosure policy, a stated support period of at least five years, free security updates kept available for at least 10 years, and a process to report actively exploited vulnerabilities and severe incidents through the ENISA single reporting platform (24 h early warning, 72 h notification, final report). | CRA Art. 13(8)–(9), Art. 14, Annex I Part II; [`SECURITY.md`](../../SECURITY.md). | I | draft | #14, release workflow / release workflow |
+| REQ-REG-014 | ISED compliance is not required for revision A; any decision that would block it later shall be noted in the relevant ADR. | ISED optional, later (constraints §4); carried over from REQ-REG-006. | I | draft | #7, #12 / — |
 
 ## 9. RF environment and EMC
 
@@ -248,6 +256,8 @@ and editions are confirmed in [#10](https://github.com/Reid-n0rc/open-bt-rig-int
 | REQ-EMC-005 | Switching converters shall use low-EMI conversion (silent-switcher or spread-spectrum), with the switching frequency chosen and filtered so it doesn't land on HF amateur bands. | constraints §3.2, §5. | A | draft | #10, #11 / #10, #11 |
 | REQ-EMC-006 | Variant M shall meet CISPR 25 Class 3 or better for conducted and radiated emissions. | constraints §3.2. | T | verify | #10 / Compliance |
 | REQ-EMC-007 | Variant M shall withstand ±15 kV air discharge (ISO 10605). | constraints §3.2. | T | verify | #10 / Compliance |
+| REQ-EMC-008 | Both variants shall meet EN 301 489-1 V2.2.3 with EN 301 489-17 V3.3.1 and EN 55035:2017 (RED Art. 3.1(b)); variant M, and variant R if it is declared for use in vehicles, as vehicular equipment, including DC-port conducted emissions and ISO 7637-2 transients at test level III (EN 301 489-1 §9.6). | [constraints §4](constraints.md#4-regulatory), [EN 301 489-17](../references/index.md#etsi-en-301-489-17), [EN 301 489-1](../references/index.md#etsi-en-301-489-1), [eu.md §3.3](../compliance/eu.md#33-emc-art-31b-en-301-489-series). | T | verify | #10, #11 / Compliance |
+| REQ-EMC-009 | Both variants shall meet EN 55032 Class B emissions, as a design target alongside FCC Part 15B Class B and, for variant M, CISPR 25 Class 3. | [eu.md §3.3](../compliance/eu.md#33-emc-art-31b-en-301-489-series), [ADR-0009](../decisions/ADR-0009-eu-compliance.md). | T | draft | #10, #11, #21 / Compliance |
 
 ## 10. Timing (optional features)
 
@@ -325,30 +335,32 @@ are named by their roadmap item.
 | [#3](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/3) CI gates | Verify | REQ-MECH-007, REQ-MFG-003, REQ-TOOL-001, REQ-TOOL-004 |
 | [#5](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/5) Radio power and interface table | Verify (research) | REQ-GEN-003, REQ-CAT-003, REQ-CAT-007, REQ-PTT-004, REQ-AUD-009, REQ-RIF-006, REQ-RIF-007, REQ-RIF-010, REQ-PWR-001, REQ-PWR-004 |
 | [#6](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/6) Five-OS host matrix | Verify (research) | REQ-GEN-002, REQ-HOST-001 to -005, REQ-HOST-011, REQ-CAT-006, REQ-AUD-004 to -006 |
-| [#7](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/7) Module (ESP32-S3-MINI-1) | Design, verify | REQ-GEN-002, REQ-HOST-012, REQ-REG-001, REQ-REG-002, REQ-REG-006, REQ-MFG-008 |
-| [#8](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/8) Audio codec and isolation | Design, verify | REQ-AUD-001, REQ-AUD-007, REQ-AUD-009 to -013, REQ-ISO-001, REQ-EMC-003, REQ-MFG-008 |
-| [#9](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/9) CAT/PTT circuits, USB routing | Design | REQ-GEN-003, REQ-GEN-004, REQ-HOST-009, REQ-CAT-002, REQ-CAT-007, REQ-CAT-008, REQ-PTT-004, REQ-PTT-008, REQ-RIF-001 to -010, REQ-ISO-001, REQ-ISO-003, REQ-EMC-001 to -003, REQ-MFG-008 |
-| [#10](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/10) Variant M power | Design, verify | REQ-PWR-003, REQ-PWR-005, REQ-PWR-010 to -017, REQ-ISO-003, REQ-EMC-004 to -007, REQ-MECH-006, REQ-ENV-002, REQ-MFG-004, REQ-MFG-008 |
-| [#11](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/11) Variant R power | Design, verify | REQ-RIF-007, REQ-RIF-009, REQ-PWR-001 to -005, REQ-EMC-004, REQ-EMC-005, REQ-ENV-001, REQ-MFG-004, REQ-MFG-008 |
-| [#12](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/12) Variants and board strategy | Design, verify | REQ-GEN-006, REQ-ISO-001, REQ-ISO-002, REQ-REG-006, REQ-EMC-003, REQ-ENV-001, REQ-ENV-002 |
-| [#13](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/13) Protocol spec | Design, verify | REQ-GEN-002, REQ-GEN-005, REQ-HOST-004, -005, -011, -012, REQ-CAT-005, REQ-PTT-001, -002, -006, REQ-AUD-004, REQ-TIM-001, REQ-FW-004, REQ-FW-005 |
-| [#14](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/14) Firmware core, HAL, host tests | Design, verify | REQ-CAT-001, REQ-PTT-005, REQ-PTT-010, REQ-TIM-003, REQ-FW-001 to -003, REQ-FW-006 |
+| [#7](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/7) Module (ESP32-S3-MINI-1) | Design, verify | REQ-GEN-002, REQ-HOST-012, REQ-REG-001, REQ-REG-002, REQ-REG-008, REQ-REG-014, REQ-MFG-008 |
+| [#8](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/8) Audio codec and isolation | Design, verify | REQ-AUD-001, REQ-AUD-007, REQ-AUD-009 to -013, REQ-ISO-001, REQ-EMC-003, REQ-MFG-008, REQ-REG-009 |
+| [#9](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/9) CAT/PTT circuits, USB routing | Design | REQ-GEN-003, REQ-GEN-004, REQ-HOST-009, REQ-CAT-002, REQ-CAT-007, REQ-CAT-008, REQ-PTT-004, REQ-PTT-008, REQ-RIF-001 to -010, REQ-ISO-001, REQ-ISO-003, REQ-EMC-001 to -003, REQ-MFG-008, REQ-REG-009 |
+| [#10](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/10) Variant M power | Design, verify | REQ-PWR-003, REQ-PWR-005, REQ-PWR-010 to -017, REQ-ISO-003, REQ-EMC-004 to -007, REQ-MECH-006, REQ-ENV-002, REQ-MFG-004, REQ-MFG-008, REQ-REG-009, REQ-EMC-008, REQ-EMC-009 |
+| [#11](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/11) Variant R power | Design, verify | REQ-RIF-007, REQ-RIF-009, REQ-PWR-001 to -005, REQ-EMC-004, REQ-EMC-005, REQ-ENV-001, REQ-MFG-004, REQ-MFG-008, REQ-REG-009, REQ-EMC-008, REQ-EMC-009 |
+| [#12](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/12) Variants and board strategy | Design, verify | REQ-GEN-006, REQ-ISO-001, REQ-ISO-002, REQ-REG-014, REQ-EMC-003, REQ-ENV-001, REQ-ENV-002 |
+| [#13](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/13) Protocol spec | Design, verify | REQ-GEN-002, REQ-GEN-005, REQ-HOST-004, -005, -011, -012, REQ-CAT-005, REQ-PTT-001, -002, -006, REQ-AUD-004, REQ-TIM-001, REQ-FW-004, REQ-FW-005, REQ-REG-008, REQ-REG-012 |
+| [#14](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/14) Firmware core, HAL, host tests | Design, verify | REQ-CAT-001, REQ-PTT-005, REQ-PTT-010, REQ-TIM-003, REQ-FW-001 to -003, REQ-FW-006, REQ-REG-008, REQ-REG-012, REQ-REG-013 |
 | [#15](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/15) Firmware CAT bridge and PTT | Design, verify | REQ-GEN-001, REQ-HOST-004, REQ-CAT-001 to -003, REQ-CAT-005 to -008, REQ-PTT-001 to -003, REQ-PTT-005 to -007, REQ-PTT-009, REQ-PTT-010, REQ-RIF-003, REQ-RIF-004, REQ-FW-002, REQ-FW-005 |
 | [#16](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/16) Firmware audio pipeline | Design, verify | REQ-GEN-001, REQ-HOST-004, REQ-HOST-011, REQ-AUD-001, -002, -004, -005, -007, -008, -013 to -015 |
 | [#17](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/17) Firmware tone TX (optional) | Design, verify | REQ-TIM-001 to -003 |
 | [#18](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/18) 👤 Audio bench test | Verify | REQ-GEN-001, REQ-GEN-002, REQ-HOST-001 to -004, REQ-HOST-009, REQ-HOST-010, REQ-CAT-006, REQ-PTT-001, REQ-AUD-003, -004, -006, -008, -013, -015 |
-| [#19](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/19) Enclosure | Design | REQ-REG-004, REQ-REG-005, REQ-MECH-001 to -005, REQ-ENV-003 |
-| [#20](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/20) 👤 Print and fit check | Verify | REQ-REG-004, REQ-REG-005, REQ-MECH-001 to -004, REQ-MECH-006, REQ-MECH-008, REQ-ENV-003 |
-| [#21](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/21) KiCad setup | Design | REQ-RIF-001, REQ-RIF-009, REQ-ISO-003, REQ-REG-002, REQ-REG-003, REQ-REG-005, REQ-FW-008, REQ-MECH-007, REQ-MFG-001 to -003, REQ-MFG-009, REQ-TOOL-001, REQ-TOOL-002 |
+| [#19](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/19) Enclosure | Design | REQ-REG-004, REQ-REG-005, REQ-REG-010, REQ-MECH-001 to -005, REQ-ENV-003 |
+| [#20](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/20) 👤 Print and fit check | Verify | REQ-REG-004, REQ-REG-005, REQ-REG-010, REQ-MECH-001 to -004, REQ-MECH-006, REQ-MECH-008, REQ-ENV-003 |
+| [#21](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/21) KiCad setup | Design | REQ-RIF-001, REQ-RIF-009, REQ-ISO-003, REQ-REG-002, REQ-REG-003, REQ-REG-005, REQ-REG-007, REQ-EMC-009, REQ-FW-008, REQ-MECH-007, REQ-MFG-001 to -003, REQ-MFG-009, REQ-TOOL-001, REQ-TOOL-002 |
 | [#26](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/26) ERC/DRC merge gate | Design, verify | REQ-TOOL-003 |
 | [#43](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/43) Firmware USB host (Bluetooth mode) | Design, verify | REQ-GEN-003, REQ-GEN-004, REQ-CAT-004, REQ-PTT-003, REQ-AUD-001, REQ-AUD-002, REQ-AUD-008, REQ-RIF-006, REQ-FW-007 |
 | [#44](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/44) Firmware wired USB-C mode | Design, verify | REQ-GEN-002 to -004, REQ-HOST-001 to -003, REQ-HOST-006 to -010, REQ-PTT-002, REQ-PTT-005, REQ-PTT-009, REQ-AUD-003, REQ-AUD-006, REQ-AUD-008, REQ-RIF-008, REQ-PWR-004, REQ-FW-005 to -007 |
 | [#45](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/45) Host Bluetooth bridge (later) | Design | REQ-HOST-005 |
-| Parts list (to be created) | Verify | REQ-MFG-007, REQ-MFG-008, REQ-MFG-010 |
+| [#59](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/59) EU compliance (ADR-0009) | Design | REQ-REG-007 to -013, REQ-EMC-008, REQ-EMC-009 |
+| Parts list (to be created) | Verify | REQ-MFG-007, REQ-MFG-008, REQ-MFG-010, REQ-REG-009 |
 | Design review (to be created) | Verify | REQ-REG-002, REQ-EMC-002, REQ-MFG-001, -002, -004 to -007 |
-| Release workflow (to be created) | Verify | REQ-MFG-009 |
+| Release workflow (to be created) | Verify | REQ-MFG-009, REQ-REG-013 |
+| User documentation (to be created) | Design, verify | REQ-REG-011 |
 | Bring-up (Phase 6, to be created) | Verify | REQ-GEN-001, -003, -004, REQ-HOST-009, REQ-CAT-002, -004, -007, REQ-PTT-004, -005, -008, REQ-AUD-001, -007, -010 to -012, REQ-RIF-002, -003, -005, -006, REQ-ISO-001, REQ-PWR-002 to -005, REQ-PWR-010 to -016, REQ-EMC-001, -003, -004, REQ-ENV-001, REQ-ENV-002 |
-| Compliance (Phase 6, to be created) | Verify | REQ-REG-003, REQ-EMC-006, REQ-EMC-007 |
+| Compliance (Phase 6, to be created) | Verify | REQ-REG-003, REQ-REG-007, REQ-REG-011, REQ-REG-012, REQ-EMC-006 to -009 |
 | Maintainer | Decide | REQ-MECH-008, REQ-MFG-010 |
 
 ## 17. Coverage checklist
@@ -399,7 +411,10 @@ one requirement. Update this list when either document changes.
 
 - [x] FCC-certified module, FCC ID recorded, integration guide: REQ-REG-001, REQ-REG-002
 - [x] Part 15 Subpart B Class B SDoC and label: REQ-REG-003, REQ-REG-004
-- [x] ISED and CE optional: REQ-REG-006
+- [x] EU conformity required (RED, RoHS, REACH, WEEE, CRA; ADR-0009): REQ-REG-007 to -013, REQ-EMC-008, REQ-EMC-009
+- [x] BLE TX power within the FCC grant and the module's EU test: REQ-REG-008
+- [x] Every part RoHS-compliant, RoHS/REACH status in BOM notes: REQ-REG-009
+- [x] ISED optional: REQ-REG-014 (REQ-REG-006 withdrawn)
 - [x] No metal over the antenna: REQ-REG-005, REQ-MECH-003
 
 **§5 RF environment**
@@ -445,13 +460,13 @@ one requirement. Update this list when either document changes.
 - [x] Permissive SDK and dependencies, no NDA SDKs, THIRD_PARTY.md: REQ-FW-001
 - [x] No radio-specific logic in the core: REQ-FW-002, REQ-CAT-001
 - [x] Versioned protocol with capability discovery; configuration over Bluetooth: REQ-FW-004, REQ-FW-005
-- [x] Optional signed OTA: REQ-FW-006
+- [x] Signed user-installable updates required; OTA optional: REQ-FW-006, REQ-REG-012
 
 **§11 Environmental and mechanical**
 
 - [x] Operating temperature per variant: REQ-ENV-001, REQ-ENV-002
 - [x] Enclosure material per variant: REQ-MECH-002, REQ-ENV-003
-- [x] Parametric CAD, no supports, keep-out, mounting, strain relief, label space, CI-generated STL/3MF: REQ-MECH-001, REQ-MECH-003 to -005
+- [x] Parametric CAD, no supports, keep-out, mounting, strain relief, label space (FCC and EU markings), CI-generated STL/3MF: REQ-MECH-001, REQ-MECH-003 to -005, REQ-REG-010
 - [x] Size target TBD: REQ-MECH-008
 
 **§12 Manufacturing and sourcing**
@@ -483,3 +498,8 @@ one requirement. Update this list when either document changes.
 - **CAT latency target** (REQ-CAT-006) and **keepalive and maximum-TX
   defaults** (REQ-PTT-006, REQ-PTT-007): values to be set in #13 and #15.
 - **BOM cost and enclosure size targets** (REQ-MFG-010, REQ-MECH-008): maintainer.
+- **EU decisions** ([ADR-0009](../decisions/ADR-0009-eu-compliance.md)): is the
+  device "internet-connected" under Delegated Regulation 2022/30 (REQ-REG-012);
+  is variant R declared for vehicle use (REQ-EMC-008); RED only or also a UN R10
+  declaration for variant M; the EU economic operator; the CRA support period
+  (REQ-REG-013). Maintainer.

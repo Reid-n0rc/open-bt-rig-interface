@@ -135,7 +135,18 @@ radio's USB VBUS draw. Use the higher USB-C current advertised on CC (1.5 A or
   area, RF trace layout.
 - The end product needs **FCC Part 15 Subpart B** (unintentional radiator,
   Class B) SDoC, and a "Contains FCC ID: …" label.
-- ISED and CE: optional, later.
+- **EU conformity is required** for every variant (decision change,
+  [ADR-0009](../decisions/ADR-0009-eu-compliance.md); details in
+  [`../compliance/eu.md`](../compliance/eu.md)): Radio Equipment Directive
+  2014/53/EU (safety and RF exposure, EMC, spectrum), RoHS, REACH Art. 33,
+  WEEE marking, and the Cyber Resilience Act for units placed on the market
+  from 2027-12-11. EU declaration of conformity and CE marking, by Module A
+  where the harmonised standards allow.
+- **BLE TX power** stays within both the FCC grant (10.3 dBm conducted) and the
+  module's EU type examination (9.96 dBm e.i.r.p.), which keeps it below
+  EN 300 328's 10 dBm e.i.r.p. adaptivity threshold.
+- Every part is RoHS-compliant, with RoHS and REACH SVHC status in the BOM notes.
+- ISED: optional, later.
 - No metal over the module antenna, unless the module is certified with an
   external antenna.
 
@@ -225,7 +236,9 @@ The device operates next to HF transmitters of 100 W or more.
 - No radio-specific logic in the core (transparent CAT).
 - The protocol is versioned, with capability discovery. Configuration happens
   over Bluetooth.
-- Optional signed OTA updates.
+- Signed firmware updates that the user can install are required for EU
+  conformity (Cyber Resilience Act, [ADR-0009](../decisions/ADR-0009-eu-compliance.md));
+  OTA remains optional.
 
 ## 11. Environmental and mechanical
 
@@ -236,7 +249,8 @@ The device operates next to HF transmitters of 100 W or more.
 
 - **3D-printed enclosure:** parametric CAD source in `hardware/enclosure/`,
   printable without supports where possible, antenna keep-out respected, mounting
-  and strain relief, space for the FCC ID label. STL/3MF are generated and
+  and strain relief, space for the FCC ID label and the EU markings (CE,
+  WEEE, type or serial number, manufacturer and EU operator address). STL/3MF are generated and
   attached to releases.
 - Size target: **TBD by maintainer.**
 

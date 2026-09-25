@@ -851,6 +851,457 @@
       ],
       "sha256": "d67001d0dc491931674b4dcefca686fc87fe31410d93af81045b2a73a24a395a",
       "retrieved": "2026-09-24"
+    },
+    {
+      "id": "eu-red-2014-53",
+      "title": "Directive 2014/53/EU (Radio Equipment Directive), consolidated text of 30.05.2026 (CELEX 02014L0053-20260530)",
+      "publisher": "Publications Office of the EU (EUR-Lex)",
+      "kind": "standard",
+      "url": "https://publications.europa.eu/resource/cellar/cec7c085-48af-11f1-8095-01aa75ed71a1.0001.02/DOC_1",
+      "file": "eu-red-2014-53.html",
+      "notes": "EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02014L0053-20260530 . The URL is the Publications Office (CELLAR) copy of the same text, because EUR-Lex blocks scripted downloads. Consolidated texts are documentation only; the Official Journal text is authentic.",
+      "used_in": [
+        "docs/compliance/eu.md",
+        "docs/decisions/ADR-0009-eu-compliance.md",
+        "docs/requirements/requirements.md"
+      ],
+      "sha256": "fe04f34cc418124f6e5709045f76b2d6d9b68f8bbd018628d56dba09cdb4ce67",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "eu-red-da-2022-30",
+      "title": "Commission Delegated Regulation (EU) 2022/30 (RED Art. 3(3)(d)(e)(f), cybersecurity), consolidated text of 27.10.2023 (as amended by (EU) 2023/2444)",
+      "publisher": "Publications Office of the EU (EUR-Lex)",
+      "kind": "standard",
+      "url": "https://publications.europa.eu/resource/cellar/be2d9c0c-8921-11ee-99ba-01aa75ed71a1.0024.02/DOC_1",
+      "file": "eu-red-da-2022-30.html",
+      "notes": "EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02022R0030-20231027 . The URL is the Publications Office (CELLAR) copy of the same text, because EUR-Lex blocks scripted downloads. Consolidated texts are documentation only; the Official Journal text is authentic.",
+      "used_in": [
+        "docs/compliance/eu.md",
+        "docs/requirements/requirements.md"
+      ],
+      "sha256": "8635732b8cb56145380788d18e71061c1bbfbf492dd890a0f9ea67fee334f3a4",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "eu-red-da-2022-30-oj",
+      "title": "Commission Delegated Regulation (EU) 2022/30, OJ L 7, 12.1.2022, p. 6 (original text with recitals)",
+      "publisher": "Publications Office of the EU (EUR-Lex)",
+      "kind": "standard",
+      "url": "https://publications.europa.eu/resource/cellar/5f9d2be0-734b-11ec-9136-01aa75ed71a1.0006.03/DOC_1",
+      "file": "eu-red-da-2022-30-oj.html",
+      "notes": "EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R0030 . The URL is the Publications Office (CELLAR) copy of the same text, because EUR-Lex blocks scripted downloads.",
+      "used_in": [
+        "docs/compliance/eu.md"
+      ],
+      "sha256": "f0339edc4cd73d2af79424c610e494a1a778b764524fe234bc1a7cc196bfa432",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "eu-da-2026-339",
+      "title": "Commission Delegated Regulation (EU) 2026/339 repealing Delegated Regulation (EU) 2022/30 with effect from 11 December 2027 (OJ L, 2026/339, 29.4.2026)",
+      "publisher": "Publications Office of the EU (EUR-Lex)",
+      "kind": "standard",
+      "url": "https://publications.europa.eu/resource/cellar/d8611ecc-4364-11f1-8095-01aa75ed71a1.0006.03/DOC_1",
+      "file": "eu-da-2026-339.html",
+      "notes": "EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R0339 . The URL is the Publications Office (CELLAR) copy of the same text, because EUR-Lex blocks scripted downloads.",
+      "used_in": [
+        "docs/compliance/eu.md"
+      ],
+      "sha256": "eb26625689ef870685c4103d8006861af7769a3bef30eff170555629e102ed7c",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "eu-red-hs-2022-2191",
+      "title": "Commission Implementing Decision (EU) 2022/2191 on harmonised standards for radio equipment (RED), consolidated text of 11.12.2025 (amendments up to (EU) 2025/2499)",
+      "publisher": "Publications Office of the EU (EUR-Lex)",
+      "kind": "standard",
+      "url": "https://publications.europa.eu/resource/cellar/cd97ab8c-f649-11f0-b9bc-01aa75ed71a1.0006.02/DOC_1",
+      "file": "eu-red-hs-2022-2191.html",
+      "notes": "EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02022D2191-20251211 . The URL is the Publications Office (CELLAR) copy of the same text, because EUR-Lex blocks scripted downloads. Consolidated texts are documentation only; the Official Journal text is authentic.",
+      "used_in": [
+        "docs/compliance/eu.md"
+      ],
+      "sha256": "a0ff32b4858e4c9b58c3f838bb49242563dc42167f950116dcb0d403db31ab86",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "eu-red-hs-2026-2003",
+      "title": "Commission Implementing Decision (EU) 2026/2003 amending Implementing Decision (EU) 2022/2191 (OJ L, 2026/2003, 7.9.2026)",
+      "publisher": "Publications Office of the EU (EUR-Lex)",
+      "kind": "standard",
+      "url": "https://publications.europa.eu/resource/cellar/498dd537-aa55-11f1-b9e5-01aa75ed71a1.0006.03/DOC_1",
+      "file": "eu-red-hs-2026-2003.html",
+      "notes": "EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026D2003 . The URL is the Publications Office (CELLAR) copy of the same text, because EUR-Lex blocks scripted downloads.",
+      "used_in": [
+        "docs/compliance/eu.md"
+      ],
+      "sha256": "d3198968bb4124fac9b0ee2ebdd832aee2290f047b772bbf1536d6d0d25611cd",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "eu-cra-2024-2847",
+      "title": "Regulation (EU) 2024/2847 (Cyber Resilience Act), OJ L, 2024/2847, 20.11.2024",
+      "publisher": "Publications Office of the EU (EUR-Lex)",
+      "kind": "standard",
+      "url": "https://publications.europa.eu/resource/cellar/21b7d4eb-a6e2-11ef-85f0-01aa75ed71a1.0006.03/DOC_1",
+      "file": "eu-cra-2024-2847.html",
+      "notes": "EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R2847 . The URL is the Publications Office (CELLAR) copy of the same text, because EUR-Lex blocks scripted downloads. No consolidated version exists at the time of writing; corrigenda (EU) 2024/2847R(01), R(02), R(04) are listed on EUR-Lex.",
+      "used_in": [
+        "docs/compliance/eu.md",
+        "docs/decisions/ADR-0009-eu-compliance.md",
+        "docs/requirements/requirements.md"
+      ],
+      "sha256": "fe0cca4a0caec50e7cf5a91432b94a19b211f86be8584fdba56372bdcea571ed",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "eu-cra-2025-2392",
+      "title": "Commission Implementing Regulation (EU) 2025/2392 on the technical description of important and critical products with digital elements (CRA Annexes III and IV)",
+      "publisher": "Publications Office of the EU (EUR-Lex)",
+      "kind": "standard",
+      "url": "https://publications.europa.eu/resource/cellar/2d4a6388-ce5f-11f0-8da2-01aa75ed71a1.0006.03/DOC_1",
+      "file": "eu-cra-2025-2392.html",
+      "notes": "EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025R2392 . The URL is the Publications Office (CELLAR) copy of the same text, because EUR-Lex blocks scripted downloads.",
+      "used_in": [
+        "docs/compliance/eu.md"
+      ],
+      "sha256": "8dd48c7990527289ea46b5bd2f3c4dbbac95a89d99de2f3aa5388c3bc9398e0e",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "eu-rohs-2011-65",
+      "title": "Directive 2011/65/EU (RoHS), consolidated text of 01.07.2026 (CELEX 02011L0065-20260701)",
+      "publisher": "Publications Office of the EU (EUR-Lex)",
+      "kind": "standard",
+      "url": "https://publications.europa.eu/resource/cellar/a3485ccc-53c4-11f1-b3e2-01aa75ed71a1.0006.02/DOC_1",
+      "file": "eu-rohs-2011-65.html",
+      "notes": "EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02011L0065-20260701 . The URL is the Publications Office (CELLAR) copy of the same text, because EUR-Lex blocks scripted downloads. Consolidated texts are documentation only; the Official Journal text is authentic.",
+      "used_in": [
+        "docs/compliance/eu.md"
+      ],
+      "sha256": "aeb8b7baff8702184f3f25b2e660c630c1c11d787e3b8f9fc4811936bb0641c1",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "eu-rohs-hs-2020-659",
+      "title": "Commission Implementing Decision (EU) 2020/659 on the harmonised standard EN IEC 63000:2018 (RoHS technical documentation)",
+      "publisher": "Publications Office of the EU (EUR-Lex)",
+      "kind": "standard",
+      "url": "https://publications.europa.eu/resource/cellar/c3abeed5-98ec-11ea-aac4-01aa75ed71a1.0006.03/DOC_1",
+      "file": "eu-rohs-hs-2020-659.html",
+      "notes": "EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32020D0659 . The URL is the Publications Office (CELLAR) copy of the same text, because EUR-Lex blocks scripted downloads.",
+      "used_in": [
+        "docs/compliance/eu.md"
+      ],
+      "sha256": "5361d97e00eb98a3d16a19109357762f85e475ab9d17f88d2ffc8de1bf067ecb",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "eu-weee-2012-19",
+      "title": "Directive 2012/19/EU (WEEE), consolidated text of 08.04.2024 (CELEX 02012L0019-20240408)",
+      "publisher": "Publications Office of the EU (EUR-Lex)",
+      "kind": "standard",
+      "url": "https://publications.europa.eu/resource/cellar/2f392888-fbed-11ee-a251-01aa75ed71a1.0007.02/DOC_1",
+      "file": "eu-weee-2012-19.html",
+      "notes": "EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02012L0019-20240408 . The URL is the Publications Office (CELLAR) copy of the same text, because EUR-Lex blocks scripted downloads. Consolidated texts are documentation only; the Official Journal text is authentic.",
+      "used_in": [
+        "docs/compliance/eu.md"
+      ],
+      "sha256": "3592a136ab23ccad39ed43f2e59e778b8476d95f44e32d829e0752348917db07",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "eu-reach-1907-2006",
+      "title": "Regulation (EC) No 1907/2006 (REACH), consolidated text of 22.06.2026 (CELEX 02006R1907-20260622)",
+      "publisher": "Publications Office of the EU (EUR-Lex)",
+      "kind": "standard",
+      "url": "https://publications.europa.eu/resource/cellar/11f48a79-a0a6-11f1-b25c-01aa75ed71a1.0005.02/DOC_1",
+      "file": "eu-reach-1907-2006.html",
+      "notes": "EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02006R1907-20260622 . The URL is the Publications Office (CELLAR) copy of the same text, because EUR-Lex blocks scripted downloads. Consolidated texts are documentation only; the Official Journal text is authentic.",
+      "used_in": [
+        "docs/compliance/eu.md"
+      ],
+      "sha256": "60b7176cbdbc412d8a63937f0e3fda1d95b2e47311300ba928dbdaef6702066e",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "cjeu-c-106-14",
+      "title": "Judgment of the Court of Justice, Case C-106/14 FCD and FMB, 10 September 2015 (REACH Art. 33 applies to each constituent article)",
+      "publisher": "Publications Office of the EU (EUR-Lex)",
+      "kind": "standard",
+      "url": "https://publications.europa.eu/resource/cellar/bcab20fc-57a5-11e5-afbf-01aa75ed71a1.0006.03/DOC_3",
+      "file": "cjeu-c-106-14.html",
+      "notes": "EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:62014CJ0106 . The URL is the Publications Office (CELLAR) copy of the same text, because EUR-Lex blocks scripted downloads.",
+      "used_in": [
+        "docs/compliance/eu.md"
+      ],
+      "sha256": "7e8e83dc27d46d960241824b2d02f933e5654f6f5d7f198be1a9e2cea6013585",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "eu-wfd-2008-98",
+      "title": "Directive 2008/98/EC (Waste Framework Directive), consolidated text of 16.10.2025 (Art. 9(1)(i): SCIP notification)",
+      "publisher": "Publications Office of the EU (EUR-Lex)",
+      "kind": "standard",
+      "url": "https://publications.europa.eu/resource/cellar/d38341fd-b43b-11f0-b37f-01aa75ed71a1.0007.02/DOC_1",
+      "file": "eu-wfd-2008-98.html",
+      "notes": "EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02008L0098-20251016 . The URL is the Publications Office (CELLAR) copy of the same text, because EUR-Lex blocks scripted downloads. Consolidated texts are documentation only; the Official Journal text is authentic.",
+      "used_in": [
+        "docs/compliance/eu.md"
+      ],
+      "sha256": "99399acdfc744a50fc3b9d30784971ca0d007a33c58dc69f8dc7bed21f2f3e51",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "eu-gpsr-2023-988",
+      "title": "Regulation (EU) 2023/988 (General Product Safety Regulation), consolidated text of 29.05.2026 (CELEX 02023R0988-20260529)",
+      "publisher": "Publications Office of the EU (EUR-Lex)",
+      "kind": "standard",
+      "url": "https://publications.europa.eu/resource/cellar/ae1c043f-3e30-11f1-814f-01aa75ed71a1.0007.02/DOC_1",
+      "file": "eu-gpsr-2023-988.html",
+      "notes": "EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02023R0988-20260529 . The URL is the Publications Office (CELLAR) copy of the same text, because EUR-Lex blocks scripted downloads. Consolidated texts are documentation only; the Official Journal text is authentic.",
+      "used_in": [
+        "docs/compliance/eu.md"
+      ],
+      "sha256": "e780aaafb7e5da0b0d7db3928a949e1e4e6706816d760a2ec952710ec7fe986e",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "eu-msr-2019-1020",
+      "title": "Regulation (EU) 2019/1020 (market surveillance), consolidated text of 12.08.2026 (Art. 4: economic operator established in the Union)",
+      "publisher": "Publications Office of the EU (EUR-Lex)",
+      "kind": "standard",
+      "url": "https://publications.europa.eu/resource/cellar/ba447ab3-69ab-11f1-ae88-01aa75ed71a1.0007.02/DOC_1",
+      "file": "eu-msr-2019-1020.html",
+      "notes": "EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02019R1020-20260812 . The URL is the Publications Office (CELLAR) copy of the same text, because EUR-Lex blocks scripted downloads. Consolidated texts are documentation only; the Official Journal text is authentic.",
+      "used_in": [
+        "docs/compliance/eu.md"
+      ],
+      "sha256": "519d1fa00238de1f5841be29ac0eff18542b916d0653d7b79b98f885d22eb215",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "eu-nlf-765-2008",
+      "title": "Regulation (EC) No 765/2008, consolidated text of 16.07.2021 (Art. 30 and Annex II: CE marking)",
+      "publisher": "Publications Office of the EU (EUR-Lex)",
+      "kind": "standard",
+      "url": "https://publications.europa.eu/resource/cellar/e8e78132-f47c-11eb-aeb9-01aa75ed71a1.0007.02/DOC_1",
+      "file": "eu-nlf-765-2008.html",
+      "notes": "EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02008R0765-20210716 . The URL is the Publications Office (CELLAR) copy of the same text, because EUR-Lex blocks scripted downloads. Consolidated texts are documentation only; the Official Journal text is authentic.",
+      "used_in": [
+        "docs/compliance/eu.md"
+      ],
+      "sha256": "f437a05d4efb91b0aa1c0ca573eca1a4aa44ece5591e62a6857e385990f1ea70",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "eu-common-charger-2022-2380",
+      "title": "Directive (EU) 2022/2380 amending the RED (common charger, Annex Ia), OJ L 315, 7.12.2022",
+      "publisher": "Publications Office of the EU (EUR-Lex)",
+      "kind": "standard",
+      "url": "https://publications.europa.eu/resource/cellar/f1fdccdd-75d1-11ed-9887-01aa75ed71a1.0006.03/DOC_1",
+      "file": "eu-common-charger-2022-2380.html",
+      "notes": "EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022L2380 . The URL is the Publications Office (CELLAR) copy of the same text, because EUR-Lex blocks scripted downloads.",
+      "used_in": [
+        "docs/compliance/eu.md"
+      ],
+      "sha256": "7dbb76210f025d721aaed13e739e5eb970185989ffc54b402e0f16256bb5b6f6",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "eu-lvd-hs-2023-2723",
+      "title": "Commission Implementing Decision (EU) 2023/2723 on harmonised standards for electrical equipment (LVD), consolidated text of 30.04.2026",
+      "publisher": "Publications Office of the EU (EUR-Lex)",
+      "kind": "standard",
+      "url": "https://publications.europa.eu/resource/cellar/fd7caaad-48a7-11f1-8095-01aa75ed71a1.0006.02/DOC_1",
+      "file": "eu-lvd-hs-2023-2723.html",
+      "notes": "EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02023D2723-20260430 . The URL is the Publications Office (CELLAR) copy of the same text, because EUR-Lex blocks scripted downloads. Consolidated texts are documentation only; the Official Journal text is authentic.",
+      "used_in": [
+        "docs/compliance/eu.md"
+      ],
+      "sha256": "ab80941d7bf05e047e2ec317771b033ae5aba06d2d6619a7fe27b388fdb0a1bb",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "eu-emc-hs-2019-1326",
+      "title": "Commission Implementing Decision (EU) 2019/1326 on harmonised standards for electromagnetic compatibility (EMCD), consolidated text of 10.06.2022",
+      "publisher": "Publications Office of the EU (EUR-Lex)",
+      "kind": "standard",
+      "url": "https://publications.europa.eu/resource/cellar/37f32e6f-fcca-11ec-b94a-01aa75ed71a1.0001.02/DOC_1",
+      "file": "eu-emc-hs-2019-1326.html",
+      "notes": "EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02019D1326-20220610 . The URL is the Publications Office (CELLAR) copy of the same text, because EUR-Lex blocks scripted downloads. Consolidated texts are documentation only; the Official Journal text is authentic.",
+      "used_in": [
+        "docs/compliance/eu.md"
+      ],
+      "sha256": "f935af87951c299d7b2d2257f3a93e8a326e1540807e385c143fbac1970846e3",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "eu-srd-2006-771",
+      "title": "Commission Decision 2006/771/EC on harmonisation of the radio spectrum for short-range devices, consolidated text of 23.01.2025",
+      "publisher": "Publications Office of the EU (EUR-Lex)",
+      "kind": "standard",
+      "url": "https://publications.europa.eu/resource/cellar/8aba10b8-f90f-11ef-b7db-01aa75ed71a1.0008.02/DOC_1",
+      "file": "eu-srd-2006-771.html",
+      "notes": "EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02006D0771(01)-20250123 . The URL is the Publications Office (CELLAR) copy of the same text, because EUR-Lex blocks scripted downloads. Consolidated texts are documentation only; the Official Journal text is authentic.",
+      "used_in": [
+        "docs/compliance/eu.md"
+      ],
+      "sha256": "f3072c6107422bfd6845ad2e99447e7f046ca4fc82bfd95136e9d82c39a1b7cc",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "eu-blue-guide-2022",
+      "title": "Commission Notice: The 'Blue Guide' on the implementation of EU product rules 2022 (2022/C 247/01), OJ C 247, 29.6.2022",
+      "publisher": "Publications Office of the EU (EUR-Lex)",
+      "kind": "standard",
+      "url": "https://publications.europa.eu/resource/cellar/91a50d92-f745-11ec-b94a-01aa75ed71a1.0006.03/DOC_1",
+      "file": "eu-blue-guide-2022.html",
+      "notes": "EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52022XC0629(04) . The URL is the Publications Office (CELLAR) copy of the same text, because EUR-Lex blocks scripted downloads.",
+      "used_in": [
+        "docs/compliance/eu.md"
+      ],
+      "sha256": "2fb8e626e094e4361956cc7cc35d72ecca8b7adf6dfcc6c05e3da35aeedae353",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "unece-r10-oj-2017",
+      "title": "UN Regulation No 10 (vehicle EMC), 05 series incl. Supplement 01, as published in OJ L 41, 17.2.2017 [2017/260]",
+      "publisher": "Publications Office of the EU (EUR-Lex)",
+      "kind": "standard",
+      "url": "https://publications.europa.eu/resource/cellar/4d4ad16e-f4dc-11e6-8a35-01aa75ed71a1.0006.03/DOC_1",
+      "file": "unece-r10-oj-2017.html",
+      "notes": "EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:42017X0260 . The URL is the Publications Office (CELLAR) copy of the same text, because EUR-Lex blocks scripted downloads. Only the UNECE original has legal effect. The current 06 series (Revision 6) is on unece.org, which blocks scripted downloads.",
+      "used_in": [
+        "docs/compliance/eu.md"
+      ],
+      "sha256": "8414518e9ca8b22dd9e3a05fda7d57688c4665296462f4e3ff7fa959cd7f61ca",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "ec-red-guide-2018",
+      "title": "Guide to the Radio Equipment Directive 2014/53/EU, version of 19 December 2018",
+      "publisher": "European Commission (DG GROW)",
+      "kind": "web",
+      "url": "https://single-market-economy.ec.europa.eu/document/download/a0c7e4c5-27db-4c59-9c43-a380ed21563f_en?filename=20181219%20RED%20guide.pdf",
+      "file": "ec-red-guide-2018.pdf",
+      "notes": "Guidance, not legally binding.",
+      "used_in": [
+        "docs/compliance/eu.md"
+      ],
+      "sha256": "f50e67ec1e164c9899e070a8536ee2552b83d841658e0995ba54b076b4f6f959",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "ec-red-hs-summary",
+      "title": "Summary list of harmonised standards for Directive 2014/53/EU (generated 13.10.2025, xlsx)",
+      "publisher": "European Commission (DG GROW)",
+      "kind": "web",
+      "url": "https://single-market-economy.ec.europa.eu/document/download/1b07bf21-0158-466f-9865-2fcba3bf67d6_en?filename=SummaryListForLegislation_generated%2013.10.2025.xlsx",
+      "file": "ec-red-hs-summary.xlsx",
+      "notes": "Information only; the Implementing Decisions in the OJ are authoritative.",
+      "used_in": [
+        "docs/compliance/eu.md"
+      ],
+      "sha256": "1a3e14c8b1af4f84ce920b1b428b71af96bf4f3d8d997cb2b70cf128d6412935",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "etsi-en-300-328",
+      "title": "ETSI EN 300 328 V2.2.2 (2019-07) Wideband transmission systems; data transmission equipment operating in the 2,4 GHz band",
+      "publisher": "ETSI",
+      "kind": "standard",
+      "url": "https://www.etsi.org/deliver/etsi_en/300300_300399/300328/02.02.02_60/en_300328v020202p.pdf",
+      "file": "etsi-en-300-328.pdf",
+      "used_in": [
+        "docs/compliance/eu.md"
+      ],
+      "sha256": "35211bae77e40e835908d1b8757e82bbbb8895aee71d5e0a0a22131d4101a376",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "etsi-en-301-489-1",
+      "title": "ETSI EN 301 489-1 V2.2.3 (2019-11) EMC standard for radio equipment and services; Part 1: common technical requirements",
+      "publisher": "ETSI",
+      "kind": "standard",
+      "url": "https://www.etsi.org/deliver/etsi_en/301400_301499/30148901/02.02.03_60/en_30148901v020203p.pdf",
+      "file": "etsi-en-301-489-1.pdf",
+      "used_in": [
+        "docs/compliance/eu.md",
+        "docs/requirements/requirements.md"
+      ],
+      "sha256": "b616362dbee141e4670dd664f141e8e51323ea19dd41652d43d399c8db849d24",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "etsi-en-301-489-17",
+      "title": "ETSI EN 301 489-17 V3.3.1 (2024-09) EMC standard for radio equipment and services; Part 17: broadband and wideband data transmission systems",
+      "publisher": "ETSI",
+      "kind": "standard",
+      "url": "https://www.etsi.org/deliver/etsi_en/301400_301499/30148917/03.03.01_60/en_30148917v030301p.pdf",
+      "file": "etsi-en-301-489-17.pdf",
+      "used_in": [
+        "docs/compliance/eu.md",
+        "docs/requirements/requirements.md"
+      ],
+      "sha256": "aec55d6e0caf10635835ccc23505a5f4b8310525e6cd4c392fc357451b02a362",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "cen-en-18031-1",
+      "title": "EN 18031-1:2024 Common security requirements for radio equipment, Part 1: internet connected radio equipment (catalogue entry)",
+      "publisher": "CEN-CENELEC (catalogue via iTeh Standards)",
+      "kind": "standard",
+      "url": "https://standards.iteh.ai/catalog/standards/cen/4f1e2768-e1a6-4541-a2b6-465e1c682627/en-18031-1-2024",
+      "file": "cen-en-18031-1.html",
+      "fetch": "manual",
+      "notes": "Paid standard; only the catalogue page is referenced. Never commit a copy of the standard.",
+      "used_in": [
+        "docs/compliance/eu.md"
+      ]
+    },
+    {
+      "id": "espressif-s3-mini1-ce-cert",
+      "title": "ESP32-S3-MINI-1 EU-type examination certificate 0370-RED-4972 with technical annex (LGAI/Applus, notified body 0370, 25.02.2022)",
+      "publisher": "Espressif Systems",
+      "kind": "web",
+      "url": "https://www.espressif.com/sites/default/files/certificates/ESP32-S3-MINI-1%20CE%20Certification.pdf",
+      "file": "espressif-s3-mini1-ce-cert.pdf",
+      "used_in": [
+        "docs/compliance/eu.md",
+        "docs/requirements/requirements.md"
+      ],
+      "sha256": "174661a238b9a44cbaa748f22a9e685e32b98aa184facc92e779d9072d4ca8b3",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "orgalim-internet-connected-2022",
+      "title": "Orgalim position paper: Common understanding of the term 'internet-connected radio equipment' (13 September 2022)",
+      "publisher": "Orgalim",
+      "kind": "web",
+      "url": "https://orgalim.eu/wp-content/uploads/Common-understanding-of-the-term-Internet-connected-radio-equipment_130922-1.pdf",
+      "file": "orgalim-internet-connected-2022.pdf",
+      "notes": "Industry association paper, not legally binding.",
+      "used_in": [
+        "docs/compliance/eu.md"
+      ],
+      "sha256": "80a6853b80a679ba98fa1d52e077c1d44f835ab346825fb14f93eaf8737e4cdd",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "bsi-red-cyber-guide",
+      "title": "BSI: Radio Equipment Directive cybersecurity, guide and readiness checklist (2025; EN 18031 mechanism overview)",
+      "publisher": "BSI Group",
+      "kind": "web",
+      "url": "https://www.bsigroup.com/siteassets/pdf/en/products-and-services/gl-rs-pcert-lg-ict-dt-nsp-mp-digitaldomain-0025-red-guide-and-readiness.pdf",
+      "file": "bsi-red-cyber-guide.pdf",
+      "notes": "Secondary source for the list of EN 18031 mechanisms; check against the standard itself.",
+      "used_in": [
+        "docs/compliance/eu.md"
+      ],
+      "sha256": "c1afa5f6f4b3fe3ba890d6ac80b2aa97d4c83422c37c1683138e9527d1c42a8c",
+      "retrieved": "2026-09-25"
     }
   ]
 }
