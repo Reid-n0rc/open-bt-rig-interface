@@ -77,15 +77,22 @@ version 0.1.0) is one framed byte stream:
   RTS and DTR together never keys; PTT off at every session end.
 - **SPEC §8 (PTT rules) approved by the maintainer, 2026-09-24**, together
   with three user-facing notes in §8.5: wired CDC-ACM RTS/DTR needs no
-  keepalive, so a hung desktop program can hold PTT until `MAX_TX_S`, the
-  hardware watchdog or a USB disconnect; CAT-command keying is invisible to
+  keepalive, so a hung desktop program can hold PTT until `MAX_TX_S` or a
+  USB disconnect; CAT-command keying is invisible to
   the device and guarded only by the radio's timers; RTS and DTR rising
   together count as a port open and don't key (map only one line to PTT).
-- **Hardware PTT watchdog** (maintainer decision, 2026-09-24, designed in
-  #9): a hardware timer (configurable, default 10 minutes) forces PTT off
-  even if the firmware is hung. It backs up `MAX_TX_S`, which must not exceed
-  it. The `PTT` capability reports the limit (`hw_max_tx_s`, 0 = unknown),
-  and `PTT_STATUS` reason `HW_WATCHDOG` reports a trip after the fact.
+- **Max TX and lock-ups** (maintainer decisions, 2026-09-25, changing the
+  approved §8): `MAX_TX_S` defaults to 300 s and has **no upper bound**, but
+  can't be 0, so the timer required by `AGENTS.md` can't be switched off,
+  only set as long as the user wants. There is **no external hardware PTT
+  timer**: the ESP32-S3's internal watchdog resets the device after a
+  firmware lock-up, PTT is off during and after the reset, and `PTT_STATUS`
+  reason `WATCHDOG` reports it afterwards.
+- **Auto power-down** (maintainer decisions, 2026-09-25): `POWER_DOWN_DELAY_S`,
+  default 30 s after the radio or ignition turns off, 0 = never (the user's
+  choice, even though variant M may then exceed its off-state drain target).
+  The delay runs only while no USB host is connected; the device stays
+  awake in wired mode.
 - **Audio:** PCM16 at 12 or 16 kHz (LC3 optional), 10 ms frames with a
   sequence number and a sample timestamp, one direction at a time, the
   device's sample clock as the stream clock, and optional scheduled start.
@@ -106,7 +113,8 @@ version 0.1.0) is one framed byte stream:
   the window: no protocol message, and neither the wired control port nor
   the USB network, can open it (maintainer decision, 2026-09-24).
 - **Configurable defaults** (maintainer decision, 2026-09-24): keepalive
-  3000 ms (500–10 000), max TX 180 s (10–600, can't be disabled), serial
+  3000 ms (500–10 000), max TX 300 s (at least 10 s, no upper bound, can't be
+  switched off), serial
   9600 8N1 (`SERIAL_DEFAULT`), `LINE_MAP` (SERIAL-jack and control-port RTS →
   PTT, DTR ignored; radio ports pass-through), `WIRED_PROFILE` serial, USB
   network subnet 10.169.160.0/30 (`USB_NET_SUBNET`), pairing window 120 s.

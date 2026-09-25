@@ -215,7 +215,7 @@ radio USB-serial chip or sound card enumerates or disappears.
 | 0x02 | `SERIAL_JACK` | `port u8` (0), `modes u8` (bit *n* = SERIAL-jack mode *n* of §6.2 is supported), `min_baud u32`, `max_baud u32`, `tx_buffer u16` (initial CAT credit, §7.4) |
 | 0x03 | `RADIO_USB_SERIAL` | `port u8` (1–4), `chip u8` (0 other, 1 CP210x, 2 FTDI, 3 CH34x, 4 CDC-ACM), `vid u16`, `pid u16`, `interface u8` (USB interface number), `tx_buffer u16` |
 | 0x04 | `AUDIO` | `directions u8` (bit 0 RX, bit 1 TX), `codecs u8` (bit 0 PCM16, bit 1 LC3), `rates u8` (bit 0 12 000 Hz, bit 1 16 000 Hz), `paths u8` (bit 0 analog codec, bit 1 radio USB sound card present now), `max_frame_samples u16`, `tx_buffer_samples u16` |
-| 0x05 | `PTT` | `outputs u8` (bit 0 AUDIO-jack closure, bit 1 RTS on a radio USB-serial port, bit 2 DTR on a radio USB-serial port), `keepalive_min_ms u16`, `keepalive_max_ms u16`, `max_tx_min_s u16`, `max_tx_max_s u16`, `hw_max_tx_s u16` (the hardware PTT watchdog's limit, §8.5; 0 = unknown) |
+| 0x05 | `PTT` | `outputs u8` (bit 0 AUDIO-jack closure, bit 1 RTS on a radio USB-serial port, bit 2 DTR on a radio USB-serial port), `keepalive_min_ms u16`, `keepalive_max_ms u16`, `max_tx_min_s u32` (the smallest `MAX_TX_S`; there is no upper bound) |
 | 0x06 | `TONE` | `max_symbols u16`, `max_tone_index u8`, `shaping u8` (bit 0 phase-continuous FSK, bit 1 GFSK), `min_symbol_us u32`, `max_symbol_us u32` |
 | 0x07 | `BLE_TX_POWER` | `min_dbm i8`, `max_dbm i8`. `max_dbm` is the firmware cap (§6.3) |
 | 0x08 | `PAIRING` | `triggers u8` (the local actions that open the pairing window: bit 0 power-on, bit 1 pairing button), `window_min_s u16`, `window_max_s u16`, `max_bonds u8` (bonded hosts the device can store) (§13.5) |
@@ -270,7 +270,7 @@ writes flash, so hosts should persist rarely; the device may answer
 | 0x02 | `PTT_TARGETS` | 0 | `targets u8` (bit 0 AUDIO-jack closure, bit 1 RTS, bit 2 DTR on radio USB-serial port `usb_port`), `usb_port u8` (1–4, or 0 when bits 1–2 are clear) | closure only (0x01, 0) |
 | 0x03 | `LINE_MAP` | port (0–4, or 0x0F for the wired control port) | `rts_action u8`, `dtr_action u8`: 0–2 (§8.3); action 2 only on ports 1–4 | port 0 and 0x0F: RTS → PTT, DTR ignored; ports 1–4: both pass-through |
 | 0x04 | `PTT_KEEPALIVE_MS` | 0 | `ms u16`: 500–10 000 (the device reports its limits in the `PTT` TLV) | 3000 |
-| 0x05 | `MAX_TX_S` | 0 | `s u16`: 10–600 (limits in the `PTT` TLV), and no more than `PTT.hw_max_tx_s` when that is known (otherwise `OUT_OF_RANGE`); 0 is not allowed, so the timer can't be disabled | 180 |
+| 0x05 | `MAX_TX_S` | 0 | `s u32`: at least `PTT.max_tx_min_s` (10), with **no upper bound** (maintainer decision, 2026-09-25); 0 is refused with `OUT_OF_RANGE`, so the timer can't be switched off, only set as long as the user wants | 300 |
 | 0x06 | `AUDIO_PATH` | 0 | `path u8`: 0 automatic (radio USB sound card when present), 1 analog, 2 radio USB | 0 |
 | 0x07 | `TX_LEVEL` | 0 | `centibel i16`: TX audio level in 0.1 dB, ≤ 0 (0 = full-scale line level) | set in #16 |
 | 0x08 | `RX_ATTENUATOR` | 0 | `on u8` (the about 19 dB AUDIO-jack pad, [radio-connectors](../docs/requirements/radio-connectors.md#audio-jack-35-mm-trrs)) | 0 |
@@ -281,7 +281,7 @@ writes flash, so hosts should persist rarely; the device may answer
 | 0x0D | `SERIAL_DEFAULT` | port (0–4) | `baud u32` (the port's `min_baud`–`max_baud`), `data_bits u8`, `parity u8`, `stop_bits u8` (values as in `SERIAL_SET`, §7.1). Applied when the port is opened (§7.2), and to the wired SERIAL-jack bridge port until the host sets its own line coding | 9600 8N1 |
 | 0x0E | `USB_NET_SUBNET` | 0 | `a u8`, `b u8`, `c u8`, `d u8`: the network address of the USB network /30, in address order (`a.b.c.d`). Must be a private IPv4 address (10/8, 172.16/12 or 192.168/16) with `d` a multiple of 4; the device takes `d`+1, the host gets `d`+2 (§14.2). Takes effect at the next enumeration | 10.169.160.0 |
 | 0x0F | `PAIRING_WINDOW_S` | 0 | `s u16`: how long the pairing window stays open, 30–600 (the device reports its limits in the `PAIRING` TLV) (§13.5) | 120 |
-| 0x10 | `POWER_DOWN_DELAY_S` | 0 | `s u16`: how long after the radio (or, on variant M, the ignition) turns off the device powers itself down, 5–3600; 0 ("never") is refused with `OUT_OF_RANGE`, so the off-state drain limit (REQ-PWR-016) always applies **(verify range and 0 with the maintainer)**. Powering down ends the session first, which turns PTT off (§8.7) (REQ-PWR-018) | 30 |
+| 0x10 | `POWER_DOWN_DELAY_S` | 0 | `s u16`: how long after the radio (or, on variant M, the ignition) turns off the device powers itself down: 5–3600, or 0 = never. With 0, variant M can exceed its off-state drain target (REQ-PWR-016); that is the user's choice. The delay runs only while no USB host is connected on USB-C: the device stays awake in wired mode. Powering down ends the session first, which turns PTT off (§8.7) (REQ-PWR-018) | 30 |
 
 ### 6.2 SERIAL-jack modes
 
@@ -381,7 +381,8 @@ PTT safety is the most important part of this protocol
 ([`GOVERNANCE.md`](../GOVERNANCE.md#scope-and-principles)). The rules here are
 the protocol's side of REQ-PTT-001 to REQ-PTT-011. The device-side state
 machine is in [architecture §5](../docs/architecture.md#5-ptt-safety-state-machine).
-The maintainer approved this section on 2026-09-24
+The maintainer approved this section on 2026-09-24, and amended the max-TX
+bound and the lock-up handling on 2026-09-25
 ([ADR-0007](../docs/decisions/ADR-0007-protocol.md)). Later changes need the
 maintainer's explicit approval again
 ([`GOVERNANCE.md`](../GOVERNANCE.md#safety-and-compliance)).
@@ -407,7 +408,7 @@ CAT), so the radio's own timers are the only guard for CAT keying.
 | Type | Message | Dir. | Payload |
 |---|---|---|---|
 | `0x30` | `PTT_SET` | H→D | `state u8` (0 release, 1 key). Reply: `PTT_STATUS` |
-| `0x31` | `PTT_STATUS` | D→H | `state u8` (logical PTT), `sources u8` (active sources, bits above), `reason u8` (§8.6), `remaining_s u16` (max-TX time left; 0 when off). Sent on every change and as the reply to `PTT_SET` |
+| `0x31` | `PTT_STATUS` | D→H | `state u8` (logical PTT), `sources u8` (active sources, bits above), `reason u8` (§8.6), `remaining_s u32` (max-TX time left; 0 when off). Sent on every change and as the reply to `PTT_SET` |
 | `0x32` | `KEEPALIVE` | H→D | none. Refreshes the keepalive of every source that needs one |
 
 ### 8.2 Keepalive
@@ -477,16 +478,15 @@ any      --session start, SERIAL_OPEN, USB reset/configure,
   and sends `PTT_STATUS` reason `MAX_TX`. PTT then stays **locked out** until
   every source has been released (for example `PTT_SET` 0 and the mapped
   lines deasserted); a key attempt meanwhile gets `PTT_STATUS` reason
-  `LOCKED_OUT`. `MAX_TX_S` can't be 0 or above `max_tx_max_s`, so the timer
-  can't be disabled (REQ-PTT-007). Default 180 s, range 10–600 s
+  `LOCKED_OUT`. `MAX_TX_S` can't be 0, so the timer can't be switched off
+  (REQ-PTT-007); it has no upper bound. Default 300 s, minimum 10 s
   (`MAX_TX_S`, §6.1).
-- **Hardware backstop:** a hardware PTT watchdog, independent of the
-  firmware, forces PTT off after continuous keying longer than its limit
-  (configurable in hardware, default 10 minutes, designed in #9), even if the
-  firmware is hung. `PTT.hw_max_tx_s` reports the limit (0 = unknown), and
-  `MAX_TX_S` must not exceed it. The firmware may have been hung when the
-  hardware timer tripped, so the device reports it afterwards, as
-  `PTT_STATUS` reason `HW_WATCHDOG`, as soon as it can.
+- **Firmware lock-up:** there is no separate hardware PTT timer. The
+  ESP32-S3's internal watchdog resets the device within a few seconds of a
+  firmware lock-up. PTT is off during the reset (the output is off unless
+  actively driven) and after it (power-on state). After such a reset the
+  device reports `PTT_STATUS` reason `WATCHDOG` to the next session
+  (REQ-PTT-011).
 - **PTT is off** at power-on, reset, brownout, watchdog timeout, session end,
   loss of the active transport or the Bluetooth link, USB-C unplug, suspend
   or reset in wired mode, and host-mode change (REQ-PTT-005). After any of
@@ -501,7 +501,7 @@ any      --session start, SERIAL_OPEN, USB reset/configure,
 
 - **Wired RTS/DTR has no keepalive.** A desktop program that hangs while it
   holds RTS or DTR on a wired CDC-ACM port keeps PTT keyed until `MAX_TX_S`
-  expires, the hardware PTT watchdog trips, or the USB link goes away.
+  expires or the USB link goes away.
 - **CAT keying is invisible to the device.** PTT keyed by a CAT command in the
   byte stream isn't seen by the device (§8.1), so only the radio's own timers
   guard it.
@@ -526,7 +526,7 @@ any      --session start, SERIAL_OPEN, USB reset/configure,
 | 9 | `FAULT` | Brownout, watchdog or another internal fault |
 | 10 | `SEQUENCE_DONE` | A tone sequence ended and released PTT (§11) |
 | 11 | `BOOT` | First status after power-on or reset |
-| 12 | `HW_WATCHDOG` | The hardware PTT watchdog forced PTT off (§8.5); reported after the fact |
+| 12 | `WATCHDOG` | The internal watchdog reset the device after a firmware lock-up, so PTT went off (§8.5); reported after the reset |
 
 ### 8.7 Session end
 

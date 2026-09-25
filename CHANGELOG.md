@@ -17,7 +17,7 @@ and tagged independently (see `AGENTS.md`).
   control port. Covers capability discovery, CAT with credit flow control,
   PTT with keepalive, max TX and RTS/DTR arming, BLE audio framing, clock sync,
   optional tone-sequence TX, a capped BLE TX power, a BLE pairing window,
-  a hardware PTT watchdog backstop (`HW_WATCHDOG`), configurable defaults
+  watchdog-reset reporting (`WATCHDOG`), configurable defaults
   (serial defaults, USB network subnet, pairing window, power-down delay),
   and new GATT UUIDs.
   Golden vectors in `protocol/vectors/`, a reference codec in

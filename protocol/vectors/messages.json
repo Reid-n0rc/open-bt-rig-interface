@@ -108,9 +108,7 @@
             "outputs": 7,
             "keepalive_min_ms": 500,
             "keepalive_max_ms": 10000,
-            "max_tx_min_s": 10,
-            "max_tx_max_s": 600,
-            "hw_max_tx_s": 600
+            "max_tx_min_s": 10
           },
           {
             "tlv": "TONE",
@@ -134,9 +132,9 @@
           }
         ]
       },
-      "payload_hex": "0104ff7f0300020c000fc012000000c20100000203090101c41070ea00000203090201c41070ea010002040803010303e0016009050b07f40110270a0058025802060c00010f03e803000080841e000702e8090806031e00580208",
-      "frame_hex": "04020104ff7f0300020c000fc012000000c20100000203090101c41070ea00000203090201c41070ea010002040803010303e0016009050b07f40110270a0058025802060c00010f03e803000080841e000702e8090806031e005802086704",
-      "wire_hex": "0804020104ff7f0303020c040fc012010103c201010a0203090101c41070ea010b0203090201c41070ea011402040803010303e0016009050b07f40110270a0758025802060c06010f03e803010480841e090702e8090806031e06580208670400",
+      "payload_hex": "0104ff7f0300020c000fc012000000c20100000203090101c41070ea00000203090201c41070ea010002040803010303e0016009050907f40110270a000000060c00010f03e803000080841e000702e8090806031e00580208",
+      "frame_hex": "04020104ff7f0300020c000fc012000000c20100000203090101c41070ea00000203090201c41070ea010002040803010303e0016009050907f40110270a000000060c00010f03e803000080841e000702e8090806031e005802089da5",
+      "wire_hex": "0804020104ff7f0303020c040fc012010103c201010a0203090101c41070ea010b0203090201c41070ea011402040803010303e0016009050907f40110270a010103060c06010f03e803010480841e090702e8090806031e065802089da500",
       "note": "Every TLV. The radio USB entries show a dual-port USB-serial chip (VID/PID are examples)."
     },
     {
@@ -164,15 +162,13 @@
             "outputs": 1,
             "keepalive_min_ms": 500,
             "keepalive_max_ms": 10000,
-            "max_tx_min_s": 10,
-            "max_tx_max_s": 600,
-            "hw_max_tx_s": 600
+            "max_tx_min_s": 10
           }
         ]
       },
-      "payload_hex": "010403000000020c0001c012000000c201000001050b01f40110270a0058025802",
-      "frame_hex": "0400010403000000020c0001c012000000c201000001050b01f40110270a00580258020968",
-      "wire_hex": "020404010403010103020c0401c012010103c201010a01050b01f40110270a0758025802096800",
+      "payload_hex": "010403000000020c0001c012000000c201000001050901f40110270a000000",
+      "frame_hex": "0400010403000000020c0001c012000000c201000001050901f40110270a0000002c79",
+      "wire_hex": "020404010403010103020c0401c012010103c201010a01050901f40110270a0101032c7900",
       "note": "Unsolicited (token 0) after a change; a device with CAT and PTT only."
     },
     {
@@ -492,14 +488,35 @@
           "key": "MAX_TX_S",
           "selector": 0,
           "value": {
-            "s": 180
+            "s": 300
           }
         }
       },
-      "payload_hex": "010500b400",
-      "frame_hex": "110c010500b400eab1",
-      "wire_hex": "05110c010502b403eab100",
-      "note": "Maximum continuous TX 180 s."
+      "payload_hex": "0105002c010000",
+      "frame_hex": "110c0105002c0100003405",
+      "wire_hex": "05110c0105032c010103340500",
+      "note": "Maximum continuous TX 300 s (the default)."
+    },
+    {
+      "name": "config_set_max_tx_long",
+      "message": "CONFIG_SET",
+      "type": "0x11",
+      "direction": "h2d",
+      "token": 43,
+      "fields": {
+        "flags": 1,
+        "config": {
+          "key": "MAX_TX_S",
+          "selector": 0,
+          "value": {
+            "s": 86400
+          }
+        }
+      },
+      "payload_hex": "01050080510100",
+      "frame_hex": "112b01050080510100ff71",
+      "wire_hex": "05112b01050480510103ff7100",
+      "note": "Maximum continuous TX 24 h: no upper bound, but never 0 (off)."
     },
     {
       "name": "config_set_audio_path",
@@ -760,6 +777,27 @@
       "note": "Power down 30 s (the default) after the radio or ignition turns off."
     },
     {
+      "name": "config_set_power_down_never",
+      "message": "CONFIG_SET",
+      "type": "0x11",
+      "direction": "h2d",
+      "token": 44,
+      "fields": {
+        "flags": 1,
+        "config": {
+          "key": "POWER_DOWN_DELAY_S",
+          "selector": 0,
+          "value": {
+            "s": 0
+          }
+        }
+      },
+      "payload_hex": "0110000000",
+      "frame_hex": "112c0110000000c9f1",
+      "wire_hex": "05112c0110010103c9f100",
+      "note": "Never power down automatically (user's choice; variant M may exceed its off-state drain target)."
+    },
+    {
       "name": "config_report",
       "message": "CONFIG",
       "type": "0x12",
@@ -973,12 +1011,12 @@
         "state": 1,
         "sources": 1,
         "reason": 0,
-        "remaining_s": 180
+        "remaining_s": 300
       },
-      "payload_hex": "010100b400",
-      "frame_hex": "3118010100b400c809",
-      "wire_hex": "053118010102b403c80900",
-      "note": "Keyed by the protocol command; 180 s of TX left."
+      "payload_hex": "0101002c010000",
+      "frame_hex": "31180101002c010000b096",
+      "wire_hex": "0531180101032c010103b09600",
+      "note": "Keyed by the protocol command; 300 s of TX left."
     },
     {
       "name": "ptt_status_keepalive_timeout",
@@ -992,13 +1030,13 @@
         "reason": 2,
         "remaining_s": 0
       },
-      "payload_hex": "0000020000",
-      "frame_hex": "31000000020000427e",
-      "wire_hex": "0231010102020103427e00",
+      "payload_hex": "00000200000000",
+      "frame_hex": "310000000200000000d043",
+      "wire_hex": "02310101020201010103d04300",
       "note": "Unsolicited: PTT dropped because the keepalive expired."
     },
     {
-      "name": "ptt_status_hw_watchdog",
+      "name": "ptt_status_watchdog",
       "message": "PTT_STATUS",
       "type": "0x31",
       "direction": "d2h",
@@ -1009,10 +1047,10 @@
         "reason": 12,
         "remaining_s": 0
       },
-      "payload_hex": "00000c0000",
-      "frame_hex": "310000000c00004365",
-      "wire_hex": "02310101020c0103436500",
-      "note": "Reported after the fact: the hardware PTT watchdog forced PTT off."
+      "payload_hex": "00000c00000000",
+      "frame_hex": "310000000c00000000788c",
+      "wire_hex": "02310101020c01010103788c00",
+      "note": "Reported after a watchdog reset: the ESP32-S3 watchdog reset the device after a lock-up; PTT went off."
     },
     {
       "name": "keepalive",

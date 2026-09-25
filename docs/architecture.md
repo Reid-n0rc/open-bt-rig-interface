@@ -127,7 +127,7 @@ stateDiagram-v2
     Keyed --> Off: every source released (RELEASED)
     Keyed --> Off: keepalive expired, protocol sources dropped (KEEPALIVE_TIMEOUT)
     Keyed --> LockedOut: max-TX timer expired (MAX_TX)
-    Keyed --> Off: hardware PTT watchdog tripped,\neven with the firmware hung (HW_WATCHDOG, reported afterwards)
+    Keyed --> Off: firmware lock-up, internal watchdog resets the device\n(PTT off during and after; WATCHDOG reported afterwards)
     LockedOut --> Off: every source released
     LockedOut --> LockedOut: key attempt refused (LOCKED_OUT)
     Keyed --> Off: session end, link or transport lost,\nUSB unplug/suspend/reset, port closed,\nhost-mode or PTT config change
@@ -150,9 +150,10 @@ stateDiagram-v2
 ```
 
 Timers (defaults accepted by the maintainer, all configurable): keepalive
-3000 ms (500–10 000 ms), max TX 180 s (10–600 s; can't be disabled). Behind
-them, a **hardware PTT watchdog** (default 10 minutes, #9) forces PTT off even
-if the firmware is hung; `MAX_TX_S` must not exceed it (REQ-PTT-011). Every
+3000 ms (500–10 000 ms), max TX 300 s (at least 10 s, no upper bound; can't
+be switched off). There is no external hardware PTT timer: after a firmware
+lock-up the ESP32-S3's internal watchdog resets the device, with PTT off
+during and after the reset (REQ-PTT-011). Every
 fail-safe path gets a host-run firmware test (REQ-PTT-010, #14, #15).
 
 ## 6. Host-link and connection state machine

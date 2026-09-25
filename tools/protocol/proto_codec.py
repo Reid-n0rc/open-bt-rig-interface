@@ -172,7 +172,7 @@ CAP_TLVS = {
     0x04: ("AUDIO", [("directions", "u8"), ("codecs", "u8"), ("rates", "u8"), ("paths", "u8"),
                      ("max_frame_samples", "u16"), ("tx_buffer_samples", "u16")]),
     0x05: ("PTT", [("outputs", "u8"), ("keepalive_min_ms", "u16"), ("keepalive_max_ms", "u16"),
-                   ("max_tx_min_s", "u16"), ("max_tx_max_s", "u16"), ("hw_max_tx_s", "u16")]),
+                   ("max_tx_min_s", "u32")]),
     0x06: ("TONE", [("max_symbols", "u16"), ("max_tone_index", "u8"), ("shaping", "u8"),
                     ("min_symbol_us", "u32"), ("max_symbol_us", "u32")]),
     0x07: ("BLE_TX_POWER", [("min_dbm", "i8"), ("max_dbm", "i8")]),
@@ -228,7 +228,7 @@ CONFIG_KEYS = {
     0x02: ("PTT_TARGETS", [("targets", "u8"), ("usb_port", "u8")]),
     0x03: ("LINE_MAP", [("rts_action", "u8"), ("dtr_action", "u8")]),
     0x04: ("PTT_KEEPALIVE_MS", [("ms", "u16")]),
-    0x05: ("MAX_TX_S", [("s", "u16")]),
+    0x05: ("MAX_TX_S", [("s", "u32")]),
     0x06: ("AUDIO_PATH", [("path", "u8")]),
     0x07: ("TX_LEVEL", [("centibel", "i16")]),
     0x08: ("RX_ATTENUATOR", [("on", "u8")]),
@@ -299,7 +299,7 @@ MESSAGES = {
     # PTT
     0x30: ("PTT_SET", "h2d", [("state", "u8")]),
     0x31: ("PTT_STATUS", "d2h", [("state", "u8"), ("sources", "u8"), ("reason", "u8"),
-                                 ("remaining_s", "u16")]),
+                                 ("remaining_s", "u32")]),
     0x32: ("KEEPALIVE", "h2d", []),
     # Audio
     0x40: ("AUDIO_START", "h2d", [("direction", "u8"), ("codec", "u8"), ("sample_rate", "u16"),
