@@ -48,7 +48,7 @@ Constraints that shape the decision:
 
 | Option | Pros | Cons | Sources |
 |---|---|---|---|
-| **Current limit A: 0.25 A fast fuse + B5819W Schottky + SMBJ15A** | $0.16. The fuse opens within 5 s at 0.5 A (the K3's limit) and carries the 0.18 A worst-case draw. The Schottky blocks reverse polarity and back-feed | A fuse must be replaced after a fault; the TVS clamp at full rated pulse (24.4 V) is at the mux's 24 V absolute maximum **(verify)**; a surge test may blow the fuse | [466 Series](../references/index.md#littelfuse-0466-ds), [SMBJ](../references/index.md#vishay-smbj-ds), LCSC C83557, C8598, C78409 |
+| **Current limit A: 0.25 A fast fuse + B5819W Schottky + SMBJ15A** | $0.16. The fuse opens within 5 s at 0.5 A (the K3's limit) and carries the 0.19 A worst-case draw. The Schottky blocks reverse polarity and back-feed | A fuse must be replaced after a fault; the TVS clamp at full rated pulse (24.4 V) is at the mux's 24 V absolute maximum **(verify)**; a surge test may blow the fuse | [466 Series](../references/index.md#littelfuse-0466-ds), [SMBJ](../references/index.md#vishay-smbj-ds), LCSC C83557, C8598, C78409 |
 | Current limit B: TPS26600 eFuse (−60 V reverse polarity, 0.1–2.23 A adjustable limit, dV/dt, UVLO, OVP, reverse blocking, 62 V) | Precise electronic limit, auto-retry, rugged | $1.07, about $0.95 more | [TPS2660](../references/index.md#ti-tps2660-ds), LCSC C544399 |
 | Current limit C: variant M's LM74800-Q1 chain | Shared with variant M | No current limit; automotive cost | #10 |
 | **Source selection A: TPS2121 priority mux on both raw inputs** | $0.70. One IC: priority to radio DC, OVP on each input, soft start (inrush), reverse blocking into both sources, status pin; 2.8–22 V | 24 V absolute maximum near the TVS clamp | [TPS2121](../references/index.md#ti-tps2121-ds), LCSC C485916 |
@@ -73,7 +73,7 @@ maintainer. Every chosen part is RoHS-compliant per LCSC; REACH SVHC is
 
 1. **Power flows in only.** The device takes power from the radio's DC
    accessory pin or USB-C (and, on variant M, 12 V). **It never supplies power
-   on any port:**
+   on any port, with one deliberate exception** (below):
    - **USB-C is a sink only, in both host modes:** 5.1 kΩ Rd on CC1 and CC2,
      never Rp; it never drives VBUS. The TPS2121 keeps the USB-C VBUS pin
      unpowered when radio DC powers the device.
@@ -81,16 +81,17 @@ maintainer. Every chosen part is RoHS-compliant per LCSC; REACH SVHC is
      the TPS2121).
    - **Radio USB port:** no VBUS; hardware blocks current into the radio's VBUS
      (#9, ADR-0003).
-   - Jack contacts carry signals, and PTT is a closure. **Open question:** the
-     SERIAL jack's optional "3.3 V out" on ring 2 (about 20 mA to a cable's
-     circuit, REQ-RIF-003). The maintainer decides whether it stays as an
-     exception.
+   - Jack contacts carry signals, and PTT is a closure.
+   - **Exception:** the SERIAL jack's ring-2 3.3 V output (about 20 mA,
+     current-limited, off by default). It powers circuits inside a cable,
+     never the radio (maintainer decision 2026-09-25; ADR-0003, PR #61). Its
+     20 mA is in the 3.3 V budget.
 2. **Radio DC input:** 0.25 A fast fuse (the current limit) → B5819W → SMBJ15A
    → TPS2121 IN1, which has priority above 9.0 V and cuts off above 17.5 V.
    Inrush is set by the TPS2121 soft start; about 1 µF sits before the mux.
    The TPS26600 eFuse is the upgrade path if the surge test or the bench needs
    it.
-3. **USB-C:** 5 V sink, no USB PD (the worst case is about 343 mA at 4.4 V).
+3. **USB-C:** 5 V sink, no USB PD (the worst case is about 360 mA at 4.4 V).
    The firmware reads CC against the Type-C thresholds and reports Default,
    1.5 A or 3.0 A. ESD on CC (TPD1E10B06) and VBUS (SMF6.0A); OVP at 5.8 V in
    the mux.
@@ -120,10 +121,10 @@ maintainer. Every chosen part is RoHS-compliant per LCSC; REACH SVHC is
 
 ## Consequences
 
-- **Power budget** (research doc §6): 0.5–1.3 W average, 1.5 W peak.
-  **Wired mode draws about 276 mA from USB-C at 4.75 V** (298 mA at 4.4 V),
-  about 200 mA under the 500 mA Default. Radio DC draws at most 0.15 A at
-  11 V (0.18 A at 9 V). REQ-PWR-003 and REQ-PWR-004 are met on paper
+- **Power budget** (research doc §6): 0.5–1.4 W average, 1.6 W peak.
+  **Wired mode draws about 292 mA from USB-C at 4.75 V** (315 mA at 4.4 V),
+  about 185 mA under the 500 mA Default. Radio DC draws at most 0.16 A at
+  11 V (0.19 A at 9 V). REQ-PWR-003 and REQ-PWR-004 are met on paper
   **(verify on the bench)**.
 - **Power-section BOM about $7.9** (LCSC, qty 100, including the shared core
   and clock), about half of it the buck IC.
@@ -148,6 +149,5 @@ maintainer. Every chosen part is RoHS-compliant per LCSC; REACH SVHC is
   at 3.0 V AVDD (#8); whether radios attach on USB without VBUS from the
   device (#9); REACH SVHC per part.
 - **Follow-ups:** a bench `human-task` for the radio DC pin limits (#5, "Needs
-  measurement", item 1), the budget, the noise floor and EU pre-compliance; the
-  ring 2 question (maintainer); battery
+  measurement", item 1), the budget, the noise floor and EU pre-compliance; battery
   operation as a future variant (research doc §12).

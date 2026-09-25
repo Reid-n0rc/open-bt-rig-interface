@@ -44,7 +44,10 @@ later issue must confirm. `unknown` means no primary source was found.
 
 1. **Power flows in only.** The device takes power from the radio's DC
    accessory pin or USB-C (and, on variant M, 12 V). **It never supplies
-   power on any port**: it doesn't source VBUS to the radio's USB port in
+   power on any port, with one deliberate exception:** the SERIAL jack's
+   ring-2 3.3 V output (about 20 mA, current-limited, off by default). It
+   powers circuits inside a cable and never the radio (maintainer decision
+   2026-09-25, recorded in ADR-0003, PR #61). Otherwise it doesn't source VBUS to the radio's USB port in
    either host mode, and it is a sink only on USB-C, in wired mode too.
    Hardware blocks current from the device into the radio's VBUS. That circuit,
    and the matching edits to `constraints.md` and `requirements.md`, belong to
@@ -82,8 +85,8 @@ later issue must confirm. `unknown` means no primary source was found.
   whose PLL makes 48 kHz from it (ADR-0002, PR #55). The
   codec gets an **LP5907-3.0** LDO (analog) and a **TPS7A2018** (core, fed
   from the 3.0 V output), as ADR-0002 specifies.
-- **Power budget:** 0.5–1.3 W average, 1.5 W peak. **Wired mode draws about
-  276 mA from USB-C at 4.75 V (298 mA at 4.4 V)**, about 200 mA under the
+- **Power budget:** 0.5–1.4 W average, 1.6 W peak. **Wired mode draws about
+  292 mA from USB-C at 4.75 V (315 mA at 4.4 V)**, about 185 mA under the
   500 mA Default.
 - **Radios that can power variant R:** IC-7300, TS-590SG, K3, K3S and K4
   (documented limits, switched outputs). The Yaesu +13 V pins and the TS-590S
@@ -133,8 +136,8 @@ USB-C VBUS ─ D5 SMF6.0A ──────────────────
 
 | Function | Part and setting | Basis |
 |---|---|---|
-| **Current limit** | **Littelfuse 0466.250 (0.25 A, 1206, fast-acting).** It carries 100 % of its rating for at least 4 h and opens within 5 s at 200 % (0.5 A). The device draws at most 0.18 A (at 9 V, §6), 72 % of the rating. Cold resistance 0.691 Ω, melting I²t 0.0022 A²s | [466 Series datasheet](../references/index.md#littelfuse-0466-ds) |
-| Reverse polarity, no back-feed | **B5819W** Schottky (40 V, 1 A, SOD-123; JLCPCB Basic). About 0.4 V drop, 70 mW at 0.18 A; the buck doesn't need that headroom from a 12 V input. It also stops USB-C power from reaching the radio's pin, alongside the mux | [LCSC C8598](https://www.lcsc.com/product-detail/C8598.html) |
+| **Current limit** | **Littelfuse 0466.250 (0.25 A, 1206, fast-acting).** It carries 100 % of its rating for at least 4 h and opens within 5 s at 200 % (0.5 A). The device draws at most 0.19 A (at 9 V, §6), 77 % of the rating. Cold resistance 0.691 Ω, melting I²t 0.0022 A²s | [466 Series datasheet](../references/index.md#littelfuse-0466-ds) |
+| Reverse polarity, no back-feed | **B5819W** Schottky (40 V, 1 A, SOD-123; JLCPCB Basic). About 0.4 V drop, about 80 mW at 0.19 A; the buck doesn't need that headroom from a 12 V input. It also stops USB-C power from reaching the radio's pin, alongside the mux | [LCSC C8598](https://www.lcsc.com/product-detail/C8598.html) |
 | Transient | **SMBJ15A**, unidirectional (it sits after the diode). VRWM 15 V; VBR 16.7 V minimum; clamp 24.4 V at 24.6 A. It also clamps the ringing of a hot-plugged ceramic input, which would otherwise reach about twice the supply ([pcb-fabrication §6.1](../requirements/pcb-fabrication.md#61-type)). The clamp at full rated pulse is at the TPS2121's 24 V absolute maximum. The fuse's 0.69 Ω limits the surge current, and real station transients are far smaller, but this is **(verify)** in the surge test (§10) | [Vishay SMBJ](../references/index.md#vishay-smbj-ds) (series data) |
 | **Inrush** | The TPS2121's soft start (SS pin) ramps the buck's input capacitors. Before the mux there is only about 1 µF plus the TVS, so a hot-plug puts about C·V²/(2R) = 1 µF × (13.8 V)² / (2 × 0.8 Ω) ≈ **0.00012 A²s** through the fuse, about 5 % of its melting I²t | TPS2121 §8; 466 datasheet |
 | Undervoltage / overvoltage | TPS2121 PR1 selects IN1 above **9.0 V** (below that, USB-C if present). OV1 cuts IN1 off above **17.5 V** (1.06 V reference, < ±5 %) | [TPS2121](../references/index.md#ti-tps2121-ds) §7.5 |
@@ -168,7 +171,7 @@ locking 2-pin connector is preferred; a reversed lead does no harm.
 | Sink only | Rd only, never Rp; the device never drives VBUS. With radio DC present and no host, the USB-C VBUS pin stays unpowered because the TPS2121 blocks OUT → IN2 | TPS2121 §1 |
 | Host detection | A divider from VBUS (before the mux) feeds the hub's VBUS_DET input and an MCU GPIO. Wired mode starts only when a host enumerates the device (ADR-0008) | [USB2422](../references/index.md#microchip-usb2422-ds) pin table |
 
-**Is USB PD needed?** No. The worst case is about 343 mA at 4.4 V (§6), so
+**Is USB PD needed?** No. The worst case is about 360 mA at 4.4 V (§6), so
 the Default 500 mA covers it and 1.5 A isn't needed. PD would add a controller
 and firmware for no gain.
 
@@ -176,7 +179,7 @@ Two USB 2.0 rules to check against the USB 2.0 spec, which this repo doesn't
 cite yet:
 
 - **Before configuration,** a USB 2.0 device may draw only one unit load
-  (100 mA) **(verify)**. The idle draw is about 100 mA average with 216 mA
+  (100 mA) **(verify)**. The idle draw is about 113 mA average with 231 mA
   peaks (§6). Mitigation: keep the BLE radio and codec off until the host has
   configured the device, or until no host has appeared within a short timeout.
 - **USB suspend:** at Default current the USB 2.0 suspend limits apply; at
@@ -382,6 +385,7 @@ itself (#10 §6.2 has the same open item). The allocation here is 0.25 W out,
 | USB2422 hub | **89 mA max** (Hi-Speed, 2 ports, peak traffic); 1 mA max in reset (Bluetooth mode) | [USB2422](../references/index.md#microchip-usb2422-ds) Table 5-1 (I_HCH2, I_CRST, industrial) |
 | Codec TLV320AIC3104 | 11 mA analog + 6 mA digital (upper estimate), through its LDOs | ADR-0002 (#8), datasheet §8.5 |
 | Misc | 15 mA: LEDs, USB switches, isolator side 1, pull-ups, serial level shifting when not isolated, clock | Allowance |
+| SERIAL ring-2 3.3 V output | 20 mA (current-limited, off by default; counted in every mode as a worst case) | radio-connectors, REQ-RIF-003; ADR-0003 |
 | PTT PhotoMOS LED | 10 mA while keyed | Allowance (#9 picks the part) |
 | Isolated jack side | 109 mA (0.36 W at 3.3 V; 0.25 W out at 70 %) | Allocation, as #10 (#9) |
 | Radio USB VBUS | **0: the device doesn't supply it** | Maintainer decision |
@@ -396,31 +400,31 @@ diode losses: under 0.1 W.
 
 | Mode | 3.3 V avg / peak (mA) | USB-C power avg / peak (W) | USB-C at 4.75 V avg / peak (mA) | USB-C at 4.4 V peak (mA) | Radio DC at 13.8 V avg / peak (mA) | at 11 V peak (mA) | at 9 V peak (mA) |
 |---|---|---|---|---|---|---|---|
-| Idle / advertising | 123 / 273 | 0.46 / 1.02 | 97 / 216 | 233 | 37 / 82 | 102 | 125 |
-| Connected (CAT only) | 133 / 273 | 0.50 / 1.02 | 105 / 216 | 233 | 40 / 82 | 102 | 125 |
-| BLE audio streaming | 218 / 273 | 0.82 / 1.02 | 172 / 216 | 233 | 65 / 82 | 102 | 125 |
-| USB host active (radio USB) + BLE audio | 228 / 283 | 0.85 / 1.06 | 180 / 223 | 241 | 68 / 85 | 106 | 130 |
-| PTT keyed (BLE audio + USB host) | 238 / 293 | 0.89 / 1.10 | 188 / 231 | 250 | 71 / 88 | 110 | 134 |
-| Worst Bluetooth case: iso fitted, PTT keyed | 347 / 402 | 1.30 / 1.51 | 274 / 317 | 343 | 104 / 120 | 151 | 184 |
-| **Wired mode with hub** (iso mandatory) | 340 | 1.28 | **268** | 290 | 102 | 128 | 156 |
-| **Wired mode, PTT keyed** | 350 | 1.31 | **276** | 298 | 105 | 131 | 160 |
+| Idle / advertising | 143 / 293 | 0.54 / 1.10 | 113 / 231 | 250 | 43 / 88 | 110 | 134 |
+| Connected (CAT only) | 153 / 293 | 0.57 / 1.10 | 121 / 231 | 250 | 46 / 88 | 110 | 134 |
+| BLE audio streaming | 238 / 293 | 0.89 / 1.10 | 188 / 231 | 250 | 71 / 88 | 110 | 134 |
+| USB host active (radio USB) + BLE audio | 248 / 303 | 0.93 / 1.14 | 196 / 239 | 258 | 74 / 91 | 114 | 139 |
+| PTT keyed (BLE audio + USB host) | 258 / 313 | 0.97 / 1.17 | 204 / 247 | 267 | 77 / 94 | 117 | 143 |
+| Worst Bluetooth case: iso fitted, PTT keyed | 367 / 422 | 1.38 / 1.58 | 290 / 333 | 360 | 110 / 126 | 158 | 193 |
+| **Wired mode with hub** (iso mandatory) | 360 | 1.35 | **284** | 307 | 108 | 135 | 165 |
+| **Wired mode, PTT keyed** | 370 | 1.39 | **292** | 315 | 111 | 139 | 170 |
 
 Calculation, for example the wired PTT row: 110 (module) + 89 (hub) + 17
-(codec) + 15 (misc) + 10 (PTT) + 109 (iso) = 350 mA at 3.3 V = 1.155 W.
-From USB-C: 1.155 / 0.88 = 1.31 W, / 4.75 V = 276 mA. From radio DC:
-1.155 / 0.80 = 1.44 W, / 13.8 V = 105 mA.
+(codec) + 15 (misc) + 20 (ring 2) + 10 (PTT) + 109 (iso) = 370 mA at 3.3 V =
+1.221 W. From USB-C: 1.221 / 0.88 = 1.39 W, / 4.75 V = 292 mA. From radio
+DC: 1.221 / 0.80 = 1.53 W, / 13.8 V = 111 mA.
 
 Findings:
 
-- **Wired mode on a 500 mA USB-C port:** 276 mA at 4.75 V and 298 mA at
-  4.4 V, about 200 mA of margin. No load shedding is needed, and Rd-only (no
+- **Wired mode on a 500 mA USB-C port:** 292 mA at 4.75 V and 315 mA at
+  4.4 V, about 185 mA of margin. No load shedding is needed, and Rd-only (no
   PD) is enough.
-- **Every mode fits 500 mA,** including the worst Bluetooth case (343 mA peak
+- **Every mode fits 500 mA,** including the worst Bluetooth case (360 mA peak
   at 4.4 V). The firmware still reads CC, reports the advertisement, and
   reports an input droop to the host rather than browning out (REQ-PWR-004).
-- **Radio DC:** at most 184 mA (9 V, worst case), 74 % of the 0.25 A fuse and
-  well under the K3's 0.5 A. At the usual 12–13.8 V it is 82–151 mA.
-- **Against constraints §3.4:** 0.5–1.3 W average and 1.5 W peak, inside
+- **Radio DC:** at most 193 mA (9 V, worst case), 77 % of the 0.25 A fuse and
+  well under the K3's 0.5 A. At the usual 12–13.8 V it is 88–158 mA.
+- **Against constraints §3.4:** 0.5–1.4 W average and 1.6 W peak, inside
   "about 1.5 W typical, 3 W peak". §3.4's "USB host VBUS to the radio" row no
   longer applies (#9 edits §3.4).
 - **Phones as USB-C hosts:** Apple states only "up to 4.5 watts" to a PD
@@ -430,14 +434,14 @@ Findings:
 
 ## 7. Which radios can power variant R?
 
-Variant R draws at most **0.15 A at 11 V** (0.18 A at 9 V) in its worst case
+Variant R draws at most **0.16 A at 11 V** (0.19 A at 9 V) in its worst case
 (§6). The fuse opens within 5 s at 0.5 A.
 
 | Radio | Can it power variant R? | Why |
 |---|---|---|
 | Icom IC-7300 | **Yes** | ACC pin 8, 13.8 V, 1 A documented; switched |
 | Kenwood TS-590SG | **Yes** | EXT.AT pin 6, 4 A; switched. EXT.AT is the tuner port, so an external tuner and the interface can't share it (#5) |
-| Elecraft K3 | **Yes, with limits** | 0.5 A, the lowest documented limit: the worst-case draw is 0.15 A at 11 V, and the 0.25 A fuse opens within 5 s at 0.5 A. 12 V at load is above the 9 V priority threshold |
+| Elecraft K3 | **Yes, with limits** | 0.5 A, the lowest documented limit: the worst-case draw is 0.16 A at 11 V, and the 0.25 A fuse opens within 5 s at 0.5 A. 12 V at load is above the 9 V priority threshold |
 | Elecraft K3S | **Yes** | 1.0 A; switched |
 | Elecraft K4 | **Yes** | 12 VDC OUT, 1.5 A; switched. Data goes through the K4's USB-B port; its rear USB-A ports are not used |
 | Kenwood TS-590S | **Not yet** (limit `unknown`) | Switched 13.8 V, no documented current. Use USB-C until the pin is measured at ≥ 0.25 A |
@@ -651,7 +655,6 @@ no TPS2553-class switch and no 5 V rail. The isolated supply allocation is
   codec output swing at 3.0 V AVDD (#8); the flip-flops' additive jitter
   (ADR-0004); SN74LVC1G80 stock (175 at LCSC); REACH SVHC declarations for every
   part.
-- **Maintainer:** whether the SERIAL jack's
-  optional "3.3 V out" on ring 2 (about 20 mA to a cable's own circuit,
-  REQ-RIF-003) counts as supplying power out of a port under the "input only"
-  rule; the MC3-Q1 vs commercial MB5 buck trade-off (§9.2).
+- **Maintainer:** the MC3-Q1 vs commercial MB5 buck trade-off (§9.2), being
+  settled in PR #57. (Closed: the SERIAL ring-2 3.3 V output stays, as a
+  deliberate exception to "input only"; ADR-0003.)
