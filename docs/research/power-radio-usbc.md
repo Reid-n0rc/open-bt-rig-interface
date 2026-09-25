@@ -91,7 +91,8 @@ later issue must confirm. `unknown` means no primary source was found.
   FT-817ND/FT-818 use USB-C.
 - **Radio-on sense:** the switched DC pin; otherwise the radio's USB attach,
   the SERIAL-jack idle level, or a CAT reply. Radio-powered: the device follows
-  the radio. USB-powered: it sleeps after a timeout with no radio and no host.
+  the radio. Otherwise it powers down **30 s after radio-on sense goes off**
+  (configurable; maintainer decision 2026-09-25).
 - **Power-section BOM:** about **$7.9 at LCSC, quantity 100** (§9.2). The buck
   IC alone is $3.99 of that, and LCSC holds only 10 of them.
 
@@ -468,15 +469,15 @@ to "Yes".
   (REQ-PTT-008), and loses power when the radio turns off.
 - **Radio DC and USB-C both present:** when the radio turns off, the mux moves
   to USB-C without a reset. The firmware reports "radio off" to the host,
-  turns PTT off, powers down the codec and the isolated supply, and stays
-  connected to the host.
-- **USB-C only (charger, power bank or host):** after a configurable timeout
-  with no radio detected and no host connection (no BLE connection and no USB
-  enumeration), the device goes to deep sleep: PTT off, hub in reset, codec
+  turns PTT off at once, and powers down the codec and the isolated supply.
+  The auto power-down rule below then applies.
+- **Auto power-down (maintainer decision, 2026-09-25):** **30 s after
+  radio-on sense goes off**, configurable, the device tells the host and goes
+  to deep sleep. "Radio-on sense" is any signal in §8.1: RADIO_DC_SENSE, the
+  radio's USB attach, the SERIAL idle level, or CAT replies. In deep sleep: PTT off, hub in reset, codec
   and isolated supply off, BLE off, the clock stopped and the buck in PFM
   (the MODE/SYNC pin low). It wakes on RADIO_DC_SENSE, on a periodic timer to
-  check USB and advertise briefly, or on an optional button (#12). The timeout
-  default is **TBD** (maintainer).
+  check for a radio and advertise briefly, or on an optional button (#12).
 - **Power banks** may switch off when the load is small **(verify)**. A
   sleeping device may then lose its power bank until the bank's button is
   pressed.
@@ -645,7 +646,7 @@ no TPS2553-class switch and no 5 V rail. The isolated supply allocation is
   codec output swing at 3.0 V AVDD (#8); the flip-flops' additive jitter
   (ADR-0004); SN74LVC1G80 stock (175 at LCSC); REACH SVHC declarations for every
   part.
-- **Maintainer:** the auto power-down timeout; whether the SERIAL jack's
+- **Maintainer:** whether the SERIAL jack's
   optional "3.3 V out" on ring 2 (about 20 mA to a cable's own circuit,
   REQ-RIF-003) counts as supplying power out of a port under the "input only"
   rule; the MC3-Q1 vs commercial MB5 buck trade-off (§9.2).
