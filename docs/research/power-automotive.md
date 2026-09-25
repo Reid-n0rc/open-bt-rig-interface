@@ -51,7 +51,8 @@ bench test. Calculations are reproducible from the numbers given here.
   3.5 V input; a hardware brownout detector forces PTT off at 7.0 V; hold-up
   is ≥ 747 µs from 7.0 V at worst-case load (§7, §8).
 - **Power-down:** ignition / radio-on sense, USB-C host and a firmware hold
-  line drive the LM74800-Q1 enable. **Off-state drain ≤ 7 µA** at 25 °C
+  line drive the LM74800-Q1 enable; auto power-down 30 s (configurable) after
+  the radio or ignition turns off. **Off-state drain ≤ 7 µA** at 25 °C
   (limit 1 mA; §9).
 - **Power budget:** about 1.1 W typical and **2.1 W worst case** input, inside
   the 1.5 W typical / 3 W peak target of constraints §3.4 (REQ-PWR-003) (§2).
@@ -358,13 +359,27 @@ therefore filtered as if the MW limit applied.
 **Choice: one LMR43620MC3RPERQ1** (maintainer decision 2026-09-24): the
 LMR436x0 family is the only candidate whose sync range reaches the band-clean
 2.304 MHz (§6.2), and the MC3 variant is 3.3 V fixed, MODE/SYNC, without
-spread spectrum. **Cheaper option for the maintainer:** the commercial
-**LMR43610MB3RPER** (1 A, 3.3 V fixed, MODE/SYNC, no spread spectrum, same
-0.2–2.5 MHz sync range and the same 75 ns / 85 ns timing, −40 to +150 °C TJ;
-[datasheet](../references/index.md#ti-lmr436x0-ds)) costs $1.40 at LCSC
-against $3.99. Its free-running frequency is 1 MHz (0.9–1.1 MHz), whose
-harmonics sit on band edges until sync starts. The LM6x440 family is the
-fallback at 2.150 MHz with a smaller margin.
+spread spectrum. The LM6x440 family is the fallback at 2.150 MHz with a
+smaller margin.
+
+**Cheaper drop-in check (maintainer rule, 2026-09-25):** a cheaper drop-in
+is used only if it is automotive-grade, "since this might get connected to
+a car battery".
+- The LMR43610-Q1 (1 A) shares the LMR43620-Q1's datasheet, package and
+  pinout, and has the same 0.2–2.5 MHz sync range and 75 ns / 85 ns timing
+  ([datasheet](../references/index.md#ti-lmr436x0-q1-ds), Device Comparison
+  Table).
+- Its AEC-Q100 orderables are MSC3, MSC5, RS3Q and RS5Q (TI product page,
+  2026-09-25). **There is no MC3 variant** (MODE/SYNC, no spread spectrum).
+  The nearest, **LMR43610MSC3RPERQ1**, adds spread spectrum while
+  free-running.
+- It is also **not cheaper**: TI.com $2.850 (100–249, 0 in stock) against
+  $2.494 for the MC3-Q1 (3,500 in stock). At LCSC it is $4.3244 (0 in stock)
+  against $3.9856 (C5219290 vs C41658611, 2026-09-25).
+- **Decision: keep LMR43620MC3RPERQ1 for both variants.**
+- The commercial **LMR43610MB3RPER** (1 A, 3.3 V, MODE/SYNC, no spread
+  spectrum, $1.40 at LCSC; [datasheet](../references/index.md#ti-lmr436x0-ds))
+  was **not adopted** because it is not AEC-Q100 qualified.
 
 ### 6.2 Switching frequency against the HF amateur bands
 
@@ -637,8 +652,10 @@ dropout).
   - **Firmware HOLD** (3.3 V GPIO, pulled down, low at reset).
   - Optional push-button. For installs without an ignition wire, tie SENSE
     to the battery lead (then the device stays on).
-- **Power-down:** SENSE falls → firmware drops PTT, finishes, waits a
-  configurable delay, releases HOLD → EN low → Q1/Q2 off → all rails
+- **Power-down:** SENSE falls → firmware drops PTT, finishes, waits the
+  power-down delay (**30 s after the radio or ignition turns off, default;
+  configurable**, maintainer decision 2026-09-25), releases HOLD → EN low →
+  Q1/Q2 off → all rails
   collapse. A hung MCU is reset by the watchdog, and its HOLD pin defaults low,
   so it can't keep the device on. Firmware may also power down on low battery
   (for example < 11.5 V for 60 s with SENSE off; threshold TBD).
@@ -678,7 +695,8 @@ a REACH mark; the rest **(verify)** against the manufacturers' declarations
 | C1, C2 (×2) | PSA FS32X225K101EGG (2.2 µF 100 V X7R 1210) | Commercial; X7R | Yes | C153036 / 0.0720 / 346,540 | — | blank |
 | C_bulk | Huawei VD1H101MF105000CE0 (100 µF 50 V) | Commercial; −55 to +105 °C | Yes | C189260 / 0.1846 / 8,840 | — | blank |
 | U2 | TI LMR43620MC3RPERQ1 | AEC-Q100 grade 1 | Yes | C41658611 / 3.9856 / 10 | 2.494 / 3,500 | blank |
-| U2 alt | TI LMR43610MB3RPER (1 A, commercial, 1 MHz free-run) | Commercial; TJ −40 to +150 °C | Yes | C5899189 / 1.4045 / 665 | 1.655 / 18,000 | blank |
+| U2 (not adopted) | TI LMR43610MB3RPER (1 A, commercial): not AEC-Q100 | Commercial; TJ −40 to +150 °C | Yes | C5899189 / 1.4045 / 665 | 1.655 / 18,000 | blank |
+| U2 (checked) | TI LMR43610MSC3RPERQ1 (1 A, AEC-Q100, spread spectrum when free-running): not cheaper | AEC-Q100 grade 1 | Yes | C5219290 / 4.3244 / 0 | 2.850 / 0 | blank |
 | C_out (×2) | Samwha CS3216X7R226K160NRI (22 µF 16 V X7R 1206) | Commercial; X7R | Yes | C5252682 / 0.1186 / 18,980 | — | blank |
 | Y1 | YXC OT322518.432MJBA4SL (18.432 MHz, ±20 ppm) | Commercial; −40 to +85 °C | Yes (REACH mark) | C2831385 / 0.2858 / 1,149 | — | blank |
 | U7–U9 | TI SN74LVC1G80DBVR (÷8) | Commercial; −40 to +125 °C | Yes | C42879 / 0.1899 / 5,415 | 0.129 / 285,101 | blank |
@@ -693,7 +711,6 @@ zeners, diodes and small capacitors excluded in both):**
 |---|---|---|
 | Before (two AEC-Q bucks, 5 V + 3.3 V, SiT8924B, AEC-Q parts throughout, LP5907-Q1) | 18 lines | **≈ $23.56** |
 | After (single stage, commercial where allowed, 18.432 MHz ÷ 8) | 17 lines | **≈ $10.95** |
-| After, with the LMR43610MB3RPER option | | ≈ $8.37 |
 
 The biggest savings: Q1 ($5.91 → $0.49), the second buck and its passives
 (≈ $4.5), the oscillator (≈ $2.96 → $0.86) and the 5 V-rail LDO. None of the
@@ -787,7 +804,7 @@ The product must meet EU requirements (maintainer, 2026-09-24,
 ## 13. Parts common with variant R (#11)
 
 - **Shared 3.3 V regulator core:** variant R reuses this exact core: the
-  LMR43620MC3RPERQ1 (or the LMR43610MB3RPER option) with its 2.2 µH
+  LMR43620MC3RPERQ1 with its 2.2 µH
   inductor and output capacitors, locked to the same 18.432 MHz ÷ 8 =
   2.304 MHz clock. The harmonic analysis (§6.2) then covers both variants.
   The radio accessory input of variant R (11–15 V) is inside the synchronized
@@ -831,5 +848,5 @@ values. Record it as a separate variant if there is demand.
 - **Decisions for other issues:** isolated jack-side supply (from 3.3 V) and
   its frequency (#9); the codec analog rail and the hub and codec currents
   (#8, #9); UN ECE R10 and REACH (#59).
-- **For the maintainer:** LMR43610MB3RPER instead of LMR43620MC3RPERQ1 saves
-  about $2.58 per board (§6.1).
+- **Buck part:** LMR43620MC3RPERQ1 kept for both variants; no cheaper
+  automotive-grade drop-in exists (§6.1).

@@ -103,9 +103,11 @@ Full analysis, calculations, prices and stock:
    - TJ is ≤ about 99 °C at 85 °C ambient against the 150 °C limit.
    - **Variant R (#11) reuses this exact core** (regulator, inductor, output
      capacitors and clock).
-   - The commercial LMR43610MB3RPER (1 A, same sync and timing, 1 MHz
-     free-run, $1.40 vs $3.99) is offered to the maintainer as a cheaper
-     option.
+   - Cheaper drop-ins must be automotive-grade (maintainer, 2026-09-25).
+     The only AEC-Q100 1 A drop-in, LMR43610MSC3RPERQ1, has no
+     no-spread-spectrum variant and is not cheaper ($2.85 vs $2.494 at
+     TI.com, 2026-09-25), so **LMR43620MC3RPERQ1 is kept for both variants**.
+   - The commercial LMR43610MB3RPER was not adopted: it is not AEC-Q100.
 4. **Clock, shared with ADR-0002 and ADR-0005 (the shared-clock
    recommendation, research §6.2):**
    - Source: an 18.432 MHz CMOS oscillator (YXC OT322518.432MJBA4SL:
@@ -133,8 +135,10 @@ Full analysis, calculations, prices and stock:
    - That gives ≥ 747 µs before logic dropout at worst-case load.
    - Supply interruptions up to 3 ms (at 2.1 W) are ridden through.
 7. **Power-down:** ignition or radio-on SENSE, USB-C host VBUS and a firmware
-   HOLD line are diode-ORed into the LM74800-Q1 enable. Off-state drain is
-   **≤ 7 µA** at 25 °C (limit 1 mA).
+   HOLD line are diode-ORed into the LM74800-Q1 enable. **Auto power-down
+   30 s after the radio or ignition turns off** (default, configurable;
+   maintainer decision 2026-09-25). Off-state drain is **≤ 7 µA** at 25 °C
+   (limit 1 mA).
 8. **24 V trucks:** not in revision A; the same topology scales (research §14).
 
 Why:
