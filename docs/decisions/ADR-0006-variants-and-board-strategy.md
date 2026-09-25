@@ -84,7 +84,7 @@ antenna clearance add about 25 %.
 | ESP32-S3-MINI-1 and its edge/antenna clearance | ≈ 500 |
 | Codec, its two LDOs, level and filter networks | ≈ 250 |
 | AUDIO transformers and their 0 Ω bypass footprints | ≈ 300 |
-| SERIAL switching (MAX14778, TRS3221E, TCA9534, CI-V, protection) | ≈ 400 |
+| SERIAL switching (MAX14778, TRS3221E, TCA9534, CI-V, ring-2 3.3 V output switch and limiter, protection) | ≈ 400 |
 | Jack isolation (ISO7721, ISO1540, jack-domain supply, 0 Ω links, barrier) | ≈ 300 |
 | PTT closure and gating (AQY212EH; TPS3839 supervisor if kept). The TPL5111 hardware timer and TPS3430 watchdog are removed from #9 (maintainer, 2026-09-25) and not counted | ≈ 80 |
 | USB-C, hub with crystal, two switches, ESD | ≈ 300 |
@@ -286,7 +286,7 @@ output the release needs per variant.
   `docs/developer-guide.md`, `constraints.md` §13, and the READMEs in
   `hardware/boards/` and `hardware/enclosure/`.
 
-### Open questions for the maintainer (not decided here)
+### Open questions for the maintainer (not decided here, except where marked closed)
 
 1. **Variant R isolation in wired mode.** [Constraints §6](../requirements/constraints.md#6-safety-and-fail-safe)
    requires jack isolation "on every variant whenever the USB-C data link is
@@ -302,12 +302,11 @@ output the release needs per variant.
    isolator itself (about $7.40 at LCSC, quantity 100+, per that study). Decide whether revision A reserves footprints for it (they
    would take area on both variants) or accepts the ground path through the
    radio's USB cable on M.
-3. **SERIAL-jack ring-2 3.3 V output** (about 20 mA to a cable's circuit;
-   ADR-0005 open question, ADR-0003 design). It is under review and may be
-   removed (maintainer, 2026-09-25), so this ADR treats it as optional: decide
-   whether it stays as the one exception to "power flows in only". If it stays,
-   it can be a fitting option on both variants; its few parts are within the
-   SERIAL block estimate either way.
+3. **SERIAL-jack ring-2 3.3 V output: closed.** The maintainer decided to
+   **keep it** (2026-09-25): about 20 mA, current-limited, off by default,
+   recorded in ADR-0003 ([PR #61](https://github.com/Reid-n0rc/open-bt-rig-interface/pull/61)).
+   It is part of the shared core, fitted on both variants, and its switch,
+   current limiter and Schottky are counted in the SERIAL block estimate.
 4. Also noted: ADR-0004 left open whether M may run from USB-C alone (bench
    use). The TPS2121 can't simply be fitted on M: its 24 V absolute maximum is
    below M's 37–40 V cut-off on the protected rail.
