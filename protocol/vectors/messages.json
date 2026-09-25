@@ -739,6 +739,27 @@
       "note": "Pairing window length 120 s (the default)."
     },
     {
+      "name": "config_set_power_down_delay",
+      "message": "CONFIG_SET",
+      "type": "0x11",
+      "direction": "h2d",
+      "token": 42,
+      "fields": {
+        "flags": 1,
+        "config": {
+          "key": "POWER_DOWN_DELAY_S",
+          "selector": 0,
+          "value": {
+            "s": 30
+          }
+        }
+      },
+      "payload_hex": "0110001e00",
+      "frame_hex": "112a0110001e00545c",
+      "wire_hex": "05112a0110021e03545c00",
+      "note": "Power down 30 s (the default) after the radio or ignition turns off."
+    },
+    {
       "name": "config_report",
       "message": "CONFIG",
       "type": "0x12",

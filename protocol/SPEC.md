@@ -281,6 +281,7 @@ writes flash, so hosts should persist rarely; the device may answer
 | 0x0D | `SERIAL_DEFAULT` | port (0–4) | `baud u32` (the port's `min_baud`–`max_baud`), `data_bits u8`, `parity u8`, `stop_bits u8` (values as in `SERIAL_SET`, §7.1). Applied when the port is opened (§7.2), and to the wired SERIAL-jack bridge port until the host sets its own line coding | 9600 8N1 |
 | 0x0E | `USB_NET_SUBNET` | 0 | `a u8`, `b u8`, `c u8`, `d u8`: the network address of the USB network /30, in address order (`a.b.c.d`). Must be a private IPv4 address (10/8, 172.16/12 or 192.168/16) with `d` a multiple of 4; the device takes `d`+1, the host gets `d`+2 (§14.2). Takes effect at the next enumeration | 10.169.160.0 |
 | 0x0F | `PAIRING_WINDOW_S` | 0 | `s u16`: how long the pairing window stays open, 30–600 (the device reports its limits in the `PAIRING` TLV) (§13.5) | 120 |
+| 0x10 | `POWER_DOWN_DELAY_S` | 0 | `s u16`: how long after the radio (or, on variant M, the ignition) turns off the device powers itself down, 5–3600; 0 ("never") is refused with `OUT_OF_RANGE`, so the off-state drain limit (REQ-PWR-016) always applies **(verify range and 0 with the maintainer)**. Powering down ends the session first, which turns PTT off (§8.7) (REQ-PWR-018) | 30 |
 
 ### 6.2 SERIAL-jack modes
 

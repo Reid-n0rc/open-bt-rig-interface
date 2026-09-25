@@ -240,6 +240,7 @@ CONFIG_KEYS = {
                               ("stop_bits", "u8")]),
     0x0E: ("USB_NET_SUBNET", [("a", "u8"), ("b", "u8"), ("c", "u8"), ("d", "u8")]),
     0x0F: ("PAIRING_WINDOW_S", [("s", "u16")]),
+    0x10: ("POWER_DOWN_DELAY_S", [("s", "u16")]),
 }
 _KEY_BY_NAME = {name: (key, schema) for key, (name, schema) in CONFIG_KEYS.items()}
 

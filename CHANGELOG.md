@@ -18,11 +18,12 @@ and tagged independently (see `AGENTS.md`).
   PTT with keepalive, max TX and RTS/DTR arming, BLE audio framing, clock sync,
   optional tone-sequence TX, a capped BLE TX power, a BLE pairing window,
   a hardware PTT watchdog backstop (`HW_WATCHDOG`), configurable defaults
-  (serial defaults, USB network subnet, pairing window), and new GATT UUIDs.
+  (serial defaults, USB network subnet, pairing window, power-down delay),
+  and new GATT UUIDs.
   Golden vectors in `protocol/vectors/`, a reference codec in
   `tools/protocol/`, and a `Protocol vectors` CI job. The USB endpoint budget
   changes the wired USB functions per radio type (`constraints.md` §2,
-  REQ-HOST-003, -010, -013, -014, REQ-PTT-002, -007, -011, REQ-FW-005) (#13).
+  REQ-HOST-003, -010, -013, -014, REQ-PTT-002, -007, -011, REQ-PWR-018, REQ-FW-005) (#13).
 - Radio module confirmation (`docs/research/module-selection.md`): the
   ESP32-S3-MINI-1 FCC grant (2AC7Z-ESPS3MINI1: single modular, BLE certified at
   10.3 dBm conducted, 20 cm mobile use), ISED ID, lifecycle and dated LCSC
