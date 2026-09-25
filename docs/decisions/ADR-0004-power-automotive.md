@@ -106,7 +106,8 @@ Full analysis, calculations, prices and stock:
    - The commercial LMR43610MB3RPER (1 A, same sync and timing, 1 MHz
      free-run, $1.40 vs $3.99) is offered to the maintainer as a cheaper
      option.
-4. **Clock, shared with ADR-0002:**
+4. **Clock, shared with ADR-0002 and ADR-0005 (the shared-clock
+   recommendation, research §6.2):**
    - Source: an 18.432 MHz CMOS oscillator (YXC OT322518.432MJBA4SL:
      ±20 ppm over −40 to +85 °C, 0.7 ps phase jitter max), divided by 8
      with three SN74LVC1G80 flip-flops, giving **2.304 MHz**.
@@ -114,6 +115,11 @@ Full analysis, calculations, prices and stock:
      the buck's MODE/SYNC, the TLV320AIC3104 MCLK (PLL to exactly 48 kHz,
      ADR-0002, PR #55) and the #9 isolated-supply clock if used.
    - The codec input levels (VIH ≥ 0.7 × IOVDD at 3.3 V) are met.
+   - The codec takes 2.304 MHz through its PLL, not 18.432 MHz directly,
+     so the 18.432 MHz net stays under 5 mm. Its 8th harmonic (147.456 MHz)
+     falls in 2 m.
+   - A direct 2.304 MHz MEMS oscillator is the drop-in upgrade if it can be
+     bought at or below the ≈ $0.86 cost.
 5. **Codec analog supply:** an LP5907-3.0 from the 3.3 V rail (ADR-0002 /
    #8). It needs the rail at ≥ about 3.1 V.
    - The rail is 3.27–3.33 V whenever the buck is synchronized (input

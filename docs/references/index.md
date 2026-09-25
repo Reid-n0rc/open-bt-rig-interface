@@ -627,6 +627,16 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Notes: Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).
 - Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
 
+### sitime-sit8008-ds
+
+**SiT8008B programmable 1–110 MHz MEMS oscillator datasheet** (SiTime, datasheet)
+
+- Local copy: [cache/sitime-sit8008-ds.pdf](cache/sitime-sit8008-ds.pdf)
+- Original: <https://datasheet.lcsc.com/datasheet/pdf/e884cf0cc5d2c9b8d1f5ed7f6655e679.pdf?productCode=C1184488>
+- Retrieved: 2026-09-25; SHA-256 `ea4a3c7ea2e6d0c0…`
+- Notes: Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).
+- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
+
 ### sitime-sit8924b-ds
 
 **SiT8924B automotive AEC-Q100 programmable oscillator datasheet** (SiTime, datasheet)

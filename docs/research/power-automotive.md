@@ -214,7 +214,7 @@ IGN / radio-on ─┴─ sense network ────── EN/UVLO ◄── USB-
 
 | Option | For | Against | Source |
 |---|---|---|---|
-| TVS only, SMBJ/SMCJ class | Cheap, passive | Test A energy is **47–173 J per pulse** (table below) against about 0.87 J for a 600 W SMBJ; fails test A. Clamp of about 45–53 V also exceeds the bucks' 42 V absolute maximum | [Vishay SMBJ](../references/index.md#vishay-smbj-ds) |
+| TVS only, SMBJ/SMCJ class | Cheap, passive | Test A energy is **47–173 J per pulse** (table below) against about 0.87 J for a 600 W SMBJ; fails test A. Clamp of about 45–53 V also exceeds the buck's 42 V absolute maximum | [Vishay SMBJ](../references/index.md#vishay-smbj-ds) |
 | TVS only, load-dump class (SM8S / SLD8S) | Passive, survives test A at higher Ri | Littelfuse SLD33-018 handles 38.4 A for 10 × 400 ms pulses; test A needs 58 A at 79 V / 0.5 Ω, so **two in series** are needed; clamp 50 V still exceeds 42 V; large DO-218 package | [Littelfuse](../references/index.md#littelfuse-tvs-load-dump-an) Tables 3–4 |
 | Surge stopper, linear clamp (LTC4380, LM5060-Q1 with external clamp) | Keeps running through test A | MOSFET dissipates (Vin − Vclamp) × I for up to 400 ms × 10 pulses; SOA design; LTC4380 facts **not verified** (analog.com blocked scripted access) | [LTC4380](../references/index.md#adi-ltc4380-ds), [LM5060](../references/index.md#ti-lm5060-ds) (5.5–65 V, < 15 µA disabled) |
 | **LM74800-Q1 common source, OV cut-off** | Q1 simply turns off: **no energy absorbed** in FET or TVS during test A; one IC also does reverse polarity and reverse-current blocking | Device browns out for the length of a test A pulse (functional status C); needs a 150 V FET and a VS clamp | [LM7480-Q1](../references/index.md#ti-lm7480-q1-ds) §10.3 (TI's 200 V / 24 V example, scaled to 12 V here) |
@@ -447,6 +447,35 @@ clock tolerance, against every band. Findings (1 kHz scan, 0.3–3.0 MHz):
     (≈ 5–10 pF each) draw well under 1 mA. A 74LVC1G34 buffer per branch
     ($0.05–0.10) is the option if the codec branch needs isolation from the
     buck's SYNC trace **(decide at layout)**.
+- **Shared clock recommendation (for ADR-0002, ADR-0004 and ADR-0005).**
+  One 2.304 MHz net feeds every load: buck MODE/SYNC in both variants, the
+  codec MCLK through its PLL (P = 3, R = 8, J = 16, D = 0 → 48 kHz, as
+  ADR-0002 has it) and the #9 isolated-supply clock. The source is an
+  **18.432 MHz XO ÷ 8**. Options compared (LCSC, 2026-09-24):
+
+| | (a) 2.304 MHz oscillator direct | (b1) 18.432 MHz XO ÷ 8, codec on 2.304 MHz via PLL | (b2) as b1, codec MCLK on 18.432 MHz without PLL |
+|---|---|---|---|
+| Parts | Programmable MEMS, e.g. SiT8008BI at 2.304 MHz ([datasheet](../references/index.md#sitime-sit8008-ds)); YXC also offers YSO110TR at any 1–125 MHz frequency on request | YXC OT322518.432MJBA4SL + 3 × SN74LVC1G80 (PR #60 uses an SN74HC161 counter instead) | Same parts |
+| Cost | ≈ $0.43 (qty 200) to $1.11 (qty 1) for SiT8008BI listings at LCSC (4.608 MHz version); **the 2.304 MHz part isn't stocked**, so price and lead time **(verify)** | **≈ $0.86** (LVC ÷ 8), or ≈ $0.67 with the HC161 | Same |
+| Accuracy, −40 to +85 °C | ±20 or ±25 ppm (industrial grade) | ±20 ppm (±10 ppm at 25 °C) | Same |
+| Jitter | 0.5 ps typ / 0.9 ps max RMS phase jitter (spec at 75 MHz) | 0.7 ps max phase jitter (12 kHz–20 MHz), plus unspecified flip-flop additive jitter **(verify)** | Oscillator only on the codec path |
+| Drive, 3 loads | One LVCMOS output, 15 pF load spec; series-R star | LVC1G80 ±32 mA; series-R star | Two nets to route |
+| Spurious | Only the 2.304 MHz comb | Adds a short 18.432 MHz net: fundamental 264 kHz above 17 m (18.168 MHz edge); 3rd harmonic 55.296 MHz, above 6 m; **8th harmonic 147.456 MHz inside 2 m** (144–148 MHz). The 2.304 MHz comb itself has its 63rd and 64th harmonics (145.152 and 147.456 MHz) in 2 m, so 2 m isn't clean either way; the 18.432 MHz net concentrates energy there | Worst: the 18.432 MHz net runs to the codec |
+| Codec clock | PLL from 2.304 MHz | PLL from 2.304 MHz | Non-PLL: fS = MCLK / (128 × Q) = 18.432 MHz / (128 × 3) = **48 kHz exactly**, Q = 2–17 ([TLV320AIC3104](../references/index.md#ti-tlv320aic3104-ds), eq. 1) |
+
+  **Recommendation: (b1).**
+  - It is stocked, costs about $0.86, and meets ±20 ppm and the codec
+    jitter needs.
+  - The codec stays on 2.304 MHz via its PLL, as in ADR-0002. That exact
+    48 kHz derivation is cited in ADR-0002 (PR #55) and was not checked here.
+  - Keep the 18.432 MHz net under 5 mm, from the oscillator straight into
+    the first flip-flop, over solid ground.
+  - Use SN74LVC1G80 rather than an HC161: the LVC parts are specified far
+    above 18.432 MHz at 3.3 V, while the HC161's margin at 3.3 V is
+    **(verify)** (PR #60 flags it too).
+  - **Revisit (a)** if a 2.304 MHz MEMS part is orderable at or below the
+    (b1) cost. It removes the 18.432 MHz net and three parts.
+  - (b2) is rejected for emissions.
 - The ESP32-S3 can't make 2.304 MHz by integer division of its 80 MHz or
   40 MHz clocks. Its nearest, 80 MHz / 35 = 2.2857 MHz, puts harmonic 13
   only 14 kHz above 10 m, and a fractional LEDC divider would add jitter spurs.
@@ -762,7 +791,9 @@ The product must meet EU requirements (maintainer, 2026-09-24,
   inductor and output capacitors, locked to the same 18.432 MHz ÷ 8 =
   2.304 MHz clock. The harmonic analysis (§6.2) then covers both variants.
   The radio accessory input of variant R (11–15 V) is inside the synchronized
-  range (≤ 19.1 V); a USB-C 5 V input is too (≥ 4.2 V).
+  range (≤ 19.1 V); a USB-C 5 V input is too (≥ 4.2 V). PR #60 (#11,
+  ADR-0005) already uses the same LMR43620MC3RPERQ1 core and the 18.432 MHz
+  ÷ 8 clock.
 - **Same TVS and ideal diode:** SMBJ33CA-HE3 and LM74700-Q1 or LM74800-Q1
   (common drain, 60–80 V FETs, no 150 V FET needed without unsuppressed load
   dump) for the accessory input's reverse-polarity and TVS protection.

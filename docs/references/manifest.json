@@ -1487,6 +1487,20 @@
       ],
       "sha256": "370754a5744f29edfa8ba2dbeaf4e7c22c3306c45b918b625e38b76df73763e8",
       "retrieved": "2026-09-25"
+    },
+    {
+      "id": "sitime-sit8008-ds",
+      "title": "SiT8008B programmable 1–110 MHz MEMS oscillator datasheet",
+      "publisher": "SiTime",
+      "kind": "datasheet",
+      "url": "https://datasheet.lcsc.com/datasheet/pdf/e884cf0cc5d2c9b8d1f5ed7f6655e679.pdf?productCode=C1184488",
+      "file": "sitime-sit8008-ds.pdf",
+      "notes": "Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).",
+      "used_in": [
+        "docs/research/power-automotive.md"
+      ],
+      "sha256": "ea4a3c7ea2e6d0c0a080d3ee6ccdc00d0f189125a01af0a82c1d416fc9dc84ef",
+      "retrieved": "2026-09-25"
     }
   ]
 }
