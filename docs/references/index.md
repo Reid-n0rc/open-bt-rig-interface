@@ -492,6 +492,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `4a9ad71cd6535368…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md), [`docs/decisions/ADR-0003-radio-interface-circuits.md`](../../docs/decisions/ADR-0003-radio-interface-circuits.md)
 
+### nexperia-bc857bs-ds
+
+**BC857BS PNP general-purpose double transistor datasheet** (Nexperia, datasheet)
+
+- Local copy: [cache/nexperia-bc857bs-ds.pdf](cache/nexperia-bc857bs-ds.pdf)
+- Original: <https://assets.nexperia.com/documents/data-sheet/BC857BS.pdf>
+- Retrieved: 2026-09-25; SHA-256 `646d89717bb01880…`
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
+
 ### nexperia-pesd24vl1ba-ds
 
 **PESD24VL1BA low-capacitance bidirectional ESD protection diode datasheet** (Nexperia, datasheet)

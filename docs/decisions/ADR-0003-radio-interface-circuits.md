@@ -85,9 +85,14 @@ by the maintainer (2026-09-24).
    receive paths merge in a 3-input AND. Mode control comes from a TCA9534
    whose power-up pulls give the default: **3.3 V logic, RS-232 off, ring 2
    off**. Series pulse-rated resistors and PESD24VL1BA TVS diodes at each
-   contact. Ring 2 "3.3 V out" goes through a CPC1017N-class switch with a
-   current limiter and a Schottky; firmware never selects it for a cable that
-   uses ring 2 (KX2). Fallback if the MAX14778 fails its ±15 V unpowered test:
+   contact. **Ring 2 "3.3 V out" is kept** (maintainer decision, 2026-09-25):
+   about 3.2 V, limited to about 22 mA by a BC857BS two-transistor limiter,
+   short-circuit protected, through a BAT54 and an AQY212EHAX PhotoMOS that is
+   off unless "3.3 V logic + power" mode is selected (about $1.10). It is a
+   deliberate exception to "the device only takes power in": it powers
+   cable-side circuits for compatibility with the existing cable convention,
+   never the radio. Firmware never selects it for a cable that uses ring 2
+   (KX2). Fallback if the MAX14778 fails its ±15 V unpowered test:
    relays on variant R, TMUX6219 with a ±16 V supply on M.
 2. **PTT:** an **AQY212EHAX** PhotoMOS closes AUDIO ring 2 to sleeve. Its LED
    is driven through an SN74LVC1G08 AND gate only when **both** are true:

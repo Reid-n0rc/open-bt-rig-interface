@@ -221,25 +221,59 @@ From the [TRS3221E datasheet](../references/index.md#ti-trs3221e-ds):
 
 ### 3.7 Ring 2: 3.3 V out (logic + power mode)
 
-The convention's "3.3 V out, about 20 mA" feeds cables with their own
-isolation circuit. It must also survive ±15 V, and the KX2 cable puts the
-radio's key-out line on ring 2.
+**Maintainer decision (2026-09-25): keep it.** The "3.3 V logic + power" mode
+puts about 3.3 V, limited to about 20 mA and short-circuit protected, on
+SERIAL ring 2. It is off unless that mode is selected. It is a **deliberate
+exception** to "the device only takes power in": it powers **cable-side
+circuits** (cables with their own isolation or level-shift circuit), for
+compatibility with the existing cable convention, and **never the radio**.
+
+It must also survive ±15 V, and the KX2 cable puts the radio's key-out line
+on ring 2.
 
 ```text
-3.3 V_ISO ─► current limiter (≈ 20–25 mA) ─► Schottky (≥ 20 V reverse) ─► PhotoMOS (CPC1017N-class, 60 V, AC) ─► R_series ─► ring 2
-                                                                      LED ◄── TCA9534 "RING2_EN" (default off)
+jack-domain rectified rail (≈ 3.8–4.1 V, before the 3.3 V_ISO LDO; §6.2)
+   │
+   R_S 27 Ω ──┬─────────────── Q2 base               (BC857BS dual PNP: Q1 pass, Q2 limit)
+   │          │
+   Q1 E       Q2 E                Q2 C ──► Q1 base; Q1 base ── 4.7 kΩ ── RING2_EN_n (TCA9534, default high = off)
+   Q1 C ──► BAT54 (30 V reverse) ──► PhotoMOS AQY212EHAX output (60 V, AC) ──► 10 Ω ──► ring 2
+                                        LED ◄── 680 Ω ◄── TCA9534 "RING2_EN" (default off)
+   Q2 C also ──► 100 kΩ divider ──► TCA9534 input "RING2_LIMIT" (high while the limiter is active)
 ```
 
-- **Off by default** (PhotoMOS LED undriven) and blocks ±60 V in both polarities
-  ([CPC1017N datasheet](../references/index.md#littelfuse-cpc1017n-ds): 60 V
-  blocking, 100 mA, 16 Ω max, 1 mA LED to operate).
-- **On, with a foreign voltage applied:** +15 V is blocked by the Schottky;
-  −15 V is limited by the current limiter, which must then dissipate about
-  (3.3 + 15) V × 25 mA ≈ 0.46 W until the firmware turns ring 2 off. A limiter
-  with a fault flag readable through the TCA9534 lets firmware react; the
-  limiter part and its thermal rating are **(verify)** at schematic time.
+- **Current limit:** Q2 turns on when the drop across R_S reaches about
+  one V_BE (≈ 0.6 V), so the limit is ≈ 0.6 V / 27 Ω ≈ 22 mA, falling at hot
+  temperature (V_BE's tempco; **verify** the spread over −40 to +85 °C).
+- **Voltage at ring 2:** ≈ 3.9 V − 0.3 V (R_S at 10 mA) − 0.1 V (Q1
+  saturation) − 0.3 V (BAT54) − 0.01 V (PhotoMOS, 0.85 Ω typ) ≈ **3.2 V at
+  10 mA**, lower near the limit (**verify** on the bench; the convention only
+  asks for "3.3 V, about 20 mA").
+- **Off by default:** the PhotoMOS LED is undriven (TCA9534 powers up with
+  all pins as inputs; pull-downs hold it off) and Q1's base is pulled off. In
+  the off state the AQY212EH blocks up to 60 V in both polarities
+  ([datasheet](../references/index.md#panasonic-aqy21eh-ds)), so ±15 V on
+  ring 2 does nothing.
+- **Short to sleeve:** the limiter holds ≈ 22 mA; Q1 dissipates about
+  4 V × 22 mA ≈ 90 mW, inside the BC857BS's 200 mW per transistor and
+  300 mW per package at 25 °C
+  ([datasheet](../references/index.md#nexperia-bc857bs-ds)); derating to
+  85 °C is **(verify)**.
+- **On, with a foreign voltage applied:** +15 V is blocked by the BAT54. At
+  −15 V the limiter holds 22 mA but Q1 would dissipate about
+  (4 + 15) V × 22 mA ≈ 0.42 W, above its rating. The `RING2_LIMIT` flag goes
+  high; firmware turns ring 2 off within milliseconds (**verify** Q1 survives
+  that pulse; a PTC in series is the fallback).
 - **Firmware rule:** never select this mode for a radio profile whose cable
   uses ring 2 for another function (KX2).
+
+**Cost (LCSC, 2026-09-24/25):** AQY212EHAX $0.98 @100 (C29276), BC857BS
+$0.056 @100 (Nexperia, [C8654](https://www.lcsc.com/product-detail/C8654.html),
+930 in stock, RoHS3), BAT54 $0.03 (BAT54S,
+[C47546](https://www.lcsc.com/product-detail/C47546.html), 283,320 in stock,
+RoHS3), four resistors: **about $1.10 per board.** Using the AQY212EHAX (the
+same part as the PTT closure) instead of a CPC1017N saves $0.41 and lowers
+the on-resistance from 16 Ω to 2.5 Ω max.
 
 ### 3.8 Why not a solder-jumper design
 
@@ -969,9 +1003,11 @@ and Mouser: **deferred** by the maintainer, left blank.
 | Würth 760390014 (or equal) | 1:1.3 push-pull transformer | (verify) | not found | — | — | (verify) | deferred | deferred | listed in the SN6505B datasheet |
 | SN6505BDBVR (fallback) | Isolated supply driver | −55 to +125 °C | C74518 | 1+ 0.62; 10+ 0.49; 100+ 0.37; 1,000+ 0.32 | 10,616 | RoHS3 | deferred | deferred | [ti-sn6505b-ds](../references/index.md#ti-sn6505b-ds) |
 | SN6507DGQR (rejected) | Push-pull driver, 2 MHz | −55 to +125 °C | C5122398 | 1+ 5.30 … 1,000+ 3.78 | 149 | (not checked) | deferred | deferred | [ti-sn6507-ds](../references/index.md#ti-sn6507-ds) |
-| AQY212EHAX | PTT PhotoMOS (SMD) | −40 to +85 °C | C29276 | 1+ 1.64; 10+ 1.33; 30+ 1.17; 100+ 0.98; 500+ 0.89; 1,000+ 0.85 | 2,706 | RoHS3 | deferred | deferred | [panasonic-aqy21eh-ds](../references/index.md#panasonic-aqy21eh-ds) |
+| AQY212EHAX | PTT closure and ring-2 switch (×2) | −40 to +85 °C | C29276 | 1+ 1.64; 10+ 1.33; 30+ 1.17; 100+ 0.98; 500+ 0.89; 1,000+ 0.85 | 2,706 | RoHS3 | deferred | deferred | [panasonic-aqy21eh-ds](../references/index.md#panasonic-aqy21eh-ds) |
+| BC857BS,115 | Ring-2 current limiter | −65 to +150 °C | C8654 | 10+ 0.072; 100+ 0.056; 300+ 0.048; 3,000+ 0.043 | 930 | RoHS3 | deferred | deferred | [nexperia-bc857bs-ds](../references/index.md#nexperia-bc857bs-ds) |
+| BAT54S,215 | Ring-2 reverse block | (LCSC listing) | C47546 | 20+ 0.031 … 21,000+ 0.016 | 283,320 | RoHS3 | deferred | deferred | LCSC listing |
 | AQY212EH (DIP) | same, through-hole | −40 to +85 °C | C2894775 | 1+ 1.25; 10+ 1.08; 100+ 0.87; 1,000+ 0.79 | 192 | (not checked) | deferred | deferred | [panasonic-aqy21eh-ds](../references/index.md#panasonic-aqy21eh-ds) |
-| CPC1017NTR | PTT alt. / ring-2 switch | −40 to +85 °C | C81521 | 1+ 1.99; 10+ 1.71; 100+ 1.39; 1,000+ 1.12 | 23,818 | RoHS3 | deferred | deferred | [littelfuse-cpc1017n-ds](../references/index.md#littelfuse-cpc1017n-ds) |
+| CPC1017NTR | PTT alternate | −40 to +85 °C | C81521 | 1+ 1.99; 10+ 1.71; 100+ 1.39; 1,000+ 1.12 | 23,818 | RoHS3 | deferred | deferred | [littelfuse-cpc1017n-ds](../references/index.md#littelfuse-cpc1017n-ds) |
 | TPS3839G33DBZR | Supervisor (3.08 V, push-pull) | −40 to +85 °C | C485802 | 1+ 0.44; 10+ 0.35; 30+ 0.31; 100+ 0.26; 500+ 0.24; 1,000+ 0.23 | 3,431 | RoHS3 | deferred | deferred | [ti-tps3839-ds](../references/index.md#ti-tps3839-ds) |
 | PESD24VL1BA | Jack TVS | −65 to +150 °C | C69324 | 5+ 0.24; 50+ 0.19; 150+ 0.16; 500+ 0.13 | 32,235 | RoHS3 | deferred | deferred | [nexperia-pesd24vl1ba-ds](../references/index.md#nexperia-pesd24vl1ba-ds) |
 | USB2422T-I/MJ | USB hub | −40 to +85 °C | C622610 | 1+ 2.31; 10+ 1.95; 100+ 1.48; 1,000+ 1.33 | 403 | RoHS3 | deferred | deferred | [microchip-usb2422-ds](../references/index.md#microchip-usb2422-ds) |

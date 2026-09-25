@@ -1210,6 +1210,19 @@
       ],
       "sha256": "30b963cc44233cf3ca35c891ff987c8323a2244ecc765e23296ec96ca4b42666",
       "retrieved": "2026-09-25"
+    },
+    {
+      "id": "nexperia-bc857bs-ds",
+      "title": "BC857BS PNP general-purpose double transistor datasheet",
+      "publisher": "Nexperia",
+      "kind": "datasheet",
+      "url": "https://assets.nexperia.com/documents/data-sheet/BC857BS.pdf",
+      "file": "nexperia-bc857bs-ds.pdf",
+      "used_in": [
+        "docs/research/radio-interface-circuits.md"
+      ],
+      "sha256": "646d89717bb01880434f9e46030338cd8e26af90c903e8bfb0d8ec7703bc8056",
+      "retrieved": "2026-09-25"
     }
   ]
 }
