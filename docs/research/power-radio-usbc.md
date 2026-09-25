@@ -91,8 +91,9 @@ later issue must confirm. `unknown` means no primary source was found.
   FT-817ND/FT-818 use USB-C.
 - **Radio-on sense:** the switched DC pin; otherwise the radio's USB attach,
   the SERIAL-jack idle level, or a CAT reply. Radio-powered: the device follows
-  the radio. Otherwise it powers down **30 s after radio-on sense goes off**
-  (configurable; maintainer decision 2026-09-25).
+  the radio. Otherwise, **with no USB host attached**, it powers down **30 s
+  after radio-on sense goes off** (configurable, 0 = never). It stays awake
+  while a USB host is connected (maintainer decisions, 2026-09-25).
 - **Power-section BOM:** about **$7.9 at LCSC, quantity 100** (§9.2). The buck
   IC alone is $3.99 of that, and LCSC holds only 10 of them.
 
@@ -470,12 +471,16 @@ to "Yes".
 - **Radio DC and USB-C both present:** when the radio turns off, the mux moves
   to USB-C without a reset. The firmware reports "radio off" to the host,
   turns PTT off at once, and powers down the codec and the isolated supply.
-  The auto power-down rule below then applies.
-- **Auto power-down (maintainer decision, 2026-09-25):** **30 s after
-  radio-on sense goes off**, configurable, the device tells the host and goes
-  to deep sleep. "Radio-on sense" is any signal in §8.1: RADIO_DC_SENSE, the
-  radio's USB attach, the SERIAL idle level, or CAT replies. In deep sleep: PTT off, hub in reset, codec
-  and isolated supply off, BLE off, the clock stopped and the buck in PFM
+  It stays awake while the USB host is connected.
+- **Auto power-down (maintainer decisions, 2026-09-25):**
+  - **The device stays awake while a USB host is connected on USB-C**, whatever
+    the radio does.
+  - With **no USB host attached**, the device goes to deep sleep **30 s after
+    radio-on sense goes off**. It notifies a connected BLE host first.
+    Radio-on sense is any signal in §8.1.
+  - The delay is configurable; **0 means never**.
+
+  In deep sleep: PTT off, hub in reset, codec and isolated supply off, BLE off, the clock stopped and the buck in PFM
   (the MODE/SYNC pin low). It wakes on RADIO_DC_SENSE, on a periodic timer to
   check for a radio and advertise briefly, or on an optional button (#12).
 - **Power banks** may switch off when the load is small **(verify)**. A

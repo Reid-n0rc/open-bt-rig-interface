@@ -108,9 +108,11 @@ maintainer. Every chosen part is RoHS-compliant per LCSC; REACH SVHC is
    2.304 MHz rule.
 7. **Radio-on sense:** the switched DC pin (RADIO_DC_SENSE on an RTC GPIO),
    plus the radio's USB attach, the SERIAL idle level and CAT replies.
-   **Auto power:** radio-powered units follow the radio. Otherwise the device
-   powers down **30 s after radio-on sense goes off** (configurable; maintainer
-   decision 2026-09-25), and wakes on radio DC, a timer or a button.
+   **Auto power** (maintainer decisions, 2026-09-25): radio-powered units follow
+   the radio. The device **stays awake while a USB host is connected** on
+   USB-C. With no USB host attached, it powers down **30 s after radio-on sense
+   goes off** (configurable; 0 = never), and wakes on radio DC, a timer or a
+   button.
 8. **Radios that can power variant R:** IC-7300, TS-590SG, K3 (within 0.5 A),
    K3S, K4. The TS-590S and the Yaesu "+13V" pins qualify after a measurement
    shows at least 0.25 A. The FT-817ND/FT-818, IC-705, KX2, KX3 and X6100 use
