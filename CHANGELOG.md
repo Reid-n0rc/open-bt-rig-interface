@@ -18,7 +18,9 @@ and tagged independently (see `AGENTS.md`).
   Module A route, declaration and technical file contents, markings, and who
   holds manufacturer obligations. BLE TX power capped at the module's EU-tested
   9.96 dBm e.i.r.p.; `constraints.md` §4 changed and REQ-REG-007 to -014 and
-  REQ-EMC-008, -009 added (REQ-REG-006 withdrawn); 32 references added (#59).
+  REQ-EMC-008, -009 added (REQ-REG-006 withdrawn); 32 references added. Maintainer
+  decision: design security to the CRA level now; the EN 18031-1 gap analysis and
+  cost go to #64 (#59).
 - Radio module confirmation (`docs/research/module-selection.md`): the
   ESP32-S3-MINI-1 FCC grant (2AC7Z-ESPS3MINI1: single modular, BLE certified at
   10.3 dBm conducted, 20 cm mobile use), ISED ID, lifecycle and dated LCSC

@@ -54,7 +54,7 @@ authentic. Each reference entry links the EUR-Lex page by CELEX number.
 | RED 3.1(a) safety and RF exposure | Applies, **no voltage limit** | Applies, no voltage limit | Art. 3(1)(a); §3.4 |
 | RED 3.1(b) EMC | Applies | Applies, as **vehicular** equipment | Art. 3(1)(b); EN 301 489-17 Table 3 and 5 (§3.3) |
 | RED 3.2 spectrum | Applies | Applies | Art. 3(2); EN 300 328 (§3.1) |
-| RED 3.3(d)(e) cybersecurity (2022/30) | **Depends on "internet-connected" (maintainer)**, only for units placed on the market before 2027-12-11 | Same | §4 |
+| RED 3.3(d)(e) cybersecurity (2022/30) | Depends on "internet-connected", only for units placed on the market before 2027-12-11. **Decided:** design to the CRA level; EN 18031-1 gap analysis and cost in [#64](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/64) | Same | §4 |
 | RED 3.3(f) fraud | No | No | No money transfer (2022/30 Art. 1(3)) |
 | RED Art. 3(4), common charger (2022/2380) | No | No | No battery; not an Annex Ia category (§8) |
 | LVD 2014/35/EU, EMC Directive 2014/30/EU | No | No | RED Art. 1(4); EMCD Art. 2(2)(a) with RED Art. 50 ([RED guide](../references/index.md#ec-red-guide-2018) §9.5) |
@@ -217,7 +217,14 @@ experimental and scientific purposes related to amateur radio".
 - **So the question below matters only if units are placed on the market
   before 2027-12-11.** After that date the CRA applies regardless (§5).
 
-### 4.2 Is the device "internet-connected"? (maintainer)
+### 4.2 Is the device "internet-connected"?
+
+**Decision (maintainer, 2026-09-25):** design product security to the Cyber
+Resilience Act level now (§4.4, §5). At implementation time, also plan for the
+internet-connected level (EN 18031-1), with its complexity and production cost
+explained before it is built. The EN 18031-1 gap analysis and cost go to
+[#64](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/64) ([ADR-0009](../decisions/ADR-0009-eu-compliance.md)). The analysis
+below is kept as the basis for that work.
 
 No Commission guidance that defines the term further was found **(verify)**.
 The only structured reading found is an industry paper ([Orgalim 2022](../references/index.md#orgalim-internet-connected-2022),
@@ -254,7 +261,7 @@ Consequences:
   placed before 2027-12-11: ship those units without the network function. That
   loses the protocol over TCP, so wired iOS hosts lose PTT and configuration,
   and radios with USB serial and analog audio lose the wired protocol transport
-  (PR #58 §14.1). **(maintainer)**
+  (PR #58 §14.1). To be weighed in [#64](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/64).
 
 ### 4.3 EN 18031-1 in brief
 
@@ -322,7 +329,7 @@ Manufacturer obligations when a unit is placed on the market from 2027-12-11:
 
 | Obligation | Where | Project status |
 |---|---|---|
-| Meet Annex I Part I; documented cybersecurity risk assessment in the technical documentation | Art. 13(1)–(4), Annex VII | To do (#13, #14; §4.4) |
+| Meet Annex I Part I; documented cybersecurity risk assessment in the technical documentation | Art. 13(1)–(4), Annex VII | To do ([#64](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/64), #13, #14; §4.4) |
 | Due diligence on third-party components (ESP-IDF, NimBLE, TinyUSB, lwIP) | Art. 13(5) | [`THIRD_PARTY.md`](../../THIRD_PARTY.md) records licences; add security tracking |
 | Support period of **at least five years**, end date (month and year) shown at purchase | Art. 13(8), 13(19) | To decide **(maintainer)** |
 | Each security update kept available for 10 years or the support period, whichever is longer | Art. 13(9) | Release workflow |
@@ -573,8 +580,9 @@ State determines (RED Art. 10(8); CRA Art. 13(18)):
       updates; factory reset; SBOM in CI (REQ-REG-012, -013).
 - [ ] **Support period** of at least five years and a vulnerability-reporting
       process that meets CRA Art. 14 (REQ-REG-013; [`SECURITY.md`](../../SECURITY.md)).
-- [ ] **Decisions for the maintainer:** the "internet-connected" reading (§4.2);
-      whether R is declared for vehicle use (§3.3); the R10 reading (§8); the EU
+- [ ] **Security level (decided):** CRA level now; EN 18031-1 gap analysis and
+      cost in [#64](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/64) (§4.2).
+- [ ] **Decisions for the maintainer:** whether R is declared for vehicle use (§3.3); the R10 reading (§8); the EU
       economic operator (§7); the firmware's CRA status under commercial licences (§11).
 
 ## 14. Not covered

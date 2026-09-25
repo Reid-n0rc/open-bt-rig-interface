@@ -52,6 +52,13 @@ the EU market with an EU declaration of conformity and CE marking, under the
 RED, RoHS and, from 2027-12-11, the CRA, using Module A where the harmonised
 standards allow. Test, declaration and registration work stays `human-task`.
 
+**Security level (maintainer decision, 2026-09-25):** design product security
+to the **Cyber Resilience Act** level now (Annex I; [eu.md](../compliance/eu.md) §4.4, §5).
+At implementation time, also plan for the RED internet-connected level
+(Delegated Regulation 2022/30, EN 18031-1), with an explanation of its
+complexity and production cost before it is built. The implementation, the
+EN 18031-1 gap analysis and the cost go to [#64](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/64).
+
 ## Consequences
 
 - [`constraints.md`](../requirements/constraints.md) §4: EU conformity is
@@ -73,17 +80,18 @@ standards allow. Test, declaration and registration work stays `human-task`.
   logging, robustness); an SBOM, a support period of at least five years, and a
   CRA Art. 14 reporting process in [`SECURITY.md`](../../SECURITY.md) before any
   unit is placed on the market.
+- **Decided:** the "internet-connected" question under 2022/30
+  ([eu.md](../compliance/eu.md) §4.2) is closed as "design to the CRA level; the
+  EN 18031-1 gap analysis and cost go to [#64](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/64)".
 - **Open decisions for the maintainer** (not made by this ADR):
-  1. Is the device "internet-connected" under 2022/30 (BLE, USB network)? This
-     only matters for units placed before 2027-12-11 ([eu.md](../compliance/eu.md) §4.2).
-  2. Is variant R declared for use in vehicles ([eu.md](../compliance/eu.md) §3.3)?
-  3. RED only, or RED plus a UN R10 §3.2.9 declaration for variant M
+  1. Is variant R declared for use in vehicles ([eu.md](../compliance/eu.md) §3.3)?
+  2. RED only, or RED plus a UN R10 §3.2.9 declaration for variant M
      ([eu.md](../compliance/eu.md) §8)?
-  4. Who is the EU economic operator and WEEE representative if units are sold
+  3. Who is the EU economic operator and WEEE representative if units are sold
      from the US ([eu.md](../compliance/eu.md) §7)?
-  5. The firmware's CRA status when supplied under commercial licences
+  4. The firmware's CRA status when supplied under commercial licences
      ([eu.md](../compliance/eu.md) §11); get advice.
-  6. The support period length.
+  5. The support period length.
 - **Risks to verify:** the module's antenna gain and the ESP-IDF power index that
   gives 9.96 dBm e.i.r.p.; whether a lab accepts Espressif's radio reports for
   the host; the EN 62479 threshold; the R10 06-series text; CRA harmonised
