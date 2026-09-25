@@ -28,6 +28,11 @@ and tagged independently (see `AGENTS.md`).
   `tools/protocol/`, and a `Protocol vectors` CI job. The USB endpoint budget
   changes the wired USB functions per radio type (`constraints.md` §2,
   REQ-HOST-003, -010, -013 to -017, REQ-PTT-002, -007, -011, REQ-PWR-018, REQ-FW-005) (#13).
+- Host compatibility research (`docs/research/host-compatibility.md`): wired
+  USB-C (CDC-ACM, RTS/DTR, UAC1 vs UAC2, voice processing, port power) and
+  Bluetooth LE (2M PHY, DLE, MTU, intervals, L2CAP CoC vs GATT, throughput
+  budget) on iOS/iPadOS, macOS, Android, Windows and Linux. Recommends UAC1 for
+  #44 and NimBLE with L2CAP CoC plus a GATT fallback (#6).
 - Radio module confirmation (`docs/research/module-selection.md`): the
   ESP32-S3-MINI-1 FCC grant (2AC7Z-ESPS3MINI1: single modular, BLE certified at
   10.3 dBm conducted, 20 cm mobile use), ISED ID, lifecycle and dated LCSC
