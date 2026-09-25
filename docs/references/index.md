@@ -453,7 +453,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ecfr-47-97-301.html](cache/ecfr-47-97-301.html)
 - Original: <https://www.ecfr.gov/current/title-47/chapter-I/subchapter-D/part-97/subpart-D/section-97.301>
 - Retrieved: 2026-09-24; SHA-256 `e0ad6b5728c57d16…`
-- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/decisions/ADR-0004-power-automotive.md`](../../docs/decisions/ADR-0004-power-automotive.md)
+- Cited in: [`docs/decisions/ADR-0004-power-automotive.md`](../../docs/decisions/ADR-0004-power-automotive.md), [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
 
 ### ecfr-47-97-303
 
@@ -624,7 +624,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/esp32s3-mini1-ds.pdf](cache/esp32s3-mini1-ds.pdf)
 - Original: <https://www.espressif.com/sites/default/files/documentation/esp32-s3-mini-1_mini-1u_datasheet_en.pdf>
 - Retrieved: 2026-09-24; SHA-256 `4d4b7f1c17b484c6…`
-- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md), [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md), [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/module-selection.md`](../../docs/research/module-selection.md), [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
+- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md), [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md), [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/module-selection.md`](../../docs/research/module-selection.md), [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
 
 ### esp32s3-mini1-fcc-grant
 
@@ -983,7 +983,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://datasheet.lcsc.com/datasheet/pdf/6219a627c4d940b38430cad44a96cd77.pdf?productCode=C3105>
 - Retrieved: 2026-09-25; SHA-256 `33f71340c39d8991…`
 - Notes: Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).
-- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
+- Cited in: [`docs/decisions/ADR-0005-power-radio-usbc.md`](../../docs/decisions/ADR-0005-power-radio-usbc.md), [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
 
 ### littelfuse-437-ds
 
@@ -1040,7 +1040,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/microchip-usb2422-ds.pdf](cache/microchip-usb2422-ds.pdf)
 - Original: <https://ww1.microchip.com/downloads/en/DeviceDoc/00001726B.pdf>
 - Retrieved: 2026-09-24; SHA-256 `4a9ad71cd6535368…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
 
 ### ms-audio-modes
 
@@ -1320,7 +1320,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://datasheet.lcsc.com/datasheet/pdf/8c96a8aa3d565d5919120c49061d45c5.pdf?productCode=C401144>
 - Retrieved: 2026-09-24; SHA-256 `7b593d10a0902132…`
 - Notes: Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).
-- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
+- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
 
 ### tdk-acm70v-ds
 
@@ -1440,7 +1440,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-lmr436x0-ds.pdf](cache/ti-lmr436x0-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/lmr43620.pdf>
 - Retrieved: 2026-09-25; SHA-256 `18b2cc488ccfa848…`
-- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
+- Cited in: [`docs/decisions/ADR-0005-power-radio-usbc.md`](../../docs/decisions/ADR-0005-power-radio-usbc.md), [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
 
 ### ti-lmr436x0-q1-ds
 
@@ -1449,7 +1449,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-lmr436x0-q1-ds.pdf](cache/ti-lmr436x0-q1-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/lmr43620-q1.pdf>
 - Retrieved: 2026-09-24; SHA-256 `db767b9234f756c3…`
-- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/decisions/ADR-0004-power-automotive.md`](../../docs/decisions/ADR-0004-power-automotive.md)
+- Cited in: [`docs/decisions/ADR-0004-power-automotive.md`](../../docs/decisions/ADR-0004-power-automotive.md), [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
 
 ### ti-lp5907-ds
 
@@ -1496,6 +1496,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `b181232be6afaef8…`
 - Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/decisions/ADR-0004-power-automotive.md`](../../docs/decisions/ADR-0004-power-automotive.md)
 
+### ti-sn6505-ds
+
+**SN6505x low-noise 1 A transformer drivers for isolated power supplies datasheet** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-sn6505-ds.pdf](cache/ti-sn6505-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/sn6505b.pdf>
+- Retrieved: 2026-09-24; SHA-256 `dfc57cb042218cb6…`
+- Cited in: [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
+
 ### ti-sn6505-q1-ds
 
 **SN6505A-Q1 / SN6505B-Q1 / SN6505D-Q1 low-noise transformer drivers for isolated supplies datasheet** (Texas Instruments, datasheet)
@@ -1521,7 +1530,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-sn74lvc1g80-ds.pdf](cache/ti-sn74lvc1g80-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/sn74lvc1g80.pdf>
 - Retrieved: 2026-09-25; SHA-256 `73b5b60e38105033…`
-- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/decisions/ADR-0004-power-automotive.md`](../../docs/decisions/ADR-0004-power-automotive.md)
+- Cited in: [`docs/decisions/ADR-0004-power-automotive.md`](../../docs/decisions/ADR-0004-power-automotive.md), [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
 
 ### ti-sn74lxc1t45-ds
 
@@ -1584,7 +1593,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-tlv320aic3104-ds.pdf](cache/ti-tlv320aic3104-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/tlv320aic3104.pdf>
 - Retrieved: 2026-09-24; SHA-256 `17ce38b2b2b35e44…`
-- Cited in: [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md), [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md)
+- Cited in: [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md), [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
 
 ### ti-tlv320aic3104-product
 
@@ -1647,7 +1656,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-tps2121-ds.pdf](cache/ti-tps2121-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/tps2121.pdf>
 - Retrieved: 2026-09-24; SHA-256 `b2f5950f596dc2c4…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/decisions/ADR-0005-power-radio-usbc.md`](../../docs/decisions/ADR-0005-power-radio-usbc.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
 
 ### ti-tps2553-ds
 
@@ -1657,6 +1666,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://www.ti.com/lit/ds/symlink/tps2553.pdf>
 - Retrieved: 2026-09-24; SHA-256 `88e453700cea2b26…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+
+### ti-tps2660-ds
+
+**TPS2660x 60 V, 2 A industrial eFuse with integrated reverse input polarity protection datasheet (SLVSDG2G)** (Texas Instruments, datasheet)
+
+- Local copy: [cache/ti-tps2660-ds.pdf](cache/ti-tps2660-ds.pdf)
+- Original: <https://www.ti.com/lit/ds/symlink/tps2660.pdf>
+- Retrieved: 2026-09-24; SHA-256 `b781cbce51984715…`
+- Cited in: [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md), [`docs/decisions/ADR-0005-power-radio-usbc.md`](../../docs/decisions/ADR-0005-power-radio-usbc.md)
 
 ### ti-tps3430-ds
 
@@ -1692,7 +1710,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-tps62933-ds.pdf](cache/ti-tps62933-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/tps62933.pdf>
 - Retrieved: 2026-09-24; SHA-256 `16ec2eac43c7374e…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
 
 ### ti-tps7a20-ds
 
@@ -1701,7 +1719,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/ti-tps7a20-ds.pdf](cache/ti-tps7a20-ds.pdf)
 - Original: <https://www.ti.com/lit/ds/symlink/tps7a20.pdf>
 - Retrieved: 2026-09-24; SHA-256 `663a9ff5bca60864…`
-- Cited in: [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md), [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+- Cited in: [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md), [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
 
 ### ti-trs3221e-ds
 
@@ -1759,6 +1777,16 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `bed5eeb82a1e25a5…`
 - Cited in: [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md)
 
+### usb-typec-r20
+
+**USB Type-C Cable and Connector Specification, Release 2.0 (August 2019)** (USB Implementers Forum, standard)
+
+- Local copy: [cache/usb-typec-r20.pdf](cache/usb-typec-r20.pdf)
+- Original: <https://www.usb.org/sites/default/files/USB%20Type-C%20Spec%20R2.0%20-%20August%202019.pdf>
+- Retrieved: 2026-09-24; SHA-256 `87d15160bf8bd251…`
+- Notes: Tables 4-17 (power precedence), 4-24 (Rp), 4-25 (Rd), 4-36 (sink CC voltages); section 4.6.1.1 (suspend). The current release (R2.5) is a manual download (#6).
+- Cited in: [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md), [`docs/decisions/ADR-0005-power-radio-usbc.md`](../../docs/decisions/ADR-0005-power-radio-usbc.md)
+
 ### usb-typec-r25
 
 **USB Type-C Cable and Connector Specification, Release 2.5 (March 2026)** (USB Implementers Forum, standard)
@@ -1776,7 +1804,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/vishay-smbj-ds.pdf](cache/vishay-smbj-ds.pdf)
 - Original: <https://www.vishay.com/docs/88392/smbj.pdf>
 - Retrieved: 2026-09-24; SHA-256 `1b65b57a43111280…`
-- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/decisions/ADR-0004-power-automotive.md`](../../docs/decisions/ADR-0004-power-automotive.md)
+- Cited in: [`docs/decisions/ADR-0004-power-automotive.md`](../../docs/decisions/ADR-0004-power-automotive.md), [`docs/decisions/ADR-0005-power-radio-usbc.md`](../../docs/decisions/ADR-0005-power-radio-usbc.md), [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
 
 ### vishay-sqsa80enw-ds
 
@@ -1923,4 +1951,4 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://datasheet.lcsc.com/datasheet/pdf/b336a5b52993e15e0134a8f3d7decec7.pdf?productCode=C2831385>
 - Retrieved: 2026-09-25; SHA-256 `d155dd2bc59fe81f…`
 - Notes: Manufacturer copy hosted by LCSC (the manufacturer site blocks scripted downloads).
-- Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/decisions/ADR-0004-power-automotive.md`](../../docs/decisions/ADR-0004-power-automotive.md)
+- Cited in: [`docs/decisions/ADR-0004-power-automotive.md`](../../docs/decisions/ADR-0004-power-automotive.md), [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
