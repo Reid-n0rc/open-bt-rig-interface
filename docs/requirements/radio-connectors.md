@@ -66,8 +66,9 @@ Mode behavior:
 A **USB-A receptacle** (the radio end of the cable is usually USB-B or
 micro/mini-B). It connects to the radio's own USB port, for radios with a
 built-in USB-serial chip, with or without a USB sound card
-([ADR-0008](../decisions/ADR-0008-host-links-esp32-s3.md)). The interface supplies
-current-limited 5 V VBUS.
+([ADR-0008](../decisions/ADR-0008-host-links-esp32-s3.md)). The interface
+supplies **no VBUS**: the port's VBUS pin connects to no device rail, in either
+mode ([ADR-0003](../decisions/ADR-0003-radio-interface-circuits.md)).
 
 - **Bluetooth mode:** the ESP32-S3 is USB host to the radio's chips.
 - **Wired mode:** the port is switched to the on-board USB hub, so the computer

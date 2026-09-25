@@ -77,10 +77,12 @@ Consequences:
 
 - **The radio's USB port provides no power.** Transceivers such as the FT-891,
   FT-710, FT-991A and IC-7300 have USB *device* ports (their internal
-  USB-serial and codec chips). When this device is the **USB host** to such a port,
-  it must *supply* VBUS to the radio, current-limited. The radio's draw is **(verify)**:
-  no manual states it, and the IC-705 charges its battery from VBUS by default
-  ([`radio-interfaces.md`](../research/radio-interfaces.md#icom-ic-705)).
+  USB-serial and codec chips). **This device never supplies power to a radio
+  through USB**, as fitted by default, in either host mode (maintainer decision, 2026-09-24,
+  [ADR-0003](../decisions/ADR-0003-radio-interface-circuits.md)): the radio port's VBUS pin connects to no device rail,
+  and hardware blocks current from the device (or, in wired mode, the
+  computer) into the radio's VBUS and back. Radios whose USB chip needs VBUS
+  to attach may not enumerate **(verify per radio)**.
 - **Radio accessory DC (preferred where available).** Some radios provide DC on
   an accessory jack. Documented limits: IC-7300 ACC 1 A, TS-590SG EXT.AT 4 A,
   K3 0.5 A, K3S 1 A, K4 1.5 A, all switched with the radio. The Yaesu "+13V"
@@ -139,8 +141,8 @@ The device supplies no power to the radio: the radio port's VBUS is blocked in
 hardware (ADR-0003, [#9](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/9)).
 
 **USB-C budget:** a USB-C host without USB PD may supply only 500 mA at 5 V
-(USB 2.0 default). In wired mode that must cover the device, the hub and the
-radio's USB VBUS draw. Use the higher USB-C current advertised on CC (1.5 A or
+(USB 2.0 default). In wired mode that must cover the device and the hub (the
+radio's USB port gets no power, §3.1). Use the higher USB-C current advertised on CC (1.5 A or
 3 A) when present, and report an overcurrent to the host rather than browning out.
 
 ## 4. Regulatory
@@ -172,6 +174,10 @@ The device operates next to HF transmitters of 100 W or more.
 - The firmware enforces a maximum continuous TX time: user-configurable,
   default 5 minutes, no upper limit, and the user can disable it
   ([ADR-0007](../decisions/ADR-0007-protocol.md), maintainer decision 2026-09-25).
+- **Firmware lock-up:** an ESP32-S3 internal watchdog resets the MCU within a
+  few seconds, and PTT is off during and after the reset (hardware default).
+  There is no hardware max-TX backstop
+  ([ADR-0003](../decisions/ADR-0003-radio-interface-circuits.md)).
 - **Galvanic isolation** of the AUDIO and SERIAL jacks toward the radio:
   transformer-coupled audio, isolated PTT, and digital isolators on the serial
   lines. **Required for variant M, and on every variant whenever the USB-C data
@@ -196,8 +202,8 @@ The device operates next to HF transmitters of 100 W or more.
 - **USB host:** for radios with their own USB port. The device is the USB host to
   the radio's USB-serial chip (CP210x including dual-port CP2105, FTDI, CH34x,
   CDC-ACM) **and** its built-in USB sound card (USB Audio Class 1.0), including
-  through a USB hub inside the radio. Full speed (12 Mbit/s) is enough. Supplies
-  current-limited VBUS (3.1). In wired mode the same port is routed to the
+  through a USB hub inside the radio. Full speed (12 Mbit/s) is enough. It
+  supplies **no VBUS** to the radio (§3.1). In wired mode the same port is routed to the
   on-board hub so the computer reaches the radio's chips directly (§2).
 - **Radio-type coverage, in both host modes:** radios with USB serial + USB
   audio; USB serial + analog audio; RS-232, 3.3 V logic or CI-V serial + analog
