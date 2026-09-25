@@ -72,12 +72,16 @@ issue, ADR or doc instead.
 
 ## Currently included
 
-None yet. The files in `LICENSES/` are license texts (taken from SPDX
-license-list-data) and aren't third-party works that need an entry.
+The files in `LICENSES/` are license texts (taken from SPDX license-list-data)
+and aren't third-party works that need an entry. Nothing below is committed to
+this repository: the firmware build links it from the pinned SDK, and the host
+tests fetch Unity at build time.
 
 | Name | Source | License | Copyright | Used in | Modifications | Obligations | Added in |
 |---|---|---|---|---|---|---|---|
-| — | | | | | | | |
+| ESP-IDF | https://github.com/espressif/esp-idf, tag `v6.0.3` (commit `76f5dedd9950a3012fee8fb7d5586df21fc67802`) | Apache-2.0 ([LICENSE](docs/references/index.md#esp-idf-license)) | Copyright (C) 2015-2023 Espressif Systems (as stated in its [COPYRIGHT](docs/references/index.md#esp-idf-copyright) document; file headers take precedence) | Firmware binary (`firmware/platform/esp-idf`): drivers, FreeRTOS port, NVS, esp_timer, bootloader | None | Apache-2.0 text and notices in firmware releases | #14 |
+| Components bundled with ESP-IDF v6.0.3 that the image links | As listed in ESP-IDF's [COPYRIGHT](docs/references/index.md#esp-idf-copyright) document | Apache-2.0 (Apache mynewt-nimble; the BLE controller, PHY and coexistence libraries, whose LICENSE files are Apache-2.0), Apache-2.0 OR GPL-2.0-or-later (Mbed TLS / TF-PSA-Crypto: **used under Apache-2.0**), MIT (FreeRTOS kernel, Xtensa headers), BSD (Picolibc/Newlib) | As stated in each component's LICENSE/COPYING file in the ESP-IDF tree | Firmware binary: NimBLE host (the BLE stack), BT controller, PHY and coexistence libraries, FreeRTOS, C library, TF-PSA-Crypto (NimBLE security) | None | Each license text and notice in the release's `THIRD_PARTY_NOTICES` (rule 7). The exact list comes from the linked components of the release build | #14 |
+| Unity | https://github.com/ThrowTheSwitch/Unity, tag `v2.7.0` (commit `b6763fbd9cedfacaa89e2ad9fd00d615a234e355`) | MIT ([LICENSE.txt](docs/references/index.md#unity-license)) | Copyright (c) 2007-26 Mike Karlesky, Mark VanderVoord, & Greg Williams | Host test build only (`firmware/test`, fetched by CMake); never in a firmware image | None | Keep notice + MIT text if it is ever redistributed | #14 |
 
 ## Known candidates (not yet included)
 
@@ -91,7 +95,6 @@ the material in**, and move the row to "Currently included".
 | ESP32_ft8_lib | https://github.com/guido57/ESP32_ft8_lib | MIT | Copyright (c) 2018 Kārlis Goba (as stated in its LICENSE) | Reference/port of ft8_lib to ESP32 (#17) | Same as ft8_lib; also credit the port's author if any of its code is used |
 | ESP32_BleSerial | https://github.com/avinabmalla/ESP32_BleSerial | MIT | Copyright (c) 2022 Avinab Malla | BLE-to-UART bridge reference (#15) | Keep notice + MIT text |
 | esp32-ble-uart-mx | https://github.com/olegv142/esp32-ble-uart-mx | Unlicense | Public domain dedication | BLE-to-UART reference (#15) | None required; credit as a courtesy |
-| ESP-IDF | https://github.com/espressif/esp-idf | Apache-2.0 | Copyright (C) Espressif Systems | Firmware SDK if an Espressif module is selected (#7, #14) | Apache-2.0 text in releases; **its bundled components have other licenses** (Newlib/Picolibc BSD, FreeRTOS MIT, lwIP BSD, …) per its [COPYRIGHT](https://github.com/espressif/esp-idf/blob/master/docs/en/COPYRIGHT.rst) document; the firmware release notices must cover every component actually linked |
 | ESP-ADF | https://github.com/espressif/esp-adf | "ESPRESSIF MIT License" (not SPDX MIT) | Copyright (c) 2018 Espressif Systems (Shanghai) | Audio framework, only if an Espressif module is selected | The grant covers **use on Espressif products only**; record that restriction here if it's used |
 | KiCad libraries | https://gitlab.com/kicad/libraries | CC-BY-SA-4.0 + design exception | KiCad library contributors | Symbols/footprints/3D models | See the KiCad section below |
 
@@ -129,6 +132,7 @@ repository. Licenses were verified from each LICENSE file on 2026-09-24.
 | Digirig hardware | https://github.com/softcomplex/digirig | GPL-3.0 | Wired-interface reference; no schematics or layout copied |
 | Mobilinkd TNC3 firmware | https://github.com/mobilinkd/tnc3-firmware | GPL-3.0 | BLE + audio interface reference |
 | arduino-audio-tools | https://github.com/pschatzmann/arduino-audio-tools | GPL-3.0 | Microcontroller audio streaming reference |
+| ESP-IDF examples `bluetooth/nimble/bleprph` and `custom_bootloader/bootloader_hooks` (v6.0.3) | [bleprph](docs/references/index.md#esp-idf-nimble-bleprph), [bootloader_hooks](docs/references/index.md#esp-idf-bootloader-hooks-example) | Apache-2.0 (bleprph's header; the hooks example has none and falls under ESP-IDF's Apache-2.0) | Consulted for the NimBLE start-up and bootloader-hook API sequence (#14); the firmware's code was written for this project, nothing copied. Permissive, listed for traceability |
 | Linux kernel USB network drivers (`drivers/net/usb/usbnet.c`, `cdc_ncm.c`, commit 038d61fd6422) | https://github.com/torvalds/linux | GPL-2.0 | CDC-NCM host behavior and interface naming (`usbN` / `ethN`) for the protocol's USB network transport (#13); nothing copied |
 
 Add more rows as sources are consulted. Record unlicensed sources here too,

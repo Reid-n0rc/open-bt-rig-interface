@@ -136,7 +136,8 @@
         "docs/decisions/ADR-0008-host-links-esp32-s3.md",
         "docs/research/core-devices.md",
         "docs/research/module-selection.md",
-        "docs/compliance/fcc.md"
+        "docs/compliance/fcc.md",
+        "firmware/app/include/ble_power.h"
       ],
       "sha256": "4d4b7f1c17b484c627aaa0f806566c48a6124a8e466c6d21d99210e6eacdef04",
       "retrieved": "2026-09-24"
@@ -149,7 +150,9 @@
       "url": "https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf",
       "file": "esp32s3-ds.pdf",
       "used_in": [
-        "docs/research/core-devices.md"
+        "docs/research/core-devices.md",
+        "firmware/platform/esp-idf/BOARD.md",
+        "firmware/platform/esp-idf/board/board_pins.h"
       ],
       "sha256": "2d5a7cb7fd559d8d972bd88db32669c0196d23f22d7afaafb0f63d099b589a3f",
       "retrieved": "2026-09-24"
@@ -975,6 +978,313 @@
       ],
       "sha256": "d67001d0dc491931674b4dcefca686fc87fe31410d93af81045b2a73a24a395a",
       "retrieved": "2026-09-24"
+    },
+    {
+      "id": "esp-idf-v6-0-3",
+      "title": "ESP-IDF v6.0.3 release notes",
+      "publisher": "Espressif Systems",
+      "kind": "web",
+      "url": "https://github.com/espressif/esp-idf/releases/tag/v6.0.3",
+      "file": "esp-idf-v6.0.3-release.html",
+      "used_in": [
+        "firmware/platform/esp-idf/README.md",
+        "THIRD_PARTY.md"
+      ],
+      "sha256": "e42961f992ef89c97b3742d154cc5d51f51e480994fe3d019706c1e465234598",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "esp-idf-license",
+      "title": "ESP-IDF LICENSE (Apache-2.0), v6.0.3",
+      "publisher": "Espressif Systems",
+      "kind": "license",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/LICENSE",
+      "file": "esp-idf-v6.0.3-LICENSE.txt",
+      "used_in": [
+        "THIRD_PARTY.md"
+      ],
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "esp-idf-copyright",
+      "title": "ESP-IDF Copyrights and Licenses (docs/en/COPYRIGHT.rst), v6.0.3",
+      "publisher": "Espressif Systems",
+      "kind": "license",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/docs/en/COPYRIGHT.rst",
+      "file": "esp-idf-v6.0.3-COPYRIGHT.rst",
+      "used_in": [
+        "THIRD_PARTY.md"
+      ],
+      "sha256": "8993c70a1ea553d7db454bb33d279282b6a3ca006c3551b764ece4709c57dae9",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "esp-idf-versions",
+      "title": "ESP-IDF Versions and support periods (docs/en/versions.rst), v6.0.3",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/docs/en/versions.rst",
+      "file": "esp-idf-v6.0.3-versions.rst",
+      "used_in": [
+        "firmware/platform/esp-idf/README.md"
+      ],
+      "sha256": "bdabe114625f16a9b093457f7921ed6f9ac0475ebe9409bbbca9c67497b6b089",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "esp-idf-docker-image",
+      "title": "ESP-IDF Docker image (api-guides/tools/idf-docker-image.rst), v6.0.3",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/docs/en/api-guides/tools/idf-docker-image.rst",
+      "file": "esp-idf-v6.0.3-idf-docker-image.rst",
+      "used_in": [
+        "firmware/platform/esp-idf/README.md"
+      ],
+      "sha256": "b9925811c1ba96f32b8a3270b196b02c6752411bc03f13270c7716349cec1c7e",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "esp-idf-esp-bt-h-s3",
+      "title": "ESP-IDF esp_bt.h for ESP32-C3/S3: BLE TX power levels and API, v6.0.3",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/components/bt/include/esp32c3/include/esp_bt.h",
+      "file": "esp-idf-v6.0.3-esp32c3-esp_bt.h",
+      "used_in": [
+        "firmware/platform/esp-idf/README.md",
+        "firmware/app/include/ble_power.h"
+      ],
+      "sha256": "b3f8714d7d34422591530b52b21354c01c4aefd3864a39dc30df4537a0032141",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "esp-idf-bt-ctrl-kconfig-s3",
+      "title": "ESP-IDF BT controller Kconfig for ESP32-C3/S3 (default TX power), v6.0.3",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/components/bt/controller/esp32c3/Kconfig.in",
+      "file": "esp-idf-v6.0.3-bt-ctrl-esp32c3-Kconfig.in",
+      "used_in": [
+        "firmware/platform/esp-idf/README.md"
+      ],
+      "sha256": "ba8b480949107f7e3649abb8ef1785a2b10a152be537983b7fdd71a0d5e0f6af",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "esp-idf-bootloader-guide",
+      "title": "ESP-IDF API guide: Bootloader (custom bootloader, hooks), v6.0.3",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/docs/en/api-guides/bootloader.rst",
+      "file": "esp-idf-v6.0.3-bootloader.rst",
+      "used_in": [
+        "firmware/platform/esp-idf/README.md",
+        "firmware/platform/esp-idf/BOARD.md"
+      ],
+      "sha256": "14c18dd327f0b28a83128c847e8f4e3990310379b76ca5f27b527ae5f9aea93c",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "esp-idf-bootloader-hooks-example",
+      "title": "ESP-IDF example custom_bootloader/bootloader_hooks (hooks.c), v6.0.3",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/examples/custom_bootloader/bootloader_hooks/bootloader_components/my_boot_hooks/hooks.c",
+      "file": "esp-idf-v6.0.3-bootloader-hooks.c",
+      "used_in": [
+        "firmware/platform/esp-idf/README.md",
+        "THIRD_PARTY.md"
+      ],
+      "sha256": "7e8e13824828578f352b82eb611156ba69c04097c0f64120b0cf06ffefe77f23",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "esp-idf-build-system",
+      "title": "ESP-IDF API guide: Build System (PROJECT_VER, MINIMAL_BUILD), v6.0.3",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/docs/en/api-guides/build-system.rst",
+      "file": "esp-idf-v6.0.3-build-system.rst",
+      "used_in": [
+        "firmware/README.md",
+        "firmware/platform/esp-idf/README.md"
+      ],
+      "sha256": "06400762a4e215170a6099a3e2fb4871af0d9d98b79ccc542f094c8ebcc1bb1e",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "esp-idf-wdts",
+      "title": "ESP-IDF API reference: Watchdogs, v6.0.3",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/docs/en/api-reference/system/wdts.rst",
+      "file": "esp-idf-v6.0.3-wdts.rst",
+      "used_in": [
+        "firmware/platform/esp-idf/README.md"
+      ],
+      "sha256": "36391319d83c02cc601258b7499b1c71c80085b71e717c768cb8eafcfd3fddbf",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "esp-idf-system-kconfig",
+      "title": "ESP-IDF esp_system Kconfig (task and interrupt watchdogs), v6.0.3",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/components/esp_system/Kconfig",
+      "file": "esp-idf-v6.0.3-esp_system-Kconfig",
+      "used_in": [
+        "firmware/platform/esp-idf/README.md"
+      ],
+      "sha256": "86ea1f182084213311402223b0f02283db4fca46ae780b92717a5a5919395e8a",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "esp-idf-bootloader-kconfig",
+      "title": "ESP-IDF bootloader Kconfig (RTC watchdog during boot), v6.0.3",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/components/bootloader/Kconfig.projbuild",
+      "file": "esp-idf-v6.0.3-bootloader-Kconfig.projbuild",
+      "used_in": [
+        "firmware/platform/esp-idf/README.md"
+      ],
+      "sha256": "b1d3c6278660fcdb02aa783d4e280e889f84d3dd70893f7ade3df15906db573e",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "esp-idf-esp-system-h",
+      "title": "ESP-IDF esp_system.h (esp_reset_reason), v6.0.3",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/components/esp_system/include/esp_system.h",
+      "file": "esp-idf-v6.0.3-esp_system.h",
+      "used_in": [
+        "firmware/platform/esp-idf/README.md"
+      ],
+      "sha256": "d29fb527ae8bfd21376799aacf33241fab8084caceca417529b8cffe9c6ce7b4",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "esp-idf-nimble-bleprph",
+      "title": "ESP-IDF example bluetooth/nimble/bleprph (main.c), v6.0.3",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/examples/bluetooth/nimble/bleprph/main/main.c",
+      "file": "esp-idf-v6.0.3-bleprph-main.c",
+      "used_in": [
+        "firmware/platform/esp-idf/README.md",
+        "THIRD_PARTY.md"
+      ],
+      "sha256": "1292853d515852c157895a1ce80d7c96ecbdd9f6dbb35e2eaa2b9af5e49c6021",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "esp-idf-secure-boot-v2",
+      "title": "ESP-IDF Security: Secure Boot v2 (and signed app verification), v6.0.3",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/docs/en/security/secure-boot-v2.rst",
+      "file": "esp-idf-v6.0.3-secure-boot-v2.rst",
+      "used_in": [
+        "firmware/README.md"
+      ],
+      "sha256": "0816a12aab3b38f64414d566fb9c42e377c2cba73ecab46d3a7f58f96b92acd9",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "esp-idf-flash-encryption",
+      "title": "ESP-IDF Security: Flash Encryption (ROM download mode), v6.0.3",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/docs/en/security/flash-encryption.rst",
+      "file": "esp-idf-v6.0.3-flash-encryption.rst",
+      "used_in": [
+        "firmware/README.md"
+      ],
+      "sha256": "2270ed8c54589d04537a157e87454ecba44d2c5845457b361d4da3d96ab0b4c8",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "esp-idf-ota",
+      "title": "ESP-IDF API reference: Over The Air Updates (rollback, anti-rollback), v6.0.3",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/docs/en/api-reference/system/ota.rst",
+      "file": "esp-idf-v6.0.3-ota.rst",
+      "used_in": [
+        "firmware/README.md"
+      ],
+      "sha256": "c1ef06ca1729c35ba01036989119251bb3ca94ba20b22a257a621cbd9142f0cf",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "esp-idf-dfu",
+      "title": "ESP-IDF API guide: Device Firmware Upgrade via USB, v6.0.3",
+      "publisher": "Espressif Systems",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/docs/en/api-guides/dfu.rst",
+      "file": "esp-idf-v6.0.3-dfu.rst",
+      "used_in": [
+        "firmware/README.md"
+      ],
+      "sha256": "115df26f63932b89214323414d836ce439a452ac202a79c9dd1cdbc6ba5403e5",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "esp32s3-devkitm1-guide",
+      "title": "ESP32-S3-DevKitM-1 user guide",
+      "publisher": "Espressif Systems",
+      "kind": "web",
+      "url": "https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/esp32-s3-devkitm-1/user_guide.html",
+      "file": "esp32s3-devkitm1-user-guide.html",
+      "used_in": [
+        "firmware/platform/esp-idf/BOARD.md",
+        "firmware/platform/esp-idf/README.md"
+      ],
+      "sha256": "48a02a78aa747c74b240e026db98b3380d2f6c88516e9d275f94434ff61604b1",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "unity-license",
+      "title": "Unity test framework LICENSE.txt (MIT), v2.7.0",
+      "publisher": "ThrowTheSwitch.org",
+      "kind": "license",
+      "url": "https://raw.githubusercontent.com/ThrowTheSwitch/Unity/b6763fbd9cedfacaa89e2ad9fd00d615a234e355/LICENSE.txt",
+      "file": "unity-v2.7.0-LICENSE.txt",
+      "used_in": [
+        "THIRD_PARTY.md",
+        "firmware/test/README.md"
+      ],
+      "sha256": "ec6cf55f05ba2aa538b9677b2481b9ac14a87c63594fce8a0677d4f71c583980",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "esp-idf-v6-0",
+      "title": "ESP-IDF v6.0 release notes (first v6.0 stable release)",
+      "publisher": "Espressif Systems",
+      "kind": "web",
+      "url": "https://github.com/espressif/esp-idf/releases/tag/v6.0",
+      "file": "esp-idf-v6.0-release.html",
+      "used_in": [
+        "firmware/platform/esp-idf/README.md"
+      ],
+      "sha256": "1945cf0c68e59d8d362fc0d0b709f5e1c1de6b8ba8de8bd3eaa72fb6964f217d",
+      "retrieved": "2026-09-25"
+    },
+    {
+      "id": "esp-idf-nimble-store-util",
+      "title": "NimBLE ble_store_util.c (esp-nimble 6330413, the submodule of ESP-IDF v6.0.3): bond store overflow",
+      "publisher": "Apache Software Foundation (mynewt-nimble), via Espressif Systems",
+      "kind": "sdk",
+      "url": "https://raw.githubusercontent.com/espressif/esp-nimble/6330413d856dd5427c14a3570e09b2e114d38c53/nimble/host/src/ble_store_util.c",
+      "file": "nimble-ble_store_util.c",
+      "used_in": [
+        "firmware/platform/esp-idf/README.md"
+      ],
+      "sha256": "c13cc49693a287e16436d8e316a77e858517f02d3d0d4d1729a2ff77db2d6565",
+      "retrieved": "2026-09-25"
     }
   ]
 }
