@@ -54,13 +54,14 @@ RTS/DTR on radio ports 1–4 pass through to the radio's own USB-serial chip
 keepalive, max TX and session end. Action 1 on a radio port's line keys the
 device's own PTT outputs instead.
 
-Interpretations the SPEC leaves open, chosen as the safer reading (pending
-the maintainer's approval):
-- **A keepalive timeout blocks the protocol's lines** (not the native wired
-  lines, which need no keepalive), and holds pass-through lines low until the
-  host's next `MODEM_LINES`.
-- **Both native lines dropping together** on a wired CDC-ACM port is treated
-  as a port close (reason `PORT_CLOSED`, lines BLOCKED).
+**Keepalive scope and native port close (SPEC §8.2, §8.4, approved
+2026-09-28):** a keepalive timeout releases only protocol-driven sources and
+blocks those lines (native wired lines need no keepalive), and holds
+pass-through lines low until the host's next `MODEM_LINES`. Both native lines
+dropping together on a wired CDC-ACM port is a port close (reason
+`PORT_CLOSED`, lines BLOCKED until re-armed).
+
+Remaining choices where the SPEC is silent:
 - `NOT_ARMED` is reported for a rise on a BLOCKED line and for both lines
   rising together; `LOCKED_OUT` for any key attempt during the lockout.
 - A request that arrives on a transport without the session is ignored

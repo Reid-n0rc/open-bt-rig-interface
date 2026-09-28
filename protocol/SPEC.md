@@ -425,7 +425,14 @@ CAT), so the radio's own timers are the only guard for CAT keying.
   1000 ms; range 500–10 000 ms (`PTT_KEEPALIVE_MS`, §6.1).
 - If `PTT_KEEPALIVE_MS` passes with none of these, the device releases every
   keepalive source (bits 0, 1, 2 and 4), deasserts pass-through lines, and
-  sends `PTT_STATUS` with reason `KEEPALIVE_TIMEOUT`.
+  sends `PTT_STATUS` with reason `KEEPALIVE_TIMEOUT`. Lines driven by the
+  protocol (`MODEM_LINES`) go to BLOCKED (§8.4) and must be seen deasserted
+  before they key again; pass-through lines stay deasserted until the host's
+  next `MODEM_LINES`.
+- The timeout releases **only protocol-driven sources**. Native RTS/DTR on a
+  wired CDC-ACM port (source bit 3) need no keepalive and aren't released by
+  it (maintainer approval, 2026-09-28); USB state, their port close (§8.4)
+  and max TX cover them.
 - Rationale: a host app that hangs while the Bluetooth link stays up must not
   hold PTT (REQ-PTT-006). The keepalive is shorter than a typical BLE
   supervision timeout, so it also catches a failing link sooner.
@@ -487,6 +494,11 @@ any      --session start, SERIAL_OPEN, USB reset/configure,
 - Pass-through lines (action 2) are not armed this way, so that the radio's
   chip sees what a direct cable would show. The keepalive and max-TX guards
   still apply.
+- **Port close on a native wired port** (maintainer approval, 2026-09-28): a
+  CDC-ACM `SET_CONTROL_LINE_STATE` that drops RTS **and** DTR together, from
+  both asserted, is a port close. PTT keyed from that port goes off
+  (`PTT_STATUS` reason `PORT_CLOSED`) and both lines are BLOCKED until they
+  are re-armed as above.
 
 ### 8.5 Maximum TX time and other fail-safes
 

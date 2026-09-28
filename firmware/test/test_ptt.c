@@ -424,6 +424,31 @@ static void test_native_close_drop_is_port_closed(void)
     TEST_ASSERT_FALSE(out.closure);
     TEST_ASSERT_EQUAL_UINT8(PTT_R_PORT_CLOSED, last()->reason);
     TEST_ASSERT_EQUAL_UINT8(PTT_BLOCKED, ptt_arm_state(&p, PTT_PORT_CONTROL, PTT_LINE_RTS));
+    TEST_ASSERT_EQUAL_UINT8(PTT_BLOCKED, ptt_arm_state(&p, PTT_PORT_CONTROL, PTT_LINE_DTR));
+    /* The next open (both rise) doesn't key; re-armed by dropping RTS, it does. */
+    ptt_lines(&p, PTT_PORT_CONTROL, PTT_LINE_RTS | PTT_LINE_DTR, PTT_ORIGIN_NATIVE, now);
+    TEST_ASSERT_FALSE(out.closure);
+    ptt_lines(&p, PTT_PORT_CONTROL, PTT_LINE_DTR, PTT_ORIGIN_NATIVE, now);
+    ptt_lines(&p, PTT_PORT_CONTROL, PTT_LINE_RTS | PTT_LINE_DTR, PTT_ORIGIN_NATIVE, now);
+    TEST_ASSERT_TRUE(out.closure);
+}
+
+static void test_native_single_line_drop_is_not_a_close(void)
+{
+    /* Only RTS was high: dropping it is a normal release, not a close. */
+    ptt_lines(&p, PTT_PORT_CONTROL, 0, PTT_ORIGIN_NATIVE, now);
+    ptt_lines(&p, PTT_PORT_CONTROL, PTT_LINE_RTS, PTT_ORIGIN_NATIVE, now);
+    ptt_lines(&p, PTT_PORT_CONTROL, 0, PTT_ORIGIN_NATIVE, now);
+    TEST_ASSERT_FALSE(out.closure);
+    TEST_ASSERT_EQUAL_UINT8(PTT_R_RELEASED, last()->reason);
+    TEST_ASSERT_EQUAL_UINT8(PTT_ARMED, ptt_arm_state(&p, PTT_PORT_CONTROL, PTT_LINE_RTS));
+    /* A protocol port dropping both lines isn't a close either (SERIAL_OPEN is). */
+    ptt_lines(&p, 0, 0, PTT_ORIGIN_PROTOCOL, now);
+    ptt_lines(&p, 0, PTT_LINE_RTS, PTT_ORIGIN_PROTOCOL, now);
+    ptt_lines(&p, 0, PTT_LINE_RTS | PTT_LINE_DTR, PTT_ORIGIN_PROTOCOL, now);
+    ptt_lines(&p, 0, 0, PTT_ORIGIN_PROTOCOL, now);
+    TEST_ASSERT_EQUAL_UINT8(PTT_R_RELEASED, last()->reason);
+    TEST_ASSERT_EQUAL_UINT8(PTT_ARMED, ptt_arm_state(&p, 0, PTT_LINE_RTS));
 }
 
 static void test_native_lock_ignores_native_lines(void)
@@ -926,6 +951,7 @@ int main(void)
     RUN_TEST(test_native_line_needs_no_keepalive);
     RUN_TEST(test_native_port_open_does_not_key);
     RUN_TEST(test_native_close_drop_is_port_closed);
+    RUN_TEST(test_native_single_line_drop_is_not_a_close);
     RUN_TEST(test_native_lock_ignores_native_lines);
     RUN_TEST(test_usb_reset_releases_native_lines);
     RUN_TEST(test_passthrough_follows_host_and_needs_keepalive);
