@@ -3,7 +3,7 @@
 #
 # Repository checks for every PR and push (see AGENTS.md, Build and test):
 # REUSE licensing, KiCad version consistency, the silkscreen revision check and
-# the protocol vectors.
+# the protocol vectors, and the enclosure STL/3MF export.
 # The jobs have no path filters, so they always report and can be required
 # status checks. With no boards yet the KiCad checks pass. The ERC/DRC gate is
 # separate (kicad-checks.yml).
@@ -89,3 +89,41 @@ jobs:
 
       - name: Vectors up to date
         run: python tools/protocol/make_vectors.py --check
+
+  enclosure:
+    name: Enclosure export
+    # Pinned runner image; OpenSCAD pinned to its Ubuntu 24.04 package below.
+    runs-on: ubuntu-24.04
+    env:
+      # ADR-0010. Bump together with the apt pin and the docs.
+      OPENSCAD_VERSION: "2021.01"
+      OPENSCAD_APT_VERSION: "2021.01-6build4"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Self-test the export script
+        run: python -m unittest discover -v -s tools/enclosure -p 'test_*.py'
+
+      - name: Install OpenSCAD (pinned)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends "openscad=${OPENSCAD_APT_VERSION}"
+          openscad --version
+
+      # Fit check (enclosure vs board model) plus STL and 3MF for every part
+      # of every variant. Any OpenSCAD warning or failed assert fails the job.
+      - name: Export enclosures
+        run: python tools/enclosure/export_enclosures.py --out build/enclosure
+
+      - name: Upload STL/3MF
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enclosure-exports
+          path: build/enclosure/
+          if-no-files-found: warn
+          retention-days: 30

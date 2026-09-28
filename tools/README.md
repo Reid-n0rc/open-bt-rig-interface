@@ -31,3 +31,10 @@ Reference encoder/decoder for [`protocol/SPEC.md`](../protocol/SPEC.md), Python 
 - `proto_codec.py`: framing (COBS + CRC-16), every message, the capability TLVs and the config keys. `python3 tools/protocol/proto_codec.py decode <hex>` decodes a byte stream.
 - `make_vectors.py`: writes `protocol/vectors/*.json` from its examples; `--check` fails if they're out of date.
 - `test_proto_codec.py`: round-trips every vector (`python3 -m unittest discover -s tools/protocol -p 'test_*.py'`).
+
+## enclosure
+
+Headless export of the 3D-printed enclosures ([ADR-0010](../docs/decisions/ADR-0010-enclosure-cad.md)). CI runs it in `.github/workflows/checks.yml` (`Enclosure export`) with OpenSCAD 2021.01 and uploads the files as the `enclosure-exports` artifact.
+
+- `export_enclosures.py`: finds every `hardware/enclosure/<V>/enclosure_<V>.scad`, runs the fit check (enclosure ∩ board model must be empty), and exports each part in `export_parts` as STL and 3MF into `build/enclosure/` (gitignored). Any OpenSCAD warning or failed assert fails it. `--list` shows the variants without OpenSCAD.
+- `test_export_enclosures.py`: checks the script finds both variants and builds the right commands (`python3 -m unittest discover -s tools/enclosure -p 'test_*.py'`); no OpenSCAD needed.
