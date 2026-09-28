@@ -112,7 +112,9 @@ int cat_from_host(cat_t *c, uint8_t port, const uint8_t *data, size_t len, uint1
     c->port[port].credit = (uint16_t)(c->port[port].credit + out);
     *written = (uint16_t)out;
     if (take < len || out < take) {
-        c->overflows = c->overflows < 0xFFFFu ? (uint16_t)(c->overflows + 1u) : 0xFFFFu;
+        if (c->overflows < 0xFFFFu) {
+            c->overflows++;
+        }
         return PROTO_ERR_OVERFLOW;
     }
     return PROTO_OK;

@@ -12,14 +12,15 @@
 
 uint16_t proto_crc16(const uint8_t *data, size_t len)
 {
-    uint16_t crc = 0xFFFFu;
+    unsigned crc = 0xFFFFu; /* 16 bits used; unsigned avoids narrowing warnings */
     for (size_t i = 0; i < len; i++) {
-        crc = (uint16_t)(crc ^ ((unsigned)data[i] << 8));
+        crc ^= (unsigned)data[i] << 8;
         for (int b = 0; b < 8; b++) {
-            crc = (crc & 0x8000u) ? (uint16_t)((crc << 1) ^ 0x1021u) : (uint16_t)(crc << 1);
+            crc = (crc & 0x8000u) ? ((crc << 1) ^ 0x1021u) : (crc << 1);
+            crc &= 0xFFFFu;
         }
     }
-    return crc;
+    return (uint16_t)crc;
 }
 
 size_t proto_cobs_encode(const uint8_t *in, size_t len, uint8_t *out, size_t cap)
