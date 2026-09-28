@@ -2,7 +2,8 @@
 # SPDX-License-Identifier: MIT
 #
 # Repository checks for every PR and push (see AGENTS.md, Build and test):
-# REUSE licensing, KiCad version consistency and the silkscreen revision check.
+# REUSE licensing, KiCad version consistency, the silkscreen revision check and
+# the protocol vectors.
 # The jobs have no path filters, so they always report and can be required
 # status checks. With no boards yet the KiCad checks pass. The ERC/DRC gate is
 # separate (kicad-checks.yml).
@@ -70,3 +71,21 @@ jobs:
       # On hw-* tag builds the tag comes from GITHUB_REF and must match a board.
       - name: Check board revisions and silkscreen
         run: python tools/kicad_ci/check_silkscreen.py
+
+  protocol:
+    name: Protocol vectors
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Round-trips every golden vector in protocol/vectors/ through the
+      # reference codec, and checks the vectors match their generator.
+      - name: Reference codec tests
+        run: python -m unittest discover -v -s tools/protocol -p 'test_*.py'
+
+      - name: Vectors up to date
+        run: python tools/protocol/make_vectors.py --check
