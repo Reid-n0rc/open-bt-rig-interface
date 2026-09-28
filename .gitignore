@@ -17,7 +17,9 @@ hardware/**/production/
 # Firmware build output
 firmware/**/build/
 firmware/**/.pio/
+firmware/**/sdkconfig
 firmware/**/sdkconfig.old
+firmware/**/dependencies.lock
 firmware/**/managed_components/
 
 # Enclosure exports (generated)

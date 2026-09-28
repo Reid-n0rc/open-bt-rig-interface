@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: MIT
 #
 # Repository checks for every PR and push (see AGENTS.md, Build and test):
-# REUSE licensing, KiCad version consistency, the silkscreen revision check and
-# the protocol vectors.
+# REUSE licensing, KiCad version consistency, the silkscreen revision check,
+# the protocol vectors and the firmware (host tests and the ESP32-S3 build).
 # The jobs have no path filters, so they always report and can be required
 # status checks. With no boards yet the KiCad checks pass. The ERC/DRC gate is
 # separate (kicad-checks.yml).
@@ -15,7 +15,7 @@ on:
     branches: [dev, main]
   push:
     branches: [dev, main]
-    tags: ["hw-*"]
+    tags: ["hw-*", "fw-*"]
   workflow_dispatch:
 
 permissions:
@@ -89,3 +89,57 @@ jobs:
 
       - name: Vectors up to date
         run: python tools/protocol/make_vectors.py --check
+
+  firmware-host-tests:
+    name: Firmware host tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # the fw-v* tags give the firmware version
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # firmware/app against a fake HAL, with ASan and UBSan: the PTT
+      # controller, the codec against every golden vector, config, sessions.
+      - name: Build and run the host tests
+        run: |
+          cmake -S firmware/test -B build/fw-test
+          cmake --build build/fw-test --parallel
+          ctest --test-dir build/fw-test --output-on-failure
+
+  firmware-target-build:
+    name: Firmware target build (ESP-IDF)
+    runs-on: ubuntu-latest
+    # Espressif's official ESP-IDF image, pinned to the release in
+    # firmware/platform/esp-idf/README.md (tag and digest).
+    container:
+      image: espressif/idf:v6.0.3@sha256:54278f2c01e6e759502e2f04c9103589c17528923426f4d63193490c7a08f555
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # the fw-v* tags give the firmware version
+
+      - name: Build for the ESP32-S3
+        shell: bash
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          . "$IDF_PATH/export.sh"
+          cd firmware/platform/esp-idf
+          idf.py build
+          idf.py size
+
+      - name: Upload the firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware-esp32s3-devkitm1
+          path: |
+            firmware/platform/esp-idf/build/rig_interface.bin
+            firmware/platform/esp-idf/build/rig_interface.elf
+            firmware/platform/esp-idf/build/bootloader/bootloader.bin
+            firmware/platform/esp-idf/build/partition_table/partition-table.bin
+            firmware/platform/esp-idf/build/flash_args
+            firmware/platform/esp-idf/build/flasher_args.json
+          if-no-files-found: error

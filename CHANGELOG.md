@@ -10,6 +10,21 @@ and tagged independently (see `AGENTS.md`).
 
 ## Unreleased
 
+- Firmware core, HAL skeleton, host tests and firmware CI. `firmware/app`
+  (portable C): the protocol codec for every SPEC 0.1.0 message, config key
+  and TLV, tested against every golden vector; the PTT controller implementing
+  SPEC §8 (keepalive, RTS/DTR arming, max TX with lockout and the 0 = off
+  setting, every PTT-off reason including `WATCHDOG`, config changes that
+  never assert PTT); configuration with SPEC defaults and ranges; sessions and
+  dispatch; hooks for the CAT bridge, clock sync, audio, the pairing window
+  and the #64 security stores (fail closed). `firmware/test`: CMake + Unity
+  host tests with ASan/UBSan. `firmware/platform/esp-idf`: ESP-IDF v6.0.3 on
+  the ESP32-S3-DevKitM-1 (pin map in `BOARD.md`) with NimBLE, the SPEC GATT
+  service, a bootloader hook that drives the PTT pin low, the internal
+  watchdogs locked on, and one BLE TX power cap of +6 dBm for all markets.
+  Firmware version from `fw-v*` tags. CI jobs `Firmware host tests` and
+  `Firmware target build (ESP-IDF)` (binary uploaded as an artifact). OTA is a
+  proposal only (signed images and secure boot required) (#14).
 - Variants and board strategy, ADR-0006 (proposed): revision A is one board,
   `hardware/boards/interface/revA/`, with KiCad 10 design variants `R` and `M`
   (they differ in the power input chain and the isolation fitting). Tags
