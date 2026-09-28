@@ -272,6 +272,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Notes: GPL/LGPL project: facts only.
 - Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
 
+### bosl2-license
+
+**BOSL2 LICENSE (BSD-2-Clause)** (BelfrySCAD, license)
+
+- Local copy: [cache/bosl2-license.txt](cache/bosl2-license.txt)
+- Original: <https://raw.githubusercontent.com/BelfrySCAD/BOSL2/bce959c113b5d710038d460d07b70111a9498d82/LICENSE>
+- Retrieved: 2026-09-28; SHA-256 `6f6c2df70f76eb06…`
+- Cited in: [`docs/decisions/ADR-0010-enclosure-cad.md`](../../docs/decisions/ADR-0010-enclosure-cad.md)
+
 ### bourns-lm-np-ds
 
 **Bourns LM-NP/LP 1000 series line matching transformers datasheet** (Bourns, datasheet)
@@ -1120,6 +1129,24 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Notes: The site blocks scripted downloads; save the page from a browser.
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
+### freecad-license
+
+**FreeCAD 1.0.2 LICENSE (LGPL-2.0)** (FreeCAD project, license)
+
+- Local copy: [cache/freecad-license.txt](cache/freecad-license.txt)
+- Original: <https://raw.githubusercontent.com/FreeCAD/FreeCAD/256fc7eff3379911ab5daf88e10182c509aa8052/LICENSE>
+- Retrieved: 2026-09-28; SHA-256 `b185c4b00f01c738…`
+- Cited in: [`docs/decisions/ADR-0010-enclosure-cad.md`](../../docs/decisions/ADR-0010-enclosure-cad.md)
+
+### gpl-faq-output
+
+**GNU GPL FAQ: is the output of a GPL program covered by the GPL?** (Free Software Foundation, web)
+
+- Local copy: [cache/gpl-faq.html](cache/gpl-faq.html)
+- Original: <https://www.gnu.org/licenses/gpl-faq.en.html>
+- Retrieved: 2026-09-28; SHA-256 `5053fe23f1da3b76…`
+- Cited in: [`docs/decisions/ADR-0010-enclosure-cad.md`](../../docs/decisions/ADR-0010-enclosure-cad.md)
+
 ### huawei-vd-ds
 
 **VD series SMD aluminum electrolytic capacitors datasheet (VD1H101MF105000CE0)** (Changzhou Huawei Electronic, datasheet)
@@ -1657,6 +1684,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Download: manual (the site blocks scripted downloads)
 - Notes: The site blocks scripted downloads; save the PDF from a browser.
 - Cited in: [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/decisions/ADR-0004-power-automotive.md`](../../docs/decisions/ADR-0004-power-automotive.md)
+
+### openscad-license
+
+**OpenSCAD 2021.01 COPYING (GPL-2.0 with CGAL linking exception)** (OpenSCAD project, license)
+
+- Local copy: [cache/openscad-license.txt](cache/openscad-license.txt)
+- Original: <https://raw.githubusercontent.com/openscad/openscad/41f58fe57c03457a3a8b4dc541ef5654ec3e8c78/COPYING>
+- Retrieved: 2026-09-28; SHA-256 `1805a29c3bccbc04…`
+- Cited in: [`docs/decisions/ADR-0010-enclosure-cad.md`](../../docs/decisions/ADR-0010-enclosure-cad.md)
 
 ### orgalim-internet-connected-2022
 
@@ -2345,6 +2381,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://catalog.triadmagnetics.com/asset/ty-250p.pdf>
 - Retrieved: 2026-09-24; SHA-256 `bed5eeb82a1e25a5…`
 - Cited in: [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md)
+
+### ubuntu-noble-openscad
+
+**Ubuntu 24.04 (noble) openscad package page** (Canonical, web)
+
+- Local copy: [cache/ubuntu-noble-openscad.html](cache/ubuntu-noble-openscad.html)
+- Original: <https://packages.ubuntu.com/noble/openscad>
+- Retrieved: 2026-09-28; SHA-256 `f7b7a2fda27cfb84…`
+- Cited in: [`docs/decisions/ADR-0010-enclosure-cad.md`](../../docs/decisions/ADR-0010-enclosure-cad.md), [`.github/workflows/checks.yml`](../../.github/workflows/checks.yml)
 
 ### unece-r10-oj-2017
 

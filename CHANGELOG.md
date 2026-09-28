@@ -10,6 +10,17 @@ and tagged independently (see `AGENTS.md`).
 
 ## Unreleased
 
+- Enclosure, ADR-0010 (proposed): plain OpenSCAD 2021.01 source in
+  `hardware/enclosure/` for variants R (PETG) and M (ASA, vehicle flanges),
+  driven by one board parameter file (`common/board.scad`, placeholder values
+  until the KiCad board exists). The cavity keeps the fcc.md 15 mm antenna
+  clearance in all directions, with asserts against metal hardware there;
+  connector notches with lid tongues, M3 through-bolts into heat-set inserts,
+  tie-wrap strain relief, light pipe, vents and a label recess for the FCC ID,
+  CE/WEEE marks and variant/revision; support-free print orientation and print
+  settings documented. `tools/enclosure/export_enclosures.py` runs a fit check
+  and exports STL/3MF per variant; new CI job `Enclosure export` uploads them
+  as artifacts (not committed) (#19).
 - Variants and board strategy, ADR-0006 (proposed): revision A is one board,
   `hardware/boards/interface/revA/`, with KiCad 10 design variants `R` and `M`
   (they differ in the power input chain and the isolation fitting). Tags

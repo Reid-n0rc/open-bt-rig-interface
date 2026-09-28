@@ -135,6 +135,9 @@ Run the same commands locally before pushing:
 
 - KiCad CLI (macOS): `/Applications/KiCad/KiCad.app/Contents/MacOS/kicad-cli`.
 - License check: `uvx --from 'reuse[charset-normalizer]' reuse lint`.
+- Enclosure: `python3 tools/enclosure/export_enclosures.py` (OpenSCAD 2021.01;
+  fit check, then STL/3MF into the gitignored `build/enclosure/`). CI job:
+  `Enclosure export`. Never commit STL/3MF.
 - KiCad version: `python3 tools/kicad_ci/check_kicad_version.py`. Every
   `*.kicad_sch/pcb/sym/mod/pro` and every doc quoting the minimum version must
   match [`KICAD_VERSION`](KICAD_VERSION).

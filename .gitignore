@@ -23,6 +23,7 @@ firmware/**/managed_components/
 # Enclosure exports (generated)
 hardware/enclosure/**/*.stl
 hardware/enclosure/**/*.3mf
+/build/
 
 # Local notes / tooling
 AGENTS.local.md

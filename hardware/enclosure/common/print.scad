@@ -41,10 +41,11 @@ vent_w = 2.0;
 vent_pitch = 5;
 
 // --- Label recess (fcc.md section 2; CE/WEEE marks, variant and revision) --------
-// On the outside of a side wall. 40 x 18 mm holds four lines:
+// On the outside of a side wall, outside the antenna clearance. 40 x 18 mm holds:
 //   "Contains FCC ID: 2AC7Z-ESPS3MINI1"
 //   "open-bt-rig-interface <variant> Rev <rev>"
-//   CE mark (>= 5 mm high, eu.md section 12) + WEEE bin with date bar (EN 50419)
+//   CE mark (>= 5 mm high, eu.md section 12) beside the WEEE bin with its date bar
+// Use a non-metallic (paper or polyester) label.
 label_size = [40, 18];
 label_depth = 0.4;
 label_edge = "W";

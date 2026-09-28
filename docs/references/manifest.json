@@ -3709,6 +3709,72 @@
       ],
       "sha256": "ba6110d3db8e5dd17573e692665faf9569141e2b6bd8c62553da53d336cd9e04",
       "retrieved": "2026-09-25"
+    },
+    {
+      "id": "openscad-license",
+      "title": "OpenSCAD 2021.01 COPYING (GPL-2.0 with CGAL linking exception)",
+      "publisher": "OpenSCAD project",
+      "kind": "license",
+      "url": "https://raw.githubusercontent.com/openscad/openscad/41f58fe57c03457a3a8b4dc541ef5654ec3e8c78/COPYING",
+      "file": "openscad-license.txt",
+      "used_in": [
+        "docs/decisions/ADR-0010-enclosure-cad.md"
+      ],
+      "sha256": "1805a29c3bccbc0428ce0048a1dfdeb9b1867677410e99c89c3c30932ae8c7d5",
+      "retrieved": "2026-09-28"
+    },
+    {
+      "id": "freecad-license",
+      "title": "FreeCAD 1.0.2 LICENSE (LGPL-2.0)",
+      "publisher": "FreeCAD project",
+      "kind": "license",
+      "url": "https://raw.githubusercontent.com/FreeCAD/FreeCAD/256fc7eff3379911ab5daf88e10182c509aa8052/LICENSE",
+      "file": "freecad-license.txt",
+      "used_in": [
+        "docs/decisions/ADR-0010-enclosure-cad.md"
+      ],
+      "sha256": "b185c4b00f01c738376e7c4d392225c079423924e089ed9626c7298c9f2bb1a3",
+      "retrieved": "2026-09-28"
+    },
+    {
+      "id": "bosl2-license",
+      "title": "BOSL2 LICENSE (BSD-2-Clause)",
+      "publisher": "BelfrySCAD",
+      "kind": "license",
+      "url": "https://raw.githubusercontent.com/BelfrySCAD/BOSL2/bce959c113b5d710038d460d07b70111a9498d82/LICENSE",
+      "file": "bosl2-license.txt",
+      "used_in": [
+        "docs/decisions/ADR-0010-enclosure-cad.md"
+      ],
+      "sha256": "6f6c2df70f76eb06bd9ce2de160fd03bee5c6d777989120d50e572e7c412052c",
+      "retrieved": "2026-09-28"
+    },
+    {
+      "id": "gpl-faq-output",
+      "title": "GNU GPL FAQ: is the output of a GPL program covered by the GPL?",
+      "publisher": "Free Software Foundation",
+      "kind": "web",
+      "url": "https://www.gnu.org/licenses/gpl-faq.en.html",
+      "file": "gpl-faq.html",
+      "used_in": [
+        "docs/decisions/ADR-0010-enclosure-cad.md"
+      ],
+      "sha256": "5053fe23f1da3b76245b17c416640cde37ce21b8175effc0c6619d6673a25d2e",
+      "retrieved": "2026-09-28"
+    },
+    {
+      "id": "ubuntu-noble-openscad",
+      "title": "Ubuntu 24.04 (noble) openscad package page",
+      "publisher": "Canonical",
+      "kind": "web",
+      "url": "https://packages.ubuntu.com/noble/openscad",
+      "file": "ubuntu-noble-openscad.html",
+      "used_in": [
+        "docs/decisions/ADR-0010-enclosure-cad.md",
+        ".github/workflows/checks.yml"
+      ],
+      "sha256": "f7b7a2fda27cfb847d88895e06fc0396ecd2ce374c3f600cdeb62d97df45d2d2",
+      "retrieved": "2026-09-28"
     }
   ]
 }
