@@ -48,13 +48,14 @@ code, and configuration changes that never assert PTT. Every path has a host
 test in [`test/test_ptt.c`](test/test_ptt.c). Changes to it need the
 maintainer's explicit approval ([`GOVERNANCE.md`](../GOVERNANCE.md)).
 
-Interpretations the SPEC leaves open, chosen as the safer reading:
+**Radio ports (SPEC §8.3, approved 2026-09-28):** by default the host's
+RTS/DTR on radio ports 1–4 pass through to the radio's own USB-serial chip
+(action 2) and don't key the AUDIO-jack closure; they still count toward the
+keepalive, max TX and session end. Action 1 on a radio port's line keys the
+device's own PTT outputs instead.
 
-- **Pass-through lines don't drive the PTT targets.** An asserted
-  pass-through line (§8.3) counts as a PTT source for the keepalive, max TX,
-  session end and `PTT_STATUS`, but it reaches the radio only through its own
-  line, never through the AUDIO-jack closure. Otherwise a program opening a
-  radio's USB-serial port (DTR and RTS rise) would key the closure.
+Interpretations the SPEC leaves open, chosen as the safer reading (pending
+the maintainer's approval):
 - **A keepalive timeout blocks the protocol's lines** (not the native wired
   lines, which need no keepalive), and holds pass-through lines low until the
   host's next `MODEM_LINES`.

@@ -89,6 +89,14 @@ version 0.1.0) is one framed byte stream:
   timer**: the ESP32-S3's internal watchdog resets the device after a
   firmware lock-up, PTT is off during and after the reset, and `PTT_STATUS`
   reason `WATCHDOG` reports it afterwards.
+- **RTS/DTR on radio ports** (maintainer approval of the SPEC §8.3 wording,
+  2026-09-28): a radio with its own USB-serial chip handles RTS/DTR keying
+  itself, so forwarding the host's RTS/DTR to that chip (`LINE_MAP` action 2,
+  pass-through) is the default for radio ports 1–4 and does **not** also key
+  the AUDIO-jack PTT closure. The device's own hardware PTT stays available:
+  `LINE_MAP` action 1 on a radio port's line keys the `PTT_TARGETS` outputs
+  instead. Pass-through lines still count toward the keepalive, max TX and
+  session end.
 - **Auto power-down** (maintainer decisions, 2026-09-25): `POWER_DOWN_DELAY_S`,
   default 30 s after the radio or ignition turns off, 0 = never (the user's
   choice, even though variant M may then exceed its off-state drain target).

@@ -502,6 +502,53 @@ static void test_passthrough_counts_toward_max_tx(void)
     TEST_ASSERT_EQUAL_UINT8(PTT_LINE_RTS, out.radio[1]);
 }
 
+static void test_radio_ports_default_to_passthrough(void)
+{
+    /* SPEC §8.3 (approved 2026-09-28): radio ports 1-4 pass both lines
+     * through by default, and that never keys the AUDIO-jack closure. */
+    ptt_config_t d;
+    ptt_config_defaults(&d);
+    for (int i = 1; i <= 4; i++) {
+        TEST_ASSERT_EQUAL_UINT8(PTT_ACT_PASS, d.rts_action[i]);
+        TEST_ASSERT_EQUAL_UINT8(PTT_ACT_PASS, d.dtr_action[i]);
+    }
+    for (uint8_t port = 1; port <= 4; port++) {
+        ptt_lines(&p, port, 0, PTT_ORIGIN_PROTOCOL, now);
+        ptt_lines(&p, port, PTT_LINE_RTS, PTT_ORIGIN_PROTOCOL, now);
+        TEST_ASSERT_EQUAL_UINT8(PTT_LINE_RTS, out.radio[port]); /* forwarded to the chip */
+        TEST_ASSERT_FALSE(out.closure);                         /* the closure stays open */
+        TEST_ASSERT_TRUE(p.sources & PTT_SRC_PASSTHROUGH);
+        ptt_lines(&p, port, 0, PTT_ORIGIN_PROTOCOL, now);
+    }
+}
+
+static void test_radio_port_action_ptt_keys_the_closure(void)
+{
+    /* Action 1 on a radio port uses the device's own hardware PTT. */
+    cfg.rts_action[2] = PTT_ACT_PTT;
+    start();
+    ptt_lines(&p, 2, 0, PTT_ORIGIN_PROTOCOL, now);
+    TEST_ASSERT_EQUAL_UINT8(PTT_ARMED, ptt_arm_state(&p, 2, PTT_LINE_RTS));
+    ptt_lines(&p, 2, PTT_LINE_RTS, PTT_ORIGIN_PROTOCOL, now);
+    TEST_ASSERT_TRUE(out.closure);
+    TEST_ASSERT_EQUAL_UINT8(0, out.radio[2]); /* not forwarded to the chip */
+    TEST_ASSERT_EQUAL_UINT8(PTT_SRC_LINE, last()->sources);
+    /* The arming rules apply: both lines rising together don't key. */
+    ptt_lines(&p, 2, 0, PTT_ORIGIN_PROTOCOL, now);
+    TEST_ASSERT_FALSE(out.closure);
+    ptt_lines(&p, 2, PTT_LINE_RTS | PTT_LINE_DTR, PTT_ORIGIN_PROTOCOL, now);
+    TEST_ASSERT_FALSE(out.closure);
+    /* DTR stays pass-through on the same port. */
+    TEST_ASSERT_EQUAL_UINT8(PTT_LINE_DTR, out.radio[2]);
+    /* The keepalive still applies. */
+    ptt_lines(&p, 2, PTT_LINE_DTR, PTT_ORIGIN_PROTOCOL, now);
+    ptt_lines(&p, 2, PTT_LINE_RTS | PTT_LINE_DTR, PTT_ORIGIN_PROTOCOL, now);
+    TEST_ASSERT_TRUE(out.closure);
+    run_until(now + 3000, 50);
+    TEST_ASSERT_FALSE(out.closure);
+    TEST_ASSERT_EQUAL_UINT8(PTT_R_KEEPALIVE_TIMEOUT, last()->reason);
+}
+
 static void test_passthrough_not_allowed_on_port_zero(void)
 {
     cfg.rts_action[0] = PTT_ACT_PASS;
@@ -884,6 +931,8 @@ int main(void)
     RUN_TEST(test_passthrough_follows_host_and_needs_keepalive);
     RUN_TEST(test_passthrough_not_armed_at_port_open);
     RUN_TEST(test_passthrough_counts_toward_max_tx);
+    RUN_TEST(test_radio_ports_default_to_passthrough);
+    RUN_TEST(test_radio_port_action_ptt_keys_the_closure);
     RUN_TEST(test_passthrough_not_allowed_on_port_zero);
     RUN_TEST(test_targets_rts_on_radio_port);
     RUN_TEST(test_targets_closure_and_dtr);

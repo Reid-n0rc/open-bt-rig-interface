@@ -434,13 +434,24 @@ CAT), so the radio's own timers are the only guard for CAT keying.
 
 ### 8.3 RTS/DTR mapping
 
-`LINE_MAP` sets, per port, what each host line does:
+`LINE_MAP` sets, per port, what each host line does (maintainer approval of
+this wording, 2026-09-28):
 
-| Action | Meaning | Allowed on |
-|---|---|---|
-| 0 | Ignore | Any port |
-| 1 | PTT: the line is a PTT source (arming rules §8.4) | Port 0, port 0x0F, radio ports 1–4 |
-| 2 | Pass-through: the line goes to the radio's USB-serial chip, as with a direct cable. The device treats an asserted pass-through line as a possible PTT (the radio may key on it): it needs the keepalive, counts toward max TX, and drops at session end | Radio ports 1–4 only |
+| Action | AUDIO-jack PTT closure | Radio's USB-serial chip | Allowed on |
+|---|---|---|---|
+| 0 | Ignore: the line does nothing | Not driven by this line | Any port |
+| 1 | PTT: the line is a PTT source (source bit 1, or bit 3 for native wired lines) with the arming rules of §8.4, and **keys the device's own PTT outputs** (`PTT_TARGETS`, the AUDIO-jack closure by default) | Not forwarded | Port 0, port 0x0F, radio ports 1–4 |
+| 2 | Pass-through: **does not** key the AUDIO-jack closure or any other `PTT_TARGETS` output | The line is forwarded to the chip, as with a direct cable; the radio handles RTS/DTR keying itself | Radio ports 1–4 only |
+
+Defaults: **radio ports 1–4 pass both lines through** (action 2), because a
+radio with its own USB-serial chip keys from RTS/DTR itself. Ports 0 and 0x0F
+map RTS to PTT and ignore DTR. To use the device's own hardware PTT with a
+radio's USB-serial port instead, set action 1 on that radio port's line.
+
+A pass-through line is still a **possible PTT** (the radio may key on it): an
+asserted pass-through line is PTT source bit 4 in `PTT_STATUS`, needs the
+keepalive (§8.2), counts toward max TX (§8.5) and drops at session end
+(§8.7). It is not armed (§8.4), so the chip sees what a direct cable would.
 
 The SERIAL jack has no RTS/DTR contacts, so action 2 isn't available on port 0
 ([radio-connectors](../docs/requirements/radio-connectors.md#serial-jack-35-mm-trrs)).
