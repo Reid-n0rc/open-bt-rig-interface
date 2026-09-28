@@ -109,16 +109,16 @@ corrected or has a follow-up issue.
 
 ### Phase 4: Hardware
 
-- #21 KiCad 10 project setup per variant via Konnect (title block, `${REVISION}` silkscreen, libs, jobset)
+- #21 KiCad 10 project setup via Konnect: one board, `hardware/boards/interface/revA/`, with design variants R and M ([ADR-0006](decisions/ADR-0006-variants-and-board-strategy.md)); title block, `${VARIANT}`/`${REVISION}` silkscreen, libs, jobset
 - Per-block schematic issues (radio module, audio, CAT/PTT/RTS/DTR, USB routing (hub, switches, USB-C), power R, power M, connectors). *Created after Phase 2.*
 - Parts list with distributor stock and lifecycle checks (Digi-Key, Mouser, LCSC). *To be created.*
 - Design review (Konnect review workflow). *To be created.*
-- PCB layout per variant (antenna keep-out, EMC). *To be created.*
-- Release workflow: fab outputs from the jobset, attached to `hw-<variant>-rev<X>-v<semver>` releases. *To be created.*
+- PCB layout of the one board, both variants (antenna keep-out, EMC). *To be created.*
+- Release workflow: fab outputs exported with `--variant <variant>` (from the jobset where it supports variants), attached to `hw-<variant>-rev<X>-v<semver>` releases. *To be created.*
 
 **Exit criteria:**
 
-- ERC and DRC are clean in CI for every variant.
+- ERC and DRC are clean in CI for the board (they check every variant's parts at once).
 - The design review is signed off.
 - The parts list has at least two sources per key part, all with an active
   lifecycle.
@@ -134,7 +134,7 @@ keep-out is respected. The ASA version of variant M passes the heat soak.
 
 ### Phase 6: Bring-up and compliance (issues to be created)
 
-- 👤 Fabricate and assemble revision A per variant
+- 👤 Fabricate and assemble revision A per variant (one board design, R and M builds)
 - 👤 Bench bring-up per variant (power rails, PTT fail-safe, CAT, audio)
 - 👤 Variant M automotive pulse testing (ISO 7637-2 / ISO 16750-2)
 - 👤 FCC Part 15B pre-scan and SDoC documentation

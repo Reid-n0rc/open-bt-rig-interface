@@ -10,12 +10,15 @@ For each PCB under hardware/boards/<board>/rev<X>/ (see AGENTS.md, Hardware):
 - no silkscreen text hard-codes a revision ("Rev A", "revB", "REV: 2");
 - silkscreen text includes the project name, "Designed by Reid Crowe, N0RC"
   and the CC BY-NC-SA 4.0 license mark (project text variables are resolved);
+- the board declares its build variants as KiCad design variants, each named
+  so it can appear in a tag (letters, digits and inner hyphens), and the
+  front silkscreen shows ${VARIANT}, which KiCad fills in from the variant
+  selected at export (ADR-0006);
 - on a hardware tag build (hw-<variant>-rev<X>-v<semver>), a board matches the
-  tag: folder rev<X> and a board folder named <variant> or ending in -<variant>.
+  tag: folder rev<X> and a declared design variant named exactly <variant>.
 
-The variant marking is not checked automatically: its form (text variable,
-folder name or logo) is not decided yet. Hidden text is ignored. With no
-boards the check passes (except on a hardware tag build, which needs a board).
+Hidden text is ignored. With no boards the check passes (except on a hardware
+tag build, which needs a board).
 """
 
 from __future__ import annotations
@@ -27,7 +30,7 @@ import re
 import sys
 from pathlib import Path, PurePosixPath
 
-from kicad_files import Str, child_value, iter_repo_files, parse_sexpr, walk
+from kicad_files import Str, child_value, children, iter_repo_files, parse_sexpr, walk
 
 BOARDS_DIR = "hardware/boards"
 REV_DIR = re.compile(r"rev([A-Z0-9]+)")
@@ -40,7 +43,8 @@ HARD_CODED_REV = (
     re.compile(r"(?i)\brev(?:ision)?(?:[.:#]\s*|\s+)[A-Z0-9]"),  # "Rev A", "REV: 2", "Revision 1"
     re.compile(r"(?i:\brev)[A-Z0-9]{1,2}\b"),                       # "revA", "REV2"
 )
-REQUIRED_FRONT_VARS = ("${REVISION}", "${ISSUE_DATE}")
+REQUIRED_FRONT_VARS = ("${REVISION}", "${ISSUE_DATE}", "${VARIANT}")
+VARIANT_NAME = re.compile(r"[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*")
 REQUIRED_MARKS = {
     "project name": "open-bt-rig-interface",
     "designer credit": "Designed by Reid Crowe, N0RC",
@@ -68,6 +72,17 @@ def silkscreen_texts(tree: list) -> list[tuple[str, str]]:
         if isinstance(layer, str) and layer.endswith(".SilkS") and not is_hidden(node):
             found.append((layer, node[idx]))
     return found
+
+
+def design_variants(tree: list) -> list[str]:
+    """Names of the board's KiCad design variants: (variants (variant (name "R")) ...)."""
+    names = []
+    for group in children(tree, "variants"):
+        for variant in children(group, "variant"):
+            name = child_value(variant, "name")
+            if isinstance(name, str):
+                names.append(name)
+    return names
 
 
 def project_text_variables(pcb: Path) -> dict[str, str]:
@@ -108,7 +123,7 @@ def check_board(root: Path, rel: str) -> tuple[list[str], dict | None]:
     if not rev_match:
         return [f"{rel}: board files must be in {BOARDS_DIR}/<board>/rev<X>/ (X = A, B, ... or 1, 2, ...)"], None
     board, folder_rev = parts[2], rev_match.group(1)
-    info = {"path": rel, "board": board, "rev": folder_rev}
+    info = {"path": rel, "board": board, "rev": folder_rev, "variants": []}
     try:
         tree = parse_sexpr((root / rel).read_text(encoding="utf-8"))
     except ValueError as exc:
@@ -127,6 +142,16 @@ def check_board(root: Path, rel: str) -> tuple[list[str], dict | None]:
                       f"(expected {folder_rev!r})")
     if not title_date:
         errors.append(f"{rel}: title block date is not set, so ${{ISSUE_DATE}} would print nothing")
+
+    variants = design_variants(tree)
+    info["variants"] = variants
+    if not variants:
+        errors.append(f"{rel}: no KiCad design variant is defined; define one per build (e.g. R, M) "
+                      "so ${VARIANT} and the release tags have a name (ADR-0006)")
+    for name in variants:
+        if not VARIANT_NAME.fullmatch(name):
+            errors.append(f"{rel}: design variant {name!r} can't be used in a hw-<variant>-rev<X>-v<semver> tag "
+                          "(use letters, digits and inner hyphens only)")
 
     texts = silkscreen_texts(tree)
     front = " ".join(t for layer, t in texts if layer == "F.SilkS")
@@ -153,11 +178,12 @@ def check_tag(tag: str, boards: list[dict]) -> list[str]:
     if not m:
         return [f"tag {tag!r} does not follow hw-<variant>-rev<X>-v<semver> (e.g. hw-R-revA-v1.0)"]
     variant, rev = m.group("variant"), m.group("rev")
-    matches = [b for b in boards if b["rev"] == rev
-               and (b["board"] == variant or b["board"].endswith("-" + variant))]
+    matches = [b for b in boards if b["rev"] == rev and variant in b["variants"]]
     if not matches:
-        have = ", ".join(sorted({f"{b['board']}/rev{b['rev']}" for b in boards})) or "none"
-        return [f"tag {tag!r}: no board {BOARDS_DIR}/<{variant} or *-{variant}>/rev{rev}/ (boards: {have})"]
+        have = ", ".join(sorted({f"{b['board']}/rev{b['rev']} [{' '.join(b['variants']) or 'no variants'}]"
+                                 for b in boards})) or "none"
+        return [f"tag {tag!r}: no board in {BOARDS_DIR}/<board>/rev{rev}/ declares the design variant "
+                f"{variant!r} (boards: {have})"]
     return []
 
 

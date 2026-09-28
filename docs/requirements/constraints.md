@@ -77,29 +77,37 @@ Consequences:
 
 - **The radio's USB port provides no power.** Transceivers such as the FT-891,
   FT-710, FT-991A and IC-7300 have USB *device* ports (their internal
-  USB-serial and codec chips). When this device is the **USB host** to such a port,
-  it must *supply* VBUS to the radio, current-limited. The radio's draw is **(verify)**.
+  USB-serial and codec chips). **This device never supplies power to a radio
+  through USB**, as fitted by default, in either host mode (maintainer decision, 2026-09-24,
+  [ADR-0003](../decisions/ADR-0003-radio-interface-circuits.md)): the radio port's VBUS pin connects to no device rail,
+  and hardware blocks current from the device (or, in wired mode, the
+  computer) into the radio's VBUS and back. Radios whose USB chip needs VBUS
+  to attach may not enumerate **(verify per radio)**.
 - **Radio accessory DC (preferred where available).** Some radios provide DC on
-  an accessory jack (for example the IC-7300 ACC socket, or the FT-891
-  tuner/linear jack). The pin, voltage and current limit per radio are **(verify)**,
-  tracked in a per-radio table.
+  an accessory jack. Documented limits: IC-7300 ACC 1 A, TS-590SG EXT.AT 4 A,
+  K3 0.5 A, K3S 1 A, K4 1.5 A, all switched with the radio. The Yaesu "+13V"
+  pins have no documented limit **(verify)**. Per-radio table:
+  [`radio-interfaces.md`](../research/radio-interfaces.md#can-the-radio-power-the-interface).
 - **USB-C 5 V sink:** phone charger, power bank or computer.
 - **12 V vehicle or station supply:** the automotive variant (3.2).
 
 ### 3.2 Automotive 12 V input (variant M)
 
 Must survive a harsh automotive environment. Target the 12 V-system levels of
-ISO 16750-2 and ISO 7637-2 **(verify exact levels and editions)**:
+**ISO 16750-2:2023** and **ISO 7637-2:2011** (level IV), confirmed in
+[`power-automotive.md`](../research/power-automotive.md#1-test-levels) (#10;
+clauses and sources there). The design is in
+[ADR-0004](../decisions/ADR-0004-power-automotive.md):
 
 | Condition | Target |
 |---|---|
 | Normal operating range | 9–16 V |
-| Cold crank | Operate down to about 6 V (4.5 V desirable), **or** brown out safely with PTT off |
-| Load dump | Unsuppressed up to about 101 V, 40–400 ms; suppressed (centrally clamped) about 35 V |
+| Cold crank | Operate down to about 6 V (4.5 V desirable), **or** brown out safely with PTT off ("normal" profile 4.5 V then 6.5 V; "severe" 3 V then 5 V) |
+| Load dump | Test A (unsuppressed): 79–101 V, Ri 0.5–4 Ω, 40–400 ms, 10 pulses; test B (centrally suppressed): up to 35 V |
 | Reverse battery | −14 V for 60 s, no damage |
-| Jump start | 24 V for 60 s |
+| Jump start | 26 V for 60 s (ISO 16750-2:2023; 24 V in the 2012 edition) |
 | ISO 7637-2 transients | Pulse 1 about −150 V; pulse 2a about +112 V; pulses 3a/3b about −220 V / +150 V |
-| ESD | ±15 kV air (ISO 10605) |
+| ESD | ±15 kV air (ISO 10605) **(verify)** |
 | Temperature | −40 °C to +85 °C operating |
 | Off-state drain | < 1 mA; auto power-down when the radio or ignition is off |
 
@@ -127,12 +135,14 @@ Design guidance (confirmed in the power-front-end issue):
 | Radio module (ESP32-S3-MINI-1), BLE active | about 0.1 A typical, 0.34 A peak (BLE TX at +20 dBm, datasheet) @ 3.3 V |
 | USB hub (wired mode) | about 50 mA **(verify with the hub chosen)** |
 | Audio codec | about 50 mA |
-| USB host VBUS to the radio | up to about 0.5 A (current-limited switch) |
 | Target total | about 1.5 W typical, 3 W peak |
 
+The device supplies no power to the radio: the radio port's VBUS is blocked in
+hardware (ADR-0003, [#9](https://github.com/Reid-n0rc/open-bt-rig-interface/issues/9)).
+
 **USB-C budget:** a USB-C host without USB PD may supply only 500 mA at 5 V
-(USB 2.0 default). In wired mode that must cover the device, the hub and the
-radio's USB VBUS draw. Use the higher USB-C current advertised on CC (1.5 A or
+(USB 2.0 default). In wired mode that must cover the device and the hub (the
+radio's USB port gets no power, §3.1). Use the higher USB-C current advertised on CC (1.5 A or
 3 A) when present, and report an overcurrent to the host rather than browning out.
 
 ## 4. Regulatory
@@ -142,7 +152,18 @@ radio's USB VBUS draw. Use the higher USB-C current advertised on CC (1.5 A or
   area, RF trace layout.
 - The end product needs **FCC Part 15 Subpart B** (unintentional radiator,
   Class B) SDoC, and a "Contains FCC ID: …" label.
-- ISED and CE: optional, later.
+- **EU conformity is required** for every variant (decision change,
+  [ADR-0009](../decisions/ADR-0009-eu-compliance.md); details in
+  [`../compliance/eu.md`](../compliance/eu.md)): Radio Equipment Directive
+  2014/53/EU (safety and RF exposure, EMC, spectrum), RoHS, REACH Art. 33,
+  WEEE marking, and the Cyber Resilience Act for units placed on the market
+  from 2027-12-11. EU declaration of conformity and CE marking, by Module A
+  where the harmonised standards allow.
+- **BLE TX power** stays within both the FCC grant (10.3 dBm conducted) and the
+  module's EU type examination (9.96 dBm e.i.r.p.), which keeps it below
+  EN 300 328's 10 dBm e.i.r.p. adaptivity threshold.
+- Every part is RoHS-compliant, with RoHS and REACH SVHC status in the BOM notes.
+- ISED: optional, later.
 - No metal over the module antenna, unless the module is certified with an
   external antenna.
 
@@ -164,6 +185,10 @@ The device operates next to HF transmitters of 100 W or more.
 - The firmware enforces a maximum continuous TX time: user-configurable,
   default 5 minutes, no upper limit, and the user can disable it
   ([ADR-0007](../decisions/ADR-0007-protocol.md), maintainer decision 2026-09-25).
+- **Firmware lock-up:** an ESP32-S3 internal watchdog resets the MCU within a
+  few seconds, and PTT is off during and after the reset (hardware default).
+  There is no hardware max-TX backstop
+  ([ADR-0003](../decisions/ADR-0003-radio-interface-circuits.md)).
 - **Galvanic isolation** of the AUDIO and SERIAL jacks toward the radio:
   transformer-coupled audio, isolated PTT, and digital isolators on the serial
   lines. **Required for variant M, and on every variant whenever the USB-C data
@@ -188,8 +213,8 @@ The device operates next to HF transmitters of 100 W or more.
 - **USB host:** for radios with their own USB port. The device is the USB host to
   the radio's USB-serial chip (CP210x including dual-port CP2105, FTDI, CH34x,
   CDC-ACM) **and** its built-in USB sound card (USB Audio Class 1.0), including
-  through a USB hub inside the radio. Full speed (12 Mbit/s) is enough. Supplies
-  current-limited VBUS (3.1). In wired mode the same port is routed to the
+  through a USB hub inside the radio. Full speed (12 Mbit/s) is enough. It
+  supplies **no VBUS** to the radio (§3.1). In wired mode the same port is routed to the
   on-board hub so the computer reaches the radio's chips directly (§2).
 - **Radio-type coverage, in both host modes:** radios with USB serial + USB
   audio; USB serial + analog audio; RS-232, 3.3 V logic or CI-V serial + analog
@@ -234,7 +259,9 @@ The device operates next to HF transmitters of 100 W or more.
 - No radio-specific logic in the core (transparent CAT).
 - The protocol is versioned, with capability discovery. Configuration happens
   over Bluetooth.
-- Optional signed OTA updates.
+- Signed firmware updates that the user can install are required for EU
+  conformity (Cyber Resilience Act, [ADR-0009](../decisions/ADR-0009-eu-compliance.md));
+  OTA remains optional.
 
 ## 11. Environmental and mechanical
 
@@ -245,7 +272,8 @@ The device operates next to HF transmitters of 100 W or more.
 
 - **3D-printed enclosure:** parametric CAD source in `hardware/enclosure/`,
   printable without supports where possible, antenna keep-out respected, mounting
-  and strain relief, space for the FCC ID label. STL/3MF are generated and
+  and strain relief, space for the FCC ID label and the EU markings (CE,
+  WEEE, type or serial number, manufacturer and EU operator address). STL/3MF are generated and
   attached to releases.
 - Size target: **TBD by maintainer.**
 
@@ -268,5 +296,6 @@ The device operates next to HF transmitters of 100 W or more.
   "Designed by Reid Crowe, N0RC", and the license mark. The revision is never
   hard-coded.
 - Board variants (R = radio/USB-powered, M = mobile/automotive; others possible)
-  share one core design. Whether they are separate boards or one board with
-  fitting options is a recorded decision.
+  share one core design. [ADR-0006](../decisions/ADR-0006-variants-and-board-strategy.md)
+  (proposed): one board with KiCad 10 design variants `R` and `M`, differing in
+  the power input chain and the isolation fitting.

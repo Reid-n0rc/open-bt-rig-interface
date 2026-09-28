@@ -94,10 +94,12 @@ both limits:
 
 - **FCC:** the module's grant covers BLE at 10.3 dBm conducted
   ([`fcc.md` §1.3](../../../docs/compliance/fcc.md#13-rf-configuration-firmware));
-- **EU:** Espressif's EU-type examination certificate lists BLE at
-  9.96 dBm e.i.r.p., and staying at or below it keeps the device under
-  EN 300 328's 10 dBm e.i.r.p. threshold (the EU analysis in #59, PR #62,
-  ADR-0009, REQ-REG-008 proposed). The conducted limit is 9.96 dBm minus the
+- **EU:** Espressif's EU-type examination certificate
+  ([0370-RED-4972](../../../docs/references/index.md#espressif-s3-mini1-ce-cert))
+  lists BLE at 9.96 dBm e.i.r.p., and staying at or below it keeps the device
+  under EN 300 328's 10 dBm e.i.r.p. threshold
+  ([`eu.md` §3.1](../../../docs/compliance/eu.md#31-spectrum-art-32-en-300-328),
+  ADR-0009, REQ-REG-008). The conducted limit is 9.96 dBm minus the
   antenna gain. The PCB antenna's gain isn't published; the working figure is
   2.33 dBi, the gain of the antenna Espressif used to certify the -1U
   variant ([module datasheet](../../../docs/references/index.md#esp32s3-mini1-ds)

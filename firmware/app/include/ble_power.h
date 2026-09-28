@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
  *
  * BLE TX power cap (SPEC §6.3, docs/compliance/fcc.md §1.3, and the EU
- * analysis of #59 / PR #62, ADR-0009, REQ-REG-008 proposed).
+ * analysis of #59 / PR #62, docs/compliance/eu.md §3.1, ADR-0009, REQ-REG-008).
  *
  * One cap for all markets: the lower of
  *   - FCC: the ESP32-S3-MINI-1 grant (FCC ID 2AC7Z-ESPS3MINI1) covers BLE at

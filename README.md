@@ -30,10 +30,14 @@ with their own USB port appear to the computer directly through an on-board hub.
 
 ## Planned variants
 
+Both variants are **one board** built two ways (KiCad design variants; see
+[ADR-0006](docs/decisions/ADR-0006-variants-and-board-strategy.md)). The
+silkscreen shows which one you have.
+
 - **R: radio/USB-powered.** Powered from the radio's accessory DC where available,
   or USB-C 5 V. Note that a radio's USB port is a *device* port and supplies no power.
 - **M: mobile/automotive.** A 12 V input built for a harsh automotive environment
-  (ISO 16750-2 / ISO 7637-2 targets).
+  (ISO 16750-2 / ISO 7637-2 targets), with isolated AUDIO and SERIAL jacks.
 
 Both share one core design: an ESP32-S3-MINI-1 Bluetooth LE module, audio codec,
 isolated PTT, CAT (TTL/RS-232/CI-V), and a USB host for the radio's USB sound
@@ -44,9 +48,9 @@ card and USB-serial chip. See
 
 | Path | Contents |
 |---|---|
-| `hardware/boards/` | KiCad projects, one folder per board revision |
+| `hardware/boards/` | KiCad projects, one folder per board revision (`interface/revA/`, variants R and M) |
 | `hardware/lib/` | Project-local symbols, footprints, 3D models |
-| `hardware/enclosure/` | 3D-printed enclosure CAD |
+| `hardware/enclosure/` | 3D-printed enclosure CAD, one per variant (`R/` PETG, `M/` ASA) |
 | `firmware/` | Device firmware (`app/` portable, `platform/` SDK glue, `test/`) |
 | `protocol/` | Host-device Bluetooth protocol spec and golden vectors |
 | `tools/` | Scripts and checks |
