@@ -186,25 +186,170 @@ static void test_cat_credit_and_overflow(void)
 {
     cat_t c;
     cat_setup(&c);
-    uint16_t written;
     const uint8_t data[] = "FA;FB;IF;TX;";
-    TEST_ASSERT_EQUAL_INT(PROTO_ERR_STATE, cat_from_host(&c, 0, data, 3, &written));
+    TEST_ASSERT_EQUAL_INT(PROTO_ERR_STATE, cat_from_host(&c, 0, data, 3));
+    TEST_ASSERT_EQUAL_UINT16(0, cat_pump(&c, 0)); /* closed: nothing to pump */
     TEST_ASSERT_EQUAL_INT(PROTO_OK, cat_open(&c, &ptt, &board, &cfg, 0, 1, 0));
-    TEST_ASSERT_EQUAL_INT(PROTO_ERR_BAD_LENGTH, cat_from_host(&c, 0, data, 0, &written));
-    TEST_ASSERT_EQUAL_INT(PROTO_OK, cat_from_host(&c, 0, data, 3, &written));
-    TEST_ASSERT_EQUAL_UINT16(3, written);
+    TEST_ASSERT_EQUAL_INT(PROTO_ERR_BAD_LENGTH, cat_from_host(&c, 0, data, 0));
+    TEST_ASSERT_EQUAL_INT(PROTO_OK, cat_from_host(&c, 0, data, 3));
+    TEST_ASSERT_EQUAL_UINT16(5, c.port[0].credit); /* queued bytes use credit */
+    TEST_ASSERT_EQUAL_size_t(0, fake.serial_out_len); /* nothing leaves before a pump */
+    TEST_ASSERT_EQUAL_UINT16(3, cat_pump(&c, 0));
     TEST_ASSERT_EQUAL_MEMORY("FA;", fake.serial_out, 3); /* bytes pass unchanged */
-    /* The radio side is slow: only 2 of 6 bytes leave now. */
+    TEST_ASSERT_EQUAL_UINT16(8, c.port[0].credit);
+    TEST_ASSERT_EQUAL_UINT16(0, cat_pump(&c, 0)); /* queue empty */
+
+    /* The radio side is slow: 2 bytes leave per pump. Bytes within the credit
+     * are kept, not dropped, and the credit comes back as they leave. */
     fake.serial_accept = 2;
-    TEST_ASSERT_EQUAL_INT(PROTO_ERR_OVERFLOW, cat_from_host(&c, 0, data + 3, 6, &written));
-    TEST_ASSERT_EQUAL_UINT16(2, written);
+    TEST_ASSERT_EQUAL_INT(PROTO_OK, cat_from_host(&c, 0, data + 3, 6));
+    TEST_ASSERT_EQUAL_UINT16(2, c.port[0].credit);
+    TEST_ASSERT_EQUAL_UINT16(2, cat_pump(&c, 0));
     TEST_ASSERT_EQUAL_UINT16(4, c.port[0].credit);
+    TEST_ASSERT_EQUAL_UINT16(2, cat_pump(&c, 0));
+    TEST_ASSERT_EQUAL_UINT16(2, cat_pump(&c, 0));
+    TEST_ASSERT_EQUAL_UINT16(0, cat_pump(&c, 0));
+    TEST_ASSERT_EQUAL_UINT16(8, c.port[0].credit);
+    TEST_ASSERT_EQUAL_MEMORY("FA;FB;IF;", fake.serial_out, 9); /* in order */
+    TEST_ASSERT_EQUAL_UINT16(0, c.overflows);
+
+    /* The radio side takes nothing: the queue holds the bytes. */
+    fake.serial_accept = 0;
+    TEST_ASSERT_EQUAL_INT(PROTO_OK, cat_from_host(&c, 0, data, 8));
+    TEST_ASSERT_EQUAL_UINT16(0, cat_pump(&c, 0));
+    TEST_ASSERT_EQUAL_UINT16(0, c.port[0].credit);
+
+    /* More than the credit: the excess is dropped and counted. */
+    TEST_ASSERT_EQUAL_INT(PROTO_ERR_OVERFLOW, cat_from_host(&c, 0, data, 1));
     TEST_ASSERT_EQUAL_UINT16(1, c.overflows);
-    /* More than the credit: the excess is dropped. */
     fake.serial_accept = (size_t)-1;
-    TEST_ASSERT_EQUAL_INT(PROTO_ERR_OVERFLOW, cat_from_host(&c, 0, data, 12, &written));
-    TEST_ASSERT_EQUAL_UINT16(4, written);
-    TEST_ASSERT_EQUAL_INT(PROTO_ERR_BAD_VALUE, cat_from_host(&c, 9, data, 1, &written));
+    TEST_ASSERT_EQUAL_UINT16(8, cat_pump(&c, 0));
+    TEST_ASSERT_EQUAL_INT(PROTO_ERR_OVERFLOW, cat_from_host(&c, 0, data, 12));
+    TEST_ASSERT_EQUAL_UINT16(8, cat_pump(&c, 0)); /* only the credit was kept */
+    TEST_ASSERT_EQUAL_UINT16(2, c.overflows);
+    TEST_ASSERT_EQUAL_INT(PROTO_ERR_BAD_VALUE, cat_from_host(&c, 9, data, 1));
+    TEST_ASSERT_EQUAL_UINT16(0, cat_pump(&c, 9));
+}
+
+static void test_cat_credit_capped_to_queue(void)
+{
+    cat_t c;
+    cat_setup(&c);
+    board_t big = board;
+    big.cat_tx_buffer = 4000;
+    TEST_ASSERT_EQUAL_INT(PROTO_OK, cat_open(&c, &ptt, &big, &cfg, 0, 1, 0));
+    TEST_ASSERT_EQUAL_UINT16(CAT_TXQ_MAX, c.port[0].credit);
+}
+
+static void test_cat_reopen_and_close_discard_queues(void)
+{
+    cat_t c;
+    cat_setup(&c);
+    const uint8_t data[] = "FA;";
+    TEST_ASSERT_EQUAL_INT(PROTO_OK, cat_open(&c, &ptt, &board, &cfg, 0, 1, 0));
+    fake.serial_accept = 0;
+    TEST_ASSERT_EQUAL_INT(PROTO_OK, cat_from_host(&c, 0, data, 3));
+    TEST_ASSERT_EQUAL_size_t(0, cat_from_radio(&c, 0, data, 3, 100));
+    /* Opening again restarts the port: full credit, nothing queued. */
+    TEST_ASSERT_EQUAL_INT(PROTO_OK, cat_open(&c, &ptt, &board, &cfg, 0, 1, 0));
+    TEST_ASSERT_EQUAL_UINT16(8, c.port[0].credit);
+    TEST_ASSERT_EQUAL_UINT16(0, c.port[0].txq_len);
+    TEST_ASSERT_EQUAL_UINT16(0, c.port[0].rxq_len);
+    /* Closing discards unsent bytes in both directions (SPEC §7.2). */
+    TEST_ASSERT_EQUAL_INT(PROTO_OK, cat_from_host(&c, 0, data, 3));
+    TEST_ASSERT_EQUAL_size_t(0, cat_from_radio(&c, 0, data, 3, 100));
+    TEST_ASSERT_EQUAL_INT(PROTO_OK, cat_open(&c, &ptt, &board, &cfg, 0, 0, 0));
+    TEST_ASSERT_EQUAL_UINT16(0, c.port[0].txq_len);
+    TEST_ASSERT_EQUAL_UINT16(0, c.port[0].rxq_len);
+    fake.serial_accept = (size_t)-1;
+    TEST_ASSERT_EQUAL_INT(PROTO_OK, cat_open(&c, &ptt, &board, &cfg, 0, 1, 0));
+    TEST_ASSERT_EQUAL_UINT16(0, cat_pump(&c, 0));
+    TEST_ASSERT_EQUAL_size_t(0, fake.serial_out_len); /* nothing old reached the radio */
+}
+
+static void test_cat_rx_batching(void)
+{
+    cat_t c;
+    cat_setup(&c);
+    uint8_t out[CAT_RXQ_MAX];
+    const uint8_t reply[] = "FA00014074000;";
+    /* Closed port: the radio's bytes are ignored. */
+    TEST_ASSERT_EQUAL_size_t(0, cat_from_radio(&c, 0, reply, 3, 0));
+    TEST_ASSERT_EQUAL_size_t(0, cat_from_radio(&c, 9, reply, 3, 0));
+    TEST_ASSERT_EQUAL_UINT64(UINT64_MAX, cat_next_deadline_us(&c, 0));
+    TEST_ASSERT_EQUAL_INT(PROTO_OK, cat_open(&c, &ptt, &board, &cfg, 0, 1, 0));
+    TEST_ASSERT_EQUAL_size_t(0, cat_from_radio(&c, 0, reply, 0, 0)); /* nothing */
+    TEST_ASSERT_EQUAL_UINT64(UINT64_MAX, cat_next_deadline_us(&c, 0));
+
+    /* Bytes arriving in pieces are held for the batching window... */
+    TEST_ASSERT_EQUAL_size_t(0, cat_from_radio(&c, 0, reply, 5, 1000));
+    TEST_ASSERT_EQUAL_UINT64(1000 + CAT_BATCH_US, cat_next_deadline_us(&c, 1000));
+    TEST_ASSERT_EQUAL_size_t(0, cat_rx_next(&c, 0, 255, 1500, out));
+    TEST_ASSERT_EQUAL_size_t(0, cat_from_radio(&c, 0, reply + 5, 9, 1800));
+    TEST_ASSERT_EQUAL_size_t(0, cat_rx_next(&c, 0, 255, 1000 + CAT_BATCH_US - 1, out));
+    /* ...and go as one frame, unchanged, when it ends. */
+    TEST_ASSERT_EQUAL_size_t(14, cat_rx_next(&c, 0, 255, 1000 + CAT_BATCH_US, out));
+    TEST_ASSERT_EQUAL_MEMORY(reply, out, 14);
+    TEST_ASSERT_EQUAL_size_t(0, cat_rx_next(&c, 0, 255, 9000, out));
+    TEST_ASSERT_EQUAL_UINT64(UINT64_MAX, cat_next_deadline_us(&c, 9000));
+
+    /* A full frame goes at once; the remainder waits for the window. */
+    uint8_t burst[600];
+    for (size_t i = 0; i < sizeof(burst); i++) {
+        burst[i] = (uint8_t)i;
+    }
+    TEST_ASSERT_EQUAL_size_t(0, cat_from_radio(&c, 0, burst, sizeof(burst), 10000));
+    TEST_ASSERT_EQUAL_size_t(255, cat_rx_next(&c, 0, 255, 10000, out));
+    TEST_ASSERT_EQUAL_MEMORY(burst, out, 255);
+    TEST_ASSERT_EQUAL_size_t(255, cat_rx_next(&c, 0, 255, 10000, out));
+    TEST_ASSERT_EQUAL_MEMORY(burst + 255, out, 255);
+    TEST_ASSERT_EQUAL_size_t(0, cat_rx_next(&c, 0, 255, 10000, out));
+    TEST_ASSERT_EQUAL_size_t(90, cat_rx_next(&c, 0, 255, 10000 + CAT_BATCH_US, out));
+    TEST_ASSERT_EQUAL_MEMORY(burst + 510, out, 90);
+    TEST_ASSERT_EQUAL_size_t(0, cat_rx_next(&c, 0, 0, 99999, out)); /* no room asked */
+    TEST_ASSERT_EQUAL_size_t(0, cat_rx_next(&c, 9, 255, 99999, out));
+    TEST_ASSERT_EQUAL_UINT16(0, c.overflows);
+}
+
+static void test_cat_rx_overflow_drops_newest(void)
+{
+    cat_t c;
+    cat_setup(&c);
+    static uint8_t data[CAT_RXQ_MAX + 10];
+    for (size_t i = 0; i < sizeof(data); i++) {
+        data[i] = (uint8_t)(i * 7u);
+    }
+    TEST_ASSERT_EQUAL_INT(PROTO_OK, cat_open(&c, &ptt, &board, &cfg, 0, 1, 0));
+    TEST_ASSERT_EQUAL_size_t(10, cat_from_radio(&c, 0, data, sizeof(data), 0));
+    TEST_ASSERT_EQUAL_UINT16(1, c.overflows);
+    TEST_ASSERT_EQUAL_size_t(3, cat_from_radio(&c, 0, data, 3, 0)); /* still full */
+    TEST_ASSERT_EQUAL_UINT16(2, c.overflows);
+    /* The oldest bytes are kept, in order. */
+    static uint8_t out[CAT_RXQ_MAX];
+    TEST_ASSERT_EQUAL_size_t(CAT_RXQ_MAX, cat_rx_next(&c, 0, CAT_RXQ_MAX, 0, out));
+    TEST_ASSERT_EQUAL_MEMORY(data, out, CAT_RXQ_MAX);
+    /* The counter saturates. */
+    c.overflows = 0xFFFFu;
+    TEST_ASSERT_EQUAL_size_t(0, cat_from_radio(&c, 0, data, CAT_RXQ_MAX, 0));
+    TEST_ASSERT_EQUAL_size_t(1, cat_from_radio(&c, 0, data, 1, 0));
+    TEST_ASSERT_EQUAL_UINT16(0xFFFFu, c.overflows);
+}
+
+static void test_cat_deadline_for_queued_tx(void)
+{
+    cat_t c;
+    cat_setup(&c);
+    const uint8_t data[] = "TX;";
+    TEST_ASSERT_EQUAL_INT(PROTO_OK, cat_open(&c, &ptt, &board, &cfg, 0, 1, 0));
+    fake.serial_accept = 0;
+    TEST_ASSERT_EQUAL_INT(PROTO_OK, cat_from_host(&c, 0, data, 3));
+    TEST_ASSERT_EQUAL_UINT64(5000 + CAT_PUMP_US, cat_next_deadline_us(&c, 5000));
+    /* An earlier RX batch deadline wins. */
+    TEST_ASSERT_EQUAL_size_t(0, cat_from_radio(&c, 0, data, 3, 3500));
+    TEST_ASSERT_EQUAL_UINT64(3500 + CAT_BATCH_US, cat_next_deadline_us(&c, 5000));
+    fake.serial_accept = (size_t)-1;
+    TEST_ASSERT_EQUAL_UINT16(3, cat_pump(&c, 0));
+    TEST_ASSERT_EQUAL_UINT16(8, c.port[0].credit);
 }
 
 static void test_cat_modem_lines_and_close_all(void)
@@ -284,6 +429,11 @@ int main(void)
     RUN_TEST(test_cat_ports_and_open);
     RUN_TEST(test_cat_set);
     RUN_TEST(test_cat_credit_and_overflow);
+    RUN_TEST(test_cat_credit_capped_to_queue);
+    RUN_TEST(test_cat_reopen_and_close_discard_queues);
+    RUN_TEST(test_cat_rx_batching);
+    RUN_TEST(test_cat_rx_overflow_drops_newest);
+    RUN_TEST(test_cat_deadline_for_queued_tx);
     RUN_TEST(test_cat_modem_lines_and_close_all);
     RUN_TEST(test_audio_stubs);
     RUN_TEST(test_security_stubs_fail_closed);
