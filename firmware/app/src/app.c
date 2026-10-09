@@ -408,6 +408,34 @@ static bool serial_allowed(const app_t *app, uint8_t port)
     return port == 0 && app->cfg.wired_profile == 0 && app->active == HAL_TRANSPORT_TCP;
 }
 
+/* --- CAT bridge service (SPEC §7.3, §7.4) --- */
+
+/* Hands queued host bytes to the radio side and returns the credit for what
+ * left; sends the radio's bytes that are due as CAT_DATA. */
+static void cat_service(app_t *app, uint8_t port)
+{
+    if (!app->active || !cat_is_open(&app->cat, port)) {
+        return;
+    }
+    uint16_t out = cat_pump(&app->cat, port);
+    if (out) {
+        proto_msg_t r = {.type = PROTO_CAT_CREDIT, .token = 0};
+        r.u.cat_credit.port = port;
+        r.u.cat_credit.credit = out;
+        send(app, &r);
+    }
+    static uint8_t chunk[PROTO_MAX_PAYLOAD];
+    size_t chunk_max = (size_t)app->peer_max_payload - 1u; /* CAT_DATA: port + data */
+    size_t n;
+    while ((n = cat_rx_next(&app->cat, port, chunk_max, app->now_us, chunk)) != 0) {
+        proto_msg_t m = {.type = PROTO_CAT_DATA, .token = 0};
+        m.u.cat_data.port = port;
+        m.u.cat_data.data.data = chunk;
+        m.u.cat_data.data.len = (uint16_t)n;
+        send(app, &m);
+    }
+}
+
 /* --- Dispatch --- */
 
 static void dispatch(app_t *app, const proto_msg_t *m)
@@ -474,18 +502,11 @@ static void dispatch(app_t *app, const proto_msg_t *m)
                  : PROTO_ERR_UNSUPPORTED;
         break;
     case PROTO_CAT_DATA: {
-        uint16_t written = 0;
         uint8_t port = m->u.cat_data.port;
         rc = serial_allowed(app, port)
-                 ? cat_from_host(&app->cat, port, m->u.cat_data.data.data, m->u.cat_data.data.len,
-                                 &written)
+                 ? cat_from_host(&app->cat, port, m->u.cat_data.data.data, m->u.cat_data.data.len)
                  : PROTO_ERR_UNSUPPORTED;
-        if (written) {
-            proto_msg_t r = {.type = PROTO_CAT_CREDIT, .token = 0};
-            r.u.cat_credit.port = port;
-            r.u.cat_credit.credit = written;
-            send(app, &r);
-        }
+        cat_service(app, port); /* send what the radio side takes now */
         break;
     }
     case PROTO_MODEM_LINES:
@@ -688,6 +709,14 @@ void app_tick(app_t *app, uint64_t now_us)
     app->now_us = now_us;
     ptt_tick(&app->ptt, ms(now_us));
     pairing_tick(&app->pairing, ms(now_us));
+    for (uint8_t port = 0; port < CAT_PORTS; port++) {
+        cat_service(app, port);
+    }
+}
+
+uint64_t app_next_deadline_us(const app_t *app, uint64_t now_us)
+{
+    return app->active ? cat_next_deadline_us(&app->cat, now_us) : UINT64_MAX;
 }
 
 void app_native_lines(app_t *app, uint8_t port, uint8_t lines, uint64_t now_us)
@@ -740,22 +769,15 @@ bool app_pairing_open(const app_t *app)
     return pairing_is_open(&app->pairing);
 }
 
-void app_cat_from_radio(app_t *app, uint8_t port, const uint8_t *data, size_t len)
+void app_cat_from_radio(app_t *app, uint8_t port, const uint8_t *data, size_t len,
+                        uint64_t now_us)
 {
+    app->now_us = now_us;
     if (!app->active || !cat_is_open(&app->cat, port)) {
         return;
     }
-    size_t chunk_max = (size_t)app->peer_max_payload - 1u; /* CAT_DATA: port + data */
-    while (len) {
-        size_t n = len < chunk_max ? len : chunk_max;
-        proto_msg_t m = {.type = PROTO_CAT_DATA, .token = 0};
-        m.u.cat_data.port = port;
-        m.u.cat_data.data.data = data;
-        m.u.cat_data.data.len = (uint16_t)n;
-        send(app, &m);
-        data += n;
-        len -= n;
-    }
+    (void)cat_from_radio(&app->cat, port, data, len, now_us); /* drops are counted */
+    cat_service(app, port); /* full frames go now, the rest within CAT_BATCH_US */
 }
 
 void app_info(const app_t *app, uint8_t out[PROTO_INFO_LEN])

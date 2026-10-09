@@ -474,14 +474,23 @@ static void test_serial_port_and_modem_lines(void)
     TEST_ASSERT_EQUAL_UINT8(PROTO_OK, result()->code);
     TEST_ASSERT_EQUAL_UINT32(38400, fake.serial_cfg[0].baud);
 
-    /* Radio -> host bytes. */
+    /* Radio -> host bytes: batched for CAT_BATCH_US (SPEC §7.3). */
     const uint8_t reply[] = "FA00014074000;";
-    app_cat_from_radio(&app, 0, reply, sizeof(reply) - 1);
+    app_cat_from_radio(&app, 0, reply, 5, now_us);
+    TEST_ASSERT_EQUAL_size_t(0, receive(GATT));
+    TEST_ASSERT_EQUAL_UINT64(now_us + CAT_BATCH_US, app_next_deadline_us(&app, now_us));
+    advance_ms(1);
+    app_cat_from_radio(&app, 0, reply + 5, sizeof(reply) - 6, now_us);
+    TEST_ASSERT_EQUAL_size_t(0, receive(GATT));
+    advance_ms(1);
     receive(GATT);
     const proto_msg_t *cd = find(PROTO_CAT_DATA);
     TEST_ASSERT_NOT_NULL(cd);
     TEST_ASSERT_EQUAL_UINT16(sizeof(reply) - 1, cd->u.cat_data.data.len);
-    app_cat_from_radio(&app, 1, reply, 3); /* port not open: dropped */
+    TEST_ASSERT_EQUAL_MEMORY(reply, cd->u.cat_data.data.data, sizeof(reply) - 1);
+    TEST_ASSERT_EQUAL_UINT64(UINT64_MAX, app_next_deadline_us(&app, now_us));
+    app_cat_from_radio(&app, 1, reply, 3, now_us); /* port not open: dropped */
+    advance_ms(5);
     TEST_ASSERT_EQUAL_size_t(0, receive(GATT));
 
     /* Session end closes the port and drops PTT. */
@@ -503,12 +512,111 @@ static void test_cat_from_radio_chunks_to_peer_max_payload(void)
     receive(GATT);
     static uint8_t data[600];
     memset(data, 0x55, sizeof(data));
-    app_cat_from_radio(&app, 0, data, sizeof(data));
-    receive(GATT);
-    TEST_ASSERT_EQUAL_size_t(3, ngot);
+    app_cat_from_radio(&app, 0, data, sizeof(data), now_us);
+    receive(GATT); /* full frames go at once */
+    TEST_ASSERT_EQUAL_size_t(2, ngot);
     TEST_ASSERT_EQUAL_UINT16(255, got[0].u.cat_data.data.len);
     TEST_ASSERT_EQUAL_UINT16(255, got[1].u.cat_data.data.len);
-    TEST_ASSERT_EQUAL_UINT16(90, got[2].u.cat_data.data.len);
+    advance_ms(2); /* the rest when the batching window ends */
+    receive(GATT);
+    TEST_ASSERT_EQUAL_size_t(1, ngot);
+    TEST_ASSERT_EQUAL_UINT16(90, got[0].u.cat_data.data.len);
+}
+
+static void open_port0(void)
+{
+    open_session();
+    proto_msg_t o = {.type = PROTO_SERIAL_OPEN, .token = 0};
+    o.u.serial_open.port = 0;
+    o.u.serial_open.open = 1;
+    send_msg(GATT, &o);
+    receive(GATT);
+}
+
+static void send_cat(const uint8_t *data, uint16_t len)
+{
+    proto_msg_t d = {.type = PROTO_CAT_DATA, .token = 0};
+    d.u.cat_data.port = 0;
+    d.u.cat_data.data.data = data;
+    d.u.cat_data.data.len = len;
+    send_msg(GATT, &d);
+}
+
+static uint32_t credit_received(void)
+{
+    uint32_t total = 0;
+    for (size_t i = 0; i < ngot; i++) {
+        if (got[i].type == PROTO_CAT_CREDIT) {
+            TEST_ASSERT_EQUAL_UINT8(0, got[i].u.cat_credit.port);
+            total += got[i].u.cat_credit.credit;
+        }
+    }
+    return total;
+}
+
+/* A slow radio side: bytes within the credit are kept and sent as the UART
+ * takes them, and the credit comes back only for bytes that left (§7.4). */
+static void test_cat_credit_returned_as_bytes_leave(void)
+{
+    open_port0();
+    static uint8_t data[256];
+    for (size_t i = 0; i < sizeof(data); i++) {
+        data[i] = (uint8_t)(i ^ 0xA5u);
+    }
+    fake.serial_accept = 100;
+    send_cat(data, 200);
+    receive(GATT);
+    TEST_ASSERT_NULL(find(PROTO_RESULT)); /* no OVERFLOW: within the credit */
+    TEST_ASSERT_EQUAL_UINT32(100, credit_received());
+    TEST_ASSERT_EQUAL_size_t(100, fake.serial_out_len);
+    TEST_ASSERT_EQUAL_UINT64(now_us + CAT_PUMP_US, app_next_deadline_us(&app, now_us));
+    advance_ms(1);
+    receive(GATT);
+    TEST_ASSERT_EQUAL_UINT32(100, credit_received());
+    TEST_ASSERT_EQUAL_size_t(200, fake.serial_out_len);
+    TEST_ASSERT_EQUAL_MEMORY(data, fake.serial_out, 200); /* byte-exact, in order */
+    advance_ms(1);
+    TEST_ASSERT_EQUAL_size_t(0, receive(GATT)); /* nothing more to return */
+    TEST_ASSERT_EQUAL_UINT64(UINT64_MAX, app_next_deadline_us(&app, now_us));
+    TEST_ASSERT_EQUAL_UINT16(0, app.cat.overflows);
+}
+
+static void test_cat_over_credit_reports_overflow(void)
+{
+    open_port0();
+    static uint8_t data[300];
+    memset(data, 0x3B, sizeof(data));
+    fake.serial_accept = 0; /* radio side stalled */
+    send_cat(data, 250);
+    receive(GATT);
+    TEST_ASSERT_EQUAL_size_t(0, ngot);
+    send_cat(data, 10); /* 6 fit in the 256-byte credit, 4 don't */
+    receive(GATT);
+    TEST_ASSERT_EQUAL_UINT8(PROTO_ERR_OVERFLOW, result()->code);
+    TEST_ASSERT_EQUAL_UINT16(1, app.cat.overflows);
+    fake.serial_accept = (size_t)-1;
+    advance_ms(1);
+    receive(GATT);
+    TEST_ASSERT_EQUAL_UINT32(256, credit_received());
+    TEST_ASSERT_EQUAL_size_t(256, fake.serial_out_len);
+}
+
+static void test_cat_session_end_discards_queues(void)
+{
+    open_port0();
+    const uint8_t data[] = "FA;";
+    fake.serial_accept = 0;
+    send_cat(data, 3);
+    app_cat_from_radio(&app, 0, data, 3, now_us);
+    app_transport_closed(&app, GATT, now_us);
+    TEST_ASSERT_EQUAL_UINT64(UINT64_MAX, app_next_deadline_us(&app, now_us));
+    fake.serial_accept = (size_t)-1;
+    advance_ms(5);
+    TEST_ASSERT_EQUAL_size_t(0, fake.serial_out_len);
+    TEST_ASSERT_EQUAL_size_t(0, receive(GATT));
+    /* No session: the radio's bytes go nowhere. */
+    app_cat_from_radio(&app, 0, data, 3, now_us);
+    TEST_ASSERT_EQUAL_UINT16(0, app.cat.port[0].rxq_len);
 }
 
 /* --- Configuration (SPEC §6) --- */
@@ -1058,6 +1166,9 @@ int main(void)
     RUN_TEST(test_new_hello_restarts_session);
     RUN_TEST(test_serial_port_and_modem_lines);
     RUN_TEST(test_cat_from_radio_chunks_to_peer_max_payload);
+    RUN_TEST(test_cat_credit_returned_as_bytes_leave);
+    RUN_TEST(test_cat_over_credit_reports_overflow);
+    RUN_TEST(test_cat_session_end_discards_queues);
     RUN_TEST(test_config_get_set_and_ble_power);
     RUN_TEST(test_config_persist_and_rate_limit);
     RUN_TEST(test_corrupt_storage_uses_defaults);

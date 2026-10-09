@@ -31,3 +31,10 @@ Reference encoder/decoder for [`protocol/SPEC.md`](../protocol/SPEC.md), Python 
 - `proto_codec.py`: framing (COBS + CRC-16), every message, the capability TLVs and the config keys. `python3 tools/protocol/proto_codec.py decode <hex>` decodes a byte stream.
 - `make_vectors.py`: writes `protocol/vectors/*.json` from its examples; `--check` fails if they're out of date.
 - `test_proto_codec.py`: round-trips every vector (`python3 -m unittest discover -s tools/protocol -p 'test_*.py'`).
+
+## cat_loopback
+
+Dev-kit loopback test for the CAT bridge (#15, [`protocol/SPEC.md`](../protocol/SPEC.md) §7). With the SERIAL-jack UART's TX wired to its RX, `cat_loopback.py` connects over Bluetooth LE, opens port 0, sends random bytes within the device's credit and checks that the same bytes come back. Needs `bleak` (MIT) on the host: `pip install bleak==0.22.3`; it is never part of a firmware image.
+
+- `cat_loopback.py`: `python3 tools/cat_loopback/cat_loopback.py --bytes 4096 --baud 115200` (`--help` for options). Exit code 0 means a byte-exact loopback.
+- `test_cat_loopback.py`: the protocol logic against a simulated device, no hardware (`python3 -m unittest discover -s tools/cat_loopback -p 'test_*.py'`). CI runs it in `Protocol vectors`.

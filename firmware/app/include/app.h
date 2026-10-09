@@ -79,7 +79,7 @@ void app_init(app_t *app, const board_t *board, uint8_t host_link, uint8_t boot_
 void app_rx(app_t *app, uint8_t transport, const uint8_t *data, size_t len, uint64_t now_us);
 /* A transport closed (link lost, unsubscribed, TCP closed, ...). */
 void app_transport_closed(app_t *app, uint8_t transport, uint64_t now_us);
-/* Timers: PTT keepalive and max TX, the pairing window. */
+/* Timers: PTT keepalive and max TX, the pairing window, the CAT bridge. */
 void app_tick(app_t *app, uint64_t now_us);
 
 /* Wired mode: native CDC-ACM line state on a device serial port (port 0 =
@@ -98,8 +98,15 @@ void app_pairing_button(app_t *app, uint64_t now_us);
 void app_bond_added(app_t *app);
 bool app_pairing_open(const app_t *app);
 
-/* Bytes from the radio on a serial port (sent as CAT_DATA when open). */
-void app_cat_from_radio(app_t *app, uint8_t port, const uint8_t *data, size_t len);
+/* Bytes from the radio on a serial port. Sent as CAT_DATA when the port is
+ * open: at once when they fill a frame, otherwise batched for up to
+ * CAT_BATCH_US (SPEC §7.3); app_tick() sends what is due. */
+void app_cat_from_radio(app_t *app, uint8_t port, const uint8_t *data, size_t len,
+                        uint64_t now_us);
+/* When app_tick() next has time-critical work beyond its regular period (a
+ * CAT batch or queued CAT bytes): an absolute time in microseconds, or
+ * UINT64_MAX. The platform wakes the app task by then. */
+uint64_t app_next_deadline_us(const app_t *app, uint64_t now_us);
 
 /* The GATT Info characteristic value (SPEC §13.2). */
 void app_info(const app_t *app, uint8_t out[PROTO_INFO_LEN]);
