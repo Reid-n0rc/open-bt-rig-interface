@@ -16,7 +16,7 @@ the host tests in [`../test/`](../test/).
 | Configuration | [`cfg.h`](include/cfg.h) | Every SPEC §6.1 key with its default and range, and the storage format (every stored value is checked again on load) |
 | BLE TX power | [`ble_power.h`](include/ble_power.h) | The cap for all markets (+6 dBm) with static assertions against the FCC and EU limits |
 | Core | [`app.h`](include/app.h) | Sessions (SPEC §4), dispatch, CAPS, STATUS, the watchdog/boot reason, the status LED pattern |
-| CAT bridge | [`cat.h`](include/cat.h) | Serial ports, credit and RTS/DTR (skeleton; #15, #43) |
+| CAT bridge | [`cat.h`](include/cat.h) | SPEC §7: serial ports, a per-port queue toward the radio with credit returned as bytes leave, radio-side batching (full frame or 2 ms), RTS/DTR. Radio USB-serial ports arrive with #43 |
 | Clock sync | [`clock_sync.h`](include/clock_sync.h) | `TIME_REQ`/`TIME_SET` and the UTC mapping (SPEC §10) |
 | Pairing window | [`pairing.h`](include/pairing.h) | SPEC §13.5: opened only by a local action |
 | Audio | [`audio.h`](include/audio.h) | Hooks; `UNSUPPORTED` until #16 |

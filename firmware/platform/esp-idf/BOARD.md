@@ -67,6 +67,23 @@ The layers that keep PTT off, from power-on:
 4. **Watchdogs:** a lock-up resets the chip, which goes back to step 1
    ([`README.md`](README.md#watchdogs)).
 
+## CAT loopback test
+
+To check the CAT bridge (#15) without a radio, connect **GPIO17 (J1 pin 19)
+to GPIO18 (J1 pin 20)** with a jumper wire. Then run
+[`tools/cat_loopback/cat_loopback.py`](../../../tools/cat_loopback/cat_loopback.py)
+on a computer with Bluetooth LE:
+
+```sh
+pip install bleak==0.22.3
+python3 tools/cat_loopback/cat_loopback.py --bytes 4096 --baud 115200
+```
+
+The script pairs, opens port 0, sends random bytes within the device's credit
+(SPEC §7.4) and passes only if exactly the same bytes come back. Repeat at
+4800 and 9600 baud to exercise credit with a slow radio side. Remove the jumper
+before connecting a radio.
+
 ## Not on the dev kit
 
 - The AUDIO-jack isolation, the RS-232 transceiver and CI-V buffer, the

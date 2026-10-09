@@ -27,8 +27,8 @@ AddressSanitizer and UndefinedBehaviorSanitizer; pass
 | `test_ptt` | Every PTT path of SPEC §8: boot and watchdog reset, `PTT_SET`, keepalive (and what counts), arming (BLOCKED/ARMED/KEYING, both lines rising), native wired lines, pass-through, targets, max TX with lockout, max TX disabled, session end, mode change, faults, configuration changes that never assert PTT, tone source |
 | `test_proto` | The codec against **every** vector in `protocol/vectors/` (messages both ways, CRC, COBS, invalid frames, the resync stream, GATT Info and chunking), plus limits and error paths |
 | `test_cfg` | Every config key's default, range and errors; the storage format and its checks |
-| `test_app` | Sessions, replies and tokens, version mismatch, frame errors, CAPS, PTT over the protocol, link loss, serial ports and CAT, configuration with persistence, wired-mode rules, security (authorization, AUTH), the pairing window (no message opens it), the LED pattern |
-| `test_modules` | BLE TX power cap, pairing window, clock sync, CAT bridge, audio and security stubs, the reset-reason mapping |
+| `test_app` | Sessions, replies and tokens, version mismatch, frame errors, CAPS, PTT over the protocol, link loss, serial ports and CAT (credit returned as bytes leave, overflow, batching, session end), configuration with persistence, wired-mode rules, security (authorization, AUTH), the pairing window (no message opens it), the LED pattern |
+| `test_modules` | BLE TX power cap, pairing window, clock sync, CAT bridge (queues, credit, batching by size and time, overflow, deadlines), audio and security stubs, the reset-reason mapping |
 | `test_fw_version` | `../cmake/fw_version.cmake` (a CMake script) |
 
 `gen_vectors.py` turns the golden vectors into C at build time, using the
