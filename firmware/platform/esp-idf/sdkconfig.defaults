@@ -1,0 +1,48 @@
+# SPDX-FileCopyrightText: 2026 Reid Crowe, N0RC
+# SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
+#
+# ESP32-S3-MINI-1-N8 (8 MB flash, no PSRAM). Wi-Fi is never started
+# (docs/compliance/fcc.md §1.3: no other transmitter at the same time).
+
+CONFIG_IDF_TARGET="esp32s3"
+CONFIG_ESPTOOLPY_FLASHSIZE_8MB=y
+
+# Bluetooth LE with the NimBLE host (L2CAP CoC needs NimBLE, SPEC §13.3).
+CONFIG_BT_ENABLED=y
+CONFIG_BT_NIMBLE_ENABLED=y
+CONFIG_BT_NIMBLE_ROLE_PERIPHERAL=y
+CONFIG_BT_NIMBLE_ROLE_BROADCASTER=y
+CONFIG_BT_NIMBLE_ROLE_CENTRAL=n
+CONFIG_BT_NIMBLE_ROLE_OBSERVER=n
+CONFIG_BT_NIMBLE_MAX_CONNECTIONS=1
+CONFIG_BT_NIMBLE_EXT_ADV=n
+CONFIG_BT_NIMBLE_SECURITY_ENABLE=y
+CONFIG_BT_NIMBLE_SM_SC=y
+CONFIG_BT_NIMBLE_NVS_PERSIST=y
+CONFIG_BT_NIMBLE_MAX_BONDS=8
+CONFIG_BT_NIMBLE_ATT_PREFERRED_MTU=247
+
+# BLE TX power: the controller's default level is the firmware cap, +6 dBm
+# (ble_power.h; a static assertion in main/ble.c checks it).
+CONFIG_BT_CTRL_DFT_TX_POWER_LEVEL_P6=y
+
+# Watchdogs (SPEC §8.5): never disabled; a lock-up resets the chip, which
+# leaves PTT off, and the next session is told (reason WATCHDOG).
+# main/main.c refuses to build if these are changed.
+CONFIG_BOOTLOADER_WDT_ENABLE=y
+CONFIG_BOOTLOADER_WDT_TIME_MS=9000
+CONFIG_ESP_INT_WDT=y
+CONFIG_ESP_INT_WDT_TIMEOUT_MS=300
+CONFIG_ESP_TASK_WDT_EN=y
+CONFIG_ESP_TASK_WDT_INIT=y
+CONFIG_ESP_TASK_WDT_PANIC=y
+CONFIG_ESP_TASK_WDT_TIMEOUT_S=3
+CONFIG_ESP_TASK_WDT_CHECK_IDLE_TASK_CPU0=y
+CONFIG_ESP_TASK_WDT_CHECK_IDLE_TASK_CPU1=y
+CONFIG_ESP_SYSTEM_PANIC_PRINT_REBOOT=y
+
+# The app task runs in the main task.
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=8192
+
+# Logs and programming on UART0 (the USB pins are the host links, REQ-FW-008).
+CONFIG_ESP_CONSOLE_UART_DEFAULT=y

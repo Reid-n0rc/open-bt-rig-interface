@@ -587,6 +587,105 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `cc573f575e7a6f45…`
 - Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
 
+### esp-idf-bootloader-guide
+
+**ESP-IDF API guide: Bootloader (custom bootloader, hooks), v6.0.3** (Espressif Systems, sdk)
+
+- Local copy: [cache/esp-idf-v6.0.3-bootloader.rst](cache/esp-idf-v6.0.3-bootloader.rst)
+- Original: <https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/docs/en/api-guides/bootloader.rst>
+- Retrieved: 2026-09-25; SHA-256 `14c18dd327f0b28a…`
+- Cited in: [`firmware/platform/esp-idf/README.md`](../../firmware/platform/esp-idf/README.md), [`firmware/platform/esp-idf/BOARD.md`](../../firmware/platform/esp-idf/BOARD.md)
+
+### esp-idf-bootloader-hooks-example
+
+**ESP-IDF example custom_bootloader/bootloader_hooks (hooks.c), v6.0.3** (Espressif Systems, sdk)
+
+- Local copy: [cache/esp-idf-v6.0.3-bootloader-hooks.c](cache/esp-idf-v6.0.3-bootloader-hooks.c)
+- Original: <https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/examples/custom_bootloader/bootloader_hooks/bootloader_components/my_boot_hooks/hooks.c>
+- Retrieved: 2026-09-25; SHA-256 `7e8e13824828578f…`
+- Cited in: [`firmware/platform/esp-idf/README.md`](../../firmware/platform/esp-idf/README.md), [`THIRD_PARTY.md`](../../THIRD_PARTY.md)
+
+### esp-idf-bootloader-kconfig
+
+**ESP-IDF bootloader Kconfig (RTC watchdog during boot), v6.0.3** (Espressif Systems, sdk)
+
+- Local copy: [cache/esp-idf-v6.0.3-bootloader-Kconfig.projbuild](cache/esp-idf-v6.0.3-bootloader-Kconfig.projbuild)
+- Original: <https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/components/bootloader/Kconfig.projbuild>
+- Retrieved: 2026-09-25; SHA-256 `b1d3c6278660fcdb…`
+- Cited in: [`firmware/platform/esp-idf/README.md`](../../firmware/platform/esp-idf/README.md)
+
+### esp-idf-bt-ctrl-kconfig-s3
+
+**ESP-IDF BT controller Kconfig for ESP32-C3/S3 (default TX power), v6.0.3** (Espressif Systems, sdk)
+
+- Local copy: [cache/esp-idf-v6.0.3-bt-ctrl-esp32c3-Kconfig.in](cache/esp-idf-v6.0.3-bt-ctrl-esp32c3-Kconfig.in)
+- Original: <https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/components/bt/controller/esp32c3/Kconfig.in>
+- Retrieved: 2026-09-25; SHA-256 `ba8b480949107f7e…`
+- Cited in: [`firmware/platform/esp-idf/README.md`](../../firmware/platform/esp-idf/README.md)
+
+### esp-idf-build-system
+
+**ESP-IDF API guide: Build System (PROJECT_VER, MINIMAL_BUILD), v6.0.3** (Espressif Systems, sdk)
+
+- Local copy: [cache/esp-idf-v6.0.3-build-system.rst](cache/esp-idf-v6.0.3-build-system.rst)
+- Original: <https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/docs/en/api-guides/build-system.rst>
+- Retrieved: 2026-09-25; SHA-256 `06400762a4e21517…`
+- Cited in: [`firmware/README.md`](../../firmware/README.md), [`firmware/platform/esp-idf/README.md`](../../firmware/platform/esp-idf/README.md)
+
+### esp-idf-copyright
+
+**ESP-IDF Copyrights and Licenses (docs/en/COPYRIGHT.rst), v6.0.3** (Espressif Systems, license)
+
+- Local copy: [cache/esp-idf-v6.0.3-COPYRIGHT.rst](cache/esp-idf-v6.0.3-COPYRIGHT.rst)
+- Original: <https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/docs/en/COPYRIGHT.rst>
+- Retrieved: 2026-09-25; SHA-256 `8993c70a1ea553d7…`
+- Cited in: [`THIRD_PARTY.md`](../../THIRD_PARTY.md)
+
+### esp-idf-dfu
+
+**ESP-IDF API guide: Device Firmware Upgrade via USB, v6.0.3** (Espressif Systems, sdk)
+
+- Local copy: [cache/esp-idf-v6.0.3-dfu.rst](cache/esp-idf-v6.0.3-dfu.rst)
+- Original: <https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/docs/en/api-guides/dfu.rst>
+- Retrieved: 2026-09-25; SHA-256 `115df26f63932b89…`
+- Cited in: [`firmware/README.md`](../../firmware/README.md)
+
+### esp-idf-docker-image
+
+**ESP-IDF Docker image (api-guides/tools/idf-docker-image.rst), v6.0.3** (Espressif Systems, sdk)
+
+- Local copy: [cache/esp-idf-v6.0.3-idf-docker-image.rst](cache/esp-idf-v6.0.3-idf-docker-image.rst)
+- Original: <https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/docs/en/api-guides/tools/idf-docker-image.rst>
+- Retrieved: 2026-09-25; SHA-256 `b9925811c1ba96f3…`
+- Cited in: [`firmware/platform/esp-idf/README.md`](../../firmware/platform/esp-idf/README.md)
+
+### esp-idf-esp-bt-h-s3
+
+**ESP-IDF esp_bt.h for ESP32-C3/S3: BLE TX power levels and API, v6.0.3** (Espressif Systems, sdk)
+
+- Local copy: [cache/esp-idf-v6.0.3-esp32c3-esp_bt.h](cache/esp-idf-v6.0.3-esp32c3-esp_bt.h)
+- Original: <https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/components/bt/include/esp32c3/include/esp_bt.h>
+- Retrieved: 2026-09-25; SHA-256 `b3f8714d7d344225…`
+- Cited in: [`firmware/platform/esp-idf/README.md`](../../firmware/platform/esp-idf/README.md), [`firmware/app/include/ble_power.h`](../../firmware/app/include/ble_power.h)
+
+### esp-idf-esp-system-h
+
+**ESP-IDF esp_system.h (esp_reset_reason), v6.0.3** (Espressif Systems, sdk)
+
+- Local copy: [cache/esp-idf-v6.0.3-esp_system.h](cache/esp-idf-v6.0.3-esp_system.h)
+- Original: <https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/components/esp_system/include/esp_system.h>
+- Retrieved: 2026-09-25; SHA-256 `d29fb527ae8bfd21…`
+- Cited in: [`firmware/platform/esp-idf/README.md`](../../firmware/platform/esp-idf/README.md)
+
+### esp-idf-flash-encryption
+
+**ESP-IDF Security: Flash Encryption (ROM download mode), v6.0.3** (Espressif Systems, sdk)
+
+- Local copy: [cache/esp-idf-v6.0.3-flash-encryption.rst](cache/esp-idf-v6.0.3-flash-encryption.rst)
+- Original: <https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/docs/en/security/flash-encryption.rst>
+- Retrieved: 2026-09-25; SHA-256 `2270ed8c54589d04…`
+- Cited in: [`firmware/README.md`](../../firmware/README.md)
+
 ### esp-idf-hfp-hf-readme
 
 **ESP-IDF hfp_hf example README (HFP data paths, mSBC)** (Espressif Systems (Apache-2.0), sdk)
@@ -595,6 +694,24 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://raw.githubusercontent.com/espressif/esp-idf/048ec57f228afe2d720542431b849cc10c949a15/examples/bluetooth/bluedroid/classic_bt/hfp_hf/README.md>
 - Retrieved: 2026-09-24; SHA-256 `f33f812e42729ca8…`
 - Cited in: [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
+
+### esp-idf-license
+
+**ESP-IDF LICENSE (Apache-2.0), v6.0.3** (Espressif Systems, license)
+
+- Local copy: [cache/esp-idf-v6.0.3-LICENSE.txt](cache/esp-idf-v6.0.3-LICENSE.txt)
+- Original: <https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/LICENSE>
+- Retrieved: 2026-09-25; SHA-256 `cfc7749b96f63bd3…`
+- Cited in: [`THIRD_PARTY.md`](../../THIRD_PARTY.md)
+
+### esp-idf-nimble-bleprph
+
+**ESP-IDF example bluetooth/nimble/bleprph (main.c), v6.0.3** (Espressif Systems, sdk)
+
+- Local copy: [cache/esp-idf-v6.0.3-bleprph-main.c](cache/esp-idf-v6.0.3-bleprph-main.c)
+- Original: <https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/examples/bluetooth/nimble/bleprph/main/main.c>
+- Retrieved: 2026-09-25; SHA-256 `1292853d515852c1…`
+- Cited in: [`firmware/platform/esp-idf/README.md`](../../firmware/platform/esp-idf/README.md), [`THIRD_PARTY.md`](../../THIRD_PARTY.md)
 
 ### esp-idf-nimble-coc-readme
 
@@ -614,6 +731,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `d7c66583d864a810…`
 - Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
 
+### esp-idf-nimble-store-util
+
+**NimBLE ble_store_util.c (esp-nimble 6330413, the submodule of ESP-IDF v6.0.3): bond store overflow** (Apache Software Foundation (mynewt-nimble), via Espressif Systems, sdk)
+
+- Local copy: [cache/nimble-ble_store_util.c](cache/nimble-ble_store_util.c)
+- Original: <https://raw.githubusercontent.com/espressif/esp-nimble/6330413d856dd5427c14a3570e09b2e114d38c53/nimble/host/src/ble_store_util.c>
+- Retrieved: 2026-09-25; SHA-256 `c13cc49693a287e1…`
+- Cited in: [`firmware/platform/esp-idf/README.md`](../../firmware/platform/esp-idf/README.md)
+
 ### esp-idf-nimble-throughput
 
 **ESP-IDF v6.1 NimBLE GATT throughput example README** (Espressif Systems, sdk)
@@ -622,6 +748,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Original: <https://raw.githubusercontent.com/espressif/esp-idf/fff9895c82d744c7237be8847347bdd1b07c6643/examples/bluetooth/nimble/throughput_app/README.md>
 - Retrieved: 2026-09-24; SHA-256 `9f210d184659938c…`
 - Cited in: [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+
+### esp-idf-ota
+
+**ESP-IDF API reference: Over The Air Updates (rollback, anti-rollback), v6.0.3** (Espressif Systems, sdk)
+
+- Local copy: [cache/esp-idf-v6.0.3-ota.rst](cache/esp-idf-v6.0.3-ota.rst)
+- Original: <https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/docs/en/api-reference/system/ota.rst>
+- Retrieved: 2026-09-25; SHA-256 `c1ef06ca1729c35b…`
+- Cited in: [`firmware/README.md`](../../firmware/README.md)
 
 ### esp-idf-s3-brownout-kconfig
 
@@ -632,6 +767,51 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-25; SHA-256 `ea107c5dd3f597d7…`
 - Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md), [`docs/decisions/ADR-0003-radio-interface-circuits.md`](../../docs/decisions/ADR-0003-radio-interface-circuits.md)
 
+### esp-idf-secure-boot-v2
+
+**ESP-IDF Security: Secure Boot v2 (and signed app verification), v6.0.3** (Espressif Systems, sdk)
+
+- Local copy: [cache/esp-idf-v6.0.3-secure-boot-v2.rst](cache/esp-idf-v6.0.3-secure-boot-v2.rst)
+- Original: <https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/docs/en/security/secure-boot-v2.rst>
+- Retrieved: 2026-09-25; SHA-256 `0816a12aab3b38f6…`
+- Cited in: [`firmware/README.md`](../../firmware/README.md)
+
+### esp-idf-system-kconfig
+
+**ESP-IDF esp_system Kconfig (task and interrupt watchdogs), v6.0.3** (Espressif Systems, sdk)
+
+- Local copy: [cache/esp-idf-v6.0.3-esp_system-Kconfig](cache/esp-idf-v6.0.3-esp_system-Kconfig)
+- Original: <https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/components/esp_system/Kconfig>
+- Retrieved: 2026-09-25; SHA-256 `86ea1f1820842133…`
+- Cited in: [`firmware/platform/esp-idf/README.md`](../../firmware/platform/esp-idf/README.md)
+
+### esp-idf-v6-0
+
+**ESP-IDF v6.0 release notes (first v6.0 stable release)** (Espressif Systems, web)
+
+- Local copy: [cache/esp-idf-v6.0-release.html](cache/esp-idf-v6.0-release.html)
+- Original: <https://github.com/espressif/esp-idf/releases/tag/v6.0>
+- Retrieved: 2026-09-25; SHA-256 `1945cf0c68e59d8d…`
+- Cited in: [`firmware/platform/esp-idf/README.md`](../../firmware/platform/esp-idf/README.md)
+
+### esp-idf-v6-0-3
+
+**ESP-IDF v6.0.3 release notes** (Espressif Systems, web)
+
+- Local copy: [cache/esp-idf-v6.0.3-release.html](cache/esp-idf-v6.0.3-release.html)
+- Original: <https://github.com/espressif/esp-idf/releases/tag/v6.0.3>
+- Retrieved: 2026-09-25; SHA-256 `e42961f992ef89c9…`
+- Cited in: [`firmware/platform/esp-idf/README.md`](../../firmware/platform/esp-idf/README.md), [`THIRD_PARTY.md`](../../THIRD_PARTY.md)
+
+### esp-idf-versions
+
+**ESP-IDF Versions and support periods (docs/en/versions.rst), v6.0.3** (Espressif Systems, sdk)
+
+- Local copy: [cache/esp-idf-v6.0.3-versions.rst](cache/esp-idf-v6.0.3-versions.rst)
+- Original: <https://raw.githubusercontent.com/espressif/esp-idf/76f5dedd9950a3012fee8fb7d5586df21fc67802/docs/en/versions.rst>
+- Retrieved: 2026-09-25; SHA-256 `bdabe114625f16a9…`
+- Cited in: [`firmware/platform/esp-idf/README.md`](../../firmware/platform/esp-idf/README.md)
+
 ### esp-idf-wdts
 
 **ESP-IDF programming guide: watchdogs (ESP32-S3)** (Espressif Systems, web)
@@ -639,7 +819,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/esp-idf-wdts.html](cache/esp-idf-wdts.html)
 - Original: <https://docs.espressif.com/projects/esp-idf/en/stable/esp32s3/api-reference/system/wdts.html>
 - Retrieved: 2026-09-25; SHA-256 `a9d0dd71fa7b0068…`
-- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md), [`docs/decisions/ADR-0003-radio-interface-circuits.md`](../../docs/decisions/ADR-0003-radio-interface-circuits.md)
+- Cited in: [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md), [`docs/decisions/ADR-0003-radio-interface-circuits.md`](../../docs/decisions/ADR-0003-radio-interface-circuits.md), [`firmware/platform/esp-idf/README.md`](../../firmware/platform/esp-idf/README.md)
 
 ### esp-usb-cdc-acm-host-c
 
@@ -722,6 +902,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `4c7a345d1c1bfec3…`
 - Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md)
 
+### esp32s3-devkitm1-guide
+
+**ESP32-S3-DevKitM-1 user guide** (Espressif Systems, web)
+
+- Local copy: [cache/esp32s3-devkitm1-user-guide.html](cache/esp32s3-devkitm1-user-guide.html)
+- Original: <https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/esp32-s3-devkitm-1/user_guide.html>
+- Retrieved: 2026-09-25; SHA-256 `48a02a78aa747c74…`
+- Cited in: [`firmware/platform/esp-idf/BOARD.md`](../../firmware/platform/esp-idf/BOARD.md), [`firmware/platform/esp-idf/README.md`](../../firmware/platform/esp-idf/README.md)
+
 ### esp32s3-ds
 
 **ESP32-S3 series datasheet (SoC)** (Espressif Systems, datasheet)
@@ -729,7 +918,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/esp32s3-ds.pdf](cache/esp32s3-ds.pdf)
 - Original: <https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf>
 - Retrieved: 2026-09-24; SHA-256 `2d5a7cb7fd559d8d…`
-- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md)
+- Cited in: [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/host-compatibility.md`](../../docs/research/host-compatibility.md), [`firmware/platform/esp-idf/BOARD.md`](../../firmware/platform/esp-idf/BOARD.md), [`firmware/platform/esp-idf/board/board_pins.h`](../../firmware/platform/esp-idf/board/board_pins.h)
 
 ### esp32s3-hw-design
 
@@ -747,7 +936,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/esp32s3-mini1-ds.pdf](cache/esp32s3-mini1-ds.pdf)
 - Original: <https://www.espressif.com/sites/default/files/documentation/esp32-s3-mini-1_mini-1u_datasheet_en.pdf>
 - Retrieved: 2026-09-24; SHA-256 `4d4b7f1c17b484c6…`
-- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md), [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md), [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/module-selection.md`](../../docs/research/module-selection.md), [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md)
+- Cited in: [`docs/compliance/fcc.md`](../../docs/compliance/fcc.md), [`docs/decisions/ADR-0002-audio-codec.md`](../../docs/decisions/ADR-0002-audio-codec.md), [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/audio-codec.md`](../../docs/research/audio-codec.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/module-selection.md`](../../docs/research/module-selection.md), [`docs/research/power-automotive.md`](../../docs/research/power-automotive.md), [`docs/research/power-radio-usbc.md`](../../docs/research/power-radio-usbc.md), [`firmware/app/include/ble_power.h`](../../firmware/app/include/ble_power.h)
 
 ### esp32s3-mini1-fcc-grant
 
@@ -802,7 +991,7 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Local copy: [cache/espressif-s3-mini1-ce-cert.pdf](cache/espressif-s3-mini1-ce-cert.pdf)
 - Original: <https://www.espressif.com/sites/default/files/certificates/ESP32-S3-MINI-1%20CE%20Certification.pdf>
 - Retrieved: 2026-09-25; SHA-256 `174661a238b9a44c…`
-- Cited in: [`docs/compliance/eu.md`](../../docs/compliance/eu.md), [`docs/requirements/requirements.md`](../../docs/requirements/requirements.md)
+- Cited in: [`docs/compliance/eu.md`](../../docs/compliance/eu.md), [`docs/requirements/requirements.md`](../../docs/requirements/requirements.md), [`firmware/platform/esp-idf/README.md`](../../firmware/platform/esp-idf/README.md), [`firmware/app/include/ble_power.h`](../../firmware/app/include/ble_power.h)
 
 ### espressif-s3-modules
 
@@ -2355,6 +2544,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-25; SHA-256 `8414518e9ca8b22d…`
 - Notes: EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:42017X0260 . The URL is the Publications Office (CELLAR) copy of the same text, because EUR-Lex blocks scripted downloads. Only the UNECE original has legal effect. The current 06 series (Revision 6) is on unece.org, which blocks scripted downloads.
 - Cited in: [`docs/compliance/eu.md`](../../docs/compliance/eu.md)
+
+### unity-license
+
+**Unity test framework LICENSE.txt (MIT), v2.7.0** (ThrowTheSwitch.org, license)
+
+- Local copy: [cache/unity-v2.7.0-LICENSE.txt](cache/unity-v2.7.0-LICENSE.txt)
+- Original: <https://raw.githubusercontent.com/ThrowTheSwitch/Unity/b6763fbd9cedfacaa89e2ad9fd00d615a234e355/LICENSE.txt>
+- Retrieved: 2026-09-25; SHA-256 `ec6cf55f05ba2aa5…`
+- Cited in: [`THIRD_PARTY.md`](../../THIRD_PARTY.md), [`firmware/test/README.md`](../../firmware/test/README.md)
 
 ### usb-typec-r20
 
