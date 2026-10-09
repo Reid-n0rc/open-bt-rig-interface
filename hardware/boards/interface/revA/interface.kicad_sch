@@ -1,0 +1,177 @@
+(kicad_sch
+	(version 20250610)
+	(generator "konnect")
+	(generator_version "10.0")
+	(uuid "e1cf38a9-3cff-4854-a01b-b1e9d44f6966")
+	(paper "A4")
+	(lib_symbols
+	)
+	(sheet
+    (at 30 40)
+    (size 50 30)
+    (fields_autoplaced yes)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0))
+    (uuid "99c11c1f-fe61-4b11-873d-f77a9874622e")
+    (property "Sheetname" "module"
+      (at 30 39.365 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "module.kicad_sch"
+      (at 30 70.635 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (instances
+      (project "interface"
+        (path "/e1cf38a9-3cff-4854-a01b-b1e9d44f6966" (page "2"))
+      )
+    )
+  )
+	(sheet
+    (at 100 40)
+    (size 50 30)
+    (fields_autoplaced yes)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0))
+    (uuid "a3129ec7-ff87-4792-9a7a-2f34de10e358")
+    (property "Sheetname" "usb"
+      (at 100 39.365 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "usb.kicad_sch"
+      (at 100 70.635 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (instances
+      (project "interface"
+        (path "/e1cf38a9-3cff-4854-a01b-b1e9d44f6966" (page "3"))
+      )
+    )
+  )
+	(sheet
+    (at 170 40)
+    (size 50 30)
+    (fields_autoplaced yes)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0))
+    (uuid "f6139bc6-35f3-439c-b386-afcad6b84881")
+    (property "Sheetname" "audio"
+      (at 170 39.365 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "audio.kicad_sch"
+      (at 170 70.635 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (instances
+      (project "interface"
+        (path "/e1cf38a9-3cff-4854-a01b-b1e9d44f6966" (page "4"))
+      )
+    )
+  )
+	(sheet
+    (at 30 90)
+    (size 50 30)
+    (fields_autoplaced yes)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0))
+    (uuid "cbd396b0-a77b-437c-9e78-57a14d9dee42")
+    (property "Sheetname" "serial_ptt"
+      (at 30 89.365 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "serial_ptt.kicad_sch"
+      (at 30 120.635 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (instances
+      (project "interface"
+        (path "/e1cf38a9-3cff-4854-a01b-b1e9d44f6966" (page "5"))
+      )
+    )
+  )
+	(sheet
+    (at 100 90)
+    (size 50 30)
+    (fields_autoplaced yes)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0))
+    (uuid "ef1d551e-8168-4a32-a778-3cea2ba87259")
+    (property "Sheetname" "isolation"
+      (at 100 89.365 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "isolation.kicad_sch"
+      (at 100 120.635 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (instances
+      (project "interface"
+        (path "/e1cf38a9-3cff-4854-a01b-b1e9d44f6966" (page "6"))
+      )
+    )
+  )
+	(sheet
+    (at 170 90)
+    (size 50 30)
+    (fields_autoplaced yes)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0))
+    (uuid "95b88415-8c4d-4ca7-87ed-0c07c479552e")
+    (property "Sheetname" "core_clock"
+      (at 170 89.365 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "core_clock.kicad_sch"
+      (at 170 120.635 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (instances
+      (project "interface"
+        (path "/e1cf38a9-3cff-4854-a01b-b1e9d44f6966" (page "7"))
+      )
+    )
+  )
+	(sheet
+    (at 30 140)
+    (size 50 30)
+    (fields_autoplaced yes)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0))
+    (uuid "60546aa9-ae18-49d7-9b1b-45a7ee0f08bc")
+    (property "Sheetname" "power_in_R"
+      (at 30 139.365 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "power_in_R.kicad_sch"
+      (at 30 170.635 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (instances
+      (project "interface"
+        (path "/e1cf38a9-3cff-4854-a01b-b1e9d44f6966" (page "8"))
+      )
+    )
+  )
+	(sheet
+    (at 100 140)
+    (size 50 30)
+    (fields_autoplaced yes)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0))
+    (uuid "6cff58b5-95d3-45d1-a4a2-e60c09438be0")
+    (property "Sheetname" "power_in_M"
+      (at 100 139.365 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "power_in_M.kicad_sch"
+      (at 100 170.635 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (instances
+      (project "interface"
+        (path "/e1cf38a9-3cff-4854-a01b-b1e9d44f6966" (page "9"))
+      )
+    )
+  )
+)
