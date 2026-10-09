@@ -16,6 +16,7 @@
 #include "esp_timer.h"
 #include "events.h"
 #include "freertos/FreeRTOS.h"
+#include "freertos/semphr.h"
 #include "freertos/task.h"
 #include "hal.h"
 #include "hal_esp.h"
@@ -90,27 +91,42 @@ void hal_esp_button_init(void)
 
 /* --- SERIAL-jack UART (port 0) --- */
 
+/* The driver is installed while port 0 is open and deleted when it closes,
+ * which discards bytes still in its TX ring buffer (SPEC §7.2): a command
+ * the host queued must not reach the radio after the session ended. The
+ * lock keeps the RX task out of the driver while it is installed or deleted;
+ * reads, writes, open and close otherwise run in their own tasks as before
+ * (writes, open and close all in the app task). */
 static bool s_uart_installed;
+static SemaphoreHandle_t s_uart_lock;
 
 static void uart_rx_task(void *arg)
 {
     (void)arg;
     static uint8_t buf[EVT_DATA_MAX];
     for (;;) {
-        if (!s_uart_installed) {
-            vTaskDelay(pdMS_TO_TICKS(20));
-            continue;
+        xSemaphoreTake(s_uart_lock, portMAX_DELAY);
+        int n = 0;
+        bool installed = s_uart_installed;
+        if (installed) {
+            /* Reads return after a 1 ms gap; the app batches into frames (SPEC §7.3). */
+            n = uart_read_bytes(BOARD_SERIAL_UART, buf, sizeof(buf), pdMS_TO_TICKS(1));
         }
-        /* Reads return after a 1 ms gap; the app batches into frames (SPEC §7.3). */
-        int n = uart_read_bytes(BOARD_SERIAL_UART, buf, sizeof(buf), pdMS_TO_TICKS(1));
+        xSemaphoreGive(s_uart_lock);
         if (n > 0) {
             (void)evt_post(EVT_SERIAL_RX, 0, buf, (size_t)n);
+        } else if (!installed) {
+            vTaskDelay(pdMS_TO_TICKS(20));
+        } else if (n < 0) {
+            vTaskDelay(pdMS_TO_TICKS(1)); /* a driver error: don't spin */
         }
     }
 }
 
 void hal_esp_serial_init(void)
 {
+    s_uart_lock = xSemaphoreCreateMutex();
+    configASSERT(s_uart_lock);
     xTaskCreate(uart_rx_task, "uart_rx", 3072, NULL, 5, NULL);
 }
 
@@ -136,25 +152,37 @@ int hal_serial_open(uint8_t port, const hal_uart_cfg_t *cfg)
     case 1: u.stop_bits = UART_STOP_BITS_1_5; break;
     default: u.stop_bits = UART_STOP_BITS_2; break;
     }
+    int rc = PROTO_OK;
+    xSemaphoreTake(s_uart_lock, portMAX_DELAY);
     if (!s_uart_installed) {
-        if (uart_driver_install(BOARD_SERIAL_UART, 1024, 1024, 0, NULL, 0) != ESP_OK) {
-            return PROTO_ERR_INTERNAL;
+        if (uart_driver_install(BOARD_SERIAL_UART, 1024, 1024, 0, NULL, 0) == ESP_OK) {
+            s_uart_installed = true;
+        } else {
+            rc = PROTO_ERR_INTERNAL;
         }
-        s_uart_installed = true;
     }
-    if (uart_param_config(BOARD_SERIAL_UART, &u) != ESP_OK ||
-        uart_set_pin(BOARD_SERIAL_UART, BOARD_SERIAL_TX_GPIO, BOARD_SERIAL_RX_GPIO,
-                     UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE) != ESP_OK) {
-        return PROTO_ERR_INTERNAL;
+    if (rc == PROTO_OK &&
+        (uart_param_config(BOARD_SERIAL_UART, &u) != ESP_OK ||
+         uart_set_pin(BOARD_SERIAL_UART, BOARD_SERIAL_TX_GPIO, BOARD_SERIAL_RX_GPIO,
+                      UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE) != ESP_OK)) {
+        rc = PROTO_ERR_INTERNAL;
     }
-    return PROTO_OK;
+    xSemaphoreGive(s_uart_lock);
+    return rc;
 }
 
 void hal_serial_close(uint8_t port)
 {
-    if (port == 0 && s_uart_installed) {
-        (void)uart_flush_input(BOARD_SERIAL_UART);
+    if (port != 0) {
+        return;
     }
+    xSemaphoreTake(s_uart_lock, portMAX_DELAY);
+    if (s_uart_installed) {
+        /* Deleting the driver discards both ring buffers (SPEC §7.2). */
+        (void)uart_driver_delete(BOARD_SERIAL_UART);
+        s_uart_installed = false;
+    }
+    xSemaphoreGive(s_uart_lock);
 }
 
 size_t hal_serial_write(uint8_t port, const uint8_t *data, size_t len)
