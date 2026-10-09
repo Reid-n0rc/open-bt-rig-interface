@@ -44,5 +44,9 @@ CONFIG_ESP_SYSTEM_PANIC_PRINT_REBOOT=y
 # The app task runs in the main task.
 CONFIG_ESP_MAIN_TASK_STACK_SIZE=8192
 
+# 1 ms tick: the CAT batching window (SPEC §7.3) and the UART read timeout
+# are a few milliseconds, which the default 100 Hz tick rounds to 0.
+CONFIG_FREERTOS_HZ=1000
+
 # Logs and programming on UART0 (the USB pins are the host links, REQ-FW-008).
 CONFIG_ESP_CONSOLE_UART_DEFAULT=y

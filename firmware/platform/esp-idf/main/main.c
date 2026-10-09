@@ -129,7 +129,7 @@ static void handle(const evt_t *e)
         ESP_LOGI(TAG, "pairing window open");
         break;
     case EVT_SERIAL_RX:
-        app_cat_from_radio(&s_app, e->transport, e->data, e->len);
+        app_cat_from_radio(&s_app, e->transport, e->data, e->len, now);
         break;
     default:
         break;
@@ -177,7 +177,17 @@ void app_main(void)
     ESP_ERROR_CHECK(esp_task_wdt_add(NULL));
     for (;;) {
         evt_t e;
-        if (xQueueReceive(s_queue, &e, pdMS_TO_TICKS(10)) == pdTRUE) {
+        /* Wake by the CAT batch deadline (SPEC §7.3) or after 10 ms. */
+        TickType_t wait = pdMS_TO_TICKS(10);
+        uint64_t due = app_next_deadline_us(&s_app, hal_time_us());
+        if (due != UINT64_MAX) {
+            uint64_t t = hal_time_us();
+            uint64_t left_ms = due > t ? (due - t + 999u) / 1000u : 0;
+            if (left_ms < 10u) {
+                wait = pdMS_TO_TICKS(left_ms);
+            }
+        }
+        if (xQueueReceive(s_queue, &e, wait) == pdTRUE) {
             handle(&e);
             while (xQueueReceive(s_queue, &e, 0) == pdTRUE) {
                 handle(&e);

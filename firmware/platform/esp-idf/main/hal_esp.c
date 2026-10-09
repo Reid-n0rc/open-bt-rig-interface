@@ -101,8 +101,8 @@ static void uart_rx_task(void *arg)
             vTaskDelay(pdMS_TO_TICKS(20));
             continue;
         }
-        /* A short timeout batches bytes into frames (SPEC §7.3, 2 ms target, #15). */
-        int n = uart_read_bytes(BOARD_SERIAL_UART, buf, sizeof(buf), pdMS_TO_TICKS(2));
+        /* Reads return after a 1 ms gap; the app batches into frames (SPEC §7.3). */
+        int n = uart_read_bytes(BOARD_SERIAL_UART, buf, sizeof(buf), pdMS_TO_TICKS(1));
         if (n > 0) {
             (void)evt_post(EVT_SERIAL_RX, 0, buf, (size_t)n);
         }
@@ -162,8 +162,15 @@ size_t hal_serial_write(uint8_t port, const uint8_t *data, size_t len)
     if (port != 0 || !s_uart_installed) {
         return 0;
     }
-    int n = uart_tx_chars(BOARD_SERIAL_UART, (const char *)data, (uint32_t)len);
-    return n > 0 ? (size_t)n : 0;
+    /* Only what fits in the driver's TX ring buffer, so this never blocks;
+     * the rest stays queued in the app and is offered again (SPEC §7.4). */
+    size_t room = 0;
+    if (uart_get_tx_buffer_free_size(BOARD_SERIAL_UART, &room) != ESP_OK || room == 0) {
+        return 0;
+    }
+    size_t n = len < room ? len : room;
+    int w = uart_write_bytes(BOARD_SERIAL_UART, (const char *)data, n);
+    return w > 0 ? (size_t)w : 0;
 }
 
 void hal_serial_jack_mode(uint8_t mode)
