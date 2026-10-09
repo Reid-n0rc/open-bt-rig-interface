@@ -87,6 +87,10 @@ jobs:
       - name: Reference codec tests
         run: python -m unittest discover -v -s tools/protocol -p 'test_*.py'
 
+      # The dev-kit CAT loopback script (#15) against a simulated device.
+      - name: CAT loopback tool tests
+        run: python -m unittest discover -v -s tools/cat_loopback -p 'test_*.py'
+
       - name: Vectors up to date
         run: python tools/protocol/make_vectors.py --check
 
