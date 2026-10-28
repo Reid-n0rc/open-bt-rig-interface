@@ -28,6 +28,7 @@
 #include "fw_version.h"
 #include "hal_esp.h"
 #include "nvs_flash.h"
+#include "radio_usb.h"
 #include "sdkconfig.h"
 #include "status_led.h"
 
@@ -52,16 +53,16 @@ static const board_t s_board = {
     .variant = BOARD_VARIANT,
     .hw_revision = BOARD_HW_REVISION,
     .features = PROTO_F_CAT | PROTO_F_PTT_CLOSURE | PROTO_F_CLOCK_SYNC | PROTO_F_BLE_TX_POWER |
-                PROTO_F_CONFIG_PERSIST | PROTO_F_PAIRING_WINDOW,
+                PROTO_F_CONFIG_PERSIST | PROTO_F_PAIRING_WINDOW | PROTO_F_RADIO_USB_HOST,
     .serial_modes = 0x01, /* 3.3 V logic only on the dev kit */
     .serial_min_baud = 4800,
     .serial_max_baud = 115200,
     .cat_tx_buffer = 256,
-    .ptt_outputs = 0x01, /* AUDIO-jack closure (a GPIO on the dev kit) */
+    .ptt_outputs = 0x07, /* AUDIO-jack closure (a GPIO), RTS and DTR on a radio USB port */
     .pairing_triggers = BOARD_PAIR_POWER_ON | BOARD_PAIR_BUTTON,
     .max_bonds = CONFIG_BT_NIMBLE_MAX_BONDS,
     .max_wired_hosts = 0,          /* the wired-host store is #64 */
-    .radio_port_isolation = false, /* no radio USB port on the dev kit */
+    .radio_port_isolation = false, /* the dev kit's USB OTG port: not isolated */
     .l2cap_psm = 0,
 };
 
@@ -131,6 +132,16 @@ static void handle(const evt_t *e)
     case EVT_SERIAL_RX:
         app_cat_from_radio(&s_app, e->transport, e->data, e->len, now);
         break;
+    case EVT_RADIO_USB_ATTACH: {
+        usb_radio_desc_t d;
+        memcpy(&d, e->data, sizeof(d));
+        size_t n = app_radio_usb_attached(&s_app, e->transport, &d, now);
+        ESP_LOGI(TAG, "radio USB device %u: %u serial port(s)", e->transport, (unsigned)n);
+        break;
+    }
+    case EVT_RADIO_USB_DETACH:
+        app_radio_usb_detached(&s_app, e->transport, now);
+        break;
     default:
         break;
     }
@@ -167,6 +178,11 @@ void app_main(void)
     }
     hal_esp_button_init();
     hal_esp_serial_init();
+    /* The radio USB port (Bluetooth mode). Ports 1-4 are the app's table. */
+    err = radio_usb_start(&s_app.radio_usb);
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "radio USB host unavailable: %s", esp_err_to_name(err));
+    }
     uint8_t info[PROTO_INFO_LEN];
     app_info(&s_app, info);
     ble_publish(info, app_pairing_open(&s_app));

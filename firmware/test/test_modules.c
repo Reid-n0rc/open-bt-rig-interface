@@ -211,8 +211,8 @@ static void test_usb_radio_dual_port_in_interface_order(void)
 {
     usb_radio_t r;
     usb_radio_init(&r);
-    usb_radio_desc_t cp2105 = {USB_VID_SILABS, 0xEA70, 2,
-                               {{1, USB_CLASS_VENDOR, 0, 0}, {0, USB_CLASS_VENDOR, 0, 0}}};
+    usb_radio_desc_t cp2105 = {USB_RADIO_VID_SILABS, 0xEA70, 2,
+                               {{1, USB_RADIO_CLASS_VENDOR, 0, 0}, {0, USB_RADIO_CLASS_VENDOR, 0, 0}}};
     uint8_t ports[USB_RADIO_PORTS];
     TEST_ASSERT_EQUAL_size_t(2, usb_radio_attach(&r, 1, &cp2105, ports));
     TEST_ASSERT_EQUAL_UINT8(1, ports[0]);
@@ -239,10 +239,10 @@ static void test_usb_radio_cdc_acm_and_unknown_vendor(void)
     uint8_t ports[USB_RADIO_PORTS];
     /* A CH342 as CDC-ACM: two functions, each a communication interface and
      * a data interface; only the communication interfaces are ports. */
-    usb_radio_desc_t ch342 = {USB_VID_WCH, 0x55D2, 4,
-                              {{0, USB_CLASS_CDC, USB_SUBCLASS_CDC_ACM, 1},
+    usb_radio_desc_t ch342 = {USB_RADIO_VID_WCH, 0x55D2, 4,
+                              {{0, USB_RADIO_CLASS_CDC, USB_RADIO_SUBCLASS_CDC_ACM, 1},
                                {1, 0x0A, 0, 0},
-                               {2, USB_CLASS_CDC, USB_SUBCLASS_CDC_ACM, 1},
+                               {2, USB_RADIO_CLASS_CDC, USB_RADIO_SUBCLASS_CDC_ACM, 1},
                                {3, 0x0A, 0, 0}}};
     TEST_ASSERT_EQUAL_size_t(2, usb_radio_attach(&r, 1, &ch342, ports));
     TEST_ASSERT_EQUAL_UINT8(USB_CHIP_CDC_ACM, usb_radio_port(&r, 1)->chip);
@@ -250,7 +250,7 @@ static void test_usb_radio_cdc_acm_and_unknown_vendor(void)
 
     /* A vendor-class interface of an unknown chip isn't a port; with nothing
      * else usable the device sets bit 2. */
-    usb_radio_desc_t odd = {0x1234, 0x0001, 1, {{0, USB_CLASS_VENDOR, 0, 0}}};
+    usb_radio_desc_t odd = {0x1234, 0x0001, 1, {{0, USB_RADIO_CLASS_VENDOR, 0, 0}}};
     TEST_ASSERT_EQUAL_size_t(0, usb_radio_attach(&r, 2, &odd, ports));
     TEST_ASSERT_EQUAL_UINT16(0x0005, usb_radio_status_flags(&r));
     TEST_ASSERT_EQUAL_size_t(0, usb_radio_detach(&r, 2, ports));
@@ -264,11 +264,11 @@ static void test_usb_radio_audio_and_hub(void)
     uint8_t ports[USB_RADIO_PORTS];
     /* The radio's hub: a CP2105 and a PCM290x codec as separate devices. */
     usb_radio_desc_t codec = {0x08BB, 0x2901, 3,
-                              {{0, USB_CLASS_AUDIO, 0x01, 0},
-                               {1, USB_CLASS_AUDIO, USB_SUBCLASS_AUDIO_STREAMING, 0},
-                               {2, USB_CLASS_AUDIO, USB_SUBCLASS_AUDIO_STREAMING, 0}}};
-    usb_radio_desc_t cp2105 = {USB_VID_SILABS, 0xEA70, 2,
-                               {{0, USB_CLASS_VENDOR, 0, 0}, {1, USB_CLASS_VENDOR, 0, 0}}};
+                              {{0, USB_RADIO_CLASS_AUDIO, 0x01, 0},
+                               {1, USB_RADIO_CLASS_AUDIO, USB_RADIO_SUBCLASS_AUDIO_STREAMING, 0},
+                               {2, USB_RADIO_CLASS_AUDIO, USB_RADIO_SUBCLASS_AUDIO_STREAMING, 0}}};
+    usb_radio_desc_t cp2105 = {USB_RADIO_VID_SILABS, 0xEA70, 2,
+                               {{0, USB_RADIO_CLASS_VENDOR, 0, 0}, {1, USB_RADIO_CLASS_VENDOR, 0, 0}}};
     TEST_ASSERT_EQUAL_size_t(0, usb_radio_attach(&r, 7, &codec, ports));
     TEST_ASSERT_EQUAL_UINT16(0x0002, usb_radio_status_flags(&r));
     TEST_ASSERT_EQUAL_size_t(2, usb_radio_attach(&r, 8, &cp2105, ports));
@@ -287,10 +287,10 @@ static void test_usb_radio_limits(void)
     usb_radio_init(&r);
     uint8_t ports[USB_RADIO_PORTS];
     /* A CP2108 (four ports) and another chip: the fifth port is left out. */
-    usb_radio_desc_t cp2108 = {USB_VID_SILABS, 0xEA71, 4,
-                               {{0, USB_CLASS_VENDOR, 0, 0}, {1, USB_CLASS_VENDOR, 0, 0},
-                                {2, USB_CLASS_VENDOR, 0, 0}, {3, USB_CLASS_VENDOR, 0, 0}}};
-    usb_radio_desc_t ft232 = {USB_VID_FTDI, 0x6001, 1, {{0, USB_CLASS_VENDOR, 0, 0}}};
+    usb_radio_desc_t cp2108 = {USB_RADIO_VID_SILABS, 0xEA71, 4,
+                               {{0, USB_RADIO_CLASS_VENDOR, 0, 0}, {1, USB_RADIO_CLASS_VENDOR, 0, 0},
+                                {2, USB_RADIO_CLASS_VENDOR, 0, 0}, {3, USB_RADIO_CLASS_VENDOR, 0, 0}}};
+    usb_radio_desc_t ft232 = {USB_RADIO_VID_FTDI, 0x6001, 1, {{0, USB_RADIO_CLASS_VENDOR, 0, 0}}};
     TEST_ASSERT_EQUAL_size_t(4, usb_radio_attach(&r, 1, &cp2108, ports));
     TEST_ASSERT_EQUAL_size_t(0, usb_radio_attach(&r, 2, &ft232, ports));
     TEST_ASSERT_EQUAL_UINT16(0x0001, usb_radio_status_flags(&r)); /* a serial chip: usable */
@@ -302,7 +302,7 @@ static void test_usb_radio_limits(void)
     TEST_ASSERT_EQUAL_UINT8(USB_CHIP_FTDI, usb_radio_port(&r, 1)->chip);
 
     /* More interfaces than looked at: only the first USB_RADIO_MAX_IFACES. */
-    usb_radio_desc_t many = {USB_VID_FTDI, 0x6011, 200, {{0}}};
+    usb_radio_desc_t many = {USB_RADIO_VID_FTDI, 0x6011, 200, {{0}}};
     TEST_ASSERT_EQUAL_size_t(0, usb_radio_attach(&r, 4, &many, ports)); /* class 0: none */
 
     /* Every device slot in use. */

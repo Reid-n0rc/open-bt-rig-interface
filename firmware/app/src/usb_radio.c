@@ -16,11 +16,11 @@ void usb_radio_init(usb_radio_t *r)
 uint8_t usb_radio_vendor_chip(uint16_t vid)
 {
     switch (vid) {
-    case USB_VID_SILABS:
+    case USB_RADIO_VID_SILABS:
         return USB_CHIP_CP210X;
-    case USB_VID_FTDI:
+    case USB_RADIO_VID_FTDI:
         return USB_CHIP_FTDI;
-    case USB_VID_WCH:
+    case USB_RADIO_VID_WCH:
         return USB_CHIP_CH34X;
     default:
         return USB_CHIP_OTHER;
@@ -32,10 +32,10 @@ uint8_t usb_radio_vendor_chip(uint16_t vid)
  * 0x0A) belongs to it and isn't a port of its own. */
 static uint8_t iface_chip(uint8_t vendor_chip, const usb_radio_iface_t *i)
 {
-    if (i->cls == USB_CLASS_VENDOR) {
+    if (i->cls == USB_RADIO_CLASS_VENDOR) {
         return vendor_chip;
     }
-    if (i->cls == USB_CLASS_CDC && i->subclass == USB_SUBCLASS_CDC_ACM) {
+    if (i->cls == USB_RADIO_CLASS_CDC && i->subclass == USB_RADIO_SUBCLASS_CDC_ACM) {
         return USB_CHIP_CDC_ACM;
     }
     return USB_CHIP_OTHER;
@@ -92,7 +92,7 @@ size_t usb_radio_attach(usb_radio_t *r, uint8_t dev, const usb_radio_desc_t *d, 
     size_t n = 0;
     for (uint8_t i = 0; i < n_ifaces; i++) {
         const usb_radio_iface_t *f = &sorted[i];
-        if (f->cls == USB_CLASS_AUDIO && f->subclass == USB_SUBCLASS_AUDIO_STREAMING) {
+        if (f->cls == USB_RADIO_CLASS_AUDIO && f->subclass == USB_RADIO_SUBCLASS_AUDIO_STREAMING) {
             audio = true;
             continue;
         }

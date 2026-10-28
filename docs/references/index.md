@@ -884,6 +884,15 @@ Local copies are in `cache/` (gitignored). Run `python3 tools/refs/refs.py fetch
 - Retrieved: 2026-09-24; SHA-256 `e3ab7801e8e267ce…`
 - Cited in: [`docs/decisions/ADR-0008-host-links-esp32-s3.md`](../../docs/decisions/ADR-0008-host-links-esp32-s3.md), [`docs/research/core-devices.md`](../../docs/research/core-devices.md), [`docs/research/radio-interface-circuits.md`](../../docs/research/radio-interface-circuits.md)
 
+### esp-usb-license
+
+**esp-usb LICENSE (Apache-2.0), the usb component 1.6.0** (Espressif Systems, license)
+
+- Local copy: [cache/esp-usb-usb-1.6.0-LICENSE.txt](cache/esp-usb-usb-1.6.0-LICENSE.txt)
+- Original: <https://raw.githubusercontent.com/espressif/esp-usb/630f1c4e61f71d62bb57ff1b840931da24c3329f/host/usb/LICENSE>
+- Retrieved: 2026-10-28; SHA-256 `cfc7749b96f63bd3…`
+- Cited in: [`THIRD_PARTY.md`](../../THIRD_PARTY.md)
+
 ### esp-usb-uac-readme
 
 **esp-usb: USB Host UAC driver README (usb_host_uac)** (Espressif Systems (Apache-2.0), sdk)

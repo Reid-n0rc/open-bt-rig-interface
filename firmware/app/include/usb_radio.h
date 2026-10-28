@@ -32,16 +32,16 @@ enum usb_radio_chip {
 };
 
 /* USB-IF vendor IDs of the vendor-class serial chips with drivers. */
-#define USB_VID_SILABS 0x10C4u
-#define USB_VID_FTDI 0x0403u
-#define USB_VID_WCH 0x1A86u
+#define USB_RADIO_VID_SILABS 0x10C4u
+#define USB_RADIO_VID_FTDI 0x0403u
+#define USB_RADIO_VID_WCH 0x1A86u
 
 /* Interface classes this module looks at. */
-#define USB_CLASS_AUDIO 0x01u
-#define USB_CLASS_CDC 0x02u
-#define USB_CLASS_VENDOR 0xFFu
-#define USB_SUBCLASS_AUDIO_STREAMING 0x02u
-#define USB_SUBCLASS_CDC_ACM 0x02u
+#define USB_RADIO_CLASS_AUDIO 0x01u
+#define USB_RADIO_CLASS_CDC 0x02u
+#define USB_RADIO_CLASS_VENDOR 0xFFu
+#define USB_RADIO_SUBCLASS_AUDIO_STREAMING 0x02u
+#define USB_RADIO_SUBCLASS_CDC_ACM 0x02u
 
 #define USB_RADIO_PORTS 4u        /* protocol ports 1-4 */
 #define USB_RADIO_MAX_IFACES 16u  /* interfaces looked at per device */

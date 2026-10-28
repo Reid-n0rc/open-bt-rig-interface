@@ -49,7 +49,8 @@ docker run --rm -v "$PWD":/project -w /project/firmware/platform/esp-idf \
 ```
 
 Flash through the DevKitM-1's **USB-to-UART** port (UART0). The ESP32-S3's
-own USB port is reserved for the host links (REQ-FW-008). CI uploads the
+own USB port is the radio USB port in Bluetooth mode (#43,
+[`BOARD.md`](BOARD.md#radio-usb-port)) and is never the console (REQ-FW-008). CI uploads the
 images (`rig_interface.bin`, the bootloader, the partition table and
 `flash_args`) as the `firmware-esp32s3-devkitm1` artifact; flash them with
 `python -m esptool --chip esp32s3 write-flash @flash_args` from that folder.
@@ -68,6 +69,7 @@ advertises as "Rig Interface" with the Rig Interface service UUID
 | HAL | [`main/hal_esp.c`](main/hal_esp.c) | GPIO (PTT, button), UART1 (SERIAL jack), I2S (codec hooks for #16), `esp_timer` (device time), NVS (configuration) |
 | Bluetooth | [`main/ble.c`](main/ble.c) | NimBLE host; the GATT service with the SPEC §13.1 UUIDs; LE Secure Connections, "Just Works", bonds only in the pairing window; the TX power cap |
 | Status LED | [`main/status_led.c`](main/status_led.c) | The DevKitM-1's RGB LED via the RMT bytes encoder |
+| Radio USB port | [`main/radio_usb.c`](main/radio_usb.c) | USB host (esp-usb, hubs on), pinned in [`main/idf_component.yml`](main/idf_component.yml). Each device that enumerates goes to the core, which picks its serial interfaces as ports 1–4 ([`usb_radio.h`](../../app/include/usb_radio.h)); a worker task opens them with the CP210x, FTDI, CH34x or CDC-ACM driver, sets RTS/DTR and line settings, and sends the bytes. RTS/DTR are inactive on open. Unplugging closes the ports, which drops any PTT from them |
 
 **NimBLE, not Bluedroid:** the L2CAP CoC transport (SPEC §13.3) needs it.
 The flow follows ESP-IDF's
@@ -81,7 +83,18 @@ when the store is full, NimBLE's `ble_store_util_status_rr` removes the
 **oldest** bond for the new one
 ([source](../../../docs/references/index.md#esp-idf-nimble-store-util)).
 
-Not yet here: L2CAP CoC, the radio USB host (#43), wired mode (#44), audio
+**Radio USB port (#43):** the USB transfers run in their own task because
+esp-usb's control-transfer timeout (5 s) is longer than the task watchdog's
+(3 s); the app task waits at most 300 ms, for a port open. FTDI RTS/DTR are
+sent by this code as the modem-control request (request 1, mask in the high
+byte, as Linux's `ftdi_sio.h` defines it, facts only) because esp-usb's FTDI
+driver sends request 2 with other values **(verify on an FTDI radio)**. The
+CP210x, FTDI and CH34x drivers open a port by VID, PID and interface, not by
+USB address, so two identical chips on the radio port can't be told apart;
+CDC-ACM ports are opened by address.
+
+Not yet here: L2CAP CoC, the radio USB sound card (UAC streaming, with #16),
+the manual interface override, `MODEM_STATUS`, wired mode (#44), audio
 (#16), tone sequences (#17), and the security stores and secure storage
 (#64; the hooks in [`security.h`](../../app/include/security.h) and
 `hal_secure_*` fail closed).

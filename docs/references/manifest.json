@@ -3744,6 +3744,19 @@
       "retrieved": "2026-09-25"
     },
     {
+      "id": "esp-usb-license",
+      "title": "esp-usb LICENSE (Apache-2.0), the usb component 1.6.0",
+      "publisher": "Espressif Systems",
+      "kind": "license",
+      "url": "https://raw.githubusercontent.com/espressif/esp-usb/630f1c4e61f71d62bb57ff1b840931da24c3329f/host/usb/LICENSE",
+      "file": "esp-usb-usb-1.6.0-LICENSE.txt",
+      "used_in": [
+        "THIRD_PARTY.md"
+      ],
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "retrieved": "2026-10-28"
+    },
+    {
       "id": "esp-idf-copyright",
       "title": "ESP-IDF Copyrights and Licenses (docs/en/COPYRIGHT.rst), v6.0.3",
       "publisher": "Espressif Systems",

@@ -1163,10 +1163,10 @@ static void use_usb_board(void)
 
 /* A dual-port CP2105, its interfaces listed out of order. */
 static const usb_radio_desc_t cp2105 = {
-    .vid = USB_VID_SILABS,
+    .vid = USB_RADIO_VID_SILABS,
     .pid = 0xEA70,
     .n_ifaces = 2,
-    .iface = {{1, USB_CLASS_VENDOR, 0, 0}, {0, USB_CLASS_VENDOR, 0, 0}},
+    .iface = {{1, USB_RADIO_CLASS_VENDOR, 0, 0}, {0, USB_RADIO_CLASS_VENDOR, 0, 0}},
 };
 
 static void serial_open(uint8_t port, uint8_t open, uint8_t token)
@@ -1198,7 +1198,7 @@ static unsigned caps_radio_ports(const proto_msg_t *c)
         n++;
         TEST_ASSERT_EQUAL_UINT8(n, t.v.radio_usb_serial.port);
         TEST_ASSERT_EQUAL_UINT8(USB_CHIP_CP210X, t.v.radio_usb_serial.chip);
-        TEST_ASSERT_EQUAL_UINT16(USB_VID_SILABS, t.v.radio_usb_serial.vid);
+        TEST_ASSERT_EQUAL_UINT16(USB_RADIO_VID_SILABS, t.v.radio_usb_serial.vid);
         TEST_ASSERT_EQUAL_UINT16(0xEA70, t.v.radio_usb_serial.pid);
         TEST_ASSERT_EQUAL_UINT8(n - 1, t.v.radio_usb_serial.interface); /* interface order */
         TEST_ASSERT_EQUAL_UINT16(256, t.v.radio_usb_serial.tx_buffer);
@@ -1255,9 +1255,9 @@ static void test_radio_usb_status_flags_for_audio_and_unusable(void)
     use_usb_board();
     open_session();
     usb_radio_desc_t codec = {.vid = 0x08BB, .pid = 0x2901, .n_ifaces = 3,
-                              .iface = {{0, USB_CLASS_AUDIO, 0x01, 0},
-                                        {1, USB_CLASS_AUDIO, USB_SUBCLASS_AUDIO_STREAMING, 0},
-                                        {2, USB_CLASS_AUDIO, USB_SUBCLASS_AUDIO_STREAMING, 0}}};
+                              .iface = {{0, USB_RADIO_CLASS_AUDIO, 0x01, 0},
+                                        {1, USB_RADIO_CLASS_AUDIO, USB_RADIO_SUBCLASS_AUDIO_STREAMING, 0},
+                                        {2, USB_RADIO_CLASS_AUDIO, USB_RADIO_SUBCLASS_AUDIO_STREAMING, 0}}};
     TEST_ASSERT_EQUAL_size_t(0, app_radio_usb_attached(&app, 4, &codec, now_us));
     receive(GATT);
     TEST_ASSERT_NULL(find(PROTO_CAPS)); /* no port changed (audio is #16) */
