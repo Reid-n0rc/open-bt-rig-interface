@@ -85,7 +85,7 @@ typedef struct {
     uint8_t phy; /* 0 n/a, 1 1M, 2 2M, 3 Coded */
     uint32_t conn_interval_us;
     uint16_t att_mtu, coc_mtu;
-    uint16_t flags; /* STATUS.flags bits 0, 1, 2 and 4 (hardware state) */
+    uint16_t flags; /* STATUS.flags bit 4 (USB-C source current) */
     uint8_t audio_path;
     uint16_t supply_mv;
 } hal_link_status_t;

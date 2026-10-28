@@ -22,6 +22,7 @@
 #include "pairing.h"
 #include "proto.h"
 #include "ptt.h"
+#include "usb_radio.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -35,6 +36,7 @@ typedef struct {
     clock_sync_t clock;
     cat_t cat;
     audio_t audio;
+    usb_radio_t radio_usb; /* devices on the radio USB port (Bluetooth mode, #43) */
 
     proto_rx_t rx[HAL_TRANSPORT_MAX + 1]; /* one receiver per transport */
     uint8_t rx_transport;                /* transport being fed */
@@ -97,6 +99,18 @@ void app_pairing_button(app_t *app, uint64_t now_us);
 /* A new BLE bond was stored. */
 void app_bond_added(app_t *app);
 bool app_pairing_open(const app_t *app);
+
+/* Radio USB port, Bluetooth mode (#43). A device enumerated (the radio, or
+ * a device behind the radio's own hub): its serial interfaces become ports
+ * 1-4 (closed), and CAPS and STATUS are resent with token 0 (SPEC §5, §16.1).
+ * Ignored in wired mode, where ports 1-4 don't exist (§7), and on a board
+ * without the RADIO_USB_HOST feature. Returns how many ports it added. */
+size_t app_radio_usb_attached(app_t *app, uint8_t dev, const usb_radio_desc_t *d,
+                              uint64_t now_us);
+/* The device went away (unplugged, or re-enumerating): its ports close, PTT
+ * from them drops with PORT_CLOSED, their queues are discarded, and CAPS and
+ * STATUS are resent. */
+void app_radio_usb_detached(app_t *app, uint8_t dev, uint64_t now_us);
 
 /* Bytes from the radio on a serial port. Sent as CAT_DATA when the port is
  * open: at once when they fill a frame, otherwise batched for up to

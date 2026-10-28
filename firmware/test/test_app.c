@@ -288,14 +288,14 @@ static void test_ping_status_and_unknown(void)
 
     fake.link.phy = 2;
     fake.link.att_mtu = 247;
-    fake.link.flags = 0xFFFF; /* only hardware bits pass */
+    fake.link.flags = 0xFFFF; /* only bit 4 passes; bits 0-2 are the app's (#43) */
     simple(PROTO_STATUS_GET, 7);
     receive(GATT);
     const proto_msg_t *s = find(PROTO_STATUS);
     TEST_ASSERT_NOT_NULL(s);
     TEST_ASSERT_EQUAL_UINT8(GATT, s->u.status.transport);
     TEST_ASSERT_EQUAL_UINT16(247, s->u.status.att_mtu);
-    TEST_ASSERT_EQUAL_UINT16(0x0017 | 0x0040, s->u.status.flags); /* pairing window open */
+    TEST_ASSERT_EQUAL_UINT16(0x0010 | 0x0040, s->u.status.flags); /* pairing window open */
 
     /* A device -> host type sent to the device, and an undefined type. */
     simple(PROTO_PTT_STATUS, 8);
@@ -1146,6 +1146,239 @@ static void test_bad_transport_numbers_ignored(void)
     TEST_ASSERT_EQUAL_UINT8(0, app.active);
 }
 
+/* --- Radio USB port, Bluetooth mode (#43, SPEC §5, §7, §8.3) --- */
+
+static board_t usb_board;
+
+/* The test board with the RADIO_USB_HOST feature. */
+static void use_usb_board(void)
+{
+    usb_board = board;
+    usb_board.features |= PROTO_F_RADIO_USB_HOST;
+    usb_board.ptt_outputs = PTT_TARGET_CLOSURE | PTT_TARGET_RTS | PTT_TARGET_DTR;
+    fake_reset();
+    fake.time_us = now_us;
+    app_init(&app, &usb_board, HAL_LINK_BLUETOOTH, PTT_R_BOOT, now_us);
+}
+
+/* A dual-port CP2105, its interfaces listed out of order. */
+static const usb_radio_desc_t cp2105 = {
+    .vid = USB_RADIO_VID_SILABS,
+    .pid = 0xEA70,
+    .n_ifaces = 2,
+    .iface = {{1, USB_RADIO_CLASS_VENDOR, 0, 0}, {0, USB_RADIO_CLASS_VENDOR, 0, 0}},
+};
+
+static void serial_open(uint8_t port, uint8_t open, uint8_t token)
+{
+    proto_msg_t o = {.type = PROTO_SERIAL_OPEN, .token = token};
+    o.u.serial_open.port = port;
+    o.u.serial_open.open = open;
+    send_msg(GATT, &o);
+}
+
+static void modem_lines(uint8_t port, uint8_t lines)
+{
+    proto_msg_t m = {.type = PROTO_MODEM_LINES, .token = 0};
+    m.u.modem_lines.port = port;
+    m.u.modem_lines.lines = lines;
+    send_msg(GATT, &m);
+}
+
+/* How many RADIO_USB_SERIAL TLVs the CAPS carries; checks the CP2105's. */
+static unsigned caps_radio_ports(const proto_msg_t *c)
+{
+    proto_bytes_t cur = c->u.caps.tlvs;
+    proto_tlv_t t;
+    unsigned n = 0;
+    while (proto_tlv_next(&cur, &t) == 1) {
+        if (t.tag != PROTO_TLV_RADIO_USB_SERIAL) {
+            continue;
+        }
+        n++;
+        TEST_ASSERT_EQUAL_UINT8(n, t.v.radio_usb_serial.port);
+        TEST_ASSERT_EQUAL_UINT8(USB_CHIP_CP210X, t.v.radio_usb_serial.chip);
+        TEST_ASSERT_EQUAL_UINT16(USB_RADIO_VID_SILABS, t.v.radio_usb_serial.vid);
+        TEST_ASSERT_EQUAL_UINT16(0xEA70, t.v.radio_usb_serial.pid);
+        TEST_ASSERT_EQUAL_UINT8(n - 1, t.v.radio_usb_serial.interface); /* interface order */
+        TEST_ASSERT_EQUAL_UINT16(256, t.v.radio_usb_serial.tx_buffer);
+    }
+    return n;
+}
+
+static void test_radio_usb_attach_reports_ports(void)
+{
+    use_usb_board();
+    open_session();
+    serial_open(1, 1, 5);
+    receive(GATT);
+    TEST_ASSERT_EQUAL_UINT8(PROTO_ERR_UNSUPPORTED, result()->code); /* not enumerated */
+
+    TEST_ASSERT_EQUAL_size_t(2, app_radio_usb_attached(&app, 3, &cp2105, now_us));
+    receive(GATT);
+    const proto_msg_t *c = find(PROTO_CAPS);
+    TEST_ASSERT_NOT_NULL(c);
+    TEST_ASSERT_EQUAL_UINT8(0, c->token);
+    TEST_ASSERT_EQUAL_UINT(2, caps_radio_ports(c));
+    const proto_msg_t *st = find(PROTO_STATUS);
+    TEST_ASSERT_NOT_NULL(st);
+    TEST_ASSERT_EQUAL_UINT8(0, st->token);
+    TEST_ASSERT_EQUAL_UINT16(0x0001, st->u.status.flags & 0x0007); /* serial chip present */
+
+    serial_open(2, 1, 6);
+    receive(GATT);
+    TEST_ASSERT_EQUAL_UINT8(PROTO_OK, result()->code);
+    TEST_ASSERT_TRUE(fake.serial_open[2]);
+
+    /* The same device again changes nothing and sends nothing. */
+    TEST_ASSERT_EQUAL_size_t(0, app_radio_usb_attached(&app, 3, &cp2105, now_us));
+    TEST_ASSERT_EQUAL_size_t(0, receive(GATT));
+
+    /* CAPS_GET lists the ports too. */
+    simple(PROTO_CAPS_GET, 9);
+    receive(GATT);
+    TEST_ASSERT_EQUAL_UINT(2, caps_radio_ports(find(PROTO_CAPS)));
+
+    /* Detach: both ports go, CAPS and STATUS follow. */
+    app_radio_usb_detached(&app, 3, now_us);
+    TEST_ASSERT_FALSE(fake.serial_open[2]);
+    receive(GATT);
+    TEST_ASSERT_EQUAL_UINT(0, caps_radio_ports(find(PROTO_CAPS)));
+    TEST_ASSERT_EQUAL_UINT16(0, find(PROTO_STATUS)->u.status.flags & 0x0007);
+    serial_open(2, 1, 7);
+    receive(GATT);
+    TEST_ASSERT_EQUAL_UINT8(PROTO_ERR_UNSUPPORTED, result()->code);
+}
+
+static void test_radio_usb_status_flags_for_audio_and_unusable(void)
+{
+    use_usb_board();
+    open_session();
+    usb_radio_desc_t codec = {.vid = 0x08BB, .pid = 0x2901, .n_ifaces = 3,
+                              .iface = {{0, USB_RADIO_CLASS_AUDIO, 0x01, 0},
+                                        {1, USB_RADIO_CLASS_AUDIO, USB_RADIO_SUBCLASS_AUDIO_STREAMING, 0},
+                                        {2, USB_RADIO_CLASS_AUDIO, USB_RADIO_SUBCLASS_AUDIO_STREAMING, 0}}};
+    TEST_ASSERT_EQUAL_size_t(0, app_radio_usb_attached(&app, 4, &codec, now_us));
+    receive(GATT);
+    TEST_ASSERT_NULL(find(PROTO_CAPS)); /* no port changed (audio is #16) */
+    TEST_ASSERT_EQUAL_UINT16(0x0002, find(PROTO_STATUS)->u.status.flags & 0x0007);
+
+    usb_radio_desc_t hid = {.vid = 0x1234, .pid = 1, .n_ifaces = 1, .iface = {{0, 0x03, 0, 0}}};
+    app_radio_usb_attached(&app, 5, &hid, now_us);
+    receive(GATT);
+    TEST_ASSERT_EQUAL_UINT16(0x0006, find(PROTO_STATUS)->u.status.flags & 0x0007);
+
+    app_radio_usb_detached(&app, 5, now_us);
+    app_radio_usb_detached(&app, 4, now_us);
+    receive(GATT);
+    TEST_ASSERT_EQUAL_UINT16(0, find(PROTO_STATUS)->u.status.flags & 0x0007);
+    app_radio_usb_detached(&app, 4, now_us); /* already gone: nothing */
+    TEST_ASSERT_EQUAL_size_t(0, receive(GATT));
+}
+
+static void test_radio_usb_detach_drops_passthrough_ptt(void)
+{
+    use_usb_board();
+    open_session();
+    app_radio_usb_attached(&app, 3, &cp2105, now_us);
+    serial_open(1, 1, 5);
+    modem_lines(1, PTT_LINE_RTS); /* default action 2: forwarded to the chip */
+    TEST_ASSERT_EQUAL_UINT8(PTT_LINE_RTS, fake.radio_lines[1]);
+    TEST_ASSERT_FALSE(fake.closure);
+    receive(GATT);
+    TEST_ASSERT_EQUAL_UINT8(PTT_SRC_PASSTHROUGH, find(PROTO_PTT_STATUS)->u.ptt_status.sources);
+
+    /* The radio is unplugged mid-TX. */
+    app_radio_usb_detached(&app, 3, now_us);
+    TEST_ASSERT_EQUAL_UINT8(0, fake.radio_lines[1]);
+    TEST_ASSERT_FALSE(fake.serial_open[1]);
+    receive(GATT);
+    const proto_msg_t *ps = find(PROTO_PTT_STATUS);
+    TEST_ASSERT_NOT_NULL(ps);
+    TEST_ASSERT_EQUAL_UINT8(0, ps->u.ptt_status.sources);
+    TEST_ASSERT_EQUAL_UINT8(PTT_R_PORT_CLOSED, ps->u.ptt_status.reason);
+    TEST_ASSERT_EQUAL_UINT16(0, app.cat.port[1].txq_len);
+    TEST_ASSERT_FALSE(cat_is_open(&app.cat, 1));
+}
+
+static void test_radio_usb_detach_drops_keyed_ptt_and_reattach_is_blocked(void)
+{
+    use_usb_board();
+    open_session();
+    app_radio_usb_attached(&app, 3, &cp2105, now_us);
+    config_set(0, PROTO_KEY_LINE_MAP, 2, 2, fill_line_map_dtr); /* port 2: action 1 */
+    receive(GATT);
+    TEST_ASSERT_NOT_NULL(find(PROTO_CONFIG));
+    serial_open(2, 1, 5);
+    modem_lines(2, 0);
+    modem_lines(2, PTT_LINE_RTS); /* armed, then asserted: keys the closure */
+    TEST_ASSERT_TRUE(fake.closure);
+    TEST_ASSERT_EQUAL_UINT8(0, fake.radio_lines[2]); /* action 1 isn't forwarded */
+    const uint8_t cat[] = "TX;";
+    proto_msg_t d = {.type = PROTO_CAT_DATA, .token = 0};
+    d.u.cat_data.port = 2;
+    d.u.cat_data.data.data = cat;
+    d.u.cat_data.data.len = 3;
+    fake.serial_accept = 0; /* the chip takes nothing: the bytes stay queued */
+    send_msg(GATT, &d);
+    TEST_ASSERT_EQUAL_UINT16(3, app.cat.port[2].txq_len);
+    receive(GATT);
+
+    app_radio_usb_detached(&app, 3, now_us);
+    TEST_ASSERT_FALSE(fake.closure);
+    TEST_ASSERT_EQUAL_UINT16(0, app.cat.port[2].txq_len);
+    receive(GATT);
+    TEST_ASSERT_EQUAL_UINT8(PTT_R_PORT_CLOSED, find(PROTO_PTT_STATUS)->u.ptt_status.reason);
+
+    /* Re-enumerated: the port is closed, and once opened its lines are
+     * BLOCKED until seen deasserted (§8.4). */
+    fake.serial_accept = SIZE_MAX;
+    app_radio_usb_attached(&app, 6, &cp2105, now_us);
+    TEST_ASSERT_FALSE(cat_is_open(&app.cat, 2));
+    serial_open(2, 1, 6);
+    modem_lines(2, PTT_LINE_RTS);
+    TEST_ASSERT_FALSE(fake.closure);
+    modem_lines(2, 0);
+    modem_lines(2, PTT_LINE_RTS);
+    TEST_ASSERT_TRUE(fake.closure);
+}
+
+static void test_radio_usb_detach_of_closed_port(void)
+{
+    use_usb_board();
+    open_session();
+    send_ptt(1, 1);
+    TEST_ASSERT_TRUE(fake.closure);
+    app_radio_usb_attached(&app, 3, &cp2105, now_us);
+    receive(GATT);
+    app_radio_usb_detached(&app, 3, now_us);
+    TEST_ASSERT_TRUE(fake.closure); /* PTT_SET from the session isn't the port's */
+    receive(GATT);
+    TEST_ASSERT_NOT_NULL(find(PROTO_CAPS));
+    const proto_msg_t *ps = find(PROTO_PTT_STATUS);
+    TEST_ASSERT_TRUE(ps == NULL || (ps->u.ptt_status.sources & PTT_SRC_SET));
+}
+
+static void test_radio_usb_not_in_wired_mode_or_without_feature(void)
+{
+    /* The plain test board has no RADIO_USB_HOST. */
+    TEST_ASSERT_EQUAL_size_t(0, app_radio_usb_attached(&app, 3, &cp2105, now_us));
+    TEST_ASSERT_FALSE(cat_port_exists(&app.cat, 1));
+
+    use_usb_board();
+    app_radio_usb_attached(&app, 3, &cp2105, now_us); /* no session: nothing sent */
+    TEST_ASSERT_TRUE(cat_port_exists(&app.cat, 1));
+    TEST_ASSERT_EQUAL_size_t(0, receive(GATT));
+
+    /* Wired mode: the radio's chips go to the host, ports 1-4 go away. */
+    app_host_link_changed(&app, HAL_LINK_WIRED, now_us);
+    TEST_ASSERT_FALSE(cat_port_exists(&app.cat, 1));
+    TEST_ASSERT_FALSE(cat_port_exists(&app.cat, 2));
+    TEST_ASSERT_EQUAL_UINT8(0, usb_radio_ports_present(&app.radio_usb));
+    TEST_ASSERT_EQUAL_size_t(0, app_radio_usb_attached(&app, 3, &cp2105, now_us));
+    TEST_ASSERT_FALSE(cat_port_exists(&app.cat, 1));
+}
+
 int main(void)
 {
     UNITY_BEGIN();
@@ -1189,5 +1422,11 @@ int main(void)
     RUN_TEST(test_info_and_led);
     RUN_TEST(test_max_payload_clamped_and_other_transport_errors);
     RUN_TEST(test_bad_transport_numbers_ignored);
+    RUN_TEST(test_radio_usb_attach_reports_ports);
+    RUN_TEST(test_radio_usb_status_flags_for_audio_and_unusable);
+    RUN_TEST(test_radio_usb_detach_drops_passthrough_ptt);
+    RUN_TEST(test_radio_usb_detach_drops_keyed_ptt_and_reattach_is_blocked);
+    RUN_TEST(test_radio_usb_detach_of_closed_port);
+    RUN_TEST(test_radio_usb_not_in_wired_mode_or_without_feature);
     return UNITY_END();
 }

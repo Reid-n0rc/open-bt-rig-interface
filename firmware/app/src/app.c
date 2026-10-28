@@ -202,7 +202,24 @@ static void send_caps(app_t *app, uint8_t token)
         t.v.serial_jack.modes = b->serial_modes;
         t.v.serial_jack.min_baud = b->serial_min_baud;
         t.v.serial_jack.max_baud = b->serial_max_baud;
-        t.v.serial_jack.tx_buffer = b->cat_tx_buffer;
+        t.v.serial_jack.tx_buffer = cat_initial_credit(b);
+        (void)proto_tlv_put(&t, buf, sizeof(buf), &pos);
+    }
+
+    for (uint8_t port = 1; port <= USB_RADIO_PORTS; port++) {
+        const usb_radio_port_t *rp = usb_radio_port(&app->radio_usb, port);
+        if (!rp) {
+            continue;
+        }
+        memset(&t, 0, sizeof(t));
+        t.known = true;
+        t.tag = PROTO_TLV_RADIO_USB_SERIAL;
+        t.v.radio_usb_serial.port = port;
+        t.v.radio_usb_serial.chip = rp->chip;
+        t.v.radio_usb_serial.vid = rp->vid;
+        t.v.radio_usb_serial.pid = rp->pid;
+        t.v.radio_usb_serial.interface = rp->interface;
+        t.v.radio_usb_serial.tx_buffer = cat_initial_credit(b);
         (void)proto_tlv_put(&t, buf, sizeof(buf), &pos);
     }
 
@@ -246,7 +263,7 @@ static void send_caps(app_t *app, uint8_t token)
 #define STATUS_F_UTC_FRESH (1u << 3)
 #define STATUS_F_AUDIO_RUNNING (1u << 5)
 #define STATUS_F_PAIRING_OPEN (1u << 6)
-#define STATUS_F_HW_MASK ((1u << 0) | (1u << 1) | (1u << 2) | (1u << 4))
+#define STATUS_F_HW_MASK (1u << 4) /* bits 0-2 come from the radio USB port */
 
 static void send_status(app_t *app, uint8_t token)
 {
@@ -262,7 +279,8 @@ static void send_status(app_t *app, uint8_t token)
     s->conn_interval_us = link.conn_interval_us;
     s->att_mtu = link.att_mtu;
     s->coc_mtu = link.coc_mtu;
-    s->flags = (uint16_t)(link.flags & STATUS_F_HW_MASK);
+    s->flags = (uint16_t)((link.flags & STATUS_F_HW_MASK) |
+                          usb_radio_status_flags(&app->radio_usb));
     if (clock_sync_fresh(&app->clock, app->now_us)) {
         s->flags |= STATUS_F_UTC_FRESH;
     }
@@ -434,6 +452,35 @@ static void cat_service(app_t *app, uint8_t port)
         m.u.cat_data.data.len = (uint16_t)n;
         send(app, &m);
     }
+}
+
+/* --- Radio USB port (#43) --- */
+
+/* Resends CAPS when the ports changed and STATUS when its flags did, both
+ * with token 0 (SPEC §5, §16.1). */
+static void radio_usb_changed(app_t *app, bool ports_changed, uint16_t old_flags)
+{
+    if (!app->active) {
+        return; /* a session asks for CAPS when it starts */
+    }
+    if (ports_changed) {
+        send_caps(app, 0);
+    }
+    if (usb_radio_status_flags(&app->radio_usb) != old_flags) {
+        send_status(app, 0);
+    }
+}
+
+static void radio_usb_remove(app_t *app, uint8_t dev)
+{
+    uint16_t flags = usb_radio_status_flags(&app->radio_usb);
+    uint8_t ports[USB_RADIO_PORTS];
+    size_t n = usb_radio_detach(&app->radio_usb, dev, ports);
+    for (size_t i = 0; i < n; i++) {
+        /* Closes the port: PTT from it drops with PORT_CLOSED (§7.2). */
+        cat_radio_port_removed(&app->cat, &app->ptt, ports[i], ms(app->now_us));
+    }
+    radio_usb_changed(app, n != 0, flags);
 }
 
 /* --- Dispatch --- */
@@ -744,6 +791,15 @@ void app_host_link_changed(app_t *app, uint8_t host_link, uint64_t now_us)
     ptt_all_off(&app->ptt, PTT_R_MODE_CHANGE, ms(now_us)); /* REQ-PTT-005 */
     app->host_link = host_link;
     pairing_close(&app->pairing); /* a host-mode change closes the window (§13.5) */
+    if (host_link == HAL_LINK_WIRED) {
+        /* The radio's chips go to the host through the hub: ports 1-4 go away. */
+        for (unsigned i = 0; i < USB_RADIO_MAX_DEVICES; i++) {
+            uint8_t dev = app->radio_usb.device[i].dev;
+            if (dev != USB_RADIO_NO_DEVICE) {
+                radio_usb_remove(app, dev);
+            }
+        }
+    }
 }
 
 void app_fault(app_t *app, uint64_t now_us)
@@ -767,6 +823,29 @@ void app_bond_added(app_t *app)
 bool app_pairing_open(const app_t *app)
 {
     return pairing_is_open(&app->pairing);
+}
+
+size_t app_radio_usb_attached(app_t *app, uint8_t dev, const usb_radio_desc_t *d,
+                              uint64_t now_us)
+{
+    app->now_us = now_us;
+    if (app->host_link != HAL_LINK_BLUETOOTH || !(app->board->features & PROTO_F_RADIO_USB_HOST)) {
+        return 0;
+    }
+    uint16_t flags = usb_radio_status_flags(&app->radio_usb);
+    uint8_t ports[USB_RADIO_PORTS];
+    size_t n = usb_radio_attach(&app->radio_usb, dev, d, ports);
+    for (size_t i = 0; i < n; i++) {
+        cat_radio_port_added(&app->cat, ports[i]);
+    }
+    radio_usb_changed(app, n != 0, flags);
+    return n;
+}
+
+void app_radio_usb_detached(app_t *app, uint8_t dev, uint64_t now_us)
+{
+    app->now_us = now_us;
+    radio_usb_remove(app, dev);
 }
 
 void app_cat_from_radio(app_t *app, uint8_t port, const uint8_t *data, size_t len,

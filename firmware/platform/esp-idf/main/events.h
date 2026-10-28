@@ -21,11 +21,14 @@ typedef enum {
     EVT_BOND_ADDED,       /* a new BLE bond was stored */
     EVT_PAIR_BUTTON,      /* the pairing button was pressed */
     EVT_SERIAL_RX,        /* bytes from the radio on a serial port */
+    EVT_RADIO_USB_ATTACH, /* a device on the radio USB port: transport = its address,
+                             data = its usb_radio_desc_t (#43) */
+    EVT_RADIO_USB_DETACH, /* that device went away: transport = its address */
 } evt_type_t;
 
 typedef struct {
     uint8_t type;      /* evt_type_t */
-    uint8_t transport; /* HAL_TRANSPORT_* or the serial port */
+    uint8_t transport; /* HAL_TRANSPORT_*, the serial port or the USB address */
     uint16_t len;
     uint8_t data[EVT_DATA_MAX];
 } evt_t;

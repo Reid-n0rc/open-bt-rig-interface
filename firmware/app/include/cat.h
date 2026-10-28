@@ -4,8 +4,8 @@
  *
  * CAT bridge (SPEC §7): serial ports, host credit and RTS/DTR. The bytes
  * pass unchanged (REQ-CAT-001); nothing here parses CAT. Port 0 (SERIAL
- * jack) goes to hal_serial_*; radio USB-serial ports 1-4 arrive with the USB
- * host issue (#43).
+ * jack) and the radio USB-serial ports 1-4 (#43, present while their chip is
+ * enumerated) go to hal_serial_*.
  *
  * Host -> radio: CAT_DATA fills a per-port queue within the host's credit;
  * cat_pump() hands it to the HAL as the HAL accepts bytes, and only the bytes
@@ -64,6 +64,9 @@ void cat_init(cat_t *c);
 bool cat_port_exists(const cat_t *c, uint8_t port);
 bool cat_is_open(const cat_t *c, uint8_t port);
 
+/* A port's credit after SERIAL_OPEN: the board's cat_tx_buffer, capped to
+ * CAT_TXQ_MAX. CAPS reports it as each port's tx_buffer (SPEC §5.1). */
+uint16_t cat_initial_credit(const board_t *board);
 /* SERIAL_OPEN. Returns a PROTO code. */
 int cat_open(cat_t *c, ptt_t *ptt, const board_t *board, const cfg_t *cfg, uint8_t port,
              uint8_t open, uint64_t now_ms);
@@ -77,6 +80,12 @@ int cat_from_host(cat_t *c, uint8_t port, const uint8_t *data, size_t len);
 uint16_t cat_pump(cat_t *c, uint8_t port);
 /* MODEM_LINES. */
 int cat_modem_lines(cat_t *c, ptt_t *ptt, uint8_t port, uint8_t lines, uint64_t now_ms);
+/* A radio port 1-4 enumerated: it exists from now on, closed. */
+void cat_radio_port_added(cat_t *c, uint8_t port);
+/* A radio port 1-4 went away (its chip unplugged or re-enumerating): closes
+ * it if open (its lines deassert and the PTT sources from it release with
+ * PORT_CLOSED), discards both queues and forgets the port. */
+void cat_radio_port_removed(cat_t *c, ptt_t *ptt, uint8_t port, uint64_t now_ms);
 /* Session end: closes every port (their lines deassert), forgets credit and
  * discards unsent bytes in both directions. */
 void cat_close_all(cat_t *c, ptt_t *ptt, uint64_t now_ms);

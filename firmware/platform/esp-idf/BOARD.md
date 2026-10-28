@@ -35,7 +35,7 @@ app and the bootloader hook include.
 | I2S DOUT | 7 | J1 pin 9 | |
 | I2S DIN | 8 | J1 pin 10 | |
 | Console and flashing | 43 (TX), 44 (RX) | USB-to-UART port | UART0, through the board's USB-to-UART bridge (REQ-FW-008) |
-| USB OTG D−/D+ | 19/20 | ESP32-S3 USB port | Reserved for the host links (#43, #44); unused by this firmware |
+| USB OTG D−/D+ | 19/20 | ESP32-S3 USB port | The radio USB port in Bluetooth mode (USB host, #43); wired mode is #44 ([below](#radio-usb-port)) |
 
 Header positions are from the user guide's J1 table (pin 1 is 3V3).
 
@@ -84,10 +84,24 @@ The script pairs, opens port 0, sends random bytes within the device's credit
 4800 and 9600 baud to exercise credit with a slow radio side. Remove the jumper
 before connecting a radio.
 
+## Radio USB port
+
+The firmware is USB host on the ESP32-S3 USB port (GPIO19/20) and talks to
+the radio's USB-serial chips through it, through the radio's own hub too.
+Connect the radio's USB cable to that port with a USB OTG adapter.
+
+The dev kit doesn't drive VBUS out of that port **(verify on the board
+schematic)**. Radios whose chips use VBUS as connect-sense (CP2105, CH342;
+ADR-0003) then don't enumerate. Feed 5 V to VBUS on the adapter, for
+example through a powered hub or an OTG Y-cable, and keep the radio's own
+ground path in mind (the dev kit has no isolation).
+
 ## Not on the dev kit
 
 - The AUDIO-jack isolation, the RS-232 transceiver and CI-V buffer, the
-  SERIAL-jack mode switches, the USB hub and switches, and the radio USB port.
-  The firmware reports only what the dev kit has (`CAPS`: CAT on port 0 at
-  3.3 V logic, the PTT closure, clock sync, BLE TX power, the pairing window).
+  SERIAL-jack mode switches, the USB hub and switches, and the radio USB
+  port's ESD, isolation and VBUS circuits. The firmware reports only what the
+  dev kit has (`CAPS`: CAT on port 0 at 3.3 V logic, the radio USB port's
+  serial chips as ports 1–4, the PTT closure, RTS/DTR on a radio port, clock
+  sync, BLE TX power, the pairing window).
 - A supply-voltage monitor (`STATUS.supply_mv` is 0).

@@ -50,3 +50,7 @@ CONFIG_FREERTOS_HZ=1000
 
 # Logs and programming on UART0 (the USB pins are the host links, REQ-FW-008).
 CONFIG_ESP_CONSOLE_UART_DEFAULT=y
+
+# Radio USB port (#43): the ESP32-S3 is USB host to the radio, including
+# the hub inside some radios (REQ-RIF-006).
+CONFIG_USB_HOST_HUBS_SUPPORTED=y

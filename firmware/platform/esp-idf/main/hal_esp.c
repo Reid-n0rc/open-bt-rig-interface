@@ -22,6 +22,7 @@
 #include "hal_esp.h"
 #include "nvs.h"
 #include "proto.h"
+#include "radio_usb.h"
 
 static const char *TAG = "hal";
 
@@ -56,10 +57,7 @@ void hal_ptt_closure_set(bool on)
 
 void hal_radio_lines_set(uint8_t port, uint8_t lines)
 {
-    /* Radio USB-serial ports arrive with the USB host issue (#43). None
-     * exists before then, so nothing can be asserted here. */
-    (void)port;
-    (void)lines;
+    radio_usb_lines_set(port, lines); /* the radio's USB-serial chip (#43) */
 }
 
 /* --- Pairing button --- */
@@ -133,7 +131,7 @@ void hal_esp_serial_init(void)
 int hal_serial_open(uint8_t port, const hal_uart_cfg_t *cfg)
 {
     if (port != 0) {
-        return PROTO_ERR_UNSUPPORTED; /* radio USB-serial: #43 */
+        return radio_usb_serial_open(port, cfg); /* radio USB-serial (#43) */
     }
     uart_config_t u = {
         .baud_rate = (int)cfg->baud,
@@ -174,6 +172,7 @@ int hal_serial_open(uint8_t port, const hal_uart_cfg_t *cfg)
 void hal_serial_close(uint8_t port)
 {
     if (port != 0) {
+        radio_usb_serial_close(port);
         return;
     }
     xSemaphoreTake(s_uart_lock, portMAX_DELAY);
@@ -187,7 +186,10 @@ void hal_serial_close(uint8_t port)
 
 size_t hal_serial_write(uint8_t port, const uint8_t *data, size_t len)
 {
-    if (port != 0 || !s_uart_installed) {
+    if (port != 0) {
+        return radio_usb_serial_write(port, data, len);
+    }
+    if (!s_uart_installed) {
         return 0;
     }
     /* Only what fits in the driver's TX ring buffer, so this never blocks;
