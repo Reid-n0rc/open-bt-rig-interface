@@ -56,6 +56,11 @@ static int port_check(const cat_t *c, uint8_t port)
     return PROTO_OK;
 }
 
+uint16_t cat_initial_credit(const board_t *board)
+{
+    return board->cat_tx_buffer <= CAT_TXQ_MAX ? board->cat_tx_buffer : (uint16_t)CAT_TXQ_MAX;
+}
+
 int cat_open(cat_t *c, ptt_t *ptt, const board_t *board, const cfg_t *cfg, uint8_t port,
              uint8_t open, uint64_t now_ms)
 {
@@ -83,8 +88,7 @@ int cat_open(cat_t *c, ptt_t *ptt, const board_t *board, const cfg_t *cfg, uint8
     /* Opening again restarts the port: fresh credit, nothing queued (§7.2). */
     port_reset(&c->port[port]);
     c->port[port].open = true;
-    c->port[port].credit =
-        board->cat_tx_buffer <= CAT_TXQ_MAX ? board->cat_tx_buffer : (uint16_t)CAT_TXQ_MAX;
+    c->port[port].credit = cat_initial_credit(board);
     ptt_port_opened(ptt, port, now_ms); /* restarts RTS/DTR arming (§8.4) */
     return PROTO_OK;
 }
@@ -167,6 +171,29 @@ int cat_modem_lines(cat_t *c, ptt_t *ptt, uint8_t port, uint8_t lines, uint64_t 
     }
     ptt_lines(ptt, port, lines, PTT_ORIGIN_PROTOCOL, now_ms);
     return PROTO_OK;
+}
+
+void cat_radio_port_added(cat_t *c, uint8_t port)
+{
+    if (port < 1 || port > 4) {
+        return;
+    }
+    port_reset(&c->port[port]);
+    c->radio_ports_present = (uint8_t)(c->radio_ports_present | (1u << port));
+}
+
+void cat_radio_port_removed(cat_t *c, ptt_t *ptt, uint8_t port, uint64_t now_ms)
+{
+    if (port < 1 || port > 4) {
+        return;
+    }
+    if (c->port[port].open) {
+        hal_serial_close(port);
+    }
+    port_reset(&c->port[port]);
+    c->radio_ports_present = (uint8_t)(c->radio_ports_present & ~(1u << port));
+    /* Lines deassert and restart BLOCKED; a source from this port releases. */
+    ptt_port_closed(ptt, port, now_ms);
 }
 
 void cat_close_all(cat_t *c, ptt_t *ptt, uint64_t now_ms)

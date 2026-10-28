@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
  *
  * Smaller modules: BLE TX power cap, pairing window, clock sync, CAT bridge
- * skeleton, audio and security stubs, reset-reason mapping.
+ * skeleton, radio USB interface selection, audio and security stubs,
+ * reset-reason mapping.
  */
 #include <string.h>
 
@@ -16,6 +17,7 @@
 #include "pairing.h"
 #include "security.h"
 #include "unity.h"
+#include "usb_radio.h"
 
 static const board_t board = {
     .variant = 'D',
@@ -151,9 +153,166 @@ static void test_cat_ports_and_open(void)
     TEST_ASSERT_EQUAL_INT(PROTO_ERR_UNSUPPORTED, cat_open(&c, &ptt, &board, &cfg, 0, 1, 0));
     TEST_ASSERT_FALSE(cat_is_open(&c, 0));
     /* A radio port once enumerated. */
-    c.radio_ports_present = 1u << 2;
+    cat_radio_port_added(&c, 2);
     fake.serial_open_result = 0;
     TEST_ASSERT_EQUAL_INT(PROTO_OK, cat_open(&c, &ptt, &board, &cfg, 2, 1, 0));
+    TEST_ASSERT_TRUE(fake.serial_open[2]);
+}
+
+static void test_cat_radio_port_added_and_removed(void)
+{
+    cat_t c;
+    cat_setup(&c);
+    cat_radio_port_added(&c, 0); /* only 1-4 */
+    cat_radio_port_added(&c, 5);
+    TEST_ASSERT_EQUAL_UINT8(0, c.radio_ports_present);
+
+    cat_radio_port_added(&c, 1);
+    TEST_ASSERT_TRUE(cat_port_exists(&c, 1));
+    TEST_ASSERT_FALSE(cat_is_open(&c, 1));
+    TEST_ASSERT_EQUAL_INT(PROTO_OK, cat_open(&c, &ptt, &board, &cfg, 1, 1, 0));
+    const uint8_t data[] = "FA;";
+    fake.serial_accept = 0;
+    TEST_ASSERT_EQUAL_INT(PROTO_OK, cat_from_host(&c, 1, data, 3));
+    TEST_ASSERT_EQUAL_size_t(0, cat_from_radio(&c, 1, data, 3, 0));
+
+    cat_radio_port_removed(&c, &ptt, 1, 10);
+    TEST_ASSERT_FALSE(cat_port_exists(&c, 1));
+    TEST_ASSERT_FALSE(cat_is_open(&c, 1));
+    TEST_ASSERT_FALSE(fake.serial_open[1]);
+    TEST_ASSERT_EQUAL_UINT16(0, c.port[1].txq_len);
+    TEST_ASSERT_EQUAL_UINT16(0, c.port[1].rxq_len);
+    TEST_ASSERT_EQUAL_UINT16(0, c.port[1].credit);
+    TEST_ASSERT_EQUAL_INT(PROTO_ERR_UNSUPPORTED, cat_open(&c, &ptt, &board, &cfg, 1, 1, 0));
+    cat_radio_port_removed(&c, &ptt, 1, 20); /* already gone */
+    cat_radio_port_removed(&c, &ptt, 9, 20);
+    TEST_ASSERT_TRUE(cat_port_exists(&c, 0));
+}
+
+static void test_cat_initial_credit_capped(void)
+{
+    board_t big = board;
+    big.cat_tx_buffer = 4000;
+    TEST_ASSERT_EQUAL_UINT16(CAT_TXQ_MAX, cat_initial_credit(&big));
+    TEST_ASSERT_EQUAL_UINT16(8, cat_initial_credit(&board));
+}
+
+/* --- Radio USB interface selection (#43, SPEC §7) --- */
+
+static void test_usb_radio_vendor_chips(void)
+{
+    TEST_ASSERT_EQUAL_UINT8(USB_CHIP_CP210X, usb_radio_vendor_chip(0x10C4));
+    TEST_ASSERT_EQUAL_UINT8(USB_CHIP_FTDI, usb_radio_vendor_chip(0x0403));
+    TEST_ASSERT_EQUAL_UINT8(USB_CHIP_CH34X, usb_radio_vendor_chip(0x1A86));
+    TEST_ASSERT_EQUAL_UINT8(USB_CHIP_OTHER, usb_radio_vendor_chip(0x08BB));
+}
+
+static void test_usb_radio_dual_port_in_interface_order(void)
+{
+    usb_radio_t r;
+    usb_radio_init(&r);
+    usb_radio_desc_t cp2105 = {USB_VID_SILABS, 0xEA70, 2,
+                               {{1, USB_CLASS_VENDOR, 0, 0}, {0, USB_CLASS_VENDOR, 0, 0}}};
+    uint8_t ports[USB_RADIO_PORTS];
+    TEST_ASSERT_EQUAL_size_t(2, usb_radio_attach(&r, 1, &cp2105, ports));
+    TEST_ASSERT_EQUAL_UINT8(1, ports[0]);
+    TEST_ASSERT_EQUAL_UINT8(2, ports[1]);
+    TEST_ASSERT_EQUAL_UINT8(0, usb_radio_port(&r, 1)->interface);
+    TEST_ASSERT_EQUAL_UINT8(1, usb_radio_port(&r, 2)->interface);
+    TEST_ASSERT_EQUAL_UINT8(USB_CHIP_CP210X, usb_radio_port(&r, 2)->chip);
+    TEST_ASSERT_NULL(usb_radio_port(&r, 3));
+    TEST_ASSERT_NULL(usb_radio_port(&r, 0));
+    TEST_ASSERT_NULL(usb_radio_port(&r, 5));
+    TEST_ASSERT_EQUAL_UINT8(0x06, usb_radio_ports_present(&r));
+    TEST_ASSERT_EQUAL_UINT16(0x0001, usb_radio_status_flags(&r));
+
+    /* Already attached, or the null handle: nothing. */
+    TEST_ASSERT_EQUAL_size_t(0, usb_radio_attach(&r, 1, &cp2105, ports));
+    TEST_ASSERT_EQUAL_size_t(0, usb_radio_attach(&r, USB_RADIO_NO_DEVICE, &cp2105, ports));
+    TEST_ASSERT_EQUAL_size_t(0, usb_radio_detach(&r, USB_RADIO_NO_DEVICE, ports));
+}
+
+static void test_usb_radio_cdc_acm_and_unknown_vendor(void)
+{
+    usb_radio_t r;
+    usb_radio_init(&r);
+    uint8_t ports[USB_RADIO_PORTS];
+    /* A CH342 as CDC-ACM: two functions, each a communication interface and
+     * a data interface; only the communication interfaces are ports. */
+    usb_radio_desc_t ch342 = {USB_VID_WCH, 0x55D2, 4,
+                              {{0, USB_CLASS_CDC, USB_SUBCLASS_CDC_ACM, 1},
+                               {1, 0x0A, 0, 0},
+                               {2, USB_CLASS_CDC, USB_SUBCLASS_CDC_ACM, 1},
+                               {3, 0x0A, 0, 0}}};
+    TEST_ASSERT_EQUAL_size_t(2, usb_radio_attach(&r, 1, &ch342, ports));
+    TEST_ASSERT_EQUAL_UINT8(USB_CHIP_CDC_ACM, usb_radio_port(&r, 1)->chip);
+    TEST_ASSERT_EQUAL_UINT8(2, usb_radio_port(&r, 2)->interface);
+
+    /* A vendor-class interface of an unknown chip isn't a port; with nothing
+     * else usable the device sets bit 2. */
+    usb_radio_desc_t odd = {0x1234, 0x0001, 1, {{0, USB_CLASS_VENDOR, 0, 0}}};
+    TEST_ASSERT_EQUAL_size_t(0, usb_radio_attach(&r, 2, &odd, ports));
+    TEST_ASSERT_EQUAL_UINT16(0x0005, usb_radio_status_flags(&r));
+    TEST_ASSERT_EQUAL_size_t(0, usb_radio_detach(&r, 2, ports));
+    TEST_ASSERT_EQUAL_UINT16(0x0001, usb_radio_status_flags(&r));
+}
+
+static void test_usb_radio_audio_and_hub(void)
+{
+    usb_radio_t r;
+    usb_radio_init(&r);
+    uint8_t ports[USB_RADIO_PORTS];
+    /* The radio's hub: a CP2105 and a PCM290x codec as separate devices. */
+    usb_radio_desc_t codec = {0x08BB, 0x2901, 3,
+                              {{0, USB_CLASS_AUDIO, 0x01, 0},
+                               {1, USB_CLASS_AUDIO, USB_SUBCLASS_AUDIO_STREAMING, 0},
+                               {2, USB_CLASS_AUDIO, USB_SUBCLASS_AUDIO_STREAMING, 0}}};
+    usb_radio_desc_t cp2105 = {USB_VID_SILABS, 0xEA70, 2,
+                               {{0, USB_CLASS_VENDOR, 0, 0}, {1, USB_CLASS_VENDOR, 0, 0}}};
+    TEST_ASSERT_EQUAL_size_t(0, usb_radio_attach(&r, 7, &codec, ports));
+    TEST_ASSERT_EQUAL_UINT16(0x0002, usb_radio_status_flags(&r));
+    TEST_ASSERT_EQUAL_size_t(2, usb_radio_attach(&r, 8, &cp2105, ports));
+    TEST_ASSERT_EQUAL_UINT16(0x0003, usb_radio_status_flags(&r));
+    TEST_ASSERT_EQUAL_size_t(0, usb_radio_detach(&r, 7, ports));
+    TEST_ASSERT_EQUAL_UINT16(0x0001, usb_radio_status_flags(&r));
+    TEST_ASSERT_EQUAL_size_t(2, usb_radio_detach(&r, 8, ports));
+    TEST_ASSERT_EQUAL_UINT8(1, ports[0]);
+    TEST_ASSERT_EQUAL_UINT8(2, ports[1]);
+    TEST_ASSERT_EQUAL_UINT16(0, usb_radio_status_flags(&r));
+}
+
+static void test_usb_radio_limits(void)
+{
+    usb_radio_t r;
+    usb_radio_init(&r);
+    uint8_t ports[USB_RADIO_PORTS];
+    /* A CP2108 (four ports) and another chip: the fifth port is left out. */
+    usb_radio_desc_t cp2108 = {USB_VID_SILABS, 0xEA71, 4,
+                               {{0, USB_CLASS_VENDOR, 0, 0}, {1, USB_CLASS_VENDOR, 0, 0},
+                                {2, USB_CLASS_VENDOR, 0, 0}, {3, USB_CLASS_VENDOR, 0, 0}}};
+    usb_radio_desc_t ft232 = {USB_VID_FTDI, 0x6001, 1, {{0, USB_CLASS_VENDOR, 0, 0}}};
+    TEST_ASSERT_EQUAL_size_t(4, usb_radio_attach(&r, 1, &cp2108, ports));
+    TEST_ASSERT_EQUAL_size_t(0, usb_radio_attach(&r, 2, &ft232, ports));
+    TEST_ASSERT_EQUAL_UINT16(0x0001, usb_radio_status_flags(&r)); /* a serial chip: usable */
+    /* Freed ports go to the next device, lowest first. */
+    usb_radio_detach(&r, 1, ports);
+    usb_radio_detach(&r, 2, ports);
+    TEST_ASSERT_EQUAL_size_t(1, usb_radio_attach(&r, 3, &ft232, ports));
+    TEST_ASSERT_EQUAL_UINT8(1, ports[0]);
+    TEST_ASSERT_EQUAL_UINT8(USB_CHIP_FTDI, usb_radio_port(&r, 1)->chip);
+
+    /* More interfaces than looked at: only the first USB_RADIO_MAX_IFACES. */
+    usb_radio_desc_t many = {USB_VID_FTDI, 0x6011, 200, {{0}}};
+    TEST_ASSERT_EQUAL_size_t(0, usb_radio_attach(&r, 4, &many, ports)); /* class 0: none */
+
+    /* Every device slot in use. */
+    usb_radio_init(&r);
+    usb_radio_desc_t hid = {0x1234, 1, 1, {{0, 0x03, 0, 0}}};
+    for (uint8_t d = 1; d <= USB_RADIO_MAX_DEVICES; d++) {
+        usb_radio_attach(&r, d, &hid, ports);
+    }
+    TEST_ASSERT_EQUAL_size_t(0, usb_radio_attach(&r, 100, &ft232, ports));
+    TEST_ASSERT_EQUAL_UINT8(0, usb_radio_ports_present(&r));
 }
 
 static void test_cat_set(void)
@@ -435,6 +594,13 @@ int main(void)
     RUN_TEST(test_cat_rx_overflow_drops_newest);
     RUN_TEST(test_cat_deadline_for_queued_tx);
     RUN_TEST(test_cat_modem_lines_and_close_all);
+    RUN_TEST(test_cat_radio_port_added_and_removed);
+    RUN_TEST(test_cat_initial_credit_capped);
+    RUN_TEST(test_usb_radio_vendor_chips);
+    RUN_TEST(test_usb_radio_dual_port_in_interface_order);
+    RUN_TEST(test_usb_radio_cdc_acm_and_unknown_vendor);
+    RUN_TEST(test_usb_radio_audio_and_hub);
+    RUN_TEST(test_usb_radio_limits);
     RUN_TEST(test_audio_stubs);
     RUN_TEST(test_security_stubs_fail_closed);
     RUN_TEST(test_boot_reason_mapping);
