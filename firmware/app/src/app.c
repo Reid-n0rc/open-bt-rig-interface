@@ -24,10 +24,10 @@ static uint64_t ms(uint64_t us)
 static void send_on(app_t *app, uint8_t transport, const proto_msg_t *m)
 {
     uint8_t wire[PROTO_MAX_WIRE];
+    /* Every message the app builds fits PROTO_MAX_WIRE, and it sends only
+     * with a session; a HAL ignores transport 0 and an empty send anyway. */
     size_t n = proto_encode(m, wire, sizeof(wire));
-    if (n && transport) {
-        hal_transport_send(transport, wire, n);
-    }
+    hal_transport_send(transport, wire, n);
     (void)app;
 }
 
@@ -168,9 +168,10 @@ static void handle_hello(app_t *app, uint8_t transport, const proto_msg_t *m)
     d->variant = app->board->variant;
     d->hw_revision = app->board->hw_revision;
     d->max_payload = PROTO_MAX_PAYLOAD;
-    size_t blen = strlen(FW_VERSION_BUILD);
+    /* fw_version.cmake truncates the build string to PROTO_BUILD_MAX. */
+    _Static_assert(sizeof(FW_VERSION_BUILD) - 1u <= PROTO_BUILD_MAX, "DEVICE_INFO.build too long");
     d->build.data = (const uint8_t *)FW_VERSION_BUILD;
-    d->build.len = (uint16_t)(blen > PROTO_BUILD_MAX ? PROTO_BUILD_MAX : blen);
+    d->build.len = (uint16_t)(sizeof(FW_VERSION_BUILD) - 1u);
     send(app, &r);
 
     if (app->status_pending) {
@@ -314,7 +315,8 @@ static int persist(app_t *app)
     size_t n = cfg_serialize(&app->cfg, blob, sizeof(blob));
     app->persisted = true;
     app->persist_ms = ms(app->now_us);
-    if (n == 0 || hal_config_save(blob, n) != 0) {
+    /* CFG_BLOB_MAX holds every record (test_cfg checks), so n is never 0. */
+    if (hal_config_save(blob, n) != 0) {
         return PROTO_ERR_INTERNAL;
     }
     return PROTO_OK;
@@ -658,7 +660,7 @@ static void on_frame_error(void *ctx)
     if (app->frame_errors < 0xFFFFu) {
         app->frame_errors++;
     }
-    if (app->rx_transport != app->active || !app->active) {
+    if (app->rx_transport != app->active) { /* never 0 here (app_rx) */
         return;
     }
     /* RESULT FRAME_ERROR, token 0, at most once per second (SPEC §3.4). */

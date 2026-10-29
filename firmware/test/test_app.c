@@ -1402,6 +1402,250 @@ static void test_radio_usb_not_in_wired_mode_or_without_feature(void)
     TEST_ASSERT_FALSE(cat_port_exists(&app.cat, 1));
 }
 
+/* --- Remaining paths (#90 coverage) --- */
+
+static void hello_major(uint8_t transport, uint8_t major)
+{
+    proto_msg_t m = {.type = PROTO_HELLO, .token = 1};
+    m.u.hello.proto_major = major;
+    m.u.hello.proto_minor = PROTO_VERSION_MINOR;
+    m.u.hello.max_payload = 1024;
+    send_msg(transport, &m);
+}
+
+static void test_other_major_version_is_a_mismatch_but_ping_works(void)
+{
+    hello_major(GATT, 1);
+    receive(GATT);
+    simple(PROTO_STATUS_GET, 2);
+    receive(GATT);
+    TEST_ASSERT_EQUAL_UINT8(PROTO_ERR_VERSION_MISMATCH, result()->code);
+    /* PING is answered before the versions agree (§4). */
+    proto_msg_t m = {.type = PROTO_PING, .token = 3};
+    send_msg(GATT, &m);
+    receive(GATT);
+    TEST_ASSERT_NOT_NULL(find(PROTO_PONG));
+}
+
+static void test_ping_before_auth_on_a_wired_host(void)
+{
+    fake_reset();
+    app_init(&app, &board, HAL_LINK_WIRED, PTT_R_BOOT, now_us);
+    hello(HAL_TRANSPORT_TCP, PROTO_VERSION_MINOR);
+    receive(HAL_TRANSPORT_TCP);
+    proto_msg_t m = {.type = PROTO_PING, .token = 4};
+    send_msg(HAL_TRANSPORT_TCP, &m);
+    receive(HAL_TRANSPORT_TCP);
+    TEST_ASSERT_NOT_NULL(find(PROTO_PONG));
+}
+
+static const board_t bare = {
+    .variant = 'D',
+    .hw_revision = 'A',
+    .features = PROTO_F_PTT_CLOSURE,
+    .serial_modes = 0x01,
+    .serial_min_baud = 4800,
+    .serial_max_baud = 115200,
+    .cat_tx_buffer = 256,
+    .ptt_outputs = PTT_TARGET_CLOSURE,
+    .pairing_triggers = BOARD_PAIR_BUTTON,
+    .max_bonds = 4,
+};
+
+static void test_caps_of_a_board_without_options(void)
+{
+    /* No CAT, no BLE TX power control, no pairing window: no TLVs for them,
+     * and power-on doesn't open a window. */
+    fake_reset();
+    app_init(&app, &bare, HAL_LINK_BLUETOOTH, PTT_R_BOOT, now_us);
+    TEST_ASSERT_FALSE(app_pairing_open(&app));
+    open_session();
+    simple(PROTO_CAPS_GET, 5);
+    receive(GATT);
+    proto_bytes_t cur = find(PROTO_CAPS)->u.caps.tlvs;
+    proto_tlv_t t;
+    while (proto_tlv_next(&cur, &t) == 1) {
+        TEST_ASSERT_NOT_EQUAL(PROTO_TLV_SERIAL_JACK, t.tag);
+        TEST_ASSERT_NOT_EQUAL(PROTO_TLV_BLE_TX_POWER, t.tag);
+        TEST_ASSERT_NOT_EQUAL(PROTO_TLV_PAIRING, t.tag);
+    }
+    simple(PROTO_STATUS_GET, 6);
+    receive(GATT);
+    TEST_ASSERT_FALSE(find(PROTO_STATUS)->u.status.flags & (1u << 6)); /* window closed */
+}
+
+static void fill_keepalive_2000(proto_config_t *c)
+{
+    c->value.ptt_keepalive_ms.ms = 2000;
+}
+
+static void fill_wired_port_lock_1(proto_config_t *c)
+{
+    c->value.wired_port_lock.level = 1;
+}
+
+static void test_ptt_keys_reconfigure_the_controller(void)
+{
+    open_session();
+    config_set(0, PROTO_KEY_PTT_KEEPALIVE_MS, 0, 7, fill_keepalive_2000);
+    receive(GATT);
+    TEST_ASSERT_EQUAL_UINT8(PROTO_OK, find(PROTO_CONFIG) ? PROTO_OK : result()->code);
+    TEST_ASSERT_EQUAL_UINT16(2000, app.ptt.cfg.keepalive_ms);
+    config_set(0, PROTO_KEY_WIRED_PORT_LOCK, 0, 8, fill_wired_port_lock_1);
+    receive(GATT);
+    TEST_ASSERT_EQUAL_UINT8(1, app.cfg.wired_port_lock);
+}
+
+static void test_auth_on_l2cap_is_approved_by_the_bond(void)
+{
+    hello(HAL_TRANSPORT_L2CAP, PROTO_VERSION_MINOR);
+    receive(HAL_TRANSPORT_L2CAP);
+    proto_msg_t m = {.type = PROTO_AUTH, .token = 9};
+    send_msg(HAL_TRANSPORT_L2CAP, &m);
+    receive(HAL_TRANSPORT_L2CAP);
+    const proto_msg_t *a = find(PROTO_AUTH_STATUS);
+    TEST_ASSERT_NOT_NULL(a);
+    TEST_ASSERT_EQUAL_UINT8(0, a->u.auth_status.state); /* 0 approved (§15.2) */
+}
+
+static void wired_session(uint8_t transport)
+{
+    fake_reset();
+    fake_sec.approved = true;
+    app_init(&app, &board, HAL_LINK_WIRED, PTT_R_BOOT, now_us);
+    hello(transport, PROTO_VERSION_MINOR);
+    receive(transport);
+    proto_msg_t a = {.type = PROTO_AUTH, .token = 1};
+    send_msg(transport, &a);
+    receive(transport);
+    TEST_ASSERT_TRUE(app.authorized);
+}
+
+static void expect_serial_refused(uint8_t transport)
+{
+    proto_msg_t m = {.type = PROTO_SERIAL_OPEN, .token = 10};
+    m.u.serial_open.port = 0;
+    m.u.serial_open.open = 1;
+    send_msg(transport, &m);
+    receive(transport);
+    TEST_ASSERT_EQUAL_UINT8(PROTO_ERR_UNSUPPORTED, result()->code);
+    proto_msg_t s = {.type = PROTO_SERIAL_SET, .token = 11};
+    s.u.serial_set.port = 0;
+    send_msg(transport, &s);
+    receive(transport);
+    TEST_ASSERT_EQUAL_UINT8(PROTO_ERR_UNSUPPORTED, result()->code);
+    static const uint8_t fa[] = "FA;";
+    proto_msg_t d = {.type = PROTO_CAT_DATA, .token = 12};
+    d.u.cat_data.port = 0;
+    d.u.cat_data.data.data = fa;
+    d.u.cat_data.data.len = 3;
+    send_msg(transport, &d);
+    receive(transport);
+    TEST_ASSERT_EQUAL_UINT8(PROTO_ERR_UNSUPPORTED, result()->code);
+    proto_msg_t l = {.type = PROTO_MODEM_LINES, .token = 15};
+    l.u.modem_lines.port = 0;
+    send_msg(transport, &l);
+    receive(transport);
+    TEST_ASSERT_EQUAL_UINT8(PROTO_ERR_UNSUPPORTED, result()->code);
+}
+
+static void fill_wired_profile_1(proto_config_t *c)
+{
+    c->value.wired_profile.profile = 1;
+}
+
+static void test_wired_serial_needs_the_network_profile_over_tcp(void)
+{
+    /* The USB control channel never carries the SERIAL jack (§14), in
+     * either profile. */
+    wired_session(HAL_TRANSPORT_CONTROL);
+    expect_serial_refused(HAL_TRANSPORT_CONTROL);
+    app.cfg.wired_profile = 0;
+    expect_serial_refused(HAL_TRANSPORT_CONTROL);
+    /* Nor does TCP in the serial profile (wired_profile 1). */
+    wired_session(HAL_TRANSPORT_TCP);
+    proto_msg_t m = {.type = PROTO_CONFIG_SET, .token = 13};
+    m.u.config_set.config.key = PROTO_KEY_WIRED_PROFILE;
+    fill_wired_profile_1(&m.u.config_set.config);
+    send_msg(HAL_TRANSPORT_TCP, &m);
+    receive(HAL_TRANSPORT_TCP);
+    TEST_ASSERT_EQUAL_UINT8(1, app.cfg.wired_profile);
+    expect_serial_refused(HAL_TRANSPORT_TCP);
+    /* In the network profile only port 0 is reachable: the radio's own
+     * chips are the host's directly over the hub. */
+    wired_session(HAL_TRANSPORT_TCP);
+    proto_msg_t o = {.type = PROTO_SERIAL_OPEN, .token = 16};
+    o.u.serial_open.port = 1;
+    o.u.serial_open.open = 1;
+    send_msg(HAL_TRANSPORT_TCP, &o);
+    receive(HAL_TRANSPORT_TCP);
+    TEST_ASSERT_EQUAL_UINT8(PROTO_ERR_UNSUPPORTED, result()->code);
+}
+
+static void test_frame_error_counter_saturates_and_needs_a_session(void)
+{
+    const uint8_t bad[] = {0x06, 0x30, 0x01, 0x01, 0x29, 0x2b, 0x00}; /* bad CRC */
+    app_rx(&app, 0, bad, sizeof(bad), now_us); /* transport 0 is ignored */
+    app_rx(&app, GATT, bad, sizeof(bad), now_us); /* no session: not reported */
+    receive(GATT);
+    TEST_ASSERT_EQUAL_size_t(0, ngot);
+    app.frame_errors = 0xFFFFu;
+    app_rx(&app, GATT, bad, sizeof(bad), now_us);
+    TEST_ASSERT_EQUAL_UINT16(0xFFFFu, app.frame_errors);
+}
+
+static void test_usb_reset_ends_a_wired_session(void)
+{
+    wired_session(HAL_TRANSPORT_TCP);
+    app_usb_reset(&app, now_us);
+    TEST_ASSERT_EQUAL_UINT8(0, app.active);
+    wired_session(HAL_TRANSPORT_CONTROL);
+    app_usb_reset(&app, now_us);
+    TEST_ASSERT_EQUAL_UINT8(0, app.active);
+    /* A Bluetooth session doesn't depend on USB. */
+    fake_reset();
+    app_init(&app, &board, HAL_LINK_BLUETOOTH, PTT_R_BOOT, now_us);
+    open_session();
+    app_usb_reset(&app, now_us);
+    TEST_ASSERT_EQUAL_UINT8(GATT, app.active);
+}
+
+static void test_switch_back_to_bluetooth(void)
+{
+    fake_reset();
+    app_init(&app, &board, HAL_LINK_WIRED, PTT_R_BOOT, now_us);
+    app_host_link_changed(&app, HAL_LINK_BLUETOOTH, now_us);
+    TEST_ASSERT_EQUAL_UINT8(HAL_LINK_BLUETOOTH, app.host_link);
+    open_session();
+    proto_msg_t m = {.type = PROTO_SERIAL_OPEN, .token = 14};
+    m.u.serial_open.port = 0;
+    m.u.serial_open.open = 1;
+    send_msg(GATT, &m);
+    receive(GATT);
+    TEST_ASSERT_EQUAL_UINT8(PROTO_OK, result()->code);
+}
+
+static void test_pending_max_tx_replaces_fault_and_is_kept(void)
+{
+    /* A FAULT reset is pending; a MAX_TX release, also sticky, replaces it;
+     * the routine RELEASED after it doesn't hide it (§8.5). */
+    fake_reset();
+    app_init(&app, &board, HAL_LINK_WIRED, app_boot_reason(APP_RESET_PANIC), now_us);
+    TEST_ASSERT_EQUAL_UINT8(PTT_R_FAULT, app.pending.reason);
+    app_native_lines(&app, 0, 0, now_us);
+    app_native_lines(&app, 0, PTT_LINE_RTS, now_us);
+    TEST_ASSERT_TRUE(fake.closure);
+    TEST_ASSERT_EQUAL_UINT8(PTT_R_FAULT, app.pending.reason);
+    for (int i = 0; i < 301; i++) {
+        advance_ms(1000);
+        app_tick(&app, now_us);
+    }
+    TEST_ASSERT_FALSE(fake.closure);
+    TEST_ASSERT_EQUAL_UINT8(PTT_R_MAX_TX, app.pending.reason);
+    app_native_lines(&app, 0, 0, now_us);
+    TEST_ASSERT_EQUAL_UINT8(PTT_R_MAX_TX, app.pending.reason);
+}
+
 int main(void)
 {
     UNITY_BEGIN();
@@ -1452,5 +1696,15 @@ int main(void)
     RUN_TEST(test_radio_usb_detach_drops_keyed_ptt_and_reattach_is_blocked);
     RUN_TEST(test_radio_usb_detach_of_closed_port);
     RUN_TEST(test_radio_usb_not_in_wired_mode_or_without_feature);
+    RUN_TEST(test_other_major_version_is_a_mismatch_but_ping_works);
+    RUN_TEST(test_ping_before_auth_on_a_wired_host);
+    RUN_TEST(test_caps_of_a_board_without_options);
+    RUN_TEST(test_ptt_keys_reconfigure_the_controller);
+    RUN_TEST(test_auth_on_l2cap_is_approved_by_the_bond);
+    RUN_TEST(test_wired_serial_needs_the_network_profile_over_tcp);
+    RUN_TEST(test_frame_error_counter_saturates_and_needs_a_session);
+    RUN_TEST(test_usb_reset_ends_a_wired_session);
+    RUN_TEST(test_switch_back_to_bluetooth);
+    RUN_TEST(test_pending_max_tx_replaces_fault_and_is_kept);
     return UNITY_END();
 }
