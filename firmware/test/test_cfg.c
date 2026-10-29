@@ -189,6 +189,9 @@ static void test_line_map(void)
     TEST_ASSERT_EQUAL_INT(PROTO_ERR_BAD_VALUE, cfg_set(&cfg, &board, &c));
     c.value.line_map.dtr_action = 3;
     TEST_ASSERT_EQUAL_INT(PROTO_ERR_BAD_VALUE, cfg_set(&cfg, &board, &c));
+    c.value.line_map.dtr_action = PTT_ACT_IGNORE;
+    c.value.line_map.rts_action = 3;
+    TEST_ASSERT_EQUAL_INT(PROTO_ERR_BAD_VALUE, cfg_set(&cfg, &board, &c));
     c = rec(PROTO_KEY_LINE_MAP, 3);
     c.value.line_map.rts_action = PTT_ACT_PTT;
     c.value.line_map.dtr_action = PTT_ACT_PASS;
@@ -234,6 +237,11 @@ static void test_enums(void)
     TEST_ASSERT_EQUAL_INT(PROTO_ERR_UNSUPPORTED, cfg_set(&cfg, &board, &c));
     c.value.rx_attenuator.on = 0;
     TEST_ASSERT_EQUAL_INT(PROTO_OK, cfg_set(&cfg, &board, &c));
+    board_t with_attenuator = board;
+    with_attenuator.features |= PROTO_F_RX_ATTENUATOR;
+    c.value.rx_attenuator.on = 1;
+    TEST_ASSERT_EQUAL_INT(PROTO_OK, cfg_set(&cfg, &with_attenuator, &c));
+    TEST_ASSERT_TRUE(cfg.rx_attenuator);
 
     c = rec(PROTO_KEY_TX_LEVEL, 0);
     c.value.tx_level.centibel = 1;
@@ -378,6 +386,12 @@ static void test_storage_rejects_corruption(void)
     TEST_ASSERT_EQUAL_INT(-1, cfg_deserialize(&loaded, &board, blob, 3));
     blob[0] = 'X';
     TEST_ASSERT_EQUAL_INT(-1, cfg_deserialize(&loaded, &board, blob, n));
+    n = cfg_serialize(&cfg, blob, sizeof(blob));
+    blob[1] ^= 0xFF; /* second magic byte */
+    TEST_ASSERT_EQUAL_INT(-1, cfg_deserialize(&loaded, &board, blob, n));
+    n = cfg_serialize(&cfg, blob, sizeof(blob));
+    blob[2]++; /* a storage version this firmware doesn't know */
+    TEST_ASSERT_EQUAL_INT(-1, cfg_deserialize(&loaded, &board, blob, n));
 }
 
 /* A stored value that is out of range now (for example a BLE TX power above a
@@ -413,6 +427,22 @@ static void test_storage_stops_at_unknown_key(void)
     TEST_ASSERT_EQUAL_INT(1, cfg_deserialize(&loaded, &board, blob, n));
 }
 
+static void test_storage_stops_at_truncated_record(void)
+{
+    /* One more record announced; only its key and selector are there. */
+    uint8_t blob[CFG_BLOB_MAX];
+    size_t n = cfg_serialize(&cfg, blob, sizeof(blob));
+    blob[3]++;
+    blob[n - 2] = PROTO_KEY_MAX_TX_S;
+    blob[n - 1] = 0;
+    n += 2;
+    uint16_t crc = proto_crc16(blob, n - 2);
+    blob[n - 2] = (uint8_t)crc;
+    blob[n - 1] = (uint8_t)(crc >> 8);
+    cfg_t loaded;
+    TEST_ASSERT_EQUAL_INT(1, cfg_deserialize(&loaded, &board, blob, n));
+}
+
 int main(void)
 {
     UNITY_BEGIN();
@@ -432,5 +462,6 @@ int main(void)
     RUN_TEST(test_storage_rejects_corruption);
     RUN_TEST(test_storage_rechecks_every_value);
     RUN_TEST(test_storage_stops_at_unknown_key);
+    RUN_TEST(test_storage_stops_at_truncated_record);
     return UNITY_END();
 }
