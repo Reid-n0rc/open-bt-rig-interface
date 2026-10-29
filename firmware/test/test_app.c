@@ -8,6 +8,7 @@
 
 #include "app.h"
 #include "ble_power.h"
+#include "fake_audio.h"
 #include "fake_hal.h"
 #include "fake_security.h"
 #include "fw_version.h"
@@ -43,6 +44,7 @@ void setUp(void)
     fake_sec.approve_result = PROTO_ERR_UNSUPPORTED; /* as the #14 stubs */
     fake_sec.approve_calls = 0;
     fake_sec.factory_reset_result = PROTO_ERR_UNSUPPORTED;
+    fake_aud.start_result = PROTO_ERR_UNSUPPORTED; /* as the #16 stubs */
     now_us = 1000000;
     fake.time_us = now_us;
     app_init(&app, &board, HAL_LINK_BLUETOOTH, PTT_R_BOOT, now_us);
@@ -831,6 +833,27 @@ static void test_time_audio_tone(void)
     TEST_ASSERT_EQUAL_size_t(2, ngot);
 }
 
+static void test_audio_start_answers_audio_status(void)
+{
+    /* With a pipeline (#16; faked here) AUDIO_START answers AUDIO_STATUS, not
+     * RESULT, and STATUS reports the audio running (§16.1 bit 5). */
+    fake_aud.start_result = PROTO_OK;
+    open_session();
+    proto_msg_t a = {.type = PROTO_AUDIO_START, .token = 40};
+    a.u.audio_start.direction = 1;
+    send_msg(GATT, &a);
+    receive(GATT);
+    const proto_msg_t *st = find(PROTO_AUDIO_STATUS);
+    TEST_ASSERT_NOT_NULL(st);
+    TEST_ASSERT_EQUAL_UINT8(40, st->token);
+    TEST_ASSERT_EQUAL_UINT8(1, st->u.audio_status.direction);
+    TEST_ASSERT_EQUAL_UINT8(2, st->u.audio_status.state);
+    TEST_ASSERT_NULL(find(PROTO_RESULT));
+    simple(PROTO_STATUS_GET, 41);
+    receive(GATT);
+    TEST_ASSERT_TRUE(find(PROTO_STATUS)->u.status.flags & (1u << 5));
+}
+
 /* --- Wired mode (SPEC §14) --- */
 
 static void auth(uint8_t transport, uint8_t token)
@@ -1409,6 +1432,7 @@ int main(void)
     RUN_TEST(test_ptt_config_change_while_keyed_releases);
     RUN_TEST(test_non_ptt_config_never_asserts);
     RUN_TEST(test_time_audio_tone);
+    RUN_TEST(test_audio_start_answers_audio_status);
     RUN_TEST(test_wired_host_needs_approval);
     RUN_TEST(test_bluetooth_host_is_authorized_by_its_bond);
     RUN_TEST(test_trust_list_and_factory_reset);

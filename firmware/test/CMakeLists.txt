@@ -87,7 +87,7 @@ endfunction()
 fw_test(test_proto ${VECTORS_C})
 fw_test(test_ptt)
 fw_test(test_cfg)
-fw_test(test_app fake_security.c)
+fw_test(test_app fake_security.c fake_audio.c)
 fw_test(test_modules)
 
 add_test(NAME test_fw_version

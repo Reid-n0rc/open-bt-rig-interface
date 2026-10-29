@@ -248,6 +248,11 @@ static void test_usb_radio_cdc_acm_and_unknown_vendor(void)
     TEST_ASSERT_EQUAL_UINT8(USB_CHIP_CDC_ACM, usb_radio_port(&r, 1)->chip);
     TEST_ASSERT_EQUAL_UINT8(2, usb_radio_port(&r, 2)->interface);
 
+    /* A CDC interface that isn't ACM (here ECM, subclass 0x06) isn't a port. */
+    usb_radio_desc_t ecm = {0x1234, 0x0002, 2, {{0, USB_RADIO_CLASS_CDC, 0x06, 0}, {1, 0x0A, 0, 0}}};
+    TEST_ASSERT_EQUAL_size_t(0, usb_radio_attach(&r, 3, &ecm, ports));
+    TEST_ASSERT_EQUAL_size_t(0, usb_radio_detach(&r, 3, ports));
+
     /* A vendor-class interface of an unknown chip isn't a port; with nothing
      * else usable the device sets bit 2. */
     usb_radio_desc_t odd = {0x1234, 0x0001, 1, {{0, USB_RADIO_CLASS_VENDOR, 0, 0}}};
@@ -546,7 +551,13 @@ static void test_audio_stubs(void)
     TEST_ASSERT_EQUAL_INT(PROTO_ERR_UNSUPPORTED, audio_start(&a, &with_audio, &req, &st));
     TEST_ASSERT_EQUAL_INT(PROTO_ERR_UNSUPPORTED, audio_stop(&a, &with_audio, 1, &st));
     TEST_ASSERT_EQUAL_INT(PROTO_ERR_UNSUPPORTED, audio_frame(&a, &with_audio, &f));
+    /* AUDIO_STATUS reports state 2 (running) only for the running direction. */
     a.running = true;
+    a.direction = 1;
+    (void)audio_stop(&a, &with_audio, 1, &st);
+    TEST_ASSERT_EQUAL_UINT8(2, st.state);
+    (void)audio_stop(&a, &with_audio, 2, &st);
+    TEST_ASSERT_EQUAL_UINT8(0, st.state);
     audio_session_end(&a);
     TEST_ASSERT_FALSE(a.running);
 }
