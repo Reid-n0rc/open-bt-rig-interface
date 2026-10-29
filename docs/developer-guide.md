@@ -144,9 +144,16 @@ The full rules are in [AGENTS.md → Workflow](../AGENTS.md#workflow). Step by s
 Run what applies to your change before pushing. CI runs the same checks:
 `.github/workflows/checks.yml` (`REUSE lint`, `KiCad version consistency`,
 `Silkscreen revision check`, `Protocol vectors`, `Firmware host tests`,
-`Firmware target build (ESP-IDF)`) and `.github/workflows/kicad-checks.yml`
-(`KiCad ERC/DRC gate`). They all always report, so they can be required status
-checks.
+`Firmware target build (ESP-IDF)`, `CI gate`) and `.github/workflows/kicad-checks.yml`
+(`KiCad ERC/DRC gate`). On a PR to `dev` only the areas you changed are checked
+(a skipped job still reports); PRs to `main`, pushes and release tags run the
+full regression, and a release draft is made only after it passes
+([AGENTS.md → Build and test](../AGENTS.md#build-and-test)).
+
+**CI scripts (when you change `tools/ci/` or the workflows):**
+```sh
+python3 -m unittest discover -s tools/ci -p 'test_*.py'
+```
 
 **Licensing (every PR):**
 ```sh
