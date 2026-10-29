@@ -137,6 +137,13 @@ static void test_cat_ports_and_open(void)
     cat_setup(&c);
     TEST_ASSERT_TRUE(cat_port_exists(&c, 0));
     TEST_ASSERT_FALSE(cat_port_exists(&c, 1)); /* no radio USB-serial yet (#43) */
+    TEST_ASSERT_FALSE(cat_port_exists(&c, 5)); /* radio ports are 1-4 */
+    TEST_ASSERT_FALSE(cat_is_open(&c, 5));
+    /* Closing a port that isn't open is fine and doesn't reach the HAL. */
+    fake.serial_open[0] = true;
+    TEST_ASSERT_EQUAL_INT(PROTO_OK, cat_open(&c, &ptt, &board, &cfg, 0, 0, 0));
+    TEST_ASSERT_TRUE(fake.serial_open[0]);
+    fake.serial_open[0] = false;
     TEST_ASSERT_EQUAL_INT(PROTO_ERR_UNSUPPORTED, cat_open(&c, &ptt, &board, &cfg, 1, 1, 0));
     TEST_ASSERT_EQUAL_INT(PROTO_ERR_BAD_VALUE, cat_open(&c, &ptt, &board, &cfg, 9, 1, 0));
     TEST_ASSERT_EQUAL_INT(PROTO_ERR_BAD_VALUE, cat_open(&c, &ptt, &board, &cfg, 0, 2, 0));
@@ -186,6 +193,7 @@ static void test_cat_radio_port_added_and_removed(void)
     TEST_ASSERT_EQUAL_INT(PROTO_ERR_UNSUPPORTED, cat_open(&c, &ptt, &board, &cfg, 1, 1, 0));
     cat_radio_port_removed(&c, &ptt, 1, 20); /* already gone */
     cat_radio_port_removed(&c, &ptt, 9, 20);
+    cat_radio_port_removed(&c, &ptt, 0, 20); /* the SERIAL jack is never removed */
     TEST_ASSERT_TRUE(cat_port_exists(&c, 0));
 }
 
@@ -334,9 +342,19 @@ static void test_cat_set(void)
     s.baud = 9600;
     s.data_bits = 5;
     TEST_ASSERT_EQUAL_INT(PROTO_ERR_BAD_VALUE, cat_set(&c, &board, &s));
+    s.data_bits = 7;
+    TEST_ASSERT_EQUAL_INT(PROTO_OK, cat_set(&c, &board, &s));
     s.data_bits = 8;
+    s.parity = 5;
+    TEST_ASSERT_EQUAL_INT(PROTO_ERR_BAD_VALUE, cat_set(&c, &board, &s));
+    s.parity = 0;
+    s.stop_bits = 3;
+    TEST_ASSERT_EQUAL_INT(PROTO_ERR_BAD_VALUE, cat_set(&c, &board, &s));
     s.stop_bits = 2;
     TEST_ASSERT_EQUAL_INT(PROTO_OK, cat_set(&c, &board, &s));
+    s.baud = board.serial_max_baud + 1;
+    TEST_ASSERT_EQUAL_INT(PROTO_ERR_OUT_OF_RANGE, cat_set(&c, &board, &s));
+    s.baud = 9600;
     s.port = 9;
     TEST_ASSERT_EQUAL_INT(PROTO_ERR_BAD_VALUE, cat_set(&c, &board, &s));
     /* A radio port with baud 0. */
@@ -472,6 +490,7 @@ static void test_cat_rx_batching(void)
     TEST_ASSERT_EQUAL_MEMORY(burst + 510, out, 90);
     TEST_ASSERT_EQUAL_size_t(0, cat_rx_next(&c, 0, 0, 99999, out)); /* no room asked */
     TEST_ASSERT_EQUAL_size_t(0, cat_rx_next(&c, 9, 255, 99999, out));
+    TEST_ASSERT_EQUAL_size_t(0, cat_rx_next(&c, 1, 255, 99999, out)); /* not open */
     TEST_ASSERT_EQUAL_UINT16(0, c.overflows);
 }
 
@@ -511,8 +530,28 @@ static void test_cat_deadline_for_queued_tx(void)
     /* An earlier RX batch deadline wins. */
     TEST_ASSERT_EQUAL_size_t(0, cat_from_radio(&c, 0, data, 3, 3500));
     TEST_ASSERT_EQUAL_UINT64(3500 + CAT_BATCH_US, cat_next_deadline_us(&c, 5000));
+    /* The earliest of two ports' batches wins. */
+    cat_radio_port_added(&c, 2);
+    TEST_ASSERT_EQUAL_INT(PROTO_OK, cat_open(&c, &ptt, &board, &cfg, 2, 1, 0));
+    TEST_ASSERT_EQUAL_size_t(0, cat_from_radio(&c, 2, data, 3, 4000));
+    TEST_ASSERT_EQUAL_UINT64(3500 + CAT_BATCH_US, cat_next_deadline_us(&c, 5000));
     fake.serial_accept = (size_t)-1;
     TEST_ASSERT_EQUAL_UINT16(3, cat_pump(&c, 0));
+    TEST_ASSERT_EQUAL_UINT16(8, c.port[0].credit);
+}
+
+static void test_cat_pump_with_a_hal_claiming_too_much(void)
+{
+    /* A HAL that reports more bytes than offered can't return more credit
+     * than the bytes queued. */
+    cat_t c;
+    cat_setup(&c);
+    const uint8_t data[] = "FA;";
+    TEST_ASSERT_EQUAL_INT(PROTO_OK, cat_open(&c, &ptt, &board, &cfg, 0, 1, 0));
+    TEST_ASSERT_EQUAL_INT(PROTO_OK, cat_from_host(&c, 0, data, 3));
+    fake.serial_overreport = 10;
+    TEST_ASSERT_EQUAL_UINT16(3, cat_pump(&c, 0));
+    TEST_ASSERT_EQUAL_UINT16(0, c.port[0].txq_len);
     TEST_ASSERT_EQUAL_UINT16(8, c.port[0].credit);
 }
 
@@ -551,6 +590,9 @@ static void test_audio_stubs(void)
     TEST_ASSERT_EQUAL_INT(PROTO_ERR_UNSUPPORTED, audio_start(&a, &with_audio, &req, &st));
     TEST_ASSERT_EQUAL_INT(PROTO_ERR_UNSUPPORTED, audio_stop(&a, &with_audio, 1, &st));
     TEST_ASSERT_EQUAL_INT(PROTO_ERR_UNSUPPORTED, audio_frame(&a, &with_audio, &f));
+    /* Ending a session closes the audio device only if it was running. */
+    audio_session_end(&a);
+    TEST_ASSERT_EQUAL_UINT(0, fake.audio_closes);
     /* AUDIO_STATUS reports state 2 (running) only for the running direction. */
     a.running = true;
     a.direction = 1;
@@ -560,6 +602,7 @@ static void test_audio_stubs(void)
     TEST_ASSERT_EQUAL_UINT8(0, st.state);
     audio_session_end(&a);
     TEST_ASSERT_FALSE(a.running);
+    TEST_ASSERT_EQUAL_UINT(1, fake.audio_closes);
 }
 
 /* --- Security hooks (#64): fail closed --- */
@@ -604,6 +647,7 @@ int main(void)
     RUN_TEST(test_cat_rx_batching);
     RUN_TEST(test_cat_rx_overflow_drops_newest);
     RUN_TEST(test_cat_deadline_for_queued_tx);
+    RUN_TEST(test_cat_pump_with_a_hal_claiming_too_much);
     RUN_TEST(test_cat_modem_lines_and_close_all);
     RUN_TEST(test_cat_radio_port_added_and_removed);
     RUN_TEST(test_cat_initial_credit_capped);

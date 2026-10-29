@@ -612,6 +612,11 @@ static void test_targets_without_port_fall_back_to_closure(void)
     cfg.usb_port = 0;
     TEST_ASSERT_TRUE(ptt_config_sanitize(&cfg));
     TEST_ASSERT_EQUAL_UINT8(PTT_TARGET_CLOSURE, cfg.targets);
+    cfg.targets = PTT_TARGET_DTR | PTT_TARGET_CLOSURE;
+    cfg.usb_port = 5; /* radio ports are 1-4 */
+    TEST_ASSERT_TRUE(ptt_config_sanitize(&cfg));
+    TEST_ASSERT_EQUAL_UINT8(PTT_TARGET_CLOSURE, cfg.targets);
+    TEST_ASSERT_EQUAL_UINT8(0, cfg.usb_port);
     cfg.targets = PTT_TARGET_CLOSURE | 0x80;
     cfg.usb_port = 3;
     TEST_ASSERT_TRUE(ptt_config_sanitize(&cfg));
@@ -905,7 +910,74 @@ static void test_tone_refused_in_lockout(void)
     TEST_ASSERT_EQUAL_UINT8(PTT_R_LOCKED_OUT, last()->reason);
 }
 
+static void test_lockout_waits_for_a_refused_tone_request(void)
+{
+    /* A tone requested during the lockout is still a request: the lockout
+     * clears only once it is cancelled too (SPEC §8.5). */
+    cfg.max_tx_s = 10;
+    start();
+    TEST_ASSERT_TRUE(key());
+    run_with_keepalive(now + 10000);
+    TEST_ASSERT_TRUE(p.locked_out);
+    TEST_ASSERT_FALSE(ptt_tone(&p, true, now));
+    ptt_status_t st;
+    (void)ptt_set(&p, false, now, &st);
+    TEST_ASSERT_TRUE(p.locked_out);
+    (void)ptt_tone(&p, false, now);
+    TEST_ASSERT_FALSE(p.locked_out);
+}
+
+static void test_blocked_line_rising_in_lockout_reports_locked_out(void)
+{
+    cfg.max_tx_s = 10;
+    start();
+    TEST_ASSERT_TRUE(key());
+    run_with_keepalive(now + 10000);
+    TEST_ASSERT_TRUE(p.locked_out);
+    /* RTS was never seen low (BLOCKED); rising now reports the lockout. */
+    ptt_lines(&p, 0, PTT_LINE_RTS, PTT_ORIGIN_PROTOCOL, now);
+    TEST_ASSERT_FALSE(out.closure);
+    TEST_ASSERT_EQUAL_UINT8(PTT_R_LOCKED_OUT, last()->reason);
+}
+
 /* --- Several sources --- */
+
+static void test_tone_done_with_ptt_set_still_keyed(void)
+{
+    TEST_ASSERT_TRUE(key());
+    TEST_ASSERT_TRUE(ptt_tone(&p, true, now));
+    out.nstatus = 0;
+    ptt_tone_done(&p, now);
+    TEST_ASSERT_TRUE(out.closure);
+    TEST_ASSERT_EQUAL_UINT8(PTT_SRC_SET, last()->sources);
+    TEST_ASSERT_NOT_EQUAL(PTT_R_SEQUENCE_DONE, last()->reason);
+}
+
+static void test_session_end_keeps_native_lines(void)
+{
+    /* §8.7 closes the protocol's ports; a wired port's native lines are its
+     * own host's and stay. */
+    ptt_lines(&p, PTT_PORT_CONTROL, 0, PTT_ORIGIN_NATIVE, now);
+    ptt_lines(&p, PTT_PORT_CONTROL, PTT_LINE_RTS, PTT_ORIGIN_NATIVE, now);
+    TEST_ASSERT_TRUE(out.closure);
+    ptt_all_off(&p, PTT_R_LINK_LOST, now);
+    TEST_ASSERT_EQUAL_UINT8(PTT_LINE_RTS, p.port[ptt_port_index(PTT_PORT_CONTROL)].host_lines);
+}
+
+static void test_usb_port_change_while_keyed_releases(void)
+{
+    cfg.targets = PTT_TARGET_RTS;
+    cfg.usb_port = 2;
+    start();
+    TEST_ASSERT_TRUE(key());
+    TEST_ASSERT_EQUAL_UINT8(PTT_LINE_RTS, out.radio[2]);
+    ptt_config_t next = cfg;
+    next.usb_port = 3;
+    ptt_configure(&p, &next, now);
+    TEST_ASSERT_EQUAL_UINT8(0, out.radio[2]);
+    TEST_ASSERT_EQUAL_UINT8(0, out.radio[3]);
+    TEST_ASSERT_EQUAL_UINT8(0, last()->state);
+}
 
 static void test_two_sources(void)
 {
@@ -981,5 +1053,10 @@ int main(void)
     RUN_TEST(test_tone_needs_keepalive);
     RUN_TEST(test_tone_refused_in_lockout);
     RUN_TEST(test_two_sources);
+    RUN_TEST(test_lockout_waits_for_a_refused_tone_request);
+    RUN_TEST(test_blocked_line_rising_in_lockout_reports_locked_out);
+    RUN_TEST(test_tone_done_with_ptt_set_still_keyed);
+    RUN_TEST(test_session_end_keeps_native_lines);
+    RUN_TEST(test_usb_port_change_while_keyed_releases);
     return UNITY_END();
 }

@@ -103,7 +103,7 @@ size_t hal_serial_write(uint8_t port, const uint8_t *data, size_t len)
     }
     memcpy(fake.serial_out + fake.serial_out_len, data, n);
     fake.serial_out_len += n;
-    return n;
+    return n + fake.serial_overreport;
 }
 
 void hal_serial_jack_mode(uint8_t mode)
@@ -120,6 +120,7 @@ int hal_audio_open(uint32_t sample_rate_hz)
 
 void hal_audio_close(void)
 {
+    fake.audio_closes++;
 }
 
 void hal_ble_tx_power_set(int8_t dbm)

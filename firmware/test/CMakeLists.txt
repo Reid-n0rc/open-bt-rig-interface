@@ -99,7 +99,7 @@ add_test(NAME test_fw_version
 if(FW_TEST_COVERAGE)
     find_program(GCOVR gcovr REQUIRED)
     add_custom_target(coverage
-        COMMAND ${CMAKE_COMMAND} -E rm -f -- ${CMAKE_BINARY_DIR}/coverage.txt
+        COMMAND ${CMAKE_COMMAND} -DDIR=${CMAKE_BINARY_DIR} -P ${CMAKE_CURRENT_LIST_DIR}/clean_gcda.cmake
         COMMAND ${CMAKE_CTEST_COMMAND} --test-dir ${CMAKE_BINARY_DIR} --output-on-failure
         COMMAND ${GCOVR} --root ${FW_ROOT}/app --object-directory ${CMAKE_BINARY_DIR}
                 --exclude-unreachable-branches --txt-metric branch --txt ${CMAKE_BINARY_DIR}/coverage.txt
