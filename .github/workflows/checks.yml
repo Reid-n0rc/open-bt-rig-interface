@@ -163,6 +163,36 @@ jobs:
           cmake --build build/fw-test --parallel
           ctest --test-dir build/fw-test --output-on-failure
 
+  firmware-coverage:
+    name: Firmware coverage
+    needs: changes
+    if: needs.changes.outputs.firmware == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Every line and branch of firmware/app run by the host tests (#90).
+      - name: Coverage gate (100% lines and branches)
+        run: |
+          pip install gcovr==8.8
+          cmake -S firmware/test -B build/fw-cov -DFW_TEST_COVERAGE=ON
+          cmake --build build/fw-cov --parallel
+          cmake --build build/fw-cov --target coverage
+
+      - name: Upload the coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware-coverage
+          path: build/fw-cov/coverage.txt
+          if-no-files-found: ignore
+
   firmware-target-build:
     name: Firmware target build (ESP-IDF)
     needs: changes
@@ -208,7 +238,7 @@ jobs:
   gate:
     name: CI gate
     needs: [changes, reuse, kicad-version, silkscreen, protocol, firmware-host-tests,
-            firmware-target-build, kicad-release]
+            firmware-coverage, firmware-target-build, kicad-release]
     if: always()
     runs-on: ubuntu-latest
     steps:

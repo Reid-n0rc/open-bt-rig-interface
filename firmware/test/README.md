@@ -34,4 +34,22 @@ AddressSanitizer and UndefinedBehaviorSanitizer; pass
 `gen_vectors.py` turns the golden vectors into C at build time, using the
 field kinds of the reference codec (`tools/protocol/proto_codec.py`), so the
 tests always use the current JSON. `fake_hal.c` records every output;
-`fake_security.c` stands in for the #64 hooks in `test_app` only.
+`fake_security.c` and `fake_audio.c` stand in for the #64 security hooks and
+the #16 audio pipeline in `test_app` only; `test_modules` tests the real stubs.
+
+## Coverage
+
+Every line and branch of `firmware/app/` must be run by these tests (#90).
+The coverage build instruments the core with gcov (no sanitizers: their
+checks add branches of their own) and fails below 100%:
+
+```sh
+pip install gcovr==8.8
+cmake -S firmware/test -B build/fw-cov -DFW_TEST_COVERAGE=ON
+cmake --build build/fw-cov
+cmake --build build/fw-cov --target coverage   # report: build/fw-cov/coverage.txt
+```
+
+CI runs it as `Firmware coverage`. gcovr (BSD-3-Clause) is a host tool, never
+part of a firmware image. A branch no test can reach is removed, or made a
+compile-time check, rather than excluded from the report.
