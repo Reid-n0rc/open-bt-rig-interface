@@ -425,7 +425,14 @@ CAT), so the radio's own timers are the only guard for CAT keying.
   1000 ms; range 500–10 000 ms (`PTT_KEEPALIVE_MS`, §6.1).
 - If `PTT_KEEPALIVE_MS` passes with none of these, the device releases every
   keepalive source (bits 0, 1, 2 and 4), deasserts pass-through lines, and
-  sends `PTT_STATUS` with reason `KEEPALIVE_TIMEOUT`.
+  sends `PTT_STATUS` with reason `KEEPALIVE_TIMEOUT`. Lines driven by the
+  protocol (`MODEM_LINES`) go to BLOCKED (§8.4) and must be seen deasserted
+  before they key again; pass-through lines stay deasserted until the host's
+  next `MODEM_LINES`.
+- The timeout releases **only protocol-driven sources**. Native RTS/DTR on a
+  wired CDC-ACM port (source bit 3) need no keepalive and aren't released by
+  it (maintainer approval, 2026-09-28); USB state, their port close (§8.4)
+  and max TX cover them.
 - Rationale: a host app that hangs while the Bluetooth link stays up must not
   hold PTT (REQ-PTT-006). The keepalive is shorter than a typical BLE
   supervision timeout, so it also catches a failing link sooner.
@@ -434,13 +441,24 @@ CAT), so the radio's own timers are the only guard for CAT keying.
 
 ### 8.3 RTS/DTR mapping
 
-`LINE_MAP` sets, per port, what each host line does:
+`LINE_MAP` sets, per port, what each host line does (maintainer approval of
+this wording, 2026-09-28):
 
-| Action | Meaning | Allowed on |
-|---|---|---|
-| 0 | Ignore | Any port |
-| 1 | PTT: the line is a PTT source (arming rules §8.4) | Port 0, port 0x0F, radio ports 1–4 |
-| 2 | Pass-through: the line goes to the radio's USB-serial chip, as with a direct cable. The device treats an asserted pass-through line as a possible PTT (the radio may key on it): it needs the keepalive, counts toward max TX, and drops at session end | Radio ports 1–4 only |
+| Action | AUDIO-jack PTT closure | Radio's USB-serial chip | Allowed on |
+|---|---|---|---|
+| 0 | Ignore: the line does nothing | Not driven by this line | Any port |
+| 1 | PTT: the line is a PTT source (source bit 1, or bit 3 for native wired lines) with the arming rules of §8.4, and **keys the device's own PTT outputs** (`PTT_TARGETS`, the AUDIO-jack closure by default) | Not forwarded | Port 0, port 0x0F, radio ports 1–4 |
+| 2 | Pass-through: **does not** key the AUDIO-jack closure or any other `PTT_TARGETS` output | The line is forwarded to the chip, as with a direct cable; the radio handles RTS/DTR keying itself | Radio ports 1–4 only |
+
+Defaults: **radio ports 1–4 pass both lines through** (action 2), because a
+radio with its own USB-serial chip keys from RTS/DTR itself. Ports 0 and 0x0F
+map RTS to PTT and ignore DTR. To use the device's own hardware PTT with a
+radio's USB-serial port instead, set action 1 on that radio port's line.
+
+A pass-through line is still a **possible PTT** (the radio may key on it): an
+asserted pass-through line is PTT source bit 4 in `PTT_STATUS`, needs the
+keepalive (§8.2), counts toward max TX (§8.5) and drops at session end
+(§8.7). It is not armed (§8.4), so the chip sees what a direct cable would.
 
 The SERIAL jack has no RTS/DTR contacts, so action 2 isn't available on port 0
 ([radio-connectors](../docs/requirements/radio-connectors.md#serial-jack-35-mm-trrs)).
@@ -476,6 +494,11 @@ any      --session start, SERIAL_OPEN, USB reset/configure,
 - Pass-through lines (action 2) are not armed this way, so that the radio's
   chip sees what a direct cable would show. The keepalive and max-TX guards
   still apply.
+- **Port close on a native wired port** (maintainer approval, 2026-09-28): a
+  CDC-ACM `SET_CONTROL_LINE_STATE` that drops RTS **and** DTR together, from
+  both asserted, is a port close. PTT keyed from that port goes off
+  (`PTT_STATUS` reason `PORT_CLOSED`) and both lines are BLOCKED until they
+  are re-armed as above.
 
 ### 8.5 Maximum TX time and other fail-safes
 

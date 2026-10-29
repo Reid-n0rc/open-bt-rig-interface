@@ -1,0 +1,12 @@
+# SPDX-FileCopyrightText: 2026 Reid Crowe, N0RC
+# SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
+#
+# esp-usb (Apache-2.0), pinned exactly; see THIRD_PARTY.md. The radio USB
+# port in Bluetooth mode (#43).
+dependencies:
+  idf: ">=6.0.3"
+  espressif/usb: "==1.6.0"
+  espressif/usb_host_cdc_acm: "==2.4.1"
+  espressif/usb_host_cp210x_vcp: "==2.2.0"
+  espressif/usb_host_ftdi_vcp: "==2.1.1"
+  espressif/usb_host_ch34x_vcp: "==2.2.1"

@@ -123,7 +123,9 @@ name or protocol to a particular host application.
   are exported with `--variant <variant>`. A copper change is a new `rev<X>`
   for every variant; a BOM or fitting change on the same copper bumps that
   variant's minor version ([ADR-0006](docs/decisions/ADR-0006-variants-and-board-strategy.md)).
-- Firmware: `fw-v<semver>`.
+- Firmware: `fw-v<semver>`. The firmware version is taken from this tag at build
+  time (`git describe`, [`firmware/cmake/fw_version.cmake`](firmware/cmake/fw_version.cmake))
+  and reported in `DEVICE_INFO`; CI builds the image on the tag push.
 - Protocol: `proto-v<semver>`.
 
 ## Build and test
@@ -144,6 +146,13 @@ Run the same commands locally before pushing:
   board in `rev<X>` must declare the tag's variant.
 - CI script self-tests: `python3 -m unittest discover -s tools/kicad_ci -p 'test_*.py'`.
   Their KiCad fixtures are strings inside the tests; never commit `.kicad_*` fixtures.
+- Firmware host tests (PTT controller, codec against every golden vector):
+  `cmake -S firmware/test -B build/fw-test && cmake --build build/fw-test && ctest --test-dir build/fw-test --output-on-failure`.
+- Firmware target build: ESP-IDF v6.0.3 (or `docker run … espressif/idf:v6.0.3`),
+  then `cd firmware/platform/esp-idf && idf.py build`; flash with
+  `idf.py -p <UART port> flash monitor` through the dev kit's USB-to-UART port
+  ([`firmware/platform/esp-idf/README.md`](firmware/platform/esp-idf/README.md)).
+  CI jobs: **`Firmware host tests`** and **`Firmware target build (ESP-IDF)`**.
 - Reference library: `python3 tools/refs/refs.py check` (manifest valid, index current);
   `python3 tools/refs/refs.py fetch` downloads local copies into the gitignored
   `docs/references/cache/`. Cite third-party documents through

@@ -143,8 +143,9 @@ The full rules are in [AGENTS.md → Workflow](../AGENTS.md#workflow). Step by s
 
 Run what applies to your change before pushing. CI runs the same checks:
 `.github/workflows/checks.yml` (`REUSE lint`, `KiCad version consistency`,
-`Silkscreen revision check`) and `.github/workflows/kicad-checks.yml`
-(`KiCad ERC/DRC gate`). All four always report, so they can be required status
+`Silkscreen revision check`, `Protocol vectors`, `Firmware host tests`,
+`Firmware target build (ESP-IDF)`) and `.github/workflows/kicad-checks.yml`
+(`KiCad ERC/DRC gate`). They all always report, so they can be required status
 checks.
 
 **Licensing (every PR):**
@@ -197,8 +198,32 @@ least one KiCad design variant with a tag-safe name. On an
 `hw-<variant>-rev<X>-v<semver>` tag, a board in a `rev<X>` folder must declare
 the design variant `<variant>` ([ADR-0006](decisions/ADR-0006-variants-and-board-strategy.md)).
 
-**Firmware and protocol:** host tests and golden-vector tests. Commands are
-added with #14 (firmware) and #13 (protocol).
+**Firmware (host tests, every PR):**
+```sh
+cmake -S firmware/test -B build/fw-test
+cmake --build build/fw-test
+ctest --test-dir build/fw-test --output-on-failure
+```
+Builds [`firmware/app`](../firmware/app/) against a fake HAL with ASan and
+UBSan, and runs the PTT, codec (every golden vector), configuration and
+session tests. Needs CMake 3.16+, a C11 compiler, Python 3 and git
+([`firmware/test/README.md`](../firmware/test/README.md)).
+
+**Firmware (ESP32-S3 build):** install ESP-IDF v6.0.3 (or use the
+`espressif/idf:v6.0.3` Docker image), then:
+```sh
+cd firmware/platform/esp-idf
+idf.py set-target esp32s3   # once
+idf.py build
+idf.py -p <UART port> flash monitor
+```
+Flash through the ESP32-S3-DevKitM-1's USB-to-UART port; the pin map is in
+[`BOARD.md`](../firmware/platform/esp-idf/BOARD.md). CI runs both as
+`Firmware host tests` and `Firmware target build (ESP-IDF)`, and uploads the
+images as an artifact.
+
+**Protocol:** `python3 -m unittest discover -s tools/protocol -p 'test_*.py'`
+and `python3 tools/protocol/make_vectors.py --check`.
 
 ---
 
@@ -244,8 +269,12 @@ added with #14 (firmware) and #13 (protocol).
 Portable logic goes in `firmware/app/` with host tests in `firmware/test/`, and
 SDK glue in `firmware/platform/<sdk>/`. **PTT fail-safes are mandatory**, and
 every new code path needs a test ([AGENTS.md → Firmware](../AGENTS.md#firmware)).
-The SDK, build and flash commands are defined by #7 and #14 and will be added
-here.
+The SDK is ESP-IDF v6.0.3 on the ESP32-S3; build, test and flash commands are
+in [section 4](#4-local-checks), and the layout in
+[`firmware/README.md`](../firmware/README.md). Hardware access goes through
+[`hal.h`](../firmware/app/include/hal.h), so new logic lands in `firmware/app`
+with a host test and only the glue in `firmware/platform/esp-idf`. Changes to
+the PTT controller need the maintainer's explicit approval in the PR.
 
 ### Protocol change
 Edit the spec in [`protocol/`](../protocol/), bump the protocol version, and
