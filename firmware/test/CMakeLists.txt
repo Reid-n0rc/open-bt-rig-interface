@@ -15,8 +15,10 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 
 option(FW_TEST_SANITIZE "Build the host tests with ASan and UBSan" ON)
+option(FW_TEST_COVERAGE "Instrument firmware/app with gcov; adds the `coverage` target" OFF)
 
-if(FW_TEST_SANITIZE AND NOT MSVC)
+# The coverage build has no sanitizers: their checks add branches of their own.
+if(FW_TEST_SANITIZE AND NOT FW_TEST_COVERAGE AND NOT MSVC)
     add_compile_options(-fsanitize=address,undefined -fno-omit-frame-pointer)
     add_link_options(-fsanitize=address,undefined)
 endif()
@@ -52,6 +54,11 @@ target_compile_definitions(rig_app PUBLIC
     FW_VERSION_MAJOR=${FW_MAJOR} FW_VERSION_MINOR=${FW_MINOR} FW_VERSION_PATCH=${FW_PATCH}
     FW_VERSION_BUILD="${FW_BUILD}")
 
+if(FW_TEST_COVERAGE)
+    target_compile_options(rig_app PRIVATE --coverage -O0)
+    target_link_options(rig_app PUBLIC --coverage)
+endif()
+
 add_library(fake_hal STATIC fake_hal.c)
 target_link_libraries(fake_hal PUBLIC rig_app)
 target_compile_options(fake_hal PRIVATE ${WARNINGS})
@@ -85,3 +92,19 @@ fw_test(test_modules)
 
 add_test(NAME test_fw_version
          COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_LIST_DIR}/test_fw_version.cmake)
+
+# Coverage gate (#90): every line and every branch of firmware/app is run by
+# the tests. `cmake --build <dir> --target coverage` runs the tests, then
+# gcovr (BSD-3-Clause, a host tool: `pip install gcovr`), and fails below 100%.
+if(FW_TEST_COVERAGE)
+    find_program(GCOVR gcovr REQUIRED)
+    add_custom_target(coverage
+        COMMAND ${CMAKE_COMMAND} -E rm -f -- ${CMAKE_BINARY_DIR}/coverage.txt
+        COMMAND ${CMAKE_CTEST_COMMAND} --test-dir ${CMAKE_BINARY_DIR} --output-on-failure
+        COMMAND ${GCOVR} --root ${FW_ROOT}/app --object-directory ${CMAKE_BINARY_DIR}
+                --exclude-unreachable-branches --txt-metric branch --txt ${CMAKE_BINARY_DIR}/coverage.txt
+                --print-summary --fail-under-line 100 --fail-under-branch 100
+        DEPENDS test_proto test_ptt test_cfg test_app test_modules
+        USES_TERMINAL
+        COMMENT "firmware/app coverage (100% lines and branches required)")
+endif()
