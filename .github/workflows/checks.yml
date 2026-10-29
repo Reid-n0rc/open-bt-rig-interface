@@ -4,9 +4,19 @@
 # Repository checks for every PR and push (see AGENTS.md, Build and test):
 # REUSE licensing, KiCad version consistency, the silkscreen revision check,
 # the protocol vectors and the firmware (host tests and the ESP32-S3 build).
-# The jobs have no path filters, so they always report and can be required
-# status checks. With no boards yet the KiCad checks pass. The ERC/DRC gate is
-# separate (kicad-checks.yml).
+#
+# A PR to `dev` runs only the areas its changes touch (tools/ci/select_jobs.py);
+# the quick repository-wide checks always run. Everything else is the full
+# regression: PRs to `main`, pushes to `dev`/`main`, release tags and manual
+# runs, and any change to the CI itself. A skipped job still reports (as
+# skipped), so the jobs can be required status checks; `CI gate` fails if any
+# job that ran didn't pass.
+#
+# On a release tag the full regression includes ERC/DRC on every KiCad
+# project (kicad-checks.yml, called here), and only once all of it passes does
+# `Release draft` create the GitHub release as a draft, with the firmware
+# attached for fw-v* tags. The maintainer publishes it (GOVERNANCE.md).
+# Otherwise the ERC/DRC gate runs on its own (kicad-checks.yml).
 
 name: Checks
 
@@ -15,7 +25,7 @@ on:
     branches: [dev, main]
   push:
     branches: [dev, main]
-    tags: ["hw-*", "fw-*"]
+    tags: ["hw-*", "fw-*", "proto-v*"]
   workflow_dispatch:
 
 permissions:
@@ -26,6 +36,41 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  changes:
+    name: Select checks
+    runs-on: ubuntu-latest
+    outputs:
+      full: ${{ steps.select.outputs.full }}
+      firmware: ${{ steps.select.outputs.firmware }}
+      protocol: ${{ steps.select.outputs.protocol }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Self-test the CI scripts
+        run: python -m unittest discover -v -s tools/ci -p 'test_*.py'
+
+      - name: Select the areas to check
+        id: select
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          args=(--event "$EVENT_NAME" --base-ref "$BASE_REF" --github-output "$GITHUB_OUTPUT")
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            git diff --name-only "$BASE_SHA...$HEAD_SHA" > "$RUNNER_TEMP/changed.txt"
+            echo "Changed files:"; cat "$RUNNER_TEMP/changed.txt"
+            args+=(--changed-files "$RUNNER_TEMP/changed.txt")
+          fi
+          python tools/ci/select_jobs.py "${args[@]}"
+
   reuse:
     name: REUSE lint
     runs-on: ubuntu-latest
@@ -74,6 +119,8 @@ jobs:
 
   protocol:
     name: Protocol vectors
+    needs: changes
+    if: needs.changes.outputs.protocol == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -96,6 +143,8 @@ jobs:
 
   firmware-host-tests:
     name: Firmware host tests
+    needs: changes
+    if: needs.changes.outputs.firmware == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -116,6 +165,8 @@ jobs:
 
   firmware-target-build:
     name: Firmware target build (ESP-IDF)
+    needs: changes
+    if: needs.changes.outputs.firmware == 'true'
     runs-on: ubuntu-latest
     # Espressif's official ESP-IDF image, pinned to the release in
     # firmware/platform/esp-idf/README.md (tag and digest).
@@ -147,3 +198,58 @@ jobs:
             firmware/platform/esp-idf/build/flash_args
             firmware/platform/esp-idf/build/flasher_args.json
           if-no-files-found: error
+
+  # Release tags only: ERC/DRC on every project, as part of the regression.
+  kicad-release:
+    name: KiCad (release)
+    if: github.ref_type == 'tag'
+    uses: ./.github/workflows/kicad-checks.yml
+
+  gate:
+    name: CI gate
+    needs: [changes, reuse, kicad-version, silkscreen, protocol, firmware-host-tests,
+            firmware-target-build, kicad-release]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Evaluate
+        env:
+          NEEDS: ${{ toJSON(needs) }}
+          FULL: ${{ needs.changes.outputs.full }}
+          IS_TAG: ${{ github.ref_type == 'tag' }}
+        run: |
+          args=(--full "$FULL" --tag-only kicad-release)
+          if [ "$IS_TAG" = "true" ]; then args+=(--is-tag); fi
+          echo "$NEEDS" | python3 tools/ci/gate.py "${args[@]}"
+
+  # fw-v* and proto-v* tags. Hardware releases (hw-*) are #77, behind the
+  # same gate.
+  release:
+    name: Release draft
+    needs: [gate, firmware-target-build]
+    if: startsWith(github.ref, 'refs/tags/fw-v') || startsWith(github.ref, 'refs/tags/proto-v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download the firmware
+        if: startsWith(github.ref_name, 'fw-v')
+        uses: actions/download-artifact@v4
+        with:
+          name: firmware-esp32s3-devkitm1
+          path: firmware-esp32s3-devkitm1
+
+      - name: Create the draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          assets=()
+          if [ -d firmware-esp32s3-devkitm1 ]; then
+            (cd firmware-esp32s3-devkitm1 && zip -qr "../$TAG-esp32s3-devkitm1.zip" .)
+            assets+=("$TAG-esp32s3-devkitm1.zip")
+          fi
+          gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --verify-tag --draft \
+            --title "$TAG" --generate-notes "${assets[@]}"
