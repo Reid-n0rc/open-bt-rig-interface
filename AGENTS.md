@@ -39,7 +39,7 @@ name or protocol to a particular host application.
 
 ## Hardware (KiCad)
 
-- **KiCad ≥ 10.0.6.** [`KICAD_VERSION`](KICAD_VERSION) is authoritative. If you
+- **KiCad ≥ 10.0.7.** [`KICAD_VERSION`](KICAD_VERSION) is authoritative. If you
   save files with a newer KiCad, bump it in the same PR. The documented version
   must match the checked-in files.
 - **All KiCad changes go through the Konnect MCP tools** (`mcp__konnect__*`).

@@ -332,7 +332,7 @@ and editions are confirmed in [#10](https://github.com/Reid-n0rc/open-bt-rig-int
 
 | ID | Requirement | Rationale | Ver. | Status | Trace |
 |---|---|---|---|---|---|
-| REQ-TOOL-001 | Hardware files shall use KiCad ≥ 10.0.6, matching [`KICAD_VERSION`](../../KICAD_VERSION), enforced by CI. | [constraints §13](constraints.md#13-tooling-and-documentation). | T | confirmed | #3, #21 / #3 |
+| REQ-TOOL-001 | Hardware files shall use KiCad ≥ 10.0.7, matching [`KICAD_VERSION`](../../KICAD_VERSION), enforced by CI. | [constraints §13](constraints.md#13-tooling-and-documentation). | T | confirmed | #3, #21 / #3 |
 | REQ-TOOL-002 | All KiCad changes shall go through the Konnect MCP tools. | [`AGENTS.md`](../../AGENTS.md#hardware-kicad). | I | confirmed | #21 / PR review |
 | REQ-TOOL-003 | ERC shall pass when a schematic changes, and DRC when a PCB changes, before a merge into `dev` or `main`. | [`AGENTS.md`](../../AGENTS.md#ercdrc-merge-gate-required). | T | confirmed | #26 / #26 |
 | REQ-TOOL-004 | Every file shall carry SPDX headers or be covered by `REUSE.toml`, and `reuse lint` shall pass. | [`AGENTS.md`](../../AGENTS.md#licensing-reuse). | T | confirmed | #3 / #3 |
@@ -491,7 +491,7 @@ one requirement. Update this list when either document changes.
 
 **§13 Tooling and documentation**
 
-- [x] KiCad ≥ 10.0.6, KICAD_VERSION enforced by CI: REQ-TOOL-001
+- [x] KiCad ≥ 10.0.7, KICAD_VERSION enforced by CI: REQ-TOOL-001
 - [x] KiCad changes through Konnect: REQ-TOOL-002
 - [x] Silkscreen content, revision not hard-coded: REQ-MECH-007
 - [x] Variants share one core design, recorded decision: REQ-GEN-006

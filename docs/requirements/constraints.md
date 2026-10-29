@@ -289,7 +289,7 @@ The device operates next to HF transmitters of 100 W or more.
 
 ## 13. Tooling and documentation
 
-- **KiCad ≥ 10.0.6.** The documented version must match the checked-in files
+- **KiCad ≥ 10.0.7.** The documented version must match the checked-in files
   ([`KICAD_VERSION`](../../KICAD_VERSION)), enforced by CI.
 - All KiCad changes go through the Konnect MCP tools (see [`AGENTS.md`](../../AGENTS.md)).
 - **PCB silkscreen:** project name, variant, `${REVISION}`, `${ISSUE_DATE}`,

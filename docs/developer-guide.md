@@ -27,7 +27,7 @@ Before any design work, read
 |---|---|---|
 | git ≥ 2.34 | Version control, SSH commit signing | Signed commits are preferred, not required (see below) |
 | [GitHub CLI `gh`](https://cli.github.com/) | Issues, PRs, checks | `gh auth login` |
-| [KiCad](https://www.kicad.org/download/) **≥ 10.0.6** | Schematic/PCB | Must match [`KICAD_VERSION`](../KICAD_VERSION) |
+| [KiCad](https://www.kicad.org/download/) **≥ 10.0.7** | Schematic/PCB | Must match [`KICAD_VERSION`](../KICAD_VERSION) |
 | `kicad-cli` | ERC/DRC and exports from the shell | Ships with KiCad (paths below) |
 | [`uv`](https://docs.astral.sh/uv/) | Runs `reuse` without a global install | `uvx --from 'reuse[charset-normalizer]' reuse lint` |
 | [Konnect](https://github.com/Reid-n0rc/Konnect) | KiCad MCP server that agents **must** use for KiCad changes | Load the `konnect` skill first (see [`AGENTS.md`](../AGENTS.md#hardware-kicad)) |

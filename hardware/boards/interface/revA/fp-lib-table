@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+
+  (lib (name "open-bt-rig-interface") (type "KiCad") (uri "${KIPRJMOD}/../../../lib/footprints/open-bt-rig-interface.pretty") (options "") (descr "")))

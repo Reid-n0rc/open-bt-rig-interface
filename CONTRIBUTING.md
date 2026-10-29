@@ -16,7 +16,7 @@ alike. For environment setup, local checks and recipes, see the
    ruleset doesn't enforce signatures; PRs are still required for `main` and `dev`.
 5. **Open a PR to `dev`** with `Closes #N` and fill in the PR template. `main` is
    updated only by release PRs.
-6. KiCad work uses **KiCad ≥ 10.0.6** through the Konnect tools. Keep
+6. KiCad work uses **KiCad ≥ 10.0.7** through the Konnect tools. Keep
    [`KICAD_VERSION`](KICAD_VERSION) in step with the files.
 7. Add SPDX/REUSE licensing for every new file (`uvx reuse lint`).
 8. Record any material brought in from another project (code, KiCad library
@@ -78,7 +78,7 @@ tracking issue lists what is planned and in what order.
 
 ## Hardware contributions
 
-- Use the KiCad version in [`KICAD_VERSION`](KICAD_VERSION) (10.0.6 or newer). If
+- Use the KiCad version in [`KICAD_VERSION`](KICAD_VERSION) (10.0.7 or newer). If
   you save files with a newer KiCad, bump `KICAD_VERSION` in the same PR.
 - AI agents make every KiCad change through the Konnect tools and never
   hand-edit `.kicad_*` files (see [`AGENTS.md`](AGENTS.md)).
