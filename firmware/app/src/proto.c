@@ -101,7 +101,6 @@ enum field_kind {
     K_I8,
     K_I16,
     K_CHAR,
-    K_B6,     /* 6 bytes */
     K_B16,    /* 16 bytes */
     K_BYTES,  /* rest of the payload */
     K_TLVS,   /* rest of the payload, a TLV list */
@@ -131,8 +130,6 @@ static size_t kind_size(uint8_t kind)
         return 4;
     case K_U64:
         return 8;
-    case K_B6:
-        return 6;
     case K_B16:
         return 16;
     default:
@@ -142,7 +139,7 @@ static size_t kind_size(uint8_t kind)
 
 static bool is_array(uint8_t kind)
 {
-    return kind == K_B6 || kind == K_B16;
+    return kind == K_B16;
 }
 
 static void put_le(uint8_t *p, uint64_t v, size_t n)
@@ -218,8 +215,7 @@ static bool tlvs_valid(const uint8_t *data, size_t len);
 
 /* Reads fields into `base`. `exact`: trailing bytes are an error. Returns
  * PROTO_OK, PROTO_ERR_BAD_LENGTH or PROTO_ERR_BAD_VALUE. */
-static int get_fields(const field_t *f, size_t n, void *base, const uint8_t *in, size_t len,
-                      bool exact)
+static int get_fields(const field_t *f, size_t n, void *base, const uint8_t *in, size_t len)
 {
     uint8_t *b = (uint8_t *)base;
     size_t pos = 0;
@@ -266,7 +262,7 @@ static int get_fields(const field_t *f, size_t n, void *base, const uint8_t *in,
             pos = len;
         }
     }
-    if (exact && pos != len) {
+    if (pos != len) {
         return PROTO_ERR_BAD_LENGTH;
     }
     return PROTO_OK;
@@ -371,7 +367,7 @@ static int decode_config(const uint8_t *in, size_t len, proto_config_t *c)
     if (!s) {
         return PROTO_ERR_BAD_VALUE; /* unknown key */
     }
-    return get_fields(s->fields, s->n, c, in + 2, len - 2, true);
+    return get_fields(s->fields, s->n, c, in + 2, len - 2);
 }
 
 int proto_config_encode(const proto_config_t *c, uint8_t *out, size_t cap, size_t *pos)
@@ -495,7 +491,7 @@ int proto_tlv_next(proto_bytes_t *cursor, proto_tlv_t *out)
         }
         /* Decode the known prefix; a newer minor version may append fields.
          * Fixed-size fields only, and `known` bytes are there: can't fail. */
-        (void)get_fields(s->fields, s->n, out, out->value, known, true);
+        (void)get_fields(s->fields, s->n, out, out->value, known);
         out->known = true;
     }
     cursor->data += 2u + len;
@@ -679,7 +675,7 @@ int proto_decode_payload(uint8_t type, uint8_t token, const uint8_t *payload, si
     if (len > PROTO_MAX_PAYLOAD) {
         return PROTO_ERR_BAD_LENGTH;
     }
-    return get_fields(d->fields, d->n, out, payload, len, true);
+    return get_fields(d->fields, d->n, out, payload, len);
 }
 
 int proto_encode_payload(const proto_msg_t *msg, uint8_t *out, size_t cap, size_t *len)

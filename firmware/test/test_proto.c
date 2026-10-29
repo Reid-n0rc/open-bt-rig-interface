@@ -399,6 +399,95 @@ static void test_tlv_errors(void)
     TEST_ASSERT_EQUAL_INT(PROTO_ERR_OVERFLOW, proto_tlv_put(&t, out, 1, &pos));
 }
 
+/* Edge paths of the encoders and the receiver (#90 coverage). */
+
+static void test_array_field_overflow(void)
+{
+    proto_msg_t m;
+    memset(&m, 0, sizeof(m));
+    m.type = PROTO_AUTH; /* a 16-byte host token */
+    uint8_t out[PROTO_MAX_PAYLOAD];
+    size_t len;
+    TEST_ASSERT_EQUAL_INT(PROTO_ERR_OVERFLOW, proto_encode_payload(&m, out, 15, &len));
+    TEST_ASSERT_EQUAL_INT(PROTO_OK, proto_encode_payload(&m, out, 16, &len));
+    TEST_ASSERT_EQUAL_size_t(16, len);
+}
+
+static void test_tlv_raw_values(void)
+{
+    uint8_t out[16];
+    proto_tlv_t t;
+    memset(&t, 0, sizeof(t));
+    /* Tag 0 is reserved: never a schema, so its value is raw. */
+    size_t pos0 = 0;
+    TEST_ASSERT_EQUAL_INT(PROTO_OK, proto_tlv_put(&t, out, sizeof(out), &pos0));
+    TEST_ASSERT_EQUAL_size_t(2, pos0);
+    /* An unknown tag, past the schema table, with an empty raw value. */
+    t.tag = 0xF0;
+    size_t pos = 0;
+    TEST_ASSERT_EQUAL_INT(PROTO_OK, proto_tlv_put(&t, out, sizeof(out), &pos));
+    TEST_ASSERT_EQUAL_size_t(2, pos);
+    TEST_ASSERT_EQUAL_UINT8(0xF0, out[0]);
+    TEST_ASSERT_EQUAL_UINT8(0, out[1]);
+    /* A known tag sent raw (known = false): its bytes as given. */
+    const uint8_t raw[] = {1, 2, 3};
+    t.tag = PROTO_TLV_FEATURES;
+    t.value = raw;
+    t.len = 3;
+    pos = 0;
+    TEST_ASSERT_EQUAL_INT(PROTO_OK, proto_tlv_put(&t, out, sizeof(out), &pos));
+    TEST_ASSERT_EQUAL_size_t(5, pos);
+    TEST_ASSERT_EQUAL_MEMORY(raw, out + 2, 3);
+}
+
+static void test_trust_record_overflow(void)
+{
+    proto_trust_record_t r;
+    memset(&r, 0, sizeof(r));
+    uint8_t out[PROTO_TRUST_RECORD_LEN];
+    size_t pos = 1;
+    TEST_ASSERT_EQUAL_INT(PROTO_ERR_OVERFLOW, proto_trust_put(&r, out, sizeof(out), &pos));
+    TEST_ASSERT_EQUAL_size_t(1, pos);
+}
+
+static void test_frame_check_length_limits(void)
+{
+    static uint8_t frame[PROTO_MAX_FRAME + 1];
+    uint8_t type, token;
+    const uint8_t *payload;
+    size_t plen;
+    TEST_ASSERT_EQUAL_INT(PROTO_ERR_FRAME,
+                          proto_frame_check(frame, PROTO_FRAME_OVERHEAD - 1, &type, &token, &payload, &plen));
+    TEST_ASSERT_EQUAL_INT(PROTO_ERR_FRAME,
+                          proto_frame_check(frame, sizeof(frame), &type, &token, &payload, &plen));
+}
+
+static void test_receiver_without_callbacks(void)
+{
+    proto_rx_t r;
+    proto_rx_init(&r, NULL, NULL, NULL);
+    const uint8_t bad[] = {0x03, 0x30, 0x01, 0x00};
+    proto_rx_feed(&r, bad, sizeof(bad));
+    TEST_ASSERT_EQUAL_UINT(1, r.errors);
+    proto_rx_feed(&r, vec_messages[0].wire.p, vec_messages[0].wire.n);
+    TEST_ASSERT_EQUAL_UINT(1, r.errors);
+}
+
+static void test_receiver_max_frame_from_peer(void)
+{
+    /* A frame longer than this peer's max_payload + 4 is a frame error. */
+    rx_start();
+    rx.max_frame = PROTO_FRAME_OVERHEAD;
+    size_t i = 0;
+    while (i < vec_messages_count && vec_messages[i].frame.n <= PROTO_FRAME_OVERHEAD) {
+        i++;
+    }
+    TEST_ASSERT_TRUE(i < vec_messages_count);
+    proto_rx_feed(&rx, vec_messages[i].wire.p, vec_messages[i].wire.n);
+    TEST_ASSERT_EQUAL_UINT(1, cap.errors);
+    TEST_ASSERT_EQUAL_size_t(0, cap.n);
+}
+
 /* --- GATT --- */
 
 static void test_info_vectors(void)
@@ -459,6 +548,12 @@ int main(void)
     RUN_TEST(test_config_record_errors);
     RUN_TEST(test_tlv_newer_minor_appends_fields);
     RUN_TEST(test_tlv_errors);
+    RUN_TEST(test_array_field_overflow);
+    RUN_TEST(test_tlv_raw_values);
+    RUN_TEST(test_trust_record_overflow);
+    RUN_TEST(test_frame_check_length_limits);
+    RUN_TEST(test_receiver_without_callbacks);
+    RUN_TEST(test_receiver_max_frame_from_peer);
     RUN_TEST(test_info_vectors);
     RUN_TEST(test_gatt_chunking);
     return UNITY_END();

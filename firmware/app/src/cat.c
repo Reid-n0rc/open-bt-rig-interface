@@ -215,7 +215,7 @@ size_t cat_from_radio(cat_t *c, uint8_t port, const uint8_t *data, size_t len, u
     cat_port_t *p = &c->port[port];
     size_t room = CAT_RXQ_MAX - p->rxq_len;
     size_t take = len <= room ? len : room;
-    if (p->rxq_len == 0 && take) {
+    if (p->rxq_len == 0) { /* then there is room: take == len */
         p->rx_first_us = now_us;
     }
     memcpy(p->rxq + p->rxq_len, data, take);

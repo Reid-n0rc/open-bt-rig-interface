@@ -7,6 +7,14 @@ SPDX-License-Identifier: CC-BY-4.0
 
 Repository scripts and checks (KiCad version check, silkscreen revision check, release helpers). License: MIT.
 
+## ci
+
+Job selection and the merge gate for `.github/workflows/checks.yml` (see `AGENTS.md`, Build and test). Python standard library only.
+
+- `select_jobs.py`: which areas (firmware, protocol) a run checks. A PR to `dev` checks the areas its changed files touch; PRs to `main`, pushes, release tags, manual runs and changes to the CI itself are the full regression.
+- `gate.py`: `CI gate`, from the workflow's `needs` context: every job that ran passed, `Select checks` succeeded, and the full regression skipped nothing (except the tag-only jobs off a tag).
+- `test_*.py`: unit tests (`python3 -m unittest discover -s tools/ci -p 'test_*.py'`).
+
 ## kicad_ci
 
 KiCad CI checks (see `AGENTS.md`, Build and test). The ERC/DRC merge gate used by `.github/workflows/kicad-checks.yml`:

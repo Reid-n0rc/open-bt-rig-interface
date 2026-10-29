@@ -19,6 +19,9 @@ name or protocol to a particular host application.
 ## Workflow
 
 - **Plan first.** Write the plan (in the issue or the PR description) before changing anything.
+- **Test-driven development.** Write the test first and watch it fail, then
+  write the code that makes it pass, then refactor. This applies to firmware,
+  protocol and tools alike; a bug fix starts with a test that reproduces it.
 - **No change without an issue.** Each issue is one agent-sized task. Work that
   needs a person, hardware or an account is labeled `human-task` and is not for agents.
 - **Branch per issue**, named `<type>/<issue#>-<slug>` (for example
@@ -82,6 +85,9 @@ name or protocol to a particular host application.
   keepalive expiry and after a watchdog reset (lock-up), plus a user-configurable
   maximum-TX timer (default 5 minutes, no upper limit, can be disabled; see
   ADR-0007). Every new code path gets a test.
+- **Full coverage:** the host tests run every line and every branch of
+  `firmware/app/` (CI `Firmware coverage` fails below 100%). A branch no test
+  can reach is removed or made a compile-time check, not excluded.
 
 ## Protocol
 
@@ -131,8 +137,24 @@ name or protocol to a particular host application.
 ## Build and test
 
 CI runs `.github/workflows/checks.yml` and `kicad-checks.yml` on every PR and on
-pushes to `dev`/`main`. Required checks: **`REUSE lint`**, **`KiCad version
-consistency`**, **`Silkscreen revision check`** and **`KiCad ERC/DRC gate`**.
+pushes to `dev`/`main`. CI is plain GitHub Actions; it never depends on an AI
+agent or service. Required checks: **`REUSE lint`**, **`KiCad version
+consistency`**, **`Silkscreen revision check`**, **`KiCad ERC/DRC gate`** and
+**`CI gate`**.
+
+- **PRs to `dev` run only what they change.** `tools/ci/select_jobs.py` maps
+  the changed paths to areas (firmware, protocol); the jobs of untouched
+  areas are skipped. REUSE, the KiCad version and silkscreen checks always
+  run, and the ERC/DRC gate picks its own projects. A change to the CI itself
+  (`checks.yml`, `tools/ci/`) runs everything.
+- **Full regression before a release.** PRs to `main`, pushes to `dev`/`main`,
+  release tags (`fw-v*`, `hw-*`, `proto-v*`) and manual runs check every area;
+  on a tag that includes ERC/DRC on every project. `CI gate`
+  (`tools/ci/gate.py`) fails if any job that ran didn't pass, or if the full
+  regression skipped one. Only after it passes does `Release draft` create the
+  GitHub release for a `fw-v*` / `proto-v*` tag, as a draft with the firmware
+  attached; the maintainer publishes it.
+
 Run the same commands locally before pushing:
 
 - KiCad CLI (macOS): `/Applications/KiCad/KiCad.app/Contents/MacOS/kicad-cli`.
@@ -144,15 +166,18 @@ Run the same commands locally before pushing:
   Checks each `hardware/boards/<board>/rev<X>/` PCB against the silkscreen rules
   above (including declared design variants and `${VARIANT}`); on `hw-*` tags a
   board in `rev<X>` must declare the tag's variant.
-- CI script self-tests: `python3 -m unittest discover -s tools/kicad_ci -p 'test_*.py'`.
+- CI script self-tests: `python3 -m unittest discover -s tools/kicad_ci -p 'test_*.py'`
+  and `python3 -m unittest discover -s tools/ci -p 'test_*.py'`.
   Their KiCad fixtures are strings inside the tests; never commit `.kicad_*` fixtures.
 - Firmware host tests (PTT controller, codec against every golden vector):
   `cmake -S firmware/test -B build/fw-test && cmake --build build/fw-test && ctest --test-dir build/fw-test --output-on-failure`.
+- Firmware coverage (`pip install gcovr==8.8`):
+  `cmake -S firmware/test -B build/fw-cov -DFW_TEST_COVERAGE=ON && cmake --build build/fw-cov && cmake --build build/fw-cov --target coverage`.
 - Firmware target build: ESP-IDF v6.0.3 (or `docker run … espressif/idf:v6.0.3`),
   then `cd firmware/platform/esp-idf && idf.py build`; flash with
   `idf.py -p <UART port> flash monitor` through the dev kit's USB-to-UART port
   ([`firmware/platform/esp-idf/README.md`](firmware/platform/esp-idf/README.md)).
-  CI jobs: **`Firmware host tests`** and **`Firmware target build (ESP-IDF)`**.
+  CI jobs: **`Firmware host tests`**, **`Firmware coverage`** and **`Firmware target build (ESP-IDF)`**.
 - Reference library: `python3 tools/refs/refs.py check` (manifest valid, index current);
   `python3 tools/refs/refs.py fetch` downloads local copies into the gitignored
   `docs/references/cache/`. Cite third-party documents through

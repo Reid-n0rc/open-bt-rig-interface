@@ -27,6 +27,7 @@ typedef struct {
     bool led;
     int8_t ble_dbm;
     unsigned ble_sets;
+    unsigned audio_closes; /* hal_audio_close() calls */
     uint8_t jack_mode;
     unsigned jack_mode_sets;
 
@@ -36,6 +37,7 @@ typedef struct {
     uint8_t serial_out[1024];
     size_t serial_out_len;
     size_t serial_accept; /* max bytes hal_serial_write accepts per call */
+    size_t serial_overreport; /* extra bytes it claims to accept (a faulty HAL) */
 
     uint8_t tx[HAL_TRANSPORT_MAX + 1][FAKE_TX_MAX]; /* bytes sent per transport */
     size_t tx_len[HAL_TRANSPORT_MAX + 1];

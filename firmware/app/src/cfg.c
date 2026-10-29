@@ -154,7 +154,7 @@ int cfg_set(cfg_t *cfg, const board_t *board, const proto_config_t *in)
         if (mode > 3) {
             return PROTO_ERR_BAD_VALUE;
         }
-        if (board && !(board->serial_modes & (1u << mode))) {
+        if (!(board->serial_modes & (1u << mode))) {
             return PROTO_ERR_UNSUPPORTED;
         }
         cfg->serial_jack_mode = mode;
@@ -172,7 +172,7 @@ int cfg_set(cfg_t *cfg, const board_t *board, const proto_config_t *in)
         } else if (port != 0) {
             return PROTO_ERR_BAD_VALUE;
         }
-        if (board && (targets & (uint8_t)~board->ptt_outputs)) {
+        if (targets & (uint8_t)~board->ptt_outputs) {
             return PROTO_ERR_UNSUPPORTED;
         }
         cfg->ptt_targets = targets;
@@ -229,7 +229,7 @@ int cfg_set(cfg_t *cfg, const board_t *board, const proto_config_t *in)
         if (in->value.rx_attenuator.on > 1) {
             return PROTO_ERR_BAD_VALUE;
         }
-        if (board && !(board->features & PROTO_F_RX_ATTENUATOR) && in->value.rx_attenuator.on) {
+        if (!(board->features & PROTO_F_RX_ATTENUATOR) && in->value.rx_attenuator.on) {
             return PROTO_ERR_UNSUPPORTED;
         }
         cfg->rx_attenuator = in->value.rx_attenuator.on;
@@ -272,7 +272,7 @@ int cfg_set(cfg_t *cfg, const board_t *board, const proto_config_t *in)
         }
         /* Port 0 has the SERIAL_JACK TLV's range; a radio port's chip checks
          * its own range when the port opens. */
-        if (port == 0 && board && (baud < board->serial_min_baud || baud > board->serial_max_baud)) {
+        if (port == 0 && (baud < board->serial_min_baud || baud > board->serial_max_baud)) {
             return PROTO_ERR_OUT_OF_RANGE;
         }
         cfg->serial_default[port].baud = baud;
@@ -315,7 +315,7 @@ int cfg_set(cfg_t *cfg, const board_t *board, const proto_config_t *in)
         if (level > CFG_WIRED_PORT_LOCK_MAX) {
             return PROTO_ERR_BAD_VALUE;
         }
-        if (level == CFG_WIRED_PORT_LOCK_MAX && !(board && board->radio_port_isolation)) {
+        if (level == CFG_WIRED_PORT_LOCK_MAX && !board->radio_port_isolation) {
             return PROTO_ERR_OUT_OF_RANGE; /* no disconnect state on the radio port switch */
         }
         cfg->wired_port_lock = level;
@@ -339,23 +339,27 @@ void cfg_to_ptt(const cfg_t *cfg, const board_t *board, ptt_config_t *out)
     ptt_config_sanitize(out);
 }
 
-/* Every (key, selector) that exists, in storage order. */
-static size_t records(uint8_t keys[], uint8_t selectors[], size_t cap)
+/* Every (key, selector) that exists, in storage order: one record per key,
+ * LINE_MAP once per port and SERIAL_DEFAULT once per serial port. */
+static const uint8_t line_map_ports[] = {0, 1, 2, 3, 4, PTT_PORT_CONTROL};
+#define CFG_RECORDS                                                                         \
+    ((PROTO_KEY_LAST - PROTO_KEY_FIRST + 1u) - 2u + sizeof(line_map_ports) + CFG_SERIAL_PORTS)
+
+static size_t records(uint8_t keys[CFG_RECORDS], uint8_t selectors[CFG_RECORDS])
 {
     size_t n = 0;
     for (uint8_t key = PROTO_KEY_FIRST; key <= PROTO_KEY_LAST; key++) {
         if (key == PROTO_KEY_LINE_MAP) {
-            static const uint8_t ports[] = {0, 1, 2, 3, 4, PTT_PORT_CONTROL};
-            for (size_t i = 0; i < sizeof(ports) && n < cap; i++) {
+            for (size_t i = 0; i < sizeof(line_map_ports); i++) {
                 keys[n] = key;
-                selectors[n++] = ports[i];
+                selectors[n++] = line_map_ports[i];
             }
         } else if (key == PROTO_KEY_SERIAL_DEFAULT) {
-            for (uint8_t s = 0; s < CFG_SERIAL_PORTS && n < cap; s++) {
+            for (uint8_t s = 0; s < CFG_SERIAL_PORTS; s++) {
                 keys[n] = key;
                 selectors[n++] = s;
             }
-        } else if (n < cap) {
+        } else {
             keys[n] = key;
             selectors[n++] = 0;
         }
@@ -365,8 +369,8 @@ static size_t records(uint8_t keys[], uint8_t selectors[], size_t cap)
 
 size_t cfg_serialize(const cfg_t *cfg, uint8_t *out, size_t cap)
 {
-    uint8_t keys[32], sels[32];
-    size_t n = records(keys, sels, sizeof(keys));
+    uint8_t keys[CFG_RECORDS], sels[CFG_RECORDS];
+    size_t n = records(keys, sels);
     size_t pos = 4;
     if (cap < 6) {
         return 0;
@@ -410,9 +414,11 @@ int cfg_deserialize(cfg_t *cfg, const board_t *board, const uint8_t *in, size_t 
             rejected++;
             break;
         }
+        /* A known key and its exact length: the record decodes; its value is
+         * checked again as a CONFIG_SET would be. */
         proto_config_t c;
-        if (proto_config_decode(in + pos, 2u + (size_t)vlen, &c) != PROTO_OK ||
-            cfg_set(cfg, board, &c) != PROTO_OK) {
+        (void)proto_config_decode(in + pos, 2u + (size_t)vlen, &c);
+        if (cfg_set(cfg, board, &c) != PROTO_OK) {
             rejected++;
         }
         pos += 2u + (size_t)vlen;

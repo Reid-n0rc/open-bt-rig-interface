@@ -354,7 +354,7 @@ void ptt_lines(ptt_t *p, uint8_t port, uint8_t lines, uint8_t origin, uint64_t n
                 }
                 break;
             }
-        } else if (act == PTT_ACT_PASS && is_radio_port(idx)) {
+        } else if (act == PTT_ACT_PASS) { /* radio ports only (ptt_config_sanitize) */
             if ((rises & bit) && p->locked_out) {
                 info = PTT_R_LOCKED_OUT;
             }
