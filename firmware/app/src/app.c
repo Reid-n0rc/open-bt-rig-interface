@@ -499,12 +499,6 @@ static void dispatch(app_t *app, const proto_msg_t *m)
         reply_result(app, m->type, m->token, PROTO_ERR_NOT_AUTHORIZED); /* §15.2 */
         return;
     }
-    if (proto_type_dir(m->type) == PROTO_D2H) {
-        /* A device -> host message sent to the device. */
-        reply_result(app, m->type, m->token, PROTO_ERR_UNKNOWN_TYPE);
-        return;
-    }
-
     switch (m->type) {
     case PROTO_CAPS_GET:
         send_caps(app, m->token);
@@ -625,7 +619,7 @@ static void dispatch(app_t *app, const proto_msg_t *m)
         rc = m->u.factory_reset.confirm == PROTO_FACTORY_RESET_CONFIRM ? sec_factory_reset()
                                                                        : PROTO_ERR_BAD_VALUE;
         break;
-    default:
+    default: /* a device -> host message sent to the device */
         rc = PROTO_ERR_UNKNOWN_TYPE;
         break;
     }
